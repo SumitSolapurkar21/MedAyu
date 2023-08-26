@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
 import componentStyle from '../css/GlobalCss';
 import Onboarding from '../components/Slider/Onboarding';
