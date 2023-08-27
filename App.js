@@ -16,6 +16,7 @@ import Consult from './src/screens/Consult';
 import Medicines from './src/screens/Medicines';
 import Tests from './src/screens/Tests';
 import HealthRecords from './src/screens/HealthRecords';
+import DoctorList from './src/screens/DoctorList';
 
 function App() {
   useEffect(() => {
@@ -41,6 +42,11 @@ function App() {
             component={Tabs}
             options={{headerShown: false}}
           />
+          <Stack.Screen
+            name="DoctorList"
+            component={DoctorList}
+            options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>
@@ -50,11 +56,11 @@ function App() {
 function Tabs() {
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: '#FFA500',
-        inactiveTintColor: '#127359',
-        labelStyle: {fontSize: 11, fontWeight: '600'},
-      }}>
+      screenOptions={() => ({
+        tabBarActiveTintColor: '#FFA500',
+        tabBarInactiveTintColor: '#127359',
+        tabBarLabelStyle: {fontSize: 11, fontWeight: '600'},
+      })}>
       <Tab.Screen
         name="Home"
         component={Home}
@@ -112,7 +118,7 @@ function Tabs() {
         }}
       />
       <Tab.Screen
-        name="Health Records"
+        name="HealthRecords"
         component={HealthRecords}
         options={{
           headerShown: false,

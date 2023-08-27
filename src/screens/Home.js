@@ -11,6 +11,7 @@ import React from 'react';
 import medayuLogo from '../images/medayu.jpeg';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import {useNavigation} from '@react-navigation/native';
 //images
 import doctorImg from '../images/doctor.png';
 import medImg from '../images/medicines.png';
@@ -18,6 +19,7 @@ import healthImg from '../images/medical-record.png';
 import labtestsImg from '../images/labtests.png';
 
 const Home = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>
@@ -52,24 +54,32 @@ const Home = () => {
       </View>
 
       <View style={styles.contentDiv}>
-        <View style={styles.contentItem}>
+        <TouchableOpacity
+          style={styles.contentItem}
+          onPress={() => navigation.navigate('Consult')}>
           <Image source={doctorImg} style={styles.img} />
-          <Text style={styles.contentText}>Doctor Digital Consult</Text>
-        </View>
-        <View style={styles.contentItem}>
+          <Text style={styles.contentText}>Doctor Consult</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.contentItem}
+          onPress={() => navigation.navigate('Medicines')}>
           <Image source={medImg} style={styles.img} />
           <Text style={styles.contentText}>Medicines</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.contentDiv}>
-        <View style={styles.contentItem}>
+        <TouchableOpacity
+          style={styles.contentItem}
+          onPress={() => navigation.navigate('Tests')}>
           <Image source={labtestsImg} style={styles.img} />
           <Text style={styles.contentText}>Lab Tests</Text>
-        </View>
-        <View style={styles.contentItem}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.contentItem}
+          onPress={() => navigation.navigate('HealthRecords')}>
           <Image source={healthImg} style={styles.img} />
           <Text style={styles.contentText}>Health Records</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -146,7 +156,7 @@ const styles = StyleSheet.create({
   },
   contentText: {
     textAlign: 'left',
-    width: 100,
+    width: 95,
     fontSize: 14,
     color: '#127359',
     fontWeight: '600',
