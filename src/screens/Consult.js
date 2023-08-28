@@ -147,8 +147,8 @@ const styles = StyleSheet.create({
   },
   contentItem: {
     flexDirection: 'row',
-    // justifyContent: 'space-between',
-    gap: 6,
+    justifyContent: 'space-between',
+    gap: 0,
     marginVertical: 10,
   },
   innercontentItem: {
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     borderRadius: 8,
-    width: 105,
+    width: 120,
     height: 'auto',
     padding: 2,
   },

@@ -80,27 +80,21 @@ const DoctorList = () => {
           </View>
           <View style={styles.cardButton}>
             <Text
-              style={{
-                fontSize: 12,
-                backgroundColor: 'orange',
-                padding: 5,
-                fontWeight: '600',
-                color: '#127359',
-                height: 40,
-                borderRadius: 6,
-              }}>
+              style={[
+                styles.btn,
+                {color: '#127359', backgroundColor: 'orange'},
+              ]}>
               <FontAwesome6 name="video" color="#127359" size={14} />
               &nbsp;&nbsp;Book Digital Consult
             </Text>
             <Text
-              style={{
-                fontSize: 12,
-                backgroundColor: '#127359',
-                padding: 5,
-                color: '#ffffff',
-                fontWeight: '600',
-                borderRadius: 6,
-              }}>
+              style={[
+                styles.btn,
+                {
+                  backgroundColor: '#127359',
+                  color: '#ffffff',
+                },
+              ]}>
               <FontAwesome6 name="hospital" color="#ffffff" size={14} />
               &nbsp;&nbsp;Book Hospital Visit
             </Text>
@@ -133,27 +127,21 @@ const DoctorList = () => {
           </View>
           <View style={styles.cardButton}>
             <Text
-              style={{
-                fontSize: 12,
-                backgroundColor: 'orange',
-                padding: 5,
-                fontWeight: '600',
-                color: '#127359',
-                height: 40,
-                borderRadius: 6,
-              }}>
+              style={[
+                styles.btn,
+                {color: '#127359', backgroundColor: 'orange'},
+              ]}>
               <FontAwesome6 name="video" color="#127359" size={14} />
               &nbsp;&nbsp;Book Digital Consult
             </Text>
             <Text
-              style={{
-                fontSize: 12,
-                backgroundColor: '#127359',
-                padding: 5,
-                color: '#ffffff',
-                fontWeight: '600',
-                borderRadius: 6,
-              }}>
+              style={[
+                styles.btn,
+                {
+                  backgroundColor: '#127359',
+                  color: '#ffffff',
+                },
+              ]}>
               <FontAwesome6 name="hospital" color="#ffffff" size={14} />
               &nbsp;&nbsp;Book Hospital Visit
             </Text>
@@ -186,27 +174,21 @@ const DoctorList = () => {
           </View>
           <View style={styles.cardButton}>
             <Text
-              style={{
-                fontSize: 12,
-                backgroundColor: 'orange',
-                padding: 5,
-                fontWeight: '600',
-                color: '#127359',
-                height: 40,
-                borderRadius: 6,
-              }}>
+              style={[
+                styles.btn,
+                {color: '#127359', backgroundColor: 'orange'},
+              ]}>
               <FontAwesome6 name="video" color="#127359" size={14} />
               &nbsp;&nbsp;Book Digital Consult
             </Text>
             <Text
-              style={{
-                fontSize: 12,
-                backgroundColor: '#127359',
-                padding: 5,
-                color: '#ffffff',
-                fontWeight: '600',
-                borderRadius: 6,
-              }}>
+              style={[
+                styles.btn,
+                {
+                  backgroundColor: '#127359',
+                  color: '#ffffff',
+                },
+              ]}>
               <FontAwesome6 name="hospital" color="#ffffff" size={14} />
               &nbsp;&nbsp;Book Hospital Visit
             </Text>
@@ -312,6 +294,16 @@ const styles = StyleSheet.create({
   },
   cardButton: {
     flexDirection: 'row',
-    gap: 5,
+    gap: 2,
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  btn: {
+    fontSize: 12,
+    padding: 12,
+    fontWeight: '600',
+    borderRadius: 6,
+    width: '50%',
+    textAlign: 'center',
   },
 });
