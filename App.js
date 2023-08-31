@@ -17,10 +17,14 @@ import Medicines from './src/screens/Medicines';
 import Tests from './src/screens/Tests';
 import HealthRecords from './src/screens/HealthRecords';
 import DoctorList from './src/screens/DoctorList';
+import TimeSlot from './src/screens/TimeSlot';
 
 function App() {
   useEffect(() => {
-    SplashScreen.hide();
+    const timeoutId = setTimeout(() => {
+      SplashScreen.hide();
+    }, 5000);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
@@ -45,6 +49,11 @@ function App() {
           <Stack.Screen
             name="DoctorList"
             component={DoctorList}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="TimeSlot"
+            component={TimeSlot}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

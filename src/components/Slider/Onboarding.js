@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   label: {
-    margin: 2,
+    fontSize: 12,
   },
   button: {
     alignItems: 'center',

@@ -79,25 +79,31 @@ const DoctorList = () => {
             </Text>
           </View>
           <View style={styles.cardButton}>
-            <Text
-              style={[
-                styles.btn,
-                {color: '#127359', backgroundColor: 'orange'},
-              ]}>
-              <FontAwesome6 name="video" color="#127359" size={14} />
-              &nbsp;&nbsp;Book Digital Consult
-            </Text>
-            <Text
-              style={[
-                styles.btn,
-                {
-                  backgroundColor: '#127359',
-                  color: '#ffffff',
-                },
-              ]}>
-              <FontAwesome6 name="hospital" color="#ffffff" size={14} />
-              &nbsp;&nbsp;Book Hospital Visit
-            </Text>
+            <TouchableOpacity
+              style={styles.btnO}
+              onPress={() => navigation.navigate('TimeSlot')}>
+              <Text
+                style={[
+                  styles.btn,
+                  {color: '#127359', backgroundColor: 'orange'},
+                ]}>
+                <FontAwesome6 name="video" color="#127359" size={14} />
+                &nbsp;&nbsp;Book Digital Consult
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.btnO}>
+              <Text
+                style={[
+                  styles.btn,
+                  {
+                    backgroundColor: '#127359',
+                    color: '#ffffff',
+                  },
+                ]}>
+                <FontAwesome6 name="hospital" color="#ffffff" size={14} />
+                &nbsp;&nbsp;Book Hospital Visit
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.card}>
@@ -126,25 +132,31 @@ const DoctorList = () => {
             </Text>
           </View>
           <View style={styles.cardButton}>
-            <Text
-              style={[
-                styles.btn,
-                {color: '#127359', backgroundColor: 'orange'},
-              ]}>
-              <FontAwesome6 name="video" color="#127359" size={14} />
-              &nbsp;&nbsp;Book Digital Consult
-            </Text>
-            <Text
-              style={[
-                styles.btn,
-                {
-                  backgroundColor: '#127359',
-                  color: '#ffffff',
-                },
-              ]}>
-              <FontAwesome6 name="hospital" color="#ffffff" size={14} />
-              &nbsp;&nbsp;Book Hospital Visit
-            </Text>
+            <TouchableOpacity
+              style={styles.btnO}
+              onPress={() => navigation.navigate('TimeSlot')}>
+              <Text
+                style={[
+                  styles.btn,
+                  {color: '#127359', backgroundColor: 'orange'},
+                ]}>
+                <FontAwesome6 name="video" color="#127359" size={14} />
+                &nbsp;&nbsp;Book Digital Consult
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.btnO}>
+              <Text
+                style={[
+                  styles.btn,
+                  {
+                    backgroundColor: '#127359',
+                    color: '#ffffff',
+                  },
+                ]}>
+                <FontAwesome6 name="hospital" color="#ffffff" size={14} />
+                &nbsp;&nbsp;Book Hospital Visit
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.card}>
@@ -173,25 +185,31 @@ const DoctorList = () => {
             </Text>
           </View>
           <View style={styles.cardButton}>
-            <Text
-              style={[
-                styles.btn,
-                {color: '#127359', backgroundColor: 'orange'},
-              ]}>
-              <FontAwesome6 name="video" color="#127359" size={14} />
-              &nbsp;&nbsp;Book Digital Consult
-            </Text>
-            <Text
-              style={[
-                styles.btn,
-                {
-                  backgroundColor: '#127359',
-                  color: '#ffffff',
-                },
-              ]}>
-              <FontAwesome6 name="hospital" color="#ffffff" size={14} />
-              &nbsp;&nbsp;Book Hospital Visit
-            </Text>
+            <TouchableOpacity
+              style={styles.btnO}
+              onPress={() => navigation.navigate('TimeSlot')}>
+              <Text
+                style={[
+                  styles.btn,
+                  {color: '#127359', backgroundColor: 'orange'},
+                ]}>
+                <FontAwesome6 name="video" color="#127359" size={14} />
+                &nbsp;&nbsp;Book Digital Consult
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.btnO}>
+              <Text
+                style={[
+                  styles.btn,
+                  {
+                    backgroundColor: '#127359',
+                    color: '#ffffff',
+                  },
+                ]}>
+                <FontAwesome6 name="hospital" color="#ffffff" size={14} />
+                &nbsp;&nbsp;Book Hospital Visit
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -303,7 +321,9 @@ const styles = StyleSheet.create({
     padding: 12,
     fontWeight: '600',
     borderRadius: 6,
-    width: '50%',
     textAlign: 'center',
+  },
+  btnO: {
+    width: '50%',
   },
 });
