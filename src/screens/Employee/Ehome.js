@@ -8,17 +8,15 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React from 'react';
-import medayuLogo from '../images/medayu.jpeg';
+import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 //images
-import doctorImg from '../images/doctor.png';
-import medImg from '../images/medicines.png';
-import healthImg from '../images/medical-record.png';
-import labtestsImg from '../images/labtests.png';
+import pr from '../../images/pr.png';
+import s_s from '../../images/s-s.png';
 
-const Home = () => {
+const Ehome = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -28,13 +26,13 @@ const Home = () => {
           <Text style={styles.uName}>Hi Sumit</Text>
         </View>
         <View style={styles.hrcontent}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <FontAwesome name="shopping-cart" size={22} color="#127359" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity>
             <FontAwesome name="bell" size={22} color="#127359" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
             <FontAwesome name="user" size={22} color="#127359" />
           </TouchableOpacity>
         </View>
@@ -56,36 +54,22 @@ const Home = () => {
       <View style={styles.contentDiv}>
         <TouchableOpacity
           style={styles.contentItem}
-          onPress={() => navigation.navigate('Consult')}>
-          <Image source={doctorImg} style={styles.img} />
-          <Text style={styles.contentText}>Doctor Consult</Text>
+          onPress={() => navigation.navigate('EpatientRegistration')}>
+          <Image source={pr} style={styles.img} />
+          <Text style={styles.contentText}>Patient Registration</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.contentItem}
-          onPress={() => navigation.navigate('Medicines')}>
-          <Image source={medImg} style={styles.img} />
-          <Text style={styles.contentText}>Medicines</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.contentDiv}>
-        <TouchableOpacity
-          style={styles.contentItem}
-          onPress={() => navigation.navigate('Tests')}>
-          <Image source={labtestsImg} style={styles.img} />
-          <Text style={styles.contentText}>Lab Tests</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.contentItem}
-          onPress={() => navigation.navigate('HealthRecords')}>
-          <Image source={healthImg} style={styles.img} />
-          <Text style={styles.contentText}>Health Records</Text>
+          onPress={() => navigation.navigate('QRScanner')}>
+          <Image source={s_s} style={styles.img} />
+          <Text style={styles.contentText}>Search Patient</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
 
-export default Home;
+export default Ehome;
 
 const styles = StyleSheet.create({
   container: {

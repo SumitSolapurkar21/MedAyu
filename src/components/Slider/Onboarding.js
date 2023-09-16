@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   SafeAreaView,
   Image,
@@ -13,10 +13,11 @@ import {
   Button,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import {SocialIcon} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 
-const {width, height} = Dimensions.get('window');
+import UserContext from '../Context/Context';
+
+const {width} = Dimensions.get('window');
 
 const slides = [
   {
@@ -51,13 +52,22 @@ const Slide = ({item}) => {
 };
 
 const Onboarding = () => {
+  const {setUserData} = useContext(UserContext);
+  const [referal, setReferal] = useState('');
   const [mobilenumber, setMobilenumber] = useState('');
   const [isSelected1, setSelection1] = useState(false);
   const [isSelected2, setSelection2] = useState(false);
+
   const navigation = useNavigation();
+
   const mobilenumberhandler = e => {
     console.log(e);
     setMobilenumber(e);
+    setUserData(e);
+  };
+  const referalHandler = e => {
+    console.log(e);
+    setReferal(e);
   };
   return (
     <View style={styles.container}>
@@ -87,10 +97,13 @@ const Onboarding = () => {
         keyboardType="numeric"
         textAlign="center"
         maxLength={10}
+        required
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('OtpPage')}>
+        onPress={() => navigation.navigate('Tabs', {mobilenumber})}
+        // onPress={() => navigation.navigate('OtpPage')}
+      >
         <Text style={{color: 'white'}}>CONTINUE</Text>
       </TouchableOpacity>
       <TextInput
@@ -98,8 +111,8 @@ const Onboarding = () => {
         backgroundColor="#f2fbff"
         textAlign="center"
         placeholder="Enter Referral Code(Optional)"
-        value={mobilenumber}
-        onChangeText={e => mobilenumberhandler(e)}
+        value={referal}
+        onChangeText={e => referalHandler(e)}
         autoComplete="off"
         keyboardType="numeric"
         maxLength={10}

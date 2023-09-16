@@ -8,16 +8,19 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 import SplashScreen from 'react-native-splash-screen';
-import Login from './src/screens/Login';
-import Otp from './src/screens/Otp';
-import Home from './src/screens/Home';
+import Login from './src/screens/Patients/Login';
+import Otp from './src/screens/Patients/Otp';
+import Home from './src/screens/Patients/Home';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import Consult from './src/screens/Consult';
-import Medicines from './src/screens/Medicines';
-import Tests from './src/screens/Tests';
-import HealthRecords from './src/screens/HealthRecords';
-import DoctorList from './src/screens/DoctorList';
-import TimeSlot from './src/screens/TimeSlot';
+import Consult from './src/screens/Patients/Consult';
+import Medicines from './src/screens/Patients/Medicines';
+import Tests from './src/screens/Patients/Tests';
+import HealthRecords from './src/screens/Patients/HealthRecords';
+import DoctorList from './src/screens/Patients/DoctorList';
+import TimeSlot from './src/screens/Patients/TimeSlot';
+import {UserProvider} from './src/components/Context/Context';
+import Ehome from './src/screens/Employee/Ehome';
+import EpatientRegistration from './src/screens/Employee/EpatientRegistration';
 
 function App() {
   useEffect(() => {
@@ -29,35 +32,47 @@ function App() {
 
   return (
     <>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="LoginPage"
-            component={Login}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="OtpPage"
-            component={Otp}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Tabs"
-            component={Tabs}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="DoctorList"
-            component={DoctorList}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="TimeSlot"
-            component={TimeSlot}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <UserProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="LoginPage"
+              component={Login}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="OtpPage"
+              component={Otp}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Tabs"
+              component={Tabs}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="DoctorList"
+              component={DoctorList}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="TimeSlot"
+              component={TimeSlot}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Ehome"
+              component={Ehome}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="EpatientRegistration"
+              component={EpatientRegistration}
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </UserProvider>
     </>
   );
 }

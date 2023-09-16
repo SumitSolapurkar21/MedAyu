@@ -11,8 +11,9 @@ import {
 import React from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
-import doctorm from '../images/doctorm.png';
-import doctorf from '../images/doctorf.png';
+
+import doctorm from '../../images/doctorm.png';
+import doctorf from '../../images/doctorf.png';
 
 const DoctorList = () => {
   const navigation = useNavigation();

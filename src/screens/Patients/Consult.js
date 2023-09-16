@@ -10,15 +10,17 @@ import {
 } from 'react-native';
 import React from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import GP from '../images/GP.png';
-import SS from '../images/SS.png';
-import CS from '../images/CS.png';
-import neo from '../images/neo.jpeg';
-import ent from '../images/ent.png';
-import cardi from '../images/cardi.webp';
-import gast from '../images/gast.jpg';
-import psy from '../images/psy.png';
-import gyn from '../images/gyn.png';
+
+import GP from '../../images/GP.png';
+import SS from '../../images/SS.png';
+import CS from '../../images/CS.png';
+import neo from '../../images/neo.jpeg';
+import ent from '../../images/ent.png';
+import cardi from '../../images/cardi.webp';
+import gast from '../../images/gast.jpg';
+import psy from '../../images/psy.png';
+import gyn from '../../images/gyn.png';
+
 import {useNavigation} from '@react-navigation/native';
 
 const Consult = () => {

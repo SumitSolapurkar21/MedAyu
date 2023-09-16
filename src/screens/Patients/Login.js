@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import React from 'react';
-import componentStyle from '../css/GlobalCss';
-import Onboarding from '../components/Slider/Onboarding';
+import componentStyle from '../../css/GlobalCss';
+import Onboarding from '../../components/Slider/Onboarding';
 
 const Login = () => {
   return (
