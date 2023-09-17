@@ -23,6 +23,8 @@ import Ehome from './src/screens/Employee/Ehome';
 import EpatientRegistration from './src/screens/Employee/EpatientRegistration';
 import Scanner from './src/components/Scanner/Scanner';
 import EpatientDetails from './src/screens/Employee/EpatientDetails';
+import DateTimeAppointment from './src/components/DateTimeAppointment';
+import Eappointment from './src/screens/Employee/Eappointment';
 
 function App() {
   useEffect(() => {
@@ -80,6 +82,16 @@ function App() {
             <Stack.Screen
               name="EpatientDetails"
               component={EpatientDetails}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Eappointment"
+              component={Eappointment}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="DTAppointment"
+              component={DateTimeAppointment}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

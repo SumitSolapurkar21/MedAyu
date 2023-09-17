@@ -8,9 +8,15 @@ import {
 } from 'react-native';
 import React from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
+import doctorImg from '../../images/doctor.png';
+import ipd from '../../images/ipd.png';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
 
 const EpatientDetails = () => {
+
+  const navigation = useNavigation();
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>
@@ -28,14 +34,34 @@ const EpatientDetails = () => {
         </View>
       </View>
       <View style={styles.card}>
-        <View style={styles.hlcontent}>
-          <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>Hi Sumit</Text>
+        <View style={[styles.cardContent, {backgroundColor: '#afcafa'}]}>
+          <Text style={styles.cardlabel}>Patient Name</Text>
+          <Text style={styles.cardData}>Sumit Solapurkar</Text>
         </View>
-        <View style={styles.hlcontent}>
-          <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>Hi Sumit</Text>
+        <View style={styles.cardContent}>
+          <Text style={styles.cardlabel}>UHID No.</Text>
+          <Text style={styles.cardData}>1149961450</Text>
         </View>
+        <View style={[styles.cardContent, {backgroundColor: '#afcafa'}]}>
+          <Text style={styles.cardlabel}>Mobile No.</Text>
+          <Text style={styles.cardData}>9822179090</Text>
+        </View>
+        <View style={styles.cardContent}>
+          <Text style={styles.cardlabel}>Gender / Age</Text>
+          <Text style={styles.cardData}>Male / 23</Text>
+        </View>
+      </View>
+      <View style={styles.cardSelection}>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('Eappointment')}>
+          <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
+          <Text style={styles.uName}>Appointment</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.selectDiv}>
+          <Image source={ipd} alt="IPD" style={styles.img} />
+          <Text style={styles.uName}>IPD</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -75,15 +101,48 @@ const styles = StyleSheet.create({
     height: 50,
   },
   card: {
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.1,
+    backgroundColor: 'white',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
     shadowRadius: 0,
-    elevation: 2,
-    //     width: '48%',
-    padding: 6,
-    //     height: 75,
-    borderRadius: 4,
+    elevation: 4,
+    borderRadius: 8,
+    borderRadius: 1,
     marginHorizontal: 16,
     marginVertical: 16,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    padding: 10,
+  },
+  cardlabel: {
+    width: 120,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  cardData: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#127359',
+  },
+  cardSelection: {
+    flexDirection: 'row',
+    marginHorizontal: 16,
+    marginVertical: 16,
+    gap: 20,
+  },
+  selectDiv: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: 'white',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 0,
+    elevation: 5,
+    borderRadius: 6,
+    padding: 10,
+    width: '47%',
   },
 });
