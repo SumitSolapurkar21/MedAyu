@@ -21,6 +21,8 @@ import TimeSlot from './src/screens/Patients/TimeSlot';
 import {UserProvider} from './src/components/Context/Context';
 import Ehome from './src/screens/Employee/Ehome';
 import EpatientRegistration from './src/screens/Employee/EpatientRegistration';
+import Scanner from './src/components/Scanner/Scanner';
+import EpatientDetails from './src/screens/Employee/EpatientDetails';
 
 function App() {
   useEffect(() => {
@@ -68,6 +70,16 @@ function App() {
             <Stack.Screen
               name="EpatientRegistration"
               component={EpatientRegistration}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="QRScanner"
+              component={Scanner}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="EpatientDetails"
+              component={EpatientDetails}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

@@ -82,3 +82,4 @@ To learn more about React Native, take a look at the following resources:
 
 **Icons** : https://www.flaticon.com/ 
 **Icons** : https://icons8.com/icons
+**Scanner Code** : https://www.youtube.com/watch?v=yKmbU_f06qM&t=107s
