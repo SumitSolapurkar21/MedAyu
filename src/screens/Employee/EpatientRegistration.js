@@ -106,6 +106,7 @@ const EpatientRegistration = () => {
     date: '',
     appointmentTime: '',
   });
+
   const handleSubmit = () => {
     const errors = {};
 

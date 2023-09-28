@@ -12,32 +12,42 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import React, {useState} from 'react';
 import DateTimeAppointment from '../../components/DateTimeAppointment';
 import {SelectList} from 'react-native-dropdown-select-list';
+import {useNavigation} from '@react-navigation/native';
+
+import successIcon from '../../images/success.gif';
+import MsgPopup from '../../components/MsgPopup/MsgPopup';
 
 const Eappointment = () => {
+  const [backdropOpacity, setBackdropOpacity] = useState(0);
+  const navigation = useNavigation();
   const [formData, setFormData] = useState({
     department: '',
     doctor: '',
   });
+  const [msgPopup, setMsgPopup] = useState(false);
+
   const department_data = [{key: '1', value: 'Panchakarma'}];
   const doctor_data = [{key: '1', value: 'Pranay Parihar'}];
+
   const handleInputChange = (fieldName, value) => {
     setFormData({
       ...formData,
       [fieldName]: value,
     });
   };
+
   const handleSubmit = () => {
     const errors = {};
 
     if (Object.keys(errors).length === 0) {
       console.log('Form data:', formData);
       // Reset the form fields
-      setFormData({
-        department: '',
-        doctor: '',
-      });
+      setFormData([]);
     }
+    setMsgPopup(true);
+    setBackdropOpacity(0.5);
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>
@@ -54,6 +64,13 @@ const Eappointment = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <MsgPopup
+        msgPopup={msgPopup}
+        setMsgPopup={setMsgPopup}
+        backdropOpacity={backdropOpacity}
+      />
+
       <View style={styles.main}>
         <View style={styles.selection}>
           <Text
@@ -87,7 +104,9 @@ const Eappointment = () => {
           </View>
         </View>
       </View>
+
       <DateTimeAppointment />
+
       <TouchableOpacity style={styles.formSubmit} onPress={handleSubmit}>
         <Text style={styles.formSubmitTest}>Submit</Text>
       </TouchableOpacity>
