@@ -14,7 +14,7 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 //images
 import pr from '../../images/pr.png';
-import s_s from '../../images/s-s.png';
+import ss from '../../images/sss.png';
 
 const Ehome = () => {
   const navigation = useNavigation();
@@ -37,6 +37,7 @@ const Ehome = () => {
           </TouchableOpacity>
         </View>
       </View>
+
       <View style={styles.searchDiv}>
         <FontAwesome6
           name="magnifying-glass"
@@ -61,7 +62,7 @@ const Ehome = () => {
         <TouchableOpacity
           style={styles.contentItem}
           onPress={() => navigation.navigate('QRScanner')}>
-          <Image source={s_s} style={styles.img} />
+          <Image source={ss} style={styles.img} />
           <Text style={styles.contentText}>Search Patient</Text>
         </TouchableOpacity>
       </View>

@@ -26,7 +26,7 @@ export default function Scanner() {
   };
 
   const handleNavigation = () => {
-    navigation.navigate('EpatientDetails');
+    navigation.navigate('EipdregistrationProfile');
   };
 
   return (

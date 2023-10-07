@@ -14,9 +14,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 
 const EpatientDetails = () => {
-
   const navigation = useNavigation();
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>
@@ -51,6 +50,7 @@ const EpatientDetails = () => {
           <Text style={styles.cardData}>Male / 23</Text>
         </View>
       </View>
+      
       <View style={styles.cardSelection}>
         <TouchableOpacity
           style={styles.selectDiv}
@@ -58,7 +58,10 @@ const EpatientDetails = () => {
           <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
           <Text style={styles.uName}>Appointment</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.selectDiv}>
+
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('Eipdregistration')}>
           <Image source={ipd} alt="IPD" style={styles.img} />
           <Text style={styles.uName}>IPD</Text>
         </TouchableOpacity>

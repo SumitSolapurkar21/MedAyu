@@ -25,6 +25,8 @@ import Scanner from './src/components/Scanner/Scanner';
 import EpatientDetails from './src/screens/Employee/EpatientDetails';
 import DateTimeAppointment from './src/components/DateTimeAppointment';
 import Eappointment from './src/screens/Employee/Eappointment';
+import EipregistrationProfile from './src/screens/Employee/EipregistrationForm/EipregistrationProfile';
+import EipdregistrationSocioeconomics from './src/screens/Employee/EipregistrationForm/EipdregistrationSocioeconomics';
 
 function App() {
   useEffect(() => {
@@ -89,9 +91,24 @@ function App() {
               component={Eappointment}
               options={{headerShown: false}}
             />
+            {/* <Stack.Screen
+              name="Eipdregistration"
+              component={Eipdregistration}
+              options={{headerShown: false}}
+            /> */}
             <Stack.Screen
               name="DTAppointment"
               component={DateTimeAppointment}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="EipdregistrationProfile"
+              component={EipregistrationProfile}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="EipdregistrationSocioeconomics"
+              component={EipdregistrationSocioeconomics}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
