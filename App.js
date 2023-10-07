@@ -27,6 +27,9 @@ import DateTimeAppointment from './src/components/DateTimeAppointment';
 import Eappointment from './src/screens/Employee/Eappointment';
 import EipregistrationProfile from './src/screens/Employee/EipregistrationForm/EipregistrationProfile';
 import EipdregistrationSocioeconomics from './src/screens/Employee/EipregistrationForm/EipdregistrationSocioeconomics';
+import EipdregistrationIdentification from './src/screens/Employee/EipregistrationForm/EipdregistrationIdentification';
+import EipdregistrationInsurance from './src/screens/Employee/EipregistrationForm/EipdregistrationInsurance';
+import EipdregistrationEmergencyContact from './src/screens/Employee/EipregistrationForm/EipdregistrationEmergencyContact';
 
 function App() {
   useEffect(() => {
@@ -109,6 +112,21 @@ function App() {
             <Stack.Screen
               name="EipdregistrationSocioeconomics"
               component={EipdregistrationSocioeconomics}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="EipdregistrationIdentification"
+              component={EipdregistrationIdentification}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="EipdregistrationInsurance"
+              component={EipdregistrationInsurance}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="EipdregistrationEmergencyContact"
+              component={EipdregistrationEmergencyContact}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

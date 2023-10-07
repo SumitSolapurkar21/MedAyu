@@ -21,7 +21,7 @@ const EipregistrationProfile = () => {
             name="arrow-left-long"
             color="#127359"
             size={28}
-            onPress={() => navigation.navigate('Ehome')}
+            onPress={() => navigation.navigate('EpatientDetails')}
           />
           <Text style={{color: 'black', fontWeight: '600', fontSize: 16}}>
             Patient Registration
@@ -185,11 +185,12 @@ const EipregistrationProfile = () => {
       <View style={styles.formGrpButton}>
         <TouchableOpacity
           onPress={() => navigation.navigate('EipdregistrationSocioeconomics')}>
-          <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
+          <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
             Save & Next
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('EipdregistrationSocioeconomics')}>
           <Text
             style={[
               styles.formButton,

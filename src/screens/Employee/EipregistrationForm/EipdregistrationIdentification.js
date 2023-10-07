@@ -11,7 +11,7 @@ import React from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 
-const EipdregistrationSocioeconomics = () => {
+const EipdregistrationIdentification = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -37,50 +37,57 @@ const EipdregistrationSocioeconomics = () => {
       <ScrollView vertical>
         <View style={styles.main}>
           <View style={styles.mainHead}>
-            <Text style={styles.mainHeadText}>Socioeconomics</Text>
+            <Text style={styles.mainHeadText}>Identification</Text>
           </View>
           <View style={styles.form}>
             <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Education</Text>
-              <TextInput style={styles.fieldInput} placeholder="Education" />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Occupation </Text>
-              <TextInput style={styles.fieldInput} placeholder="Occupation" />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Family Income </Text>
+              <Text style={styles.formLabel}>Photo Id Type</Text>
               <TextInput
                 style={styles.fieldInput}
-                placeholder="Family Income"
+                placeholder="Photo Id Type"
               />
             </View>
             <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>KPS Score </Text>
-              <TextInput style={styles.fieldInput} placeholder="KPS Score" />
+              <Text style={styles.formLabel}>Issuing Authority Detail </Text>
+              <TextInput
+                style={styles.fieldInput}
+                placeholder="Issuing Authority Detail"
+              />
             </View>
             <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>KPS Class </Text>
-              <TextInput style={styles.fieldInput} placeholder="OP" />
+              <Text style={styles.formLabel}>Full Name </Text>
+              <TextInput style={styles.fieldInput} placeholder="Full Name" />
+            </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>ID Number </Text>
+              <TextInput style={styles.fieldInput} placeholder="ID Number" />
+            </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Valid From </Text>
+              <TextInput style={styles.fieldInput} placeholder="Valid From" />
+            </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Valid Till </Text>
+              <TextInput style={styles.fieldInput} placeholder="Valid Till" />
             </View>
           </View>
         </View>
       </ScrollView>
       <View style={styles.formGrpButton}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationProfile')}>
+          onPress={() => navigation.navigate('EipdregistrationSocioeconomics')}>
           <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
             Previous
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationIdentification')}>
+          onPress={() => navigation.navigate('EipdregistrationInsurance')}>
           <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
             Save & Next
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationIdentification')}>
+          onPress={() => navigation.navigate('EipdregistrationInsurance')}>
           <Text
             style={[
               styles.formButton,
@@ -94,7 +101,7 @@ const EipdregistrationSocioeconomics = () => {
   );
 };
 
-export default EipdregistrationSocioeconomics;
+export default EipdregistrationIdentification;
 
 const styles = StyleSheet.create({
   container: {

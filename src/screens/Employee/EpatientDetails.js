@@ -10,6 +10,8 @@ import React from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import doctorImg from '../../images/doctor.png';
 import ipd from '../../images/ipd.png';
+import panchakarma from '../../images/panchakarma.png';
+import invoice from '../../images/invoice.png';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 
@@ -50,7 +52,7 @@ const EpatientDetails = () => {
           <Text style={styles.cardData}>Male / 23</Text>
         </View>
       </View>
-      
+
       <View style={styles.cardSelection}>
         <TouchableOpacity
           style={styles.selectDiv}
@@ -61,9 +63,24 @@ const EpatientDetails = () => {
 
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => navigation.navigate('Eipdregistration')}>
+          onPress={() => navigation.navigate('EipdregistrationProfile')}>
           <Image source={ipd} alt="IPD" style={styles.img} />
-          <Text style={styles.uName}>IPD</Text>
+          <Text style={[styles.uName, {marginLeft: 10}]}>IPD</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.cardSelection}>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('Eappointment')}>
+          <Image source={panchakarma} alt="DoctorImg" style={styles.img} />
+          <Text style={styles.uName}>Panchakarma</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('EipdregistrationProfile')}>
+          <Image source={invoice} alt="IPD" style={styles.img} />
+          <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -88,7 +105,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
   },
   uName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#127359',
   },

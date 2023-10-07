@@ -11,7 +11,7 @@ import React from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 
-const EipdregistrationSocioeconomics = () => {
+const EipdregistrationEmergencyContact = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -37,50 +37,57 @@ const EipdregistrationSocioeconomics = () => {
       <ScrollView vertical>
         <View style={styles.main}>
           <View style={styles.mainHead}>
-            <Text style={styles.mainHeadText}>Socioeconomics</Text>
+            <Text style={styles.mainHeadText}>EmergencyContact</Text>
           </View>
           <View style={styles.form}>
             <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Education</Text>
-              <TextInput style={styles.fieldInput} placeholder="Education" />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Occupation </Text>
-              <TextInput style={styles.fieldInput} placeholder="Occupation" />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Family Income </Text>
+              <Text style={styles.formLabel}>Name of Relatives</Text>
               <TextInput
                 style={styles.fieldInput}
-                placeholder="Family Income"
+                placeholder="Name of Relatives"
               />
             </View>
             <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>KPS Score </Text>
-              <TextInput style={styles.fieldInput} placeholder="KPS Score" />
+              <Text style={styles.formLabel}>Relation </Text>
+              <TextInput style={styles.fieldInput} placeholder="Relation" />
             </View>
             <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>KPS Class </Text>
-              <TextInput style={styles.fieldInput} placeholder="OP" />
+              <Text style={styles.formLabel}>Mobile Number </Text>
+              <TextInput
+                style={styles.fieldInput}
+                placeholder="Mobile Number"
+              />
+            </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Alternate Mobile Number </Text>
+              <TextInput
+                style={styles.fieldInput}
+                placeholder="Alternate Mobile Number"
+              />
+            </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Email ID </Text>
+              <TextInput style={styles.fieldInput} placeholder="Email ID" />
             </View>
           </View>
         </View>
       </ScrollView>
       <View style={styles.formGrpButton}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationProfile')}>
+          onPress={() => navigation.navigate('EipdregistrationInsurance')}>
           <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
             Previous
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationIdentification')}>
+          onPress={() =>
+            navigation.navigate('EipdregistrationEmergencyContact')
+          }>
           <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
-            Save & Next
+            Save
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationIdentification')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Ehome')}>
           <Text
             style={[
               styles.formButton,
@@ -94,7 +101,7 @@ const EipdregistrationSocioeconomics = () => {
   );
 };
 
-export default EipdregistrationSocioeconomics;
+export default EipdregistrationEmergencyContact;
 
 const styles = StyleSheet.create({
   container: {
