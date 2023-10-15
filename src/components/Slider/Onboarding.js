@@ -11,11 +11,14 @@ import {
   Dimensions,
   TextInput,
   Button,
+  Alert,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {useNavigation} from '@react-navigation/native';
 
 import UserContext from '../Context/Context';
+import axios from 'axios';
+import api from '../../../api.json';
 
 const {width} = Dimensions.get('window');
 
@@ -54,21 +57,53 @@ const Slide = ({item}) => {
 const Onboarding = () => {
   const {setUserData} = useContext(UserContext);
   const [referal, setReferal] = useState('');
-  const [mobilenumber, setMobilenumber] = useState('');
+
+  const [username, setMobilenumber] = useState('');
+  const [password, setPassword] = useState('');
+
   const [isSelected1, setSelection1] = useState(false);
   const [isSelected2, setSelection2] = useState(false);
 
   const navigation = useNavigation();
 
-  const mobilenumberhandler = e => {
-    console.log(e);
-    setMobilenumber(e);
-    setUserData(e);
-  };
   const referalHandler = e => {
-    console.log(e);
     setReferal(e);
   };
+
+  const handleContinue = async () => {
+    if (username === '' || username.length < 10) {
+      Alert.alert(
+        'Invalid Mobile Number',
+        'Please enter a valid mobile number with at least 10 digits.',
+      );
+    } else if (password === '') {
+      Alert.alert('Password Is Required');
+    } else {
+      await loginHandler();
+      setMobilenumber('');
+      setPassword('');
+    }
+  };
+
+  const loginHandler = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/login`, {username: username, password: password})
+        .then(response => {
+          const res = response.data;
+          if (res.status === true) {
+            Alert.alert('Login Success');
+            navigation.navigate('Ehome');
+          } else {
+            Alert.alert('Login Failed');
+          }
+          setUserData(res);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -91,17 +126,24 @@ const Onboarding = () => {
       <TextInput
         style={styles.mobileInput}
         placeholder="Enter Mobile Number"
-        value={mobilenumber}
-        onChangeText={e => mobilenumberhandler(e)}
+        value={username}
+        onChangeText={text => setMobilenumber(text)}
         autoComplete="off"
         keyboardType="numeric"
         textAlign="center"
         maxLength={10}
-        required
+      />
+      <TextInput
+        style={styles.mobileInput}
+        placeholder="Enter Password"
+        value={password}
+        onChangeText={text => setPassword(text)}
+        autoComplete="off"
+        textAlign="center"
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Tabs', {mobilenumber})}
+        onPress={handleContinue}
         // onPress={() => navigation.navigate('OtpPage')}
       >
         <Text style={{color: 'white'}}>CONTINUE</Text>

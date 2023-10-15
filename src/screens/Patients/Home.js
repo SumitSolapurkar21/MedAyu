@@ -22,7 +22,9 @@ import Ehome from '../Employee/Ehome';
 
 const Home = () => {
   const navigation = useNavigation();
+
   const {userData} = useContext(UserContext);
+  const {role} = userData;
   return (
     <SafeAreaView style={styles.container}>
       {userData === '9' ? (
@@ -87,7 +89,7 @@ const Home = () => {
             </TouchableOpacity>
           </View>
         </>
-      ) : userData === '8' ? (
+      ) : role === 'Receptionist' ? (
         <Ehome />
       ) : null}
     </SafeAreaView>

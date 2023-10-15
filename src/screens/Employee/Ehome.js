@@ -7,23 +7,26 @@ import {
   TextInput,
   SafeAreaView,
 } from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
+import UserContext from '../../components/Context/Context';
 //images
 import pr from '../../images/pr.png';
 import ss from '../../images/sss.png';
 
 const Ehome = () => {
   const navigation = useNavigation();
+  const {userData} = useContext(UserContext);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>
         <View style={styles.hlcontent}>
           <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>Hi Sumit</Text>
+          <Text style={styles.uName}>Hi {userData.username} </Text>
         </View>
         <View style={styles.hrcontent}>
           {/* <TouchableOpacity>

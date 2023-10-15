@@ -40,7 +40,6 @@ const Eappointment = () => {
     const errors = {};
 
     if (Object.keys(errors).length === 0) {
-      console.log('Form data:', formData);
       // Reset the form fields
       setFormData([]);
     }

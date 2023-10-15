@@ -8,31 +8,41 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import {SelectList} from 'react-native-dropdown-select-list';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import successIcon from '../../images/success.gif';
+import UserContext from '../../components/Context/Context';
+import api from '../../../api.json';
+import axios from 'axios';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
 const EpatientRegistration = () => {
   const navigation = useNavigation();
+  const {userData} = useContext(UserContext);
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [datePicker, setDatePicker] = useState(false);
   const [appTimePicker, setAppTimePicker] = useState(false);
   const [msgPopup, setMsgPopup] = useState(false);
   const [backdropOpacity, setBackdropOpacity] = useState(0);
 
+  //form data
+  const [countryData, setCountryData] = useState([]);
+  const [stateData, setStateData] = useState([]);
+  const [cityData, setCityData] = useState([]);
+  const [departmentData, setDepartmentData] = useState([]);
+
   const Gender_data = [
     {key: '1', value: 'Male'},
     {key: '2', value: 'Female'},
   ];
-  const country_data = [{key: '1', value: 'India'}];
-  const state_data = [{key: '1', value: 'Maharashtra'}];
-  const city_data = [{key: '1', value: 'Nagpur'}];
+  // const country_data = [{key: '1', value: 'India'}];
+  // const state_data = [{key: '1', value: 'Maharashtra'}];
+  // const city_data = [{key: '1', value: 'Nagpur'}];
   const nationality_data = [{key: '1', value: 'Indian'}];
-  const department_data = [{key: '1', value: 'OPT'}];
   const consultDoctor = [{key: '1', value: 'Pranay Parihar'}];
   const motherTounge_data = [
     {key: '1', value: 'Marathi'},
@@ -49,6 +59,7 @@ const EpatientRegistration = () => {
     city: '',
     nationality: '',
     address: '',
+    departmentName: '',
     consultDoctor: '',
     date: 'Select Date',
     appointmentTime: 'Select Time',
@@ -57,6 +68,95 @@ const EpatientRegistration = () => {
     remarks: '',
   });
 
+  useEffect(() => {
+    const countryData = async () => {
+      try {
+        await axios.post(`${api.baseurl}/getCountry`).then(res => {
+          const c_data = res.data.data;
+          let c_array = c_data.map(res => {
+            return {name: res.name, code: res.code};
+          });
+          setCountryData(c_array);
+        });
+      } catch (error) {
+        console.error('Server Not Response : ', error);
+      }
+    };
+    countryData();
+  }, []);
+
+  let c_code = formData.country;
+
+  useEffect(() => {
+    const stateData = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/FetchState`, {code: c_code})
+          .then(res => {
+            const s_data = res.data.data;
+
+            let s_array = s_data.map(res => {
+              return {
+                statename: res.statename,
+                iso: res.iso,
+                countryCode: res.countryCode,
+              };
+            });
+
+            setStateData(s_array);
+          });
+      } catch (error) {
+        console.error('Server Not Response : ', error);
+      }
+    };
+    if (c_code !== '') stateData();
+  }, [c_code]);
+
+  let s_code = formData.state;
+
+  useEffect(() => {
+    const cityData = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/FetchCitys`, {countryCode: c_code, iso: s_code})
+          .then(res => {
+            const city_data = res.data.data;
+            let city_array = city_data.map(res => {
+              return {
+                cityname: res.cityname,
+              };
+            });
+
+            setCityData(city_array);
+          });
+      } catch (error) {
+        console.error('Server Not Response : ', error);
+      }
+    };
+    if (c_code !== '' && s_code !== '') cityData();
+  }, [c_code, s_code]);
+
+  let reception_id = userData.data[0]._id;
+  useEffect(() => {
+    const departmentData = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/FetchReceptionDepartmentDeopdown`, {
+            reception_id: userData.data[0]._id,
+          })
+          .then(res => {
+            const dpt_data = res.data.data;
+            console.log('dpt_data :', dpt_data);
+            setDepartmentData(dpt_data);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (reception_id !== '') departmentData();
+  }, [reception_id]);
+
+  console.log(formData.departmentName);
   //dob
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -126,7 +226,6 @@ const EpatientRegistration = () => {
     setValidationErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      console.log('Form data:', formData);
       // Reset the form fields
       setFormData({
         fullName: '',
@@ -195,7 +294,7 @@ const EpatientRegistration = () => {
             name="arrow-left-long"
             color="#127359"
             size={28}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('Ehome')}
           />
           <Text style={{color: 'black', fontWeight: '600', fontSize: 16}}>
             Patient Registration
@@ -267,7 +366,10 @@ const EpatientRegistration = () => {
             <Text style={styles.fieldText}>COUNTRY</Text>
             <SelectList
               setSelected={val => handleInputChange('country', val)}
-              data={country_data}
+              data={countryData.map(res => ({
+                key: res.code,
+                value: res.name,
+              }))}
               search={false}
               boxStyles={styles.selectBox}
             />
@@ -277,19 +379,25 @@ const EpatientRegistration = () => {
           <View style={styles.fields}>
             <Text style={styles.fieldText}>STATE</Text>
             <SelectList
-              setSelected={val => handleInputChange('state', val)}
-              data={state_data}
+              setSelected={value => handleInputChange('state', value)}
+              data={stateData.map(res => ({
+                key: res.iso,
+                value: res.statename,
+              }))}
               search={false}
               boxStyles={styles.selectBox}
             />
           </View>
         </View>
+
         <View style={styles.fields}>
           <View style={styles.fields}>
             <Text style={styles.fieldText}>CITY</Text>
             <SelectList
               setSelected={val => handleInputChange('city', val)}
-              data={city_data}
+              data={cityData.map(res => ({
+                value: res.cityname,
+              }))}
               search={false}
               boxStyles={styles.selectBox}
             />
@@ -331,7 +439,10 @@ const EpatientRegistration = () => {
             <Text style={styles.fieldText}>DEPARTMENT</Text>
             <SelectList
               setSelected={val => handleInputChange('departmentName', val)}
-              data={department_data}
+              data={departmentData.map(res => ({
+                key: res.depart_id,
+                value: res.deptname,
+              }))}
               search={false}
               boxStyles={styles.selectBox}
             />
