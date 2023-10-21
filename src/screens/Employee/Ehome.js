@@ -11,14 +11,16 @@ import React, {useContext} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 //images
 import pr from '../../images/pr.png';
 import ss from '../../images/sss.png';
+import attendence from '../../images/calendar.png';
 
 const Ehome = () => {
   const navigation = useNavigation();
+  // const route = useRoute();
   const {userData} = useContext(UserContext);
 
   return (
@@ -64,9 +66,17 @@ const Ehome = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.contentItem}
-          onPress={() => navigation.navigate('QRScanner')}>
+          onPress={() => navigation.navigate('QRScanner', {value: '1'})}>
           <Image source={ss} style={styles.img} />
           <Text style={styles.contentText}>Search Patient</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.contentDiv}>
+        <TouchableOpacity
+          style={styles.contentItem}
+          onPress={() => navigation.navigate('QRScanner', {value: '2'})}>
+          <Image source={attendence} style={styles.img} />
+          <Text style={styles.contentText}>Attendence</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

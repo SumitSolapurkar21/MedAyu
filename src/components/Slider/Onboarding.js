@@ -88,7 +88,10 @@ const Onboarding = () => {
   const loginHandler = async () => {
     try {
       await axios
-        .post(`${api.baseurl}/login`, {username: username, password: password})
+        .post(`http://43.204.70.195:1107/login`, {
+          username: username,
+          password: password,
+        })
         .then(response => {
           const res = response.data;
           if (res.status === true) {

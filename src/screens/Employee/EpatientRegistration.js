@@ -17,7 +17,6 @@ import successIcon from '../../images/success.gif';
 import UserContext from '../../components/Context/Context';
 import api from '../../../api.json';
 import axios from 'axios';
-// import DateTimePicker from '@react-native-community/datetimepicker';
 
 const EpatientRegistration = () => {
   const navigation = useNavigation();
@@ -31,38 +30,49 @@ const EpatientRegistration = () => {
 
   //form data
   const [countryData, setCountryData] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState('');
+
   const [stateData, setStateData] = useState([]);
+  const [selectedState, setSelectedState] = useState('');
+
   const [cityData, setCityData] = useState([]);
+  const [message, setMessage] = useState('');
+
   const [departmentData, setDepartmentData] = useState([]);
+  const [consultDoctorData, setConsultDoctorData] = useState([]);
+  const [doctorRoomData, setDoctorRoomData] = useState('');
 
   const Gender_data = [
-    {key: '1', value: 'Male'},
-    {key: '2', value: 'Female'},
+    {key: 'Male', value: 'Male'},
+    {key: 'Female', value: 'Female'},
   ];
-  // const country_data = [{key: '1', value: 'India'}];
-  // const state_data = [{key: '1', value: 'Maharashtra'}];
-  // const city_data = [{key: '1', value: 'Nagpur'}];
-  const nationality_data = [{key: '1', value: 'Indian'}];
-  const consultDoctor = [{key: '1', value: 'Pranay Parihar'}];
+
+  const nationality_data = [{key: 'Indian', value: 'Indian'}];
+
   const motherTounge_data = [
-    {key: '1', value: 'Marathi'},
-    {key: '2', value: 'Hindi'},
+    {key: 'Marathi', value: 'Marathi'},
+    {key: 'Hindi', value: 'Hindi'},
+    {key: 'English', value: 'English'},
   ];
   const [formData, setFormData] = useState({
-    fullName: '',
-    gender: '',
-    mobileNumber: '',
-    dateOfBirth: 'Select DOB',
-    age: '',
-    country: '',
-    state: '',
+    patientcategory: 'New',
+    firstname: '',
+    patientgender: '',
+    patientmartial: '',
+    mobilenumber: '',
+    patientdob: '',
+    patientage: '',
+    // country: '',
+    // state: '',
     city: '',
-    nationality: '',
-    address: '',
-    departmentName: '',
-    consultDoctor: '',
-    date: 'Select Date',
-    appointmentTime: 'Select Time',
+    patientnationality: '',
+    patientlanguage: '',
+    patientaddress: '',
+    depart_id: '',
+    doctor_id: '',
+    // roomno: '',
+    app_date: '',
+    slot_id: '',
     purpose: '',
     referal: '',
     remarks: '',
@@ -79,16 +89,17 @@ const EpatientRegistration = () => {
           setCountryData(c_array);
         });
       } catch (error) {
-        console.error('Server Not Response : ', error);
+        console.error('Server Not Response for country : ', error);
       }
     };
     countryData();
   }, []);
 
-  let c_code = formData.country;
+  let c_code = selectedCountry[0];
 
   useEffect(() => {
     const stateData = async () => {
+      console.log('c_code :', c_code);
       try {
         await axios
           .post(`${api.baseurl}/FetchState`, {code: c_code})
@@ -106,35 +117,45 @@ const EpatientRegistration = () => {
             setStateData(s_array);
           });
       } catch (error) {
-        console.error('Server Not Response : ', error);
+        console.error('Server Not Response for state: ', error);
       }
     };
-    if (c_code !== '') stateData();
+    if (c_code != undefined || c_code != '') stateData();
   }, [c_code]);
 
-  let s_code = formData.state;
+  let s_code = selectedState[0];
 
   useEffect(() => {
-    const cityData = async () => {
-      try {
-        await axios
-          .post(`${api.baseurl}/FetchCitys`, {countryCode: c_code, iso: s_code})
-          .then(res => {
-            const city_data = res.data.data;
-            let city_array = city_data.map(res => {
-              return {
-                cityname: res.cityname,
-              };
-            });
+    if (s_code != '') {
+      const cityData = async () => {
+        try {
+          await axios
+            .post(`${api.baseurl}/FetchCitys`, {
+              countryCode: c_code,
+              iso: s_code,
+            })
+            .then(res => {
+              const city_data = res.data.data;
+              let city_array = city_data.map(res => {
+                return {
+                  cityname: res.cityname,
+                };
+              });
 
-            setCityData(city_array);
-          });
-      } catch (error) {
-        console.error('Server Not Response : ', error);
-      }
-    };
-    if (c_code !== '' && s_code !== '') cityData();
-  }, [c_code, s_code]);
+              setCityData(city_array);
+            });
+        } catch (error) {
+          console.error(
+            'Server Not Response for city. Status Code:',
+            error.response.status,
+            'Error Message:',
+            error.message,
+          );
+        }
+      };
+      cityData();
+    }
+  }, [s_code]);
 
   let reception_id = userData.data[0]._id;
   useEffect(() => {
@@ -146,7 +167,7 @@ const EpatientRegistration = () => {
           })
           .then(res => {
             const dpt_data = res.data.data;
-            console.log('dpt_data :', dpt_data);
+            // console.log('dpt_data :', dpt_data);
             setDepartmentData(dpt_data);
           });
       } catch (error) {
@@ -156,7 +177,45 @@ const EpatientRegistration = () => {
     if (reception_id !== '') departmentData();
   }, [reception_id]);
 
-  console.log(formData.departmentName);
+  let department_id = formData.depart_id;
+  useEffect(() => {
+    const consultDoctorData = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/DoctorAccDepartmentinAppmtRecpt`, {
+            depart_id: department_id,
+          })
+          .then(res => {
+            const consultDoctor_data = res.data.data;
+            // console.log('consultDoctor_data :', consultDoctor_data);
+            setConsultDoctorData(consultDoctor_data);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (department_id !== '') consultDoctorData();
+  }, [department_id]);
+
+  let doctor_id = formData.doctor_id;
+  useEffect(() => {
+    const doctorRoomData = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/GetroomnoAccDoctor`, {
+            doctor_id: doctor_id,
+          })
+          .then(res => {
+            const doctorRoomdata = res.data.data;
+            setDoctorRoomData(doctorRoomdata);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (doctor_id !== '') doctorRoomData();
+  }, [doctor_id]);
+
   //dob
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -175,16 +234,42 @@ const EpatientRegistration = () => {
     setAppTimePicker(true);
   };
 
-  const handleConfirm = date => {
+  // Function for handling DOB
+  const handleDOB = date => {
     const dt = new Date(date);
     const x = dt.toISOString().split('T');
     const x1 = x[0].split('-');
     const Dateformat = x1[2] + '-' + x1[1] + '-' + x1[0];
     setFormData({
       ...formData,
-      dateOfBirth: Dateformat,
-      date: Dateformat,
-      appointmentTime: dt.toLocaleTimeString(),
+      patientdob: Dateformat,
+    });
+    hideDatePicker();
+  };
+
+  // Function for handling Date
+  const handleDate = date => {
+    const dt = new Date(date);
+    const year = dt.getFullYear();
+    const month = (dt.getMonth() + 1).toString().padStart(2, '0');
+    const day = dt.getDate().toString().padStart(2, '0');
+    const Dateformat = `${year}-${month}-${day}`;
+    setFormData({
+      ...formData,
+      app_date: Dateformat,
+    });
+    hideDatePicker();
+  };
+
+  // Function for handling Time
+  const handleTime = time => {
+    const dt = new Date(time);
+    const hours = dt.getHours().toString().padStart(2, '0');
+    const minutes = dt.getMinutes().toString().padStart(2, '0');
+    const Timeformat = `${hours}.${minutes}`;
+    setFormData({
+      ...formData,
+      slot_id: Timeformat,
     });
     hideDatePicker();
   };
@@ -206,51 +291,87 @@ const EpatientRegistration = () => {
     date: '',
     appointmentTime: '',
   });
+  // const formSubmitedData = {
+  //   reception_id: userData.data[0]?._id,
+  //   patientcategory: 'New',
+  //   firstname: formData?.firstname,
+  //   patientgender: formData?.patientgender,
+  //   patientmartial: 'Single',
+  //   mobilenumber: formData?.mobilenumber,
+  //   patientdob: formData?.patientdob,
+  //   patientage: formData?.patientage,
+  //   country: selectedCountry[1],
+  //   state: selectedState[1],
+  //   cityname: formData?.city,
+  //   patientnationality: formData?.patientnationality,
+  //   patientlanguage: formData?.patientlanguage,
+  //   patientaddress: formData?.patientaddress,
+  //   depart_id: formData?.depart_id,
+  //   doctor_id: formData?.doctor_id,
+  //   app_date: formData?.app_date,
+  //   slot_id: formData?.slot_id,
+  //   roomno: doctorRoomData,
+  // };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/AddReceptionOutPatientForMobile`, {
+          reception_id: userData.data[0]._id,
+          patientcategory: 'New',
+          firstname: formData.firstname,
+          patientgender: formData.patientgender,
+          patientmartial: 'Single',
+          mobilenumber: formData.mobilenumber,
+          patientdob: formData.patientdob,
+          patientage: formData.patientage,
+          country: selectedCountry[1],
+          state: selectedState[1],
+          cityname: formData.city,
+          patientnationality: formData.patientnationality,
+          patientlanguage: formData.patientlanguage,
+          patientaddress: formData.patientaddress,
+          depart_id: formData.depart_id,
+          doctor_id: formData.doctor_id,
+          app_date: formData.app_date,
+          slot_id: formData.slot_id,
+          roomno: doctorRoomData,
+        })
+        .then(res => {
+          const formRes = res.data;
+          console.log(formRes);
+          setMessage(formRes.message);
+          return formRes;
+        });
+      setMsgPopup(true);
+      setBackdropOpacity(0.5);
+    } catch (error) {
+      console.error('Data Not Submitted', error);
+    }
     const errors = {};
 
-    if (!formData.departmentName) {
-      errors.departmentName = 'Please select a department.';
+    if (!formData.depart_id) {
+      errors.depart_id = 'Please select a department.';
     }
-    if (!formData.consultDoctor) {
-      errors.consultDoctor = 'Please select a consult doctor.';
+    if (!formData.doctor_id) {
+      errors.doctor_id = 'Please select a consult doctor.';
     }
     if (formData.date === 'Select Date') {
       errors.date = 'Please select a date.';
     }
-    if (formData.appointmentTime === 'Select Time') {
-      errors.appointmentTime = 'Please select an appointment time.';
+    if (formData.slot_id === 'Select Time') {
+      errors.slot_id = 'Please select an appointment time.';
     }
 
     setValidationErrors(errors);
-
-    if (Object.keys(errors).length === 0) {
-      // Reset the form fields
-      setFormData({
-        fullName: '',
-        gender: '',
-        mobileNumber: '',
-        dateOfBirth: 'Select DOB',
-        age: '',
-        country: '',
-        state: '',
-        city: '',
-        nationality: '',
-        address: '',
-        consultDoctor: '',
-        date: 'Select Date',
-        appointmentTime: 'Select Time',
-        purpose: '',
-        referal: '',
-        remarks: '',
-      });
-
-      setMsgPopup(true);
-      setBackdropOpacity(0.5);
-    }
   };
 
+  // console.log(
+  //   'selected country  :',
+  //   selectedCountry[0],
+  //   selectedState[0],
+  //   formData.city,
+  // );
   return (
     <SafeAreaView style={styles.container}>
       {msgPopup && (
@@ -262,15 +383,13 @@ const EpatientRegistration = () => {
                 alt="successIcon"
                 style={styles.img}
               />
-              <Text style={styles.modalText}>
-                Patient Registered Successfully
-              </Text>
+              <Text style={styles.modalText}>{message}</Text>
               <TouchableOpacity style={styles.modalBtn}>
                 <Text
                   style={styles.modalBtnText}
                   onPress={() => {
                     setMsgPopup(false);
-                    navigation.navigate('Home');
+                    navigation.navigate('Ehome');
                   }}>
                   Ok
                 </Text>
@@ -314,14 +433,14 @@ const EpatientRegistration = () => {
           <TextInput
             style={styles.fieldInput}
             placeholder="FULLNAME"
-            value={formData.fullName}
-            onChangeText={text => handleInputChange('fullName', text)}
+            value={formData.firstname}
+            onChangeText={text => handleInputChange('firstname', text)}
           />
         </View>
         <View style={styles.fields}>
           <Text style={styles.fieldText}>GENDER</Text>
           <SelectList
-            setSelected={val => handleInputChange('gender', val)}
+            setSelected={val => handleInputChange('patientgender', val)}
             data={Gender_data}
             search={false}
             boxStyles={styles.selectBox}
@@ -334,21 +453,21 @@ const EpatientRegistration = () => {
             placeholder="MOBILE NUMBER"
             keyboardType="numeric"
             maxLength={10}
-            value={formData.mobileNumber}
-            onChangeText={text => handleInputChange('mobileNumber', text)}
+            value={formData.mobilenumber}
+            onChangeText={text => handleInputChange('mobilenumber', text)}
           />
         </View>
         <View style={styles.fields}>
           <Text style={styles.fieldText}>DATE OF BIRTH</Text>
           <TouchableOpacity onPress={showDatePicker}>
             <Text style={[styles.fieldInput, {padding: 12}]}>
-              {formData.dateOfBirth}
+              {formData.patientdob}
             </Text>
           </TouchableOpacity>
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
-            onConfirm={handleConfirm}
+            onConfirm={handleDOB}
             onCancel={hideDatePicker}
           />
         </View>
@@ -357,17 +476,20 @@ const EpatientRegistration = () => {
           <TextInput
             style={styles.fieldInput}
             placeholder="AGE"
-            value={formData.age}
-            onChangeText={text => handleInputChange('age', text)}
+            value={formData.patientage}
+            onChangeText={text => handleInputChange('patientage', text)}
           />
         </View>
         <View style={styles.fields}>
           <View style={styles.fields}>
             <Text style={styles.fieldText}>COUNTRY</Text>
             <SelectList
-              setSelected={val => handleInputChange('country', val)}
+              setSelected={val => {
+                setSelectedCountry(val);
+                handleInputChange('country', val);
+              }}
               data={countryData.map(res => ({
-                key: res.code,
+                key: [res.code, res.name],
                 value: res.name,
               }))}
               search={false}
@@ -379,9 +501,11 @@ const EpatientRegistration = () => {
           <View style={styles.fields}>
             <Text style={styles.fieldText}>STATE</Text>
             <SelectList
-              setSelected={value => handleInputChange('state', value)}
+              setSelected={value => {
+                handleInputChange('state', value), setSelectedState(value);
+              }}
               data={stateData.map(res => ({
-                key: res.iso,
+                key: [res.iso, res.statename],
                 value: res.statename,
               }))}
               search={false}
@@ -407,7 +531,7 @@ const EpatientRegistration = () => {
           <View style={styles.fields}>
             <Text style={styles.fieldText}>NATIONALITY</Text>
             <SelectList
-              setSelected={val => handleInputChange('nationality', val)}
+              setSelected={val => handleInputChange('patientnationality', val)}
               data={nationality_data}
               search={false}
               boxStyles={styles.selectBox}
@@ -418,7 +542,7 @@ const EpatientRegistration = () => {
           <View style={styles.fields}>
             <Text style={styles.fieldText}>MOTHER TOUNGE</Text>
             <SelectList
-              setSelected={val => handleInputChange('motherTounge', val)}
+              setSelected={val => handleInputChange('patientlanguage', val)}
               data={motherTounge_data}
               search={false}
               boxStyles={styles.selectBox}
@@ -430,15 +554,15 @@ const EpatientRegistration = () => {
           <TextInput
             style={styles.fieldInput}
             placeholder="ADDRESS"
-            value={formData.address}
-            onChangeText={text => handleInputChange('address', text)}
+            value={formData.patientaddress}
+            onChangeText={text => handleInputChange('patientaddress', text)}
           />
         </View>
         <View style={styles.fields}>
           <View style={styles.fields}>
             <Text style={styles.fieldText}>DEPARTMENT</Text>
             <SelectList
-              setSelected={val => handleInputChange('departmentName', val)}
+              setSelected={val => handleInputChange('depart_id', val)}
               data={departmentData.map(res => ({
                 key: res.depart_id,
                 value: res.deptname,
@@ -457,8 +581,11 @@ const EpatientRegistration = () => {
           <View style={styles.fields}>
             <Text style={styles.fieldText}>CONSULT DOCTOR</Text>
             <SelectList
-              setSelected={val => handleInputChange('consultDoctor', val)}
-              data={consultDoctor}
+              setSelected={val => handleInputChange('doctor_id', val)}
+              data={consultDoctorData.map(res => ({
+                key: res._id,
+                value: res.name,
+              }))}
               search={false}
               boxStyles={styles.selectBox}
             />
@@ -470,16 +597,28 @@ const EpatientRegistration = () => {
           </View>
         </View>
         <View style={styles.fields}>
+          <View style={styles.fields}>
+            <Text style={styles.fieldText}>Room No</Text>
+            <TextInput
+              style={styles.fieldInput}
+              placeholder="Room No"
+              value={doctorRoomData}
+              // onChangeText={text => handleInputChange('roomno', text)}
+              readOnly
+            />
+          </View>
+        </View>
+        <View style={styles.fields}>
           <Text style={styles.fieldText}>DATE</Text>
           <TouchableOpacity onPress={datePickerHandler}>
             <Text style={[styles.fieldInput, {padding: 12}]}>
-              {formData.date}
+              {formData.app_date}
             </Text>
           </TouchableOpacity>
           <DateTimePickerModal
             isVisible={datePicker}
             mode="date"
-            onConfirm={handleConfirm}
+            onConfirm={handleDate}
             onCancel={hideDatePicker}
           />
           {validationErrors.date && (
@@ -490,13 +629,13 @@ const EpatientRegistration = () => {
           <Text style={styles.fieldText}>APPOINTMENT TIME</Text>
           <TouchableOpacity onPress={appTimePickerHandler}>
             <Text style={[styles.fieldInput, {padding: 12}]}>
-              {formData.appointmentTime}
+              {formData.slot_id}
             </Text>
           </TouchableOpacity>
           <DateTimePickerModal
             isVisible={appTimePicker}
             mode="time"
-            onConfirm={handleConfirm}
+            onConfirm={handleTime}
             onCancel={hideDatePicker}
           />
           {validationErrors.appointmentTime && (
@@ -506,7 +645,7 @@ const EpatientRegistration = () => {
           )}
         </View>
 
-        <View style={styles.fields}>
+        {/* <View style={styles.fields}>
           <Text style={styles.fieldText}>PERPOSE</Text>
           <TextInput
             style={styles.fieldInput}
@@ -532,7 +671,7 @@ const EpatientRegistration = () => {
             value={formData.remarks}
             onChangeText={text => handleInputChange('remarks', text)}
           />
-        </View>
+        </View> */}
       </ScrollView>
 
       <TouchableOpacity style={styles.formSubmit} onPress={handleSubmit}>
