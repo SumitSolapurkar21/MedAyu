@@ -224,6 +224,7 @@ const EpatientRegistration = () => {
     }
   }, [doctor_id]);
 
+  //time slot array .....
   const timeSlot = async () => {
     await axios
       .post(`${api.baseurl}/GetSchedulerForMobile`, {
@@ -233,8 +234,8 @@ const EpatientRegistration = () => {
         mydate: formData.app_date,
       })
       .then(res => {
-        // console.log(res.data.data);
         setTimeSlotArray(res.data.data);
+        return res.data.data;
       });
   };
 
@@ -248,7 +249,7 @@ const EpatientRegistration = () => {
 
   // Date
   const datePickerHandler = () => {
-    setDatePicker(true);
+    setDatePicker(!datePicker);
   };
 
   //appointment time picker
@@ -353,6 +354,7 @@ const EpatientRegistration = () => {
     }
 
     setValidationErrors(errors);
+
     try {
       await axios
         .post(`${api.baseurl}/AddReceptionOutPatientForMobile`, {
@@ -373,7 +375,7 @@ const EpatientRegistration = () => {
           depart_id: formData.depart_id,
           doctor_id: formData.doctor_id,
           app_date: formData.app_date,
-          slot_id: formData.slot_id,
+          slot_id: selectedTime,
           roomno: doctorRoomData,
         })
         .then(res => {
@@ -450,7 +452,7 @@ const EpatientRegistration = () => {
         />
       )}
 
-      {/* {timeSlotPopup && (
+      {timeSlotPopup && (
         <Modal
           transparent={true}
           animationType="slide"
@@ -458,47 +460,70 @@ const EpatientRegistration = () => {
           onRequestClose={closeTimeSlotPopup}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              {timeslotRows.map((row, rowIndex) => (
-                <View key={rowIndex} style={styles.timeSlot}>
-                  {row.map((timeslot, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      style={[
-                        styles.datess1,
-                        {
-                          backgroundColor:
-                            timeslot.timestatus === 'true' ||
-                            timeslot.timeSlot === selectedTime
-                              ? '#03b1fc'
-                              : 'white',
-                          borderColor:
-                            timeslot.timestatus === 'true'
-                              ? '#03b1fc'
-                              : '#03b1fc',
-                        },
-                      ]}
-                      onPress={() => setSelectedTime(timeslot.timeSlot)}>
-                      <Text
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginHorizontal: 10,
+                  marginBottom: 10,
+                }}>
+                <Text style={{color: 'black', fontWeight: '600', fontSize: 20}}>
+                  Select Time Slot
+                </Text>
+                <FontAwesome6
+                  name="xmark"
+                  color="red"
+                  size={28}
+                  onPress={closeTimeSlotPopup}
+                />
+              </View>
+              <ScrollView Vertical showsVerticalScrollIndicator={false}>
+                {timeslotRows.map((row, rowIndex) => (
+                  <View key={rowIndex} style={styles.timeSlotBox}>
+                    {row.map((timeslot, index) => (
+                      <TouchableOpacity
+                        key={index}
                         style={[
-                          styles.dateText,
+                          styles.datess1,
                           {
-                            color:
+                            backgroundColor:
                               timeslot.timestatus === 'true' ||
                               timeslot.timeSlot === selectedTime
-                                ? 'white'
+                                ? '#03b1fc'
+                                : 'white',
+                            borderColor:
+                              timeslot.timestatus === 'true'
+                                ? '#03b1fc'
                                 : '#03b1fc',
                           },
-                        ]}>
-                        {timeslot.timeSlot}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              ))}
+                        ]}
+                        onPress={() => {
+                          setSelectedTime(timeslot.timeSlot),
+                            closeTimeSlotPopup();
+                        }}>
+                        <Text
+                          style={[
+                            styles.dateText,
+                            {
+                              color:
+                                timeslot.timestatus === 'true' ||
+                                timeslot.timeSlot === selectedTime
+                                  ? 'white'
+                                  : '#03b1fc',
+                            },
+                          ]}>
+                          {timeslot.timeSlot}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                ))}
+              </ScrollView>
             </View>
           </View>
         </Modal>
-      )} */}
+      )}
 
       <View style={styles.header}>
         <View style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}>
@@ -720,12 +745,21 @@ const EpatientRegistration = () => {
         </View>
         <View style={styles.fields}>
           <Text style={styles.fieldText}>APPOINTMENT TIME</Text>
-          <TouchableOpacity onPress={appTimePickerHandler}>
+          <TouchableOpacity
+            onChangeText={() =>
+              setFormData({
+                ...formData,
+                slot_id: selectedTime,
+              })
+            }
+            onPress={() => {
+              openTimeSlotPopup();
+            }}>
             <Text style={[styles.fieldInput, {padding: 12}]}>
-              {formData.slot_id}
+              {selectedTime.toString()}
             </Text>
           </TouchableOpacity>
-          <DateTimePickerModal
+          {/* <DateTimePickerModal
             isVisible={appTimePicker}
             mode="time"
             onConfirm={handleTime}
@@ -735,7 +769,7 @@ const EpatientRegistration = () => {
             <Text style={styles.validationError}>
               {validationErrors.appointmentTime}
             </Text>
-          )}
+          )} */}
         </View>
 
         {/* <View style={styles.fields}>
@@ -879,28 +913,17 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  // slotTime: {
-  //   borderColor: 'black',
-  //   borderWidth: 2,
-  //   backgroundColor: 'white',
-  //   flexDirection: 'row',
-  //   justifyContent: 'center',
-  //   width: '80%',
-  //   alignSelf: 'center',
-  //   position: 'absolute',
-  //   top: '20%',
-  //   bottom: '50%',
-  //   height: 400,
-  //   borderRadius: 6,
-  // },
+  timeSlotBox: {
+    flexDirection: 'row',
+    gap: 23,
+    padding: 2,
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // marginTop: 22,
   },
   modalView: {
-    // margin: 10,
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 5,
@@ -913,9 +936,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: '90%',
-    height: 300,
-    maxHeight: 350,
+    width: '88%',
+    maxHeight: 480,
   },
   modalCloseText: {
     color: 'blue',
@@ -936,17 +958,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#03b1fc',
   },
-  timeSlot: {
-    marginVertical: 14,
-    // marginHorizontal: 6,
-  },
+
   timeHeading: {
     fontWeight: '600',
     fontSize: 16,
     // textAlign: 'center',
-  },
-  wrapper: {
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
   },
 });
