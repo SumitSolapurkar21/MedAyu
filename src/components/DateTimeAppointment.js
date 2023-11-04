@@ -5,9 +5,96 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import axios from 'axios';
+import api from '../../api.json';
+import UserContext from './Context/Context';
 
-const DateTimeAppointment = () => {
+const DateTimeAppointment = ({
+  dateArray,
+  doctor_id,
+  patient_id,
+  formData,
+  setFormData,
+  setMsgPopup,
+  setBackdropOpacity,
+}) => {
+  const {userData} = useContext(UserContext);
+  const {_id, hospital_id} = userData.data[0];
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [timeslotArray, setTimeSlotArray] = useState([]);
+
+  //current date
+
+  useEffect(() => {
+    if (doctor_id != '') {
+      let today = new Date();
+      let date =
+        today.getFullYear() +
+        '-' +
+        parseInt(today.getMonth() + 1) +
+        '-' +
+        today.getDate();
+      setSelectedDate(date);
+    } else {
+      setSelectedDate('');
+    }
+  }, [doctor_id]);
+
+  const handleDateSelection = selectedDate => {
+    setSelectedTime('');
+    setSelectedDate(selectedDate);
+  };
+  const handleTimeSelection = selectedTime => {
+    const isTimeSlotValid = timeslotArray.some(
+      res => res.timeSlot === selectedTime && res.timestatus === 'true',
+    );
+
+    setSelectedTime(isTimeSlotValid ? selectedTime : selectedTime);
+  };
+
+  useEffect(() => {
+    if (selectedDate !== '') timeSlot();
+  }, [selectedDate]);
+
+  const timeSlot = async () => {
+    await axios
+      .post(`${api.baseurl}/GetSchedulerForMobile`, {
+        reception_id: _id,
+        hospital_id,
+        doctor_id: doctor_id,
+        mydate: selectedDate,
+      })
+      .then(res => {
+        setTimeSlotArray(res.data.data);
+      });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/AddDirectMobileAppointments`, {
+          patientcategory: 'Review',
+          reception_id: _id,
+          patient_id,
+          depart_id: formData.department,
+          doctor_id: formData.doctor,
+          app_date: selectedDate,
+          slot_id: selectedTime,
+          hospital_id: hospital_id,
+        })
+        .then(res => {
+          return res.data;
+        });
+      setFormData([]);
+      setMsgPopup(true);
+      setBackdropOpacity(0.5);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -18,61 +105,29 @@ const DateTimeAppointment = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.slotsD}>
-          <TouchableOpacity
-            style={[
-              styles.datess,
-              {backgroundColor: '#03b1fc', borderColor: 'white'},
-            ]}>
-            <Text style={[styles.dateText, {color: '#ffffff'}]}>Today</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>Tomorrow</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>01 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>02 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>03 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>04 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>05 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>06 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>07 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>08 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>09 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>10 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>11 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>12 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>13 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>14 Sep</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess}>
-            <Text style={styles.dateText}>15 Sep</Text>
-          </TouchableOpacity>
+          {dateArray?.map((res, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.datess,
+                {
+                  backgroundColor:
+                    res.fullDate === selectedDate ? '#03b1fc' : 'white',
+
+                  borderColor:
+                    res.fullDate === selectedDate ? '#03b1fc' : '#03b1fc',
+                },
+              ]}
+              onPress={() => handleDateSelection(res.fullDate)}>
+              <Text
+                style={[
+                  styles.dateText,
+                  {color: res.fullDate === selectedDate ? 'white' : '#03b1fc'},
+                ]}>
+                {res.date}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
         <View style={styles.timeSlot}>
           <Text style={styles.timeHeading}>
@@ -81,80 +136,40 @@ const DateTimeAppointment = () => {
           </Text>
         </View>
         <View style={styles.wrapper}>
-          <TouchableOpacity style={[styles.datess1]}>
-            <Text style={[styles.dateText]}>09:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>09:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>10:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>10:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>11:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>11:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>12:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>12:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>01:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>01:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>02:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>02:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>03:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>03:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>04:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>04:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>05:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>05:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>06:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>06:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>07:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>07:30</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>08:00</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.datess1}>
-            <Text style={styles.dateText}>08:30</Text>
-          </TouchableOpacity>
+          {timeslotArray?.map((res, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.datess1,
+                {
+                  backgroundColor:
+                    res.timestatus === 'true' || res.timeSlot === selectedTime
+                      ? '#03b1fc'
+                      : 'white',
+                  borderColor:
+                    res.timestatus === 'true' ? '#03b1fc' : '#03b1fc',
+                },
+              ]}
+              onPress={() => handleTimeSelection(res.timeSlot)}>
+              <Text
+                style={[
+                  styles.dateText,
+                  {
+                    color:
+                      res.timestatus === 'true' || res.timeSlot === selectedTime
+                        ? 'white'
+                        : '#03b1fc',
+                  },
+                ]}>
+                {res.timeSlot}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </ScrollView>
+      <TouchableOpacity style={styles.formSubmit} onPress={handleSubmit}>
+        <Text style={styles.formSubmitTest}>Submit</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -204,7 +219,7 @@ const styles = StyleSheet.create({
     width: 100,
     justifyContent: 'center',
     borderRadius: 6,
-    borderColor: '#aae2fa',
+    borderColor: '#03b1fc',
     borderWidth: 2,
     marginRight: 10,
   },
@@ -213,7 +228,7 @@ const styles = StyleSheet.create({
     width: 95,
     justifyContent: 'center',
     borderRadius: 6,
-    borderColor: '#aae2fa',
+    borderColor: '#03b1fc',
     borderWidth: 2,
     marginBottom: 8,
   },
@@ -243,5 +258,19 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: '600',
     fontSize: 18,
+  },
+  formSubmit: {
+    backgroundColor: 'orange',
+    marginHorizontal: 20,
+    marginVertical: 12,
+    padding: 10,
+    borderRadius: 6,
+  },
+
+  formSubmitTest: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#ffffff',
   },
 });

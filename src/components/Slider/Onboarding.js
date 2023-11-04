@@ -1,17 +1,16 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useRef} from 'react';
+
 import {
-  SafeAreaView,
   Image,
   StyleSheet,
   FlatList,
   View,
   Text,
-  StatusBar,
   TouchableOpacity,
   Dimensions,
   TextInput,
-  Button,
-  Alert,
+  ToastAndroid,
+  Animated,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {useNavigation} from '@react-navigation/native';
@@ -19,6 +18,8 @@ import {useNavigation} from '@react-navigation/native';
 import UserContext from '../Context/Context';
 import axios from 'axios';
 import api from '../../../api.json';
+import Geolocation from '../Geolocation/Geolocation';
+// import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
 const {width} = Dimensions.get('window');
 
@@ -56,49 +57,69 @@ const Slide = ({item}) => {
 
 const Onboarding = () => {
   const {setUserData} = useContext(UserContext);
-  const [referal, setReferal] = useState('');
 
   const [username, setMobilenumber] = useState('');
   const [password, setPassword] = useState('');
 
-  const [isSelected1, setSelection1] = useState(false);
-  const [isSelected2, setSelection2] = useState(false);
+  const [message, setMessage] = useState('');
 
   const navigation = useNavigation();
 
-  const referalHandler = e => {
-    setReferal(e);
-  };
+  // fadeAnim will be used as the value for opacity. Initial Value: 0
+  // const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  // const fadeIn = message => {
+  //   setMessage(message);
+
+  //   Animated.timing(fadeAnim, {
+  //     toValue: 1,
+  //     duration: 1000,
+  //     useNativeDriver: true,
+  //   }).start(() => {
+  //     setTimeout(fadeOut, 1000);
+  //   });
+  // };
+
+  // const fadeOut = () => {
+  //   Animated.timing(fadeAnim, {
+  //     toValue: 0,
+  //     duration: 1000,
+  //     useNativeDriver: true,
+  //   }).start();
+  // };
 
   const handleContinue = async () => {
     if (username === '' || username.length < 10) {
-      Alert.alert(
-        'Invalid Mobile Number',
-        'Please enter a valid mobile number with at least 10 digits.',
+      // fadeIn('Mobile Number should be 10 Digits');
+      ToastAndroid.show(
+        'Mobile Number should be 10 Digits',
+        ToastAndroid.SHORT,
       );
     } else if (password === '') {
-      Alert.alert('Password Is Required');
+      // fadeIn('Password Is Required');
+      ToastAndroid.show('Password Is Required', ToastAndroid.SHORT);
     } else {
       await loginHandler();
-      setMobilenumber('');
-      setPassword('');
     }
   };
 
   const loginHandler = async () => {
     try {
       await axios
-        .post(`http://43.204.70.195:1107/login`, {
+        .post(`${api.baseurl}/login`, {
           username: username,
           password: password,
         })
         .then(response => {
           const res = response.data;
           if (res.status === true) {
-            Alert.alert('Login Success');
+            // fadeIn(`${res.message}`);
+            ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
             navigation.navigate('Ehome');
+            setMobilenumber('');
+            setPassword('');
           } else {
-            Alert.alert('Login Failed');
+            ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
           }
           setUserData(res);
         });
@@ -119,7 +140,7 @@ const Onboarding = () => {
       {/* <Footer /> */}
       <Text
         style={{
-          color: 'black',
+          color: '#0a0a0a',
           fontWeight: '600',
           textAlign: 'center',
           marginVertical: 30,
@@ -144,49 +165,10 @@ const Onboarding = () => {
         autoComplete="off"
         textAlign="center"
       />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleContinue}
-        // onPress={() => navigation.navigate('OtpPage')}
-      >
-        <Text style={{color: 'white'}}>CONTINUE</Text>
+      <TouchableOpacity style={styles.button} onPress={handleContinue}>
+        <Text style={{color: '#ffffff'}}>CONTINUE</Text>
       </TouchableOpacity>
-      <TextInput
-        style={styles.mobileInput}
-        backgroundColor="#f2fbff"
-        textAlign="center"
-        placeholder="Enter Referral Code(Optional)"
-        value={referal}
-        onChangeText={e => referalHandler(e)}
-        autoComplete="off"
-        keyboardType="numeric"
-        maxLength={10}
-      />
-      <View>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            value={isSelected1}
-            onValueChange={setSelection1}
-            style={styles.checkbox}
-          />
-          <Text style={styles.label}>
-            Send me personlised health tips & offers on
-          </Text>
-          {/* <SocialIcon iconSize={30} type="whatsapp" /> */}
-        </View>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            value={isSelected2}
-            onValueChange={setSelection2}
-            style={styles.checkbox}
-            j
-          />
-          <Text style={styles.label}>
-            I agree to the <Text style={{color: 'blue'}}>T&C</Text> and{' '}
-            <Text style={{color: 'blue'}}>Privacy Policy</Text> of Apollo247
-          </Text>
-        </View>
-      </View>
+      {/* <Geolocation /> */}
     </View>
   );
 };
@@ -230,8 +212,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#F28500',
     padding: 10,
     width: 300,
-    marginBottom: 10,
+    marginBottom: 80,
     borderRadius: 5,
+  },
+  fadingContainer: {
+    width: 'auto',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    marginVertical: 18,
+    borderRadius: 20,
+    padding: 10,
+  },
+  fadingText: {
+    fontSize: 16,
+    color: 'white',
+    textAlign: 'center',
+  },
+  toastDiv: {
+    flexDirection: 'row',
+    gap: 10,
+    justifyContent: 'center',
   },
 });
 export default Onboarding;

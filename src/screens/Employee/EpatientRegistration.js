@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -41,6 +42,11 @@ const EpatientRegistration = () => {
   const [departmentData, setDepartmentData] = useState([]);
   const [consultDoctorData, setConsultDoctorData] = useState([]);
   const [doctorRoomData, setDoctorRoomData] = useState('');
+
+  const [selectedTime, setSelectedTime] = useState('');
+  const [timeslotArray, setTimeSlotArray] = useState([]);
+
+  const [timeSlotPopup, setTimeSlotPopup] = useState(false);
 
   const Gender_data = [
     {key: 'Male', value: 'Male'},
@@ -213,8 +219,24 @@ const EpatientRegistration = () => {
         console.error(error);
       }
     };
-    if (doctor_id !== '') doctorRoomData();
+    if (doctor_id !== '') {
+      doctorRoomData();
+    }
   }, [doctor_id]);
+
+  const timeSlot = async () => {
+    await axios
+      .post(`${api.baseurl}/GetSchedulerForMobile`, {
+        reception_id: reception_id,
+        hospital_id: userData.data[0].hospital_id,
+        doctor_id: doctor_id,
+        mydate: formData.app_date,
+      })
+      .then(res => {
+        // console.log(res.data.data);
+        setTimeSlotArray(res.data.data);
+      });
+  };
 
   //dob
   const showDatePicker = () => {
@@ -312,8 +334,25 @@ const EpatientRegistration = () => {
   //   slot_id: formData?.slot_id,
   //   roomno: doctorRoomData,
   // };
+  // console.log('first : ', formSubmitedData);
 
   const handleSubmit = async () => {
+    const errors = {};
+
+    if (!formData.depart_id) {
+      errors.depart_id = 'Please select a department.';
+    }
+    if (!formData.doctor_id) {
+      errors.doctor_id = 'Please select a consult doctor.';
+    }
+    if (formData.date === 'Select Date') {
+      errors.date = 'Please select a date.';
+    }
+    if (formData.slot_id === 'Select Time') {
+      errors.slot_id = 'Please select an appointment time.';
+    }
+
+    setValidationErrors(errors);
     try {
       await axios
         .post(`${api.baseurl}/AddReceptionOutPatientForMobile`, {
@@ -339,39 +378,48 @@ const EpatientRegistration = () => {
         })
         .then(res => {
           const formRes = res.data;
-          console.log(formRes);
           setMessage(formRes.message);
           return formRes;
         });
       setMsgPopup(true);
       setBackdropOpacity(0.5);
+      setFormData([]);
     } catch (error) {
       console.error('Data Not Submitted', error);
     }
-    const errors = {};
-
-    if (!formData.depart_id) {
-      errors.depart_id = 'Please select a department.';
-    }
-    if (!formData.doctor_id) {
-      errors.doctor_id = 'Please select a consult doctor.';
-    }
-    if (formData.date === 'Select Date') {
-      errors.date = 'Please select a date.';
-    }
-    if (formData.slot_id === 'Select Time') {
-      errors.slot_id = 'Please select an appointment time.';
-    }
-
-    setValidationErrors(errors);
   };
 
+  const openTimeSlotPopup = () => {
+    setTimeSlotPopup(true);
+    setBackdropOpacity(0.5);
+  };
+
+  const closeTimeSlotPopup = () => {
+    setTimeSlotPopup(false);
+    setBackdropOpacity(0);
+  };
+
+  useEffect(() => {
+    if (formData.app_date !== '') timeSlot();
+  }, [formData.app_date]);
   // console.log(
   //   'selected country  :',
   //   selectedCountry[0],
   //   selectedState[0],
   //   formData.city,
   // );
+  // Function to group timeslots into rows of 3
+  const groupTimeslotsIntoRows = (timeslots, itemsPerRow) => {
+    const rows = [];
+    for (let i = 0; i < timeslots.length; i += itemsPerRow) {
+      rows.push(timeslots.slice(i, i + itemsPerRow));
+    }
+    return rows;
+  };
+
+  // Group timeslots into rows of 3
+  const timeslotRows = groupTimeslotsIntoRows(timeslotArray, 3);
+
   return (
     <SafeAreaView style={styles.container}>
       {msgPopup && (
@@ -406,6 +454,56 @@ const EpatientRegistration = () => {
           ]}
         />
       )}
+
+      {/* {timeSlotPopup && (
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={timeSlotPopup}
+          onRequestClose={closeTimeSlotPopup}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              {timeslotRows.map((row, rowIndex) => (
+                <View key={rowIndex} style={styles.timeSlot}>
+                  {row.map((timeslot, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.datess1,
+                        {
+                          backgroundColor:
+                            timeslot.timestatus === 'true' ||
+                            timeslot.timeSlot === selectedTime
+                              ? '#03b1fc'
+                              : 'white',
+                          borderColor:
+                            timeslot.timestatus === 'true'
+                              ? '#03b1fc'
+                              : '#03b1fc',
+                        },
+                      ]}
+                      onPress={() => setSelectedTime(timeslot.timeSlot)}>
+                      <Text
+                        style={[
+                          styles.dateText,
+                          {
+                            color:
+                              timeslot.timestatus === 'true' ||
+                              timeslot.timeSlot === selectedTime
+                                ? 'white'
+                                : '#03b1fc',
+                          },
+                        ]}>
+                        {timeslot.timeSlot}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              ))}
+            </View>
+          </View>
+        </Modal>
+      )} */}
 
       <View style={styles.header}>
         <View style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}>
@@ -785,5 +883,75 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  // slotTime: {
+  //   borderColor: 'black',
+  //   borderWidth: 2,
+  //   backgroundColor: 'white',
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   width: '80%',
+  //   alignSelf: 'center',
+  //   position: 'absolute',
+  //   top: '20%',
+  //   bottom: '50%',
+  //   height: 400,
+  //   borderRadius: 6,
+  // },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginTop: 22,
+  },
+  modalView: {
+    // margin: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 5,
+    // alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: '90%',
+    height: 300,
+    maxHeight: 350,
+  },
+  modalCloseText: {
+    color: 'blue',
+    fontSize: 18,
+  },
+  datess1: {
+    height: 50,
+    width: 100,
+    justifyContent: 'center',
+    borderRadius: 6,
+    borderColor: '#03b1fc',
+    borderWidth: 2,
+    marginBottom: 8,
+  },
+  dateText: {
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#03b1fc',
+  },
+  timeSlot: {
+    marginVertical: 14,
+    // marginHorizontal: 6,
+  },
+  timeHeading: {
+    fontWeight: '600',
+    fontSize: 16,
+    // textAlign: 'center',
+  },
+  wrapper: {
+    // flexDirection: 'row',
+    // flexWrap: 'wrap',
   },
 });

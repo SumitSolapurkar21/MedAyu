@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import doctorImg from '../../images/doctor.png';
 import ipd from '../../images/ipd.png';
@@ -14,16 +14,22 @@ import panchakarma from '../../images/panchakarma.png';
 import invoice from '../../images/invoice.png';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
+import UserContext from '../../components/Context/Context';
 
-const EpatientDetails = () => {
+const EpatientDetails = ({route}) => {
   const navigation = useNavigation();
+  const {userData} = useContext(UserContext);
+  const {patientData} = route.params;
+
+  const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
+    patientData;
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>
         <View style={styles.hlcontent}>
           <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>Hi Sumit</Text>
+          <Text style={styles.uName}>{userData.data[0].name}</Text>
         </View>
         <View style={styles.hrcontent}>
           <TouchableOpacity>
@@ -37,26 +43,30 @@ const EpatientDetails = () => {
       <View style={styles.card}>
         <View style={[styles.cardContent, {backgroundColor: '#afcafa'}]}>
           <Text style={styles.cardlabel}>Patient Name</Text>
-          <Text style={styles.cardData}>Sumit Solapurkar</Text>
+          <Text style={styles.cardData}>{firstname}</Text>
         </View>
         <View style={styles.cardContent}>
           <Text style={styles.cardlabel}>UHID No.</Text>
-          <Text style={styles.cardData}>1149961450</Text>
+          <Text style={styles.cardData}>{uhid}</Text>
         </View>
         <View style={[styles.cardContent, {backgroundColor: '#afcafa'}]}>
           <Text style={styles.cardlabel}>Mobile No.</Text>
-          <Text style={styles.cardData}>9822179090</Text>
+          <Text style={styles.cardData}>{mobilenumber}</Text>
         </View>
         <View style={styles.cardContent}>
           <Text style={styles.cardlabel}>Gender / Age</Text>
-          <Text style={styles.cardData}>Male / 23</Text>
+          <Text style={styles.cardData}>
+            {patientgender} / {patientage}
+          </Text>
         </View>
       </View>
 
       <View style={styles.cardSelection}>
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => navigation.navigate('Eappointment')}>
+          onPress={() =>
+            navigation.navigate('Eappointment', {patient_id: patient_id})
+          }>
           <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
           <Text style={styles.uName}>Appointment</Text>
         </TouchableOpacity>

@@ -4,11 +4,10 @@ import {
   TouchableOpacity,
   LogBox,
   View,
-  Alert,
   Image,
 } from 'react-native';
 import React, {useContext, useState} from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import UserContext from '../Context/Context';
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -24,7 +23,6 @@ LogBox.ignoreLogs([
 
 export default function Scanner({route}) {
   const navigation = useNavigation();
-  // const route = useRoute();
 
   const {userData} = useContext(UserContext);
   const {value} = route.params;
@@ -35,34 +33,38 @@ export default function Scanner({route}) {
 
   const {_id, hospital_id} = userData.data[0];
 
+  //Date Code in YYYY-MM-DD
   let today = new Date();
 
   let date =
-    today.getDate() +
+    today.getFullYear() +
     '-' +
-    parseInt(today.getMonth() + 1) +
+    (today.getMonth() + 1).toString().padStart(2, '0') +
     '-' +
-    today.getFullYear();
+    today.getDate().toString().padStart(2, '0');
+
+  console.log('date : ', date);
 
   const hours = String(today.getHours()).padStart(2, '0');
   const minutes = String(today.getMinutes()).padStart(2, '0');
 
-  // console.log(
-  //   `_id : ${_id} , hospital_id : ${hospital_id} , date : ${date} , time : ${hours}.${minutes}`,
-  // );
-
-  const attendenceData = {
-    reception_id: _id,
-    hospital_id: hospital_id,
-    login_time: `${hours}.${minutes}`,
-    login_date: date,
-    location: 'Nagpur',
-  };
+  // const attendenceData = {
+  //   reception_id: _id,
+  //   hospital_id: hospital_id,
+  //   login_time: `${hours}.${minutes}`,
+  //   login_date: date,
+  //   location: 'Nagpur',
+  // };
   // console.log(attendenceData);
+  let uhid;
+  let appoint_id;
 
   const handleScannerSuccess = e => {
-    console.log('scanned  data : ', e.data);
-    Alert.alert(e.data);
+    const data = e.data.split(',');
+    uhid = data[0];
+    appoint_id = data[1];
+
+    handleNavigation();
   };
 
   const handleNavigation = async () => {
@@ -70,7 +72,11 @@ export default function Scanner({route}) {
       try {
         await axios
           .post(`${api.baseurl}/AddMobileAttendence`, {
-            attendenceData,
+            reception_id: _id,
+            hospital_id: hospital_id,
+            login_time: `${hours}.${minutes}`,
+            login_date: date,
+            location: 'Nagpur',
           })
           .then(response => {
             // return response.data;
@@ -83,7 +89,28 @@ export default function Scanner({route}) {
       setMsgPopup(true);
       setBackdropOpacity(0.5);
     } else {
-      navigation.navigate('EpatientDetails');
+      await patientDetail();
+    }
+  };
+
+  const patientDetail = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/ScanQrForMobile`, {
+          uhid,
+          appoint_id,
+          reception_id: _id,
+          hospital_id: hospital_id,
+        })
+        .then(res => {
+          // setPatientData(res.data);
+          console.log(res.data);
+
+          navigation.navigate('EpatientDetails', {patientData: res.data});
+          return res.data;
+        });
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -102,11 +129,11 @@ export default function Scanner({route}) {
           topViewStyle={{marginVertical: 30}}
           bottomViewStyle={{marginVertical: 20}}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.buttonTouchable}
           onPress={handleNavigation}>
           <Text style={styles.buttonText}>OK. Got it!</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {msgPopup && (
           <View style={styles.modalContainer}>
