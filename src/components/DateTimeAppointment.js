@@ -33,19 +33,22 @@ const DateTimeAppointment = ({
       let date =
         today.getFullYear() +
         '-' +
-        parseInt(today.getMonth() + 1) +
+        (today.getMonth() + 1).toString().padStart(2, '0') +
         '-' +
-        today.getDate();
+        today.getDate().toString().padStart(2, '0');
       setSelectedDate(date);
     } else {
       setSelectedDate('');
     }
   }, [doctor_id]);
 
+  // DateSelection Handler
   const handleDateSelection = selectedDate => {
     setSelectedTime('');
     setSelectedDate(selectedDate);
   };
+
+  // TimeSelection Handler
   const handleTimeSelection = selectedTime => {
     const isTimeSlotValid = timeslotArray.some(
       res => res.timeSlot === selectedTime && res.timestatus === 'true',
@@ -54,10 +57,12 @@ const DateTimeAppointment = ({
     setSelectedTime(isTimeSlotValid ? selectedTime : selectedTime);
   };
 
+  // On selected date time slot function run ...
   useEffect(() => {
     if (selectedDate !== '') timeSlot();
   }, [selectedDate]);
 
+  // time slot function run
   const timeSlot = async () => {
     await axios
       .post(`${api.baseurl}/GetSchedulerForMobile`, {
@@ -67,10 +72,12 @@ const DateTimeAppointment = ({
         mydate: selectedDate,
       })
       .then(res => {
+        // console.log('Time Slot : ', res.data.data);
         setTimeSlotArray(res.data.data);
       });
   };
 
+  // Add Appointments handler .....
   const handleSubmit = async () => {
     try {
       await axios

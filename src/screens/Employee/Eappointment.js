@@ -83,9 +83,10 @@ const Eappointment = ({route}) => {
   let date =
     today.getFullYear() +
     '-' +
-    parseInt(today.getMonth() + 1) +
+    (today.getMonth() + 1).toString().padStart(2, '0') +
     '-' +
-    today.getDate();
+    today.getDate().toString().padStart(2, '0');
+
   const dateData = async () => {
     try {
       await axios

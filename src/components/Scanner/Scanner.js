@@ -48,14 +48,6 @@ export default function Scanner({route}) {
   const hours = String(today.getHours()).padStart(2, '0');
   const minutes = String(today.getMinutes()).padStart(2, '0');
 
-  // const attendenceData = {
-  //   reception_id: _id,
-  //   hospital_id: hospital_id,
-  //   login_time: `${hours}.${minutes}`,
-  //   login_date: date,
-  //   location: 'Nagpur',
-  // };
-  // console.log(attendenceData);
   let uhid;
   let appoint_id;
 

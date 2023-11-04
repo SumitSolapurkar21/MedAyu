@@ -126,7 +126,7 @@ const EpatientRegistration = () => {
         console.error('Server Not Response for state: ', error);
       }
     };
-    if (c_code != undefined || c_code != '') stateData();
+    if (c_code) stateData();
   }, [c_code]);
 
   let s_code = selectedState[0];
@@ -159,7 +159,7 @@ const EpatientRegistration = () => {
           );
         }
       };
-      cityData();
+      if (s_code) cityData();
     }
   }, [s_code]);
 
@@ -402,12 +402,7 @@ const EpatientRegistration = () => {
   useEffect(() => {
     if (formData.app_date !== '') timeSlot();
   }, [formData.app_date]);
-  // console.log(
-  //   'selected country  :',
-  //   selectedCountry[0],
-  //   selectedState[0],
-  //   formData.city,
-  // );
+
   // Function to group timeslots into rows of 3
   const groupTimeslotsIntoRows = (timeslots, itemsPerRow) => {
     const rows = [];
