@@ -89,14 +89,14 @@ const Onboarding = () => {
   // };
 
   const handleContinue = async () => {
+    // setUserData('9');
+    // navigation.navigate('Tabs');
     if (username === '' || username.length < 10) {
-      // fadeIn('Mobile Number should be 10 Digits');
       ToastAndroid.show(
         'Mobile Number should be 10 Digits',
         ToastAndroid.SHORT,
       );
     } else if (password === '') {
-      // fadeIn('Password Is Required');
       ToastAndroid.show('Password Is Required', ToastAndroid.SHORT);
     } else {
       await loginHandler();

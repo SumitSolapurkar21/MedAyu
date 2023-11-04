@@ -577,10 +577,16 @@ const EpatientRegistration = () => {
         </View>
         <View style={styles.fields}>
           <Text style={styles.fieldText}>DATE OF BIRTH</Text>
-          <TouchableOpacity onPress={showDatePicker}>
-            <Text style={[styles.fieldInput, {padding: 12}]}>
-              {formData.patientdob}
-            </Text>
+          <TouchableOpacity
+            onPress={showDatePicker}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              borderBottomColor: 'green',
+              borderBottomWidth: 2,
+            }}>
+            <Text style={{padding: 10, flex: 1}}>{formData.patientdob}</Text>
+            <FontAwesome6 name="calendar-days" color="red" size={22} />
           </TouchableOpacity>
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
@@ -729,10 +735,18 @@ const EpatientRegistration = () => {
         <View style={styles.fields}>
           <Text style={styles.fieldText}>DATE</Text>
           <TouchableOpacity onPress={datePickerHandler}>
-            <Text style={[styles.fieldInput, {padding: 12}]}>
-              {formData.app_date}
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                borderBottomColor: 'green',
+                borderBottomWidth: 2,
+              }}>
+              <Text style={{padding: 10, flex: 1}}>{formData.app_date}</Text>
+              <FontAwesome6 name="calendar-days" color="red" size={22} />
+            </View>
           </TouchableOpacity>
+
           <DateTimePickerModal
             isVisible={datePicker}
             mode="date"
@@ -754,10 +768,17 @@ const EpatientRegistration = () => {
             }
             onPress={() => {
               openTimeSlotPopup();
+            }}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              borderBottomColor: 'green',
+              borderBottomWidth: 2,
             }}>
-            <Text style={[styles.fieldInput, {padding: 12}]}>
+            <Text style={{padding: 10, fontSize: 14, flex: 1}}>
               {selectedTime.toString()}
             </Text>
+            <FontAwesome6 name="clock" color="red" size={22} />
           </TouchableOpacity>
           {/* <DateTimePickerModal
             isVisible={appTimePicker}
