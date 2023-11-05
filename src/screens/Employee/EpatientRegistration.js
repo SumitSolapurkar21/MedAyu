@@ -722,7 +722,7 @@ const EpatientRegistration = () => {
         </View>
         <View style={styles.fields}>
           <View style={styles.fields}>
-            <Text style={styles.fieldText}>Room No</Text>
+            <Text style={styles.fieldText}>Room No </Text>
             <TextInput
               style={styles.fieldInput}
               placeholder="Room No"
