@@ -30,6 +30,8 @@ import EipdregistrationSocioeconomics from './src/screens/Employee/Eipregistrati
 import EipdregistrationIdentification from './src/screens/Employee/EipregistrationForm/EipdregistrationIdentification';
 import EipdregistrationInsurance from './src/screens/Employee/EipregistrationForm/EipdregistrationInsurance';
 import EipdregistrationEmergencyContact from './src/screens/Employee/EipregistrationForm/EipdregistrationEmergencyContact';
+import Edepartment from './src/screens/Employee/Edepartment';
+import Edoctors from './src/screens/Employee/Edoctors';
 
 function App() {
   useEffect(() => {
@@ -127,6 +129,16 @@ function App() {
             <Stack.Screen
               name="EipdregistrationEmergencyContact"
               component={EipdregistrationEmergencyContact}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Edepartment"
+              component={Edepartment}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Edoctors"
+              component={Edoctors}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

@@ -25,59 +25,25 @@ const Eappointment = ({route}) => {
   const {userData} = useContext(UserContext);
   const [backdropOpacity, setBackdropOpacity] = useState(0);
   const navigation = useNavigation();
-  const {patient_id} = route.params;
+
+  let reception_id = userData.data[0]._id;
+  const {department_id, patient_id, doctor_id} = route.params;
+
+  // console.log('Data :', department_id, patient_id, doctor_id);
+
   const [formData, setFormData] = useState({
     department: '',
     doctor: '',
   });
   const [msgPopup, setMsgPopup] = useState(false);
 
-  const [departmentData, setDepartmentData] = useState([]);
-  const [consultDoctorData, setConsultDoctorData] = useState([]);
   const [dateArray, setDateArray] = useState([]);
 
-  let reception_id = userData.data[0]._id;
   useEffect(() => {
-    const departmentData = async () => {
-      await dateData();
-      try {
-        await axios
-          .post(`${api.baseurl}/FetchReceptionDepartmentDeopdown`, {
-            reception_id: userData.data[0]._id,
-          })
-          .then(res => {
-            const dpt_data = res.data.data;
-            // console.log('dpt_data :', dpt_data);
-            setDepartmentData(dpt_data);
-          });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (reception_id !== '') departmentData();
-  }, [reception_id]);
+    if (doctor_id) dateData();
+  }, [doctor_id]);
 
-  let department_id = formData.department;
-  useEffect(() => {
-    const consultDoctorData = async () => {
-      try {
-        await axios
-          .post(`${api.baseurl}/DoctorAccDepartmentinAppmtRecpt`, {
-            depart_id: department_id,
-          })
-          .then(res => {
-            const consultDoctor_data = res.data.data;
-            // console.log('consultDoctor_data :', consultDoctor_data);
-            setConsultDoctorData(consultDoctor_data);
-          });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (department_id !== '') consultDoctorData();
-  }, [department_id]);
-
-  let doctor_id = formData.doctor;
+  // let doctor_id = formData.doctor;
   let today = new Date();
 
   let date =
@@ -98,29 +64,11 @@ const Eappointment = ({route}) => {
         .then(res => {
           // console.log('Date Data : ', res.data.mydates);
           setDateArray(res.data.mydates);
-          // date_Array.push(res.data.mydates);
         });
     } catch (error) {
       console.error(error);
     }
   };
-
-  const handleInputChange = (fieldName, value) => {
-    setFormData({
-      ...formData,
-      [fieldName]: value,
-    });
-  };
-
-  // const handleSubmit = () => {
-  //   const errors = {};
-
-  //   if (Object.keys(errors).length === 0) {
-  //     setFormData([]);
-  //   }
-  //   setMsgPopup(true);
-  //   setBackdropOpacity(0.5);
-  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -157,31 +105,6 @@ const Eappointment = ({route}) => {
             }}>
             Add Appointments
           </Text>
-
-          <View style={styles.fields}>
-            <Text style={styles.fieldText}>Department</Text>
-            <SelectList
-              setSelected={val => handleInputChange('department', val)}
-              data={departmentData.map(res => ({
-                key: res.depart_id,
-                value: res.deptname,
-              }))}
-              search={true}
-              boxStyles={styles.selectBox}
-            />
-          </View>
-          <View style={styles.fields}>
-            <Text style={styles.fieldText}>Doctor</Text>
-            <SelectList
-              setSelected={val => handleInputChange('doctor', val)}
-              data={consultDoctorData.map(res => ({
-                key: res._id,
-                value: res.name,
-              }))}
-              search={true}
-              boxStyles={styles.selectBox}
-            />
-          </View>
         </View>
       </View>
 
@@ -189,8 +112,8 @@ const Eappointment = ({route}) => {
         dateArray={dateArray}
         doctor_id={doctor_id}
         patient_id={patient_id}
-        formData={formData}
-        setFormData={setFormData}
+        reception_id={reception_id}
+        department_id={department_id}
         setMsgPopup={setMsgPopup}
         setBackdropOpacity={setBackdropOpacity}
       />

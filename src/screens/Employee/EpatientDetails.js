@@ -65,7 +65,8 @@ const EpatientDetails = ({route}) => {
         <TouchableOpacity
           style={styles.selectDiv}
           onPress={() =>
-            navigation.navigate('Eappointment', {patient_id: patient_id})
+            // navigation.navigate('Eappointment', {patient_id: patient_id}
+            navigation.navigate('Edepartment', {patient_id: patient_id})
           }>
           <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
           <Text style={styles.uName}>Appointment</Text>

@@ -105,7 +105,6 @@ const EpatientRegistration = () => {
 
   useEffect(() => {
     const stateData = async () => {
-      console.log('c_code :', c_code);
       try {
         await axios
           .post(`${api.baseurl}/FetchState`, {code: c_code})

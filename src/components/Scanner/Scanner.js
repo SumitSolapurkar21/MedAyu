@@ -43,8 +43,6 @@ export default function Scanner({route}) {
     '-' +
     today.getDate().toString().padStart(2, '0');
 
-  console.log('date : ', date);
-
   const hours = String(today.getHours()).padStart(2, '0');
   const minutes = String(today.getMinutes()).padStart(2, '0');
 
@@ -72,7 +70,7 @@ export default function Scanner({route}) {
           })
           .then(response => {
             // return response.data;
-            console.log(response.data);
+            // console.log(response.data);
             setMessage(response.data.message);
           });
       } catch (error) {
@@ -96,7 +94,7 @@ export default function Scanner({route}) {
         })
         .then(res => {
           // setPatientData(res.data);
-          console.log(res.data);
+          // console.log(res.data);
 
           navigation.navigate('EpatientDetails', {patientData: res.data});
           return res.data;
@@ -121,11 +119,11 @@ export default function Scanner({route}) {
           topViewStyle={{marginVertical: 30}}
           bottomViewStyle={{marginVertical: 20}}
         />
-        {/* <TouchableOpacity
+        <TouchableOpacity
           style={styles.buttonTouchable}
           onPress={handleNavigation}>
           <Text style={styles.buttonText}>OK. Got it!</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
 
         {msgPopup && (
           <View style={styles.modalContainer}>

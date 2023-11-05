@@ -14,8 +14,8 @@ const DateTimeAppointment = ({
   dateArray,
   doctor_id,
   patient_id,
-  formData,
-  setFormData,
+  reception_id,
+  department_id,
   setMsgPopup,
   setBackdropOpacity,
 }) => {
@@ -79,14 +79,24 @@ const DateTimeAppointment = ({
 
   // Add Appointments handler .....
   const handleSubmit = async () => {
+    // console.log(
+    //   'Add Appoint:',
+    //   reception_id,
+    //   doctor_id,
+    //   patient_id,
+    //   hospital_id,
+    //   selectedTime,
+    //   selectedDate,
+    //   department_id,
+    // );
     try {
       await axios
         .post(`${api.baseurl}/AddDirectMobileAppointments`, {
           patientcategory: 'Review',
           reception_id: _id,
           patient_id,
-          depart_id: formData.department,
-          doctor_id: formData.doctor,
+          depart_id: department_id,
+          doctor_id: doctor_id,
           app_date: selectedDate,
           slot_id: selectedTime,
           hospital_id: hospital_id,
@@ -94,7 +104,7 @@ const DateTimeAppointment = ({
         .then(res => {
           return res.data;
         });
-      setFormData([]);
+      // setFormData([]);
       setMsgPopup(true);
       setBackdropOpacity(0.5);
     } catch (error) {

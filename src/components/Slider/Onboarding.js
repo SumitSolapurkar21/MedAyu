@@ -113,7 +113,6 @@ const Onboarding = () => {
         .then(response => {
           const res = response.data;
           if (res.status === true) {
-            // fadeIn(`${res.message}`);
             ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
             navigation.navigate('Ehome');
             setMobilenumber('');
