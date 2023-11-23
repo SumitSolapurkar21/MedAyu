@@ -5,6 +5,7 @@ import {
   LogBox,
   View,
   Image,
+  TextInput,
 } from 'react-native';
 import React, {useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -30,6 +31,7 @@ export default function Scanner({route}) {
   const [msgPopup, setMsgPopup] = useState(false);
   const [backdropOpacity, setBackdropOpacity] = useState(0);
   const [message, setMessage] = useState('');
+  const [searchInput, setSearchInput] = useState('');
 
   const {_id, hospital_id} = userData.data[0];
 
@@ -83,7 +85,10 @@ export default function Scanner({route}) {
     }
   };
 
+  //Get Data By QR Scan
   const patientDetail = async () => {
+    console.log('run');
+
     try {
       await axios
         .post(`${api.baseurl}/ScanQrForMobile`, {
@@ -91,10 +96,11 @@ export default function Scanner({route}) {
           appoint_id,
           reception_id: _id,
           hospital_id: hospital_id,
+          type: 'QR',
         })
         .then(res => {
           // setPatientData(res.data);
-          // console.log(res.data);
+          console.log(res.data);
 
           navigation.navigate('EpatientDetails', {patientData: res.data});
           return res.data;
@@ -104,9 +110,49 @@ export default function Scanner({route}) {
     }
   };
 
+  // const data = {
+  //   inputvalue: searchInput,
+  //   appoint_id,
+  //   reception_id: _id,
+  //   hospital_id: hospital_id,
+  //   type: 'SEARCH',
+  // };
+  // console.log('Data ; ', data);
+
+  // Get Data By Search Input :
+  const patientDetailBySearchInput = async () => {
+    try {
+      if (searchInput !== '')
+        await axios
+          .post(`${api.baseurl}/ScanQrForMobile`, {
+            inputvalue: searchInput,
+            appoint_id,
+            reception_id: _id,
+            hospital_id: hospital_id,
+            type: 'SEARCH',
+          })
+          .then(res => {
+            console.log('patientDetailBySearchInput : ', res.data);
+
+            navigation.navigate('EpatientDetails', {
+              patientData: res.data,
+              reception_id: _id,
+              hospital_id: hospital_id,
+            });
+            return res.data;
+          });
+      else return console.error('API Not Run');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
+        {/* <TouchableOpacity style={styles.buttonTouchable}>
+          <Text style={styles.buttonText}>Search</Text>
+        </TouchableOpacity> */}
         <QRCodeScanner
           onRead={handleScannerSuccess}
           flashMode={RNCamera.Constants.FlashMode.off}
@@ -119,11 +165,23 @@ export default function Scanner({route}) {
           topViewStyle={{marginVertical: 30}}
           bottomViewStyle={{marginVertical: 20}}
         />
-        <TouchableOpacity
-          style={styles.buttonTouchable}
-          onPress={handleNavigation}>
-          <Text style={styles.buttonText}>OK. Got it!</Text>
-        </TouchableOpacity>
+        <View style={styles.bottomContent}>
+          <Text style={styles.bottomTxt}>- OR -</Text>
+          <TextInput
+            style={styles.mobileInput}
+            placeholder="Enter Mobile Number or UHID No"
+            value={searchInput}
+            onChangeText={text => setSearchInput(text)}
+            autoComplete="off"
+            textAlign="center"
+            placeholderTextColor="black"
+          />
+          <TouchableOpacity
+            style={styles.buttonTouchable}
+            onPress={patientDetailBySearchInput}>
+            <Text style={styles.buttonText}>Search</Text>
+          </TouchableOpacity>
+        </View>
 
         {msgPopup && (
           <View style={styles.modalContainer}>
@@ -184,6 +242,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
     flexDirection: 'row',
     borderRadius: 6,
+    width: 'auto',
+    alignSelf: 'center',
+    marginVertical: 10,
   },
   modalContainer: {
     position: 'absolute',
@@ -233,5 +294,28 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  bottomContent: {
+    backgroundColor: '#ffffff',
+    marginHorizontal: 10,
+    borderRadius: 6,
+    marginVertical: 10,
+  },
+  bottomTxt: {
+    alignSelf: 'center',
+    marginVertical: 10,
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  buttonText: {
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    fontSize: 14,
+    color: '#ffffff',
+  },
+  mobileInput: {
+    marginHorizontal: 20,
+    borderBottomWidth: 2,
+    borderBottomColor: '#127359',
   },
 });

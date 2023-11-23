@@ -19,10 +19,12 @@ import UserContext from '../../components/Context/Context';
 const EpatientDetails = ({route}) => {
   const navigation = useNavigation();
   const {userData} = useContext(UserContext);
-  const {patientData} = route.params;
+  // const {patientData} = route.params;
+  // console.log(patientData);
 
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
-    patientData;
+    route.params.patientData;
+  const {reception_id, hospital_id} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -89,7 +91,14 @@ const EpatientDetails = ({route}) => {
 
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => navigation.navigate('EipdregistrationProfile')}>
+          onPress={() =>
+            navigation.navigate('BillLayout', {
+              uhid: uhid,
+              patient_id: patient_id,
+              reception_id: reception_id,
+              hospital_id: hospital_id,
+            })
+          }>
           <Image source={invoice} alt="IPD" style={styles.img} />
           <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
         </TouchableOpacity>

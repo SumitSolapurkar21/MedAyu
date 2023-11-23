@@ -112,6 +112,7 @@ const Onboarding = () => {
         })
         .then(response => {
           const res = response.data;
+          // console.log('first : ', res);
           if (res.status === true) {
             ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
             navigation.navigate('Ehome');

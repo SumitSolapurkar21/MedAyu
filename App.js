@@ -32,6 +32,7 @@ import EipdregistrationInsurance from './src/screens/Employee/EipregistrationFor
 import EipdregistrationEmergencyContact from './src/screens/Employee/EipregistrationForm/EipdregistrationEmergencyContact';
 import Edepartment from './src/screens/Employee/Edepartment';
 import Edoctors from './src/screens/Employee/Edoctors';
+import BillLayout from './src/screens/Employee/Bill/BillLayout';
 
 function App() {
   useEffect(() => {
@@ -84,7 +85,7 @@ function App() {
             <Stack.Screen
               name="QRScanner"
               component={Scanner}
-              options={{headerShown: false}}
+              // options={{headerShown: true}}
             />
             <Stack.Screen
               name="EpatientDetails"
@@ -139,6 +140,11 @@ function App() {
             <Stack.Screen
               name="Edoctors"
               component={Edoctors}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="BillLayout"
+              component={BillLayout}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
