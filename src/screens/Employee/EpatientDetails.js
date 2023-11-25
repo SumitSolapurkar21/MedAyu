@@ -23,7 +23,7 @@ const EpatientDetails = ({route}) => {
   // console.log(patientData);
 
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
-    route.params.patientData;
+    route.params?.patientData;
   const {reception_id, hospital_id} = route.params;
 
   return (

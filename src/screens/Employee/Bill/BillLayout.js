@@ -4,8 +4,9 @@ import {
   View,
   SafeAreaView,
   TextInput,
-  Button,
+  Modal,
   ScrollView,
+  Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -26,6 +27,7 @@ const BillLayout = ({route}) => {
   const [receivedAmt, setReceivedAmt] = useState('');
   const [discountAmt, setDiscountAmt] = useState('');
   const [discountAmtRs, setDiscountAmtRs] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     try {
@@ -48,19 +50,78 @@ const BillLayout = ({route}) => {
     }
   }, []);
 
+  let totalAmtAfterDiscountPercent =
+    billPatientData?.totalamount -
+    (billPatientData?.totalamount * discountAmt ?? 0) / 100;
+
+  let totalAmtAfterDiscountRupees =
+    billPatientData?.totalamount - discountAmtRs ?? 0;
+
+  let TOTAL_AMOUNT =
+    discountAmtRs == ''
+      ? totalAmtAfterDiscountPercent
+      : totalAmtAfterDiscountRupees;
+
+  let totalbalanceTemp = TOTAL_AMOUNT - receivedAmt;
+
+  let totalbalance = billPatientData?.totalbalance + totalbalanceTemp;
+  let previousbalance = billPatientData?.totalbalance;
+
+  let today = new Date();
+  let currentDate =
+    today.getDate().toString().padStart(2, '0') +
+    '-' +
+    (today.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
+    today.getFullYear();
+
+  let date =
+    today.getFullYear() +
+    '-' +
+    (today.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
+    today.getDate().toString().padStart(2, '0');
+
+  const addMobileBillHandler = async () => {
+    try {
+      const billDataRes = await axios.post(`${api.baseurl}/AddMobileBills`, {
+        uhid: uhid,
+        patient_id: patient_id,
+        reception_id: reception_id,
+        hospital_id: hospital_id,
+        invoiceno: billPatientData?.invoiceno,
+        totalamount: billPatientData?.totalamount,
+        totalbalance: totalbalance,
+        OutBillArrayss: billPatientData?.data,
+        mobilepaymentdate: date,
+        mobilediscountpercentage: discountAmt,
+        mobilediscountrupees: discountAmtRs,
+        mobilereceiveamount: receivedAmt,
+      });
+      return billDataRes;
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <View style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}>
-            <FontAwesome6
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 14,
+              alignItems: 'center',
+              padding: 10,
+            }}>
+            {/* <FontAwesome6
               name="arrow-left-long"
               color="#127359"
               size={28}
               onPress={() => navigation.navigate('EpatientDetails')}
-            />
+            /> */}
             <Text style={{color: 'black', fontWeight: '600', fontSize: 16}}>
-              Bill
+              Patient Bill
             </Text>
           </View>
           <View style={{flexDirection: 'row', gap: 8, alignItems: 'center'}}>
@@ -69,7 +130,8 @@ const BillLayout = ({route}) => {
               onValueChange={() => setToggleValue(!toggleValue)}
               activeText={'Cash'}
               inActiveText={'Credit'}
-              switchWidthMultiplier={3}
+              switchWidthMultiplier={3.5}
+              circleSize={20}
             />
           </View>
         </View>
@@ -82,7 +144,7 @@ const BillLayout = ({route}) => {
               </View>
               <View>
                 <Text style={{color: 'black', textAlign: 'left'}}>Date</Text>
-                <Text>10-10-2024</Text>
+                <Text>{currentDate}</Text>
               </View>
             </View>
           </View>
@@ -95,82 +157,87 @@ const BillLayout = ({route}) => {
               <Text style={{color: 'white'}}>Bill Items</Text>
             </View>
             <ScrollView vertical>
-              {billPatientData?.data.map((res, i) => {
-                return (
-                  <View style={styles.billDiv} key={i}>
-                    <View style={styles.billContent}>
-                      <Text
-                        style={[
-                          styles.billTxt,
-                          {fontWeight: 'bold', fontSize: 14},
-                        ]}>
-                        #{res.srno}. {res.outbillingtype}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.billTxt,
-                          {fontWeight: 'bold', fontSize: 14},
-                        ]}>
-                        <FontAwesome6
-                          name="indian-rupee-sign"
-                          color="black"
-                          size={12}
-                        />
-                        &nbsp;{res.amount}
-                      </Text>
-                    </View>
-                    <View style={styles.billContent}>
-                      <Text style={styles.billTxt}>Item Subtotal</Text>
-                      <Text style={styles.billTxt}>
-                        1 x {res.amount} = &nbsp;
-                        <FontAwesome6
-                          name="indian-rupee-sign"
-                          color="black"
-                          size={10}
-                        />
-                        &nbsp;{res.amount}
-                      </Text>
-                    </View>
-                    <View style={styles.billContent}>
-                      <Text style={[styles.billTxt, {color: 'orange'}]}>
-                        Discount(%) : 0
-                      </Text>
-                      <Text style={[styles.billTxt, {color: 'orange'}]}>
-                        <FontAwesome6
-                          name="indian-rupee-sign"
-                          color="orange"
-                          size={10}
-                        />
-                        &nbsp;0
-                      </Text>
-                    </View>
-                    <View style={styles.billContent}>
-                      <Text style={styles.billTxt}>Tax : 0 %</Text>
-                      <Text style={styles.billTxt}>
-                        <FontAwesome6
-                          name="indian-rupee-sign"
-                          color="black"
-                          size={10}
-                        />
-                        &nbsp;0
-                      </Text>
-                    </View>
-                    <View style={styles.billContent}>
-                      <Text
-                        style={[
-                          styles.billTxt,
-                          {fontSize: 14, fontWeight: 'bold'},
-                        ]}>
-                        {res.billname}
-                      </Text>
-                    </View>
-                    <View style={styles.billContent}>
-                      <Text style={styles.billTxt}>Date</Text>
-                      <Text style={styles.billTxt}>{res.bill_date}</Text>
-                    </View>
-                  </View>
-                );
-              })}
+              {billPatientData?.status === false
+                ? ToastAndroid.show(
+                    `${billPatientData?.message}`,
+                    ToastAndroid.SHORT,
+                  )
+                : billPatientData?.data.map((res, i) => {
+                    return (
+                      <View style={styles.billDiv} key={i}>
+                        <View style={styles.billContent}>
+                          <Text
+                            style={[
+                              styles.billTxt,
+                              {fontWeight: 'bold', fontSize: 14},
+                            ]}>
+                            #{res.srno}. {res.outbillingtype}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.billTxt,
+                              {fontWeight: 'bold', fontSize: 14},
+                            ]}>
+                            <FontAwesome6
+                              name="indian-rupee-sign"
+                              color="black"
+                              size={12}
+                            />
+                            &nbsp;{res.amount}
+                          </Text>
+                        </View>
+                        <View style={styles.billContent}>
+                          <Text style={styles.billTxt}>Item Subtotal</Text>
+                          <Text style={styles.billTxt}>
+                            1 x {res.amount} = &nbsp;
+                            <FontAwesome6
+                              name="indian-rupee-sign"
+                              color="black"
+                              size={10}
+                            />
+                            &nbsp;{res.amount}
+                          </Text>
+                        </View>
+                        <View style={styles.billContent}>
+                          <Text style={[styles.billTxt, {color: 'orange'}]}>
+                            Discount(%) : 0
+                          </Text>
+                          <Text style={[styles.billTxt, {color: 'orange'}]}>
+                            <FontAwesome6
+                              name="indian-rupee-sign"
+                              color="orange"
+                              size={10}
+                            />
+                            &nbsp;0
+                          </Text>
+                        </View>
+                        <View style={styles.billContent}>
+                          <Text style={styles.billTxt}>Tax : 0 %</Text>
+                          <Text style={styles.billTxt}>
+                            <FontAwesome6
+                              name="indian-rupee-sign"
+                              color="black"
+                              size={10}
+                            />
+                            &nbsp;0
+                          </Text>
+                        </View>
+                        <View style={styles.billContent}>
+                          <Text
+                            style={[
+                              styles.billTxt,
+                              {fontSize: 14, fontWeight: 'bold'},
+                            ]}>
+                            {res.billname}
+                          </Text>
+                        </View>
+                        <View style={styles.billContent}>
+                          <Text style={styles.billTxt}>Date</Text>
+                          <Text style={styles.billTxt}>{res.bill_date}</Text>
+                        </View>
+                      </View>
+                    );
+                  })}
             </ScrollView>
 
             <View style={styles.billGrpBtn}>
@@ -299,9 +366,7 @@ const BillLayout = ({route}) => {
                       color="black"
                       size={12}
                     />
-                    <Text style={styles.ttAmtTxt}>
-                      {billPatientData?.totalamount}
-                    </Text>
+                    <Text style={styles.ttAmtTxt}>{TOTAL_AMOUNT}</Text>
                   </View>
                 </View>
                 <View style={styles.ttAmt}>
@@ -334,7 +399,7 @@ const BillLayout = ({route}) => {
                       size={12}
                     />
                     <Text style={[styles.ttAmtTxt, {color: '#15cf84'}]}>
-                      {billPatientData?.totalamount - receivedAmt}
+                      {receivedAmt == '' ? previousbalance : totalbalance}
                     </Text>
                   </View>
                 </View>
@@ -342,9 +407,37 @@ const BillLayout = ({route}) => {
             </View>
           </View>
         </ScrollView>
-        <TouchableOpacity style={styles.submitBtn}>
+        <TouchableOpacity
+          style={styles.submitBtn}
+          onPress={() => {
+            addMobileBillHandler(), setModalVisible(true);
+          }}>
           <Text style={styles.submitBtnTxt}>Save</Text>
         </TouchableOpacity>
+        {/* Modal Popup */}
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Bill Added Successfully</Text>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    setModalVisible(!modalVisible),
+                      navigation.navigate('Ehome');
+                  }}>
+                  <Text style={styles.textStyle}>Ok</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
+        </View>
       </SafeAreaView>
     </>
   );
@@ -497,5 +590,46 @@ const styles = StyleSheet.create({
   },
   billScroll: {
     height: 220,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
