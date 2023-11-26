@@ -132,7 +132,7 @@ export default function Scanner({route}) {
             type: 'SEARCH',
           })
           .then(res => {
-            console.log('patientDetailBySearchInput : ', res.data);
+            // console.log('patientDetailBySearchInput : ', res.data);
 
             navigation.navigate('EpatientDetails', {
               patientData: res.data,

@@ -64,8 +64,8 @@ const BillLayout = ({route}) => {
 
   let totalbalanceTemp = TOTAL_AMOUNT - receivedAmt;
 
-  let totalbalance = billPatientData?.totalbalance + totalbalanceTemp;
-  let previousbalance = billPatientData?.totalbalance;
+  let totalbalance = parseInt(billPatientData?.totalbalance + totalbalanceTemp);
+  let previousbalance = parseInt(billPatientData?.totalbalance);
 
   let today = new Date();
   let currentDate =

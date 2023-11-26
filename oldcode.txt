@@ -10,7 +10,6 @@ import {
   TextInput,
   ToastAndroid,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -68,11 +67,12 @@ const Onboarding = () => {
       });
 
       const res = response.data;
+      console.log(res);
 
       if (res.status === true) {
         ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
         // Store user credentials securely
-        // await AsyncStorage.setItem('userToken', 'user_authenticated');
+        await AsyncStorage.setItem('userToken', JSON.stringify(res));
         navigation.navigate('Ehome');
         setMobilenumber('');
         setPassword('');
@@ -85,16 +85,20 @@ const Onboarding = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const checkUserSignIn = async () => {
-  //     const userToken = await AsyncStorage.getItem('userToken');
-  //     if (userToken) {
-  //       navigation.navigate('Ehome');
-  //     }
-  //   };
+  useEffect(() => {
+    const checkUserSignIn = async () => {
+      const userToken = await AsyncStorage.getItem('userToken');
+      console.log('userToken', userToken);
+      setUserData(userToken);
+      if (userToken) {
+        navigation.navigate('Ehome');
+      } else {
+        navigation.navigate('Onboarding');
+      }
+    };
 
-  //   checkUserSignIn();
-  // }, []);
+    checkUserSignIn();
+  }, []);
 
   const handleContinue = async () => {
     if (username === '' || username.length < 10) {
