@@ -10,7 +10,7 @@ import {
   TextInput,
   ToastAndroid,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -53,12 +53,29 @@ const Slide = ({item}) => {
 };
 
 const Onboarding = () => {
-  const {setUserData} = useContext(UserContext);
+  const {setUserData, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
 
   const [username, setMobilenumber] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
+
+  //
+  useEffect(() => {
+    const checkUserSignIn = async () => {
+      const userToken = await AsyncStorage?.getItem('userToken');
+      if (userToken) {
+        const userData = JSON.parse(userToken);
+        setIsLoggedIn(true);
+        navigation.navigate('Ehome');
+        // Extracting hospital _id from the response
+        const USERDATA = userData.res;
+        setUserData(USERDATA);
+      }
+    };
+
+    checkUserSignIn();
+  }, [isLoggedIn, setIsLoggedIn, navigation]);
 
   const loginHandler = async () => {
     try {
@@ -71,8 +88,11 @@ const Onboarding = () => {
 
       if (res.status === true) {
         ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
-        // Store user credentials securely
-        // await AsyncStorage.setItem('userToken', 'user_authenticated');
+        await AsyncStorage?.setItem(
+          'userToken',
+          JSON.stringify({res: response.data}),
+        );
+        setIsLoggedIn(true);
         navigation.navigate('Ehome');
         setMobilenumber('');
         setPassword('');
@@ -85,17 +105,7 @@ const Onboarding = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const checkUserSignIn = async () => {
-  //     const userToken = await AsyncStorage.getItem('userToken');
-  //     if (userToken) {
-  //       navigation.navigate('Ehome');
-  //     }
-  //   };
-
-  //   checkUserSignIn();
-  // }, []);
-
+  //
   const handleContinue = async () => {
     if (username === '' || username.length < 10) {
       ToastAndroid.show(

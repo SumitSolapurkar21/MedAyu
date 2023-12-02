@@ -293,13 +293,17 @@ const BillLayout = ({route}) => {
                       ]}>
                       <TextInput
                         style={{padding: 1.5}}
-                        placeholder="0.0"
+                        placeholder="0"
                         autoComplete="off"
                         keyboardType="numeric"
-                        textAlign="left"
+                        textAlign="center"
                         value={discountAmt}
-                        onChangeText={e => setDiscountAmt(e)}
-                        editable={discountAmtRs != '' ? false : true}
+                        onChangeText={e => {
+                          setDiscountAmt(e);
+                          const rupees =
+                            (billPatientData?.totalamount * e) / 100;
+                          setDiscountAmtRs(rupees.toFixed(2));
+                        }}
                       />
                     </View>
                     <Text
@@ -345,13 +349,17 @@ const BillLayout = ({route}) => {
                       ]}>
                       <TextInput
                         style={{padding: 1.5}}
-                        placeholder="0.0"
+                        placeholder="0"
                         autoComplete="off"
                         keyboardType="numeric"
-                        textAlign="left"
+                        textAlign="center"
                         value={discountAmtRs}
-                        onChangeText={e => setDiscountAmtRs(e)}
-                        editable={discountAmt != '' ? false : true}
+                        onChangeText={e => {
+                          setDiscountAmtRs(e);
+                          const percentage =
+                            (e * 100) / billPatientData?.totalamount;
+                          setDiscountAmt(percentage.toFixed(2));
+                        }}
                       />
                     </View>
                   </View>

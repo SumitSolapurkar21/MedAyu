@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -33,6 +33,9 @@ import EipdregistrationEmergencyContact from './src/screens/Employee/Eipregistra
 import Edepartment from './src/screens/Employee/Edepartment';
 import Edoctors from './src/screens/Employee/Edoctors';
 import BillLayout from './src/screens/Employee/Bill/BillLayout';
+
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import BillHistory from './src/screens/Employee/Bill/BillHistory';
 
 function App() {
   useEffect(() => {
@@ -90,7 +93,19 @@ function App() {
             <Stack.Screen
               name="EpatientDetails"
               component={EpatientDetails}
-              options={{headerShown: false}}
+              options={({navigation}) => ({
+                title: 'Patient Details',
+                headerRight: () => (
+                  <FontAwesome
+                    name="sign-out"
+                    size={22}
+                    color="#127359"
+                    style={{marginLeft: 20}}
+                    onPress={() => navigation.navigate('LoginPage')}
+                  />
+                ),
+                headerTitleStyle: {fontSize: 16},
+              })}
             />
             <Stack.Screen
               name="Eappointment"
@@ -145,7 +160,36 @@ function App() {
             <Stack.Screen
               name="BillLayout"
               component={BillLayout}
-              options={{headerShown: false}}
+              options={({navigation}) => ({
+                title: 'Patient Bill',
+                headerRight: () => (
+                  <FontAwesome
+                    name="sign-out"
+                    size={22}
+                    color="#127359"
+                    style={{marginLeft: 20}}
+                    onPress={() => navigation.navigate('LoginPage')}
+                  />
+                ),
+                headerTitleStyle: {fontSize: 16},
+              })}
+            />
+            <Stack.Screen
+              name="BillHistory"
+              component={BillHistory}
+              options={({navigation}) => ({
+                title: 'Patient Bill History',
+                headerRight: () => (
+                  <FontAwesome
+                    name="sign-out"
+                    size={22}
+                    color="#127359"
+                    style={{marginLeft: 20}}
+                    onPress={() => navigation.navigate('LoginPage')}
+                  />
+                ),
+                headerTitleStyle: {fontSize: 16},
+              })}
             />
           </Stack.Navigator>
         </NavigationContainer>

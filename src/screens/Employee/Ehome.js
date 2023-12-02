@@ -6,22 +6,33 @@ import {
   View,
   TextInput,
   SafeAreaView,
+  ToastAndroid,
 } from 'react-native';
 import React, {useContext} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 //images
 import pr from '../../images/pr.png';
 import ss from '../../images/sss.png';
 import attendence from '../../images/calendar.png';
+import axios from 'axios';
+import api from '../../../api.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Ehome = () => {
   const navigation = useNavigation();
-  // const route = useRoute();
-  const {userData} = useContext(UserContext);
+
+  const {userData, setIsLoggedIn} = useContext(UserContext);
+
+  const logoutHandler = async () => {
+    console.log('function run');
+    // Clear user token from AsyncStorage
+    await AsyncStorage.removeItem('userToken');
+    setIsLoggedIn(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -31,13 +42,13 @@ const Ehome = () => {
           <Text style={styles.uName}>Hi {userData.username} </Text>
         </View>
         <View style={styles.hrcontent}>
-          {/* <TouchableOpacity>
-            <FontAwesome name="shopping-cart" size={22} color="#127359" />
-          </TouchableOpacity> */}
           <TouchableOpacity>
             <FontAwesome name="bell" size={22} color="#127359" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('LoginPage'), logoutHandler();
+            }}>
             <FontAwesome name="user" size={22} color="#127359" />
           </TouchableOpacity>
         </View>

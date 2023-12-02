@@ -5,11 +5,13 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  ToastAndroid,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import doctorImg from '../../images/doctor.png';
 import ipd from '../../images/ipd.png';
+import billHistory from '../../images/billHistory.png';
 import panchakarma from '../../images/panchakarma.png';
 import invoice from '../../images/invoice.png';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -28,20 +30,6 @@ const EpatientDetails = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.outerHeader}>
-        <View style={styles.hlcontent}>
-          <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>{userData.data[0].name}</Text>
-        </View>
-        <View style={styles.hrcontent}>
-          <TouchableOpacity>
-            <FontAwesome name="bell" size={22} color="#127359" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
-            <FontAwesome name="user" size={22} color="#127359" />
-          </TouchableOpacity>
-        </View>
-      </View>
       <View style={styles.card}>
         <View style={[styles.cardContent, {backgroundColor: '#afcafa'}]}>
           <Text style={styles.cardlabel}>Patient Name</Text>
@@ -101,6 +89,21 @@ const EpatientDetails = ({route}) => {
           }>
           <Image source={invoice} alt="IPD" style={styles.img} />
           <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.cardSelection}>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() =>
+            navigation.navigate('BillHistory', {
+              uhid: uhid,
+              patient_id: patient_id,
+              reception_id: reception_id,
+              hospital_id: hospital_id,
+            })
+          }>
+          <Image source={billHistory} alt="billHistory" style={styles.img} />
+          <Text style={styles.uName}>History</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
