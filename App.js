@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -18,7 +18,7 @@ import Tests from './src/screens/Patients/Tests';
 import HealthRecords from './src/screens/Patients/HealthRecords';
 import DoctorList from './src/screens/Patients/DoctorList';
 import TimeSlot from './src/screens/Patients/TimeSlot';
-import {UserProvider} from './src/components/Context/Context';
+import UserContext, {UserProvider} from './src/components/Context/Context';
 import Ehome from './src/screens/Employee/Ehome';
 import EpatientRegistration from './src/screens/Employee/EpatientRegistration';
 import Scanner from './src/components/Scanner/Scanner';
@@ -36,8 +36,11 @@ import BillLayout from './src/screens/Employee/Bill/BillLayout';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import BillHistory from './src/screens/Employee/Bill/BillHistory';
+import Pdf from './src/components/Pdf/Pdf';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function App() {
+  // const {setIsLoggedIn} = useContext(UserContext);
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       SplashScreen.hide();
@@ -45,6 +48,12 @@ function App() {
     return () => clearTimeout(timeoutId);
   }, []);
 
+  // logouthandler....
+  const logoutHandler = async () => {
+    // Clear user token from AsyncStorage
+    await AsyncStorage.removeItem('userToken');
+    setIsLoggedIn(false);
+  };
   return (
     <>
       <UserProvider>
@@ -101,7 +110,10 @@ function App() {
                     size={22}
                     color="#127359"
                     style={{marginLeft: 20}}
-                    onPress={() => navigation.navigate('LoginPage')}
+                    onPress={() => {
+                      navigation.navigate('LoginPage');
+                      // , logoutHandler();
+                    }}
                   />
                 ),
                 headerTitleStyle: {fontSize: 16},
@@ -168,7 +180,10 @@ function App() {
                     size={22}
                     color="#127359"
                     style={{marginLeft: 20}}
-                    onPress={() => navigation.navigate('LoginPage')}
+                    onPress={() => {
+                      navigation.navigate('LoginPage');
+                      // , logoutHandler();
+                    }}
                   />
                 ),
                 headerTitleStyle: {fontSize: 16},
@@ -185,11 +200,19 @@ function App() {
                     size={22}
                     color="#127359"
                     style={{marginLeft: 20}}
-                    onPress={() => navigation.navigate('LoginPage')}
+                    onPress={() => {
+                      navigation.navigate('LoginPage');
+                      // , logoutHandler();
+                    }}
                   />
                 ),
                 headerTitleStyle: {fontSize: 16},
               })}
+            />
+            <Stack.Screen
+              name="ExportPdf"
+              component={Pdf}
+              options={{headerShown: false}}
             />
           </Stack.Navigator>
         </NavigationContainer>

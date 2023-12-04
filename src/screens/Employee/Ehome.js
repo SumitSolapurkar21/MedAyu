@@ -28,7 +28,6 @@ const Ehome = () => {
   const {userData, setIsLoggedIn} = useContext(UserContext);
 
   const logoutHandler = async () => {
-    console.log('function run');
     // Clear user token from AsyncStorage
     await AsyncStorage.removeItem('userToken');
     setIsLoggedIn(false);
@@ -42,14 +41,16 @@ const Ehome = () => {
           <Text style={styles.uName}>Hi {userData.username} </Text>
         </View>
         <View style={styles.hrcontent}>
-          <TouchableOpacity>
-            <FontAwesome name="bell" size={22} color="#127359" />
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('LoginPage'), logoutHandler();
             }}>
-            <FontAwesome name="user" size={22} color="#127359" />
+            <FontAwesome
+              name="sign-out"
+              size={22}
+              color="#127359"
+              style={{marginLeft: 20}}
+            />
           </TouchableOpacity>
         </View>
       </View>

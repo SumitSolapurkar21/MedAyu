@@ -11,6 +11,7 @@ import React, {useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import api from '../../../../api.json';
+import Pdf from '../../../components/Pdf/Pdf';
 
 const BillHistory = ({route}) => {
   const {uhid, patient_id, reception_id, hospital_id} = route.params;
@@ -40,6 +41,7 @@ const BillHistory = ({route}) => {
   }, []);
 
   let historyArray = billPatientHistory?.HistoryArray;
+  console.log(historyArray);
   return (
     <SafeAreaView style={styles.container}>
       {/* Patient Detail... */}
@@ -145,12 +147,11 @@ const BillHistory = ({route}) => {
                   </Text>
                 </View>
                 <View style={styles.grpShare}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
-                    }>
-                    <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
-                  </TouchableOpacity>
+                  <Pdf
+                    patient_id={patient_id}
+                    hospital_id={hospital_id}
+                    bill_id={res.bill_id}
+                  />
                   <TouchableOpacity
                     onPress={() =>
                       ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
