@@ -523,7 +523,7 @@ const EpatientRegistration = () => {
           </View>
         </Modal>
       )}
-
+      {/* 
       <View style={styles.header}>
         <View style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}>
           <FontAwesome6
@@ -542,7 +542,7 @@ const EpatientRegistration = () => {
             Nagpur
           </Text>
         </View>
-      </View>
+      </View> */}
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
         <View style={styles.fields}>
