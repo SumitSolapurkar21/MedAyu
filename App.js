@@ -7,7 +7,7 @@ function App() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       SplashScreen.hide();
-    }, 5000);
+    }, 2000);
     return () => clearTimeout(timeoutId);
   }, []);
 

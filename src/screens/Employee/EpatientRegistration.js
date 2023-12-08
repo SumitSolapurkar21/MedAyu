@@ -523,26 +523,6 @@ const EpatientRegistration = () => {
           </View>
         </Modal>
       )}
-      {/* 
-      <View style={styles.header}>
-        <View style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}>
-          <FontAwesome6
-            name="arrow-left-long"
-            color="#127359"
-            size={28}
-            onPress={() => navigation.navigate('Ehome')}
-          />
-          <Text style={{color: 'black', fontWeight: '600', fontSize: 16}}>
-            Patient Registration
-          </Text>
-        </View>
-        <View style={{flexDirection: 'row', gap: 8, alignItems: 'center'}}>
-          <FontAwesome6 name="location-dot" color="#127359" size={18} />
-          <Text style={{color: 'black', fontWeight: '600', fontSize: 14}}>
-            Nagpur
-          </Text>
-        </View>
-      </View> */}
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
         <View style={styles.fields}>

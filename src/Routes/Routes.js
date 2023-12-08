@@ -281,6 +281,7 @@ const Routes = () => {
                 }}
               />
             ),
+           
             headerTitleStyle: {fontSize: 16},
           })}
         />

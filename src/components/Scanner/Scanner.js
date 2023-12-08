@@ -121,6 +121,7 @@ export default function Scanner({route}) {
 
   // Get Data By Search Input :
   const patientDetailBySearchInput = async () => {
+    console.log('data : run', searchInput);
     try {
       if (searchInput !== '')
         await axios
@@ -132,7 +133,7 @@ export default function Scanner({route}) {
             type: 'SEARCH',
           })
           .then(res => {
-            // console.log('patientDetailBySearchInput : ', res.data);
+            console.log('patientDetailBySearchInput : ', res.data);
 
             navigation.navigate('EpatientDetails', {
               patientData: res.data,

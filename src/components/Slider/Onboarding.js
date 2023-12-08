@@ -64,12 +64,14 @@ const Onboarding = () => {
   useEffect(() => {
     const checkUserSignIn = async () => {
       const userToken = await AsyncStorage?.getItem('userToken');
-      if (userToken) {
+      console.log('userToken : ', userToken);
+      if (userToken !== null) {
         const userData = JSON.parse(userToken);
         setIsLoggedIn(true);
         navigation.navigate('Ehome');
         // Extracting hospital _id from the response
         const USERDATA = userData.res;
+        console.log(USERDATA);
         setUserData(USERDATA);
       }
     };

@@ -5,7 +5,13 @@ import RNPrint from 'react-native-print';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
 const Pdf = ({patient_id, bill_id, hospital_id}) => {
-  console.log('Pdf:', {patient_id, bill_id, hospital_id});
+  const handlePdfIconClick = (patientId, hospitalId, bill_id) => {
+    // Perform any action you want when the PDF icon is clicked
+    console.log('Patient ID:', patientId);
+    console.log('Hospital ID:', hospitalId);
+    console.log('Bill ID:', bill_id);
+    // You can implement further logic, such as opening a PDF or navigating to another screen
+  };
   const html = `
   <html>
   <head>
@@ -106,7 +112,11 @@ const Pdf = ({patient_id, bill_id, hospital_id}) => {
     });
   };
   return (
-    <TouchableOpacity onPress={() => exportPdf()}>
+    <TouchableOpacity
+      onPress={
+        (() => handlePdfIconClick(patient_id, hospital_id, bill_id),
+        exportPdf())
+      }>
       <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
     </TouchableOpacity>
   );
