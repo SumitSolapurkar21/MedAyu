@@ -26,7 +26,6 @@ const Ehome = () => {
   const navigation = useNavigation();
 
   const {userData, setIsLoggedIn} = useContext(UserContext);
-  console.log('userData : ', userData.username);
 
   const logoutHandler = async () => {
     // Clear user token from AsyncStorage

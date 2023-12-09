@@ -18,6 +18,8 @@ import {TouchableOpacity} from 'react-native';
 import {ToastAndroid} from 'react-native';
 import axios from 'axios';
 import api from '../../../../api.json';
+import {ActivityIndicator, MD2Colors} from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BillLayout = ({route}) => {
   const navigation = useNavigation();
@@ -28,10 +30,20 @@ const BillLayout = ({route}) => {
   const [discountAmt, setDiscountAmt] = useState('');
   const [discountAmtRs, setDiscountAmtRs] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  const storeData = async () => {
+    await AsyncStorage?.setItem(
+      'userToken',
+      JSON.stringify({res: route.params}),
+    );
+  };
+  // console.log('storeData : ', storeData);
   useEffect(() => {
+    storeData();
     try {
       const patientBillData = async () => {
+        setLoading(true);
         await axios
           .post(`${api.baseurl}/GetAllBillsForMobile`, {
             uhid: uhid,
@@ -41,12 +53,19 @@ const BillLayout = ({route}) => {
           })
           .then(res => {
             setBillPatientData(res.data);
+            // console.log('res.data', res);
             return res.data;
-          });
+          })
+          .finally(() =>
+            setTimeout(() => {
+              setLoading(false);
+            }, 3000),
+          );
       };
       patientBillData();
     } catch (error) {
       console.log('Error :', error);
+      setLoading(false);
     }
   }, []);
 
@@ -103,8 +122,21 @@ const BillLayout = ({route}) => {
       console.error(error);
     }
   };
+
+  // console.log('res.data : ', billPatientData.data[0].bill_id);
+
   return (
     <>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator
+            animating={true}
+            color={MD2Colors.red800}
+            size={70}
+            style={styles.activityIndicator}
+          />
+        </View>
+      )}
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <View
@@ -241,7 +273,13 @@ const BillLayout = ({route}) => {
             </ScrollView>
 
             <View style={styles.billGrpBtn}>
-              <TouchableOpacity style={styles.billAdd}>
+              <TouchableOpacity
+                style={styles.billAdd}
+                onPress={() =>
+                  navigation.navigate('BillAddItems', {
+                    bill_id: billPatientData.data[0].bill_id,
+                  })
+                }>
                 <FontAwesome6 name="circle-plus" color="#3763ae" size={16} />
                 <Text
                   style={{color: '#3763ae', fontWeight: 'bold', fontSize: 14}}>
@@ -639,5 +677,19 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  loadingContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Light black background
+    zIndex: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activityIndicator: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
   },
 });

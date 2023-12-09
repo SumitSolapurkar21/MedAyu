@@ -86,5 +86,6 @@ To learn more about React Native, take a look at the following resources:
 **Toast Notification** : https://www.youtube.com/watch?v=rOy8neGw6XQ
 **Pdf** : https://www.youtube.com/watch?v=YrGWWPEYxpg
             https://aboutreact.com/react-native-print-html/
+**UI** : https://callstack.github.io/react-native-paper/docs/guides/getting-started/
 
 http://43.204.70.195:1107

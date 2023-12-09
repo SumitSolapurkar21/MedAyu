@@ -87,7 +87,7 @@ export default function Scanner({route}) {
 
   //Get Data By QR Scan
   const patientDetail = async () => {
-    console.log('run');
+    // console.log('run');
 
     try {
       await axios
@@ -100,7 +100,7 @@ export default function Scanner({route}) {
         })
         .then(res => {
           // setPatientData(res.data);
-          console.log(res.data);
+          // console.log(res.data);
 
           navigation.navigate('EpatientDetails', {patientData: res.data});
           return res.data;
@@ -121,7 +121,7 @@ export default function Scanner({route}) {
 
   // Get Data By Search Input :
   const patientDetailBySearchInput = async () => {
-    console.log('data : run', searchInput);
+    // console.log('data : run', searchInput);
     try {
       if (searchInput !== '')
         await axios
@@ -133,7 +133,7 @@ export default function Scanner({route}) {
             type: 'SEARCH',
           })
           .then(res => {
-            console.log('patientDetailBySearchInput : ', res.data);
+            // console.log('patientDetailBySearchInput : ', res.data);
 
             navigation.navigate('EpatientDetails', {
               patientData: res.data,

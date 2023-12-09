@@ -27,6 +27,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import UserContext from '../components/Context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BillAddItems from '../screens/Employee/Bill/BillAddItems';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -281,7 +282,27 @@ const Routes = () => {
                 }}
               />
             ),
-           
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="BillAddItems"
+          component={BillAddItems}
+          options={({navigation}) => ({
+            title: 'Add Items to Sale',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
             headerTitleStyle: {fontSize: 16},
           })}
         />

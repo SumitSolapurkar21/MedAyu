@@ -6,6 +6,7 @@ import {
   ToastAndroid,
   TouchableOpacity,
   TextInput,
+  Share,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -14,13 +15,13 @@ import api from '../../../../api.json';
 import Pdf from '../../../components/Pdf/Pdf';
 import {useNavigation} from '@react-navigation/native';
 import RNPrint from 'react-native-print';
-import frame from '../../../images/frame.png';
 
 const BillHistory = ({route}) => {
   const navigation = useNavigation();
   const {uhid, patient_id, reception_id, hospital_id} = route.params;
   //   console.log(uhid, patient_id, reception_id, hospital_id);
   const [billPatientHistory, setBillPatientHistory] = useState([]);
+  const [sharePdf, setSharePdf] = useState('');
 
   useEffect(() => {
     try {
@@ -247,15 +248,15 @@ const BillHistory = ({route}) => {
                     <tbody>
                          <tr>
                               <td>SGST</td>
-                              <td>1,000</td>
-                              <td>9.0%</td>
-                              <td>90</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
                          </tr>
                          <tr>
                               <td>CGST</td>
-                              <td>1,000</td>
-                              <td>9.0%</td>
-                              <td>90</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
                          </tr>
                     </tbody>
                </table>
@@ -267,13 +268,10 @@ const BillHistory = ({route}) => {
                          <th colspan="2">Amount</th>
                     </thead>
                     <tbody>
-                         <tr>
-                              <td>Sub Total</td>
-                              <td>${data.OutBillArrayss[0].amount}</td>
-                         </tr>
+                         
                          <tr>
                               <td>Total</td>
-                              <td>${data.OutBillArrayss[0].amount}</td>
+                              <td>${data.totalamount}</td>
                          </tr>
                          <tr>
                               <td>Received</td>
@@ -296,9 +294,9 @@ const BillHistory = ({route}) => {
           </div>
           <div class="main2">
           <p>Invoice Amount In Words</p>
-          <p>One Thousand </p>
+          <p>${data.words} </p>
           <p>Payment Mode</p>
-          <p>Credit</p>
+          <p>Cash</p>
      </div>
      <div class="main3">
      <div class="main-part3">
@@ -313,8 +311,10 @@ const BillHistory = ({route}) => {
           </div>
      </div>
      <div class="main-part4">
-     <img src="${frame}" alt="qr code" style="width: 15vw;" />
-          <p>Scan and Pay</p>
+     <div style="align-self:center;">
+     <img src="${data.bill_qr}" alt="qr code" style="width: 15vw;" />
+     <p>Scan and Pay</p>
+     </div>
      </div>
      <div class="main-part5" style="line-height: 6;">
           <p>For , </p>
@@ -323,7 +323,7 @@ const BillHistory = ({route}) => {
 </div>
 <div class="main4">
           <div style="width: 100%;"><p>${data.patientname}</p></div>
-          <div style="width: 100%;"><p>Acknowledgemant</p><p></p><p style="margin-top: 16%;">Receiver's seal and sign</p></div>
+          <div style="width: 100%;"><p>Acknowledgemant</p><p style="color:green">${data.hosp_name}</p><p style="margin-top: 16%;">Receiver's seal and sign</p></div>
           <div style="width: 100%;">
           <p>Invoice No : ${data.invoiceno}</p>
           <p>Invoice Date : ${data.invoicedate}</p>
@@ -333,6 +333,7 @@ const BillHistory = ({route}) => {
   </body>
   </html>
   `;
+      setSharePdf(html);
       await RNPrint.print({
         html,
       });
@@ -340,6 +341,22 @@ const BillHistory = ({route}) => {
       console.error(error);
     }
     // You can implement further logic, such as opening a PDF or navigating to another screen
+  };
+
+  const sharePdfhandler = async () => {
+    try {
+      // Share the generated PDF
+      const shareOptions = {
+        title: 'Share PDF',
+        // url: pdfFilePath,
+        // type: 'application/pdf',
+        message: `${sharePdf}`,
+      };
+
+      await Share.share(shareOptions);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -453,10 +470,7 @@ const BillHistory = ({route}) => {
                     }}>
                     <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                      ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
-                    }>
+                  <TouchableOpacity onPress={() => sharePdfhandler()}>
                     <FontAwesome6 name="share" color="#1669f0" size={18} />
                   </TouchableOpacity>
                   <TouchableOpacity
