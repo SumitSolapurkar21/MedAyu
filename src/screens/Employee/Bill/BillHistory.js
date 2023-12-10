@@ -6,22 +6,21 @@ import {
   ToastAndroid,
   TouchableOpacity,
   TextInput,
-  Share,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import api from '../../../../api.json';
-import Pdf from '../../../components/Pdf/Pdf';
 import {useNavigation} from '@react-navigation/native';
 import RNPrint from 'react-native-print';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import RNFetchBlob from 'rn-fetch-blob';
+import Share from 'react-native-share';
 
 const BillHistory = ({route}) => {
-  const navigation = useNavigation();
+  const [pdfPath, setPdfPath] = useState('');
   const {uhid, patient_id, reception_id, hospital_id} = route.params;
-  //   console.log(uhid, patient_id, reception_id, hospital_id);
   const [billPatientHistory, setBillPatientHistory] = useState([]);
-  const [sharePdf, setSharePdf] = useState('');
 
   useEffect(() => {
     try {
@@ -48,11 +47,6 @@ const BillHistory = ({route}) => {
   let historyArray = billPatientHistory?.HistoryArray;
 
   const handlePdfIconClick = async (patientId, hospitalId, billId) => {
-    // Perform any action you want when the PDF icon is clicked
-    // console.log('Patient ID:', patientId);
-    // console.log('Hospital ID:', hospitalId);
-    // console.log('Bill ID:', billId);
-
     try {
       const patientBillDataRes = await axios.post(
         `${api.baseurl}/GenerateBillPdf`,
@@ -62,12 +56,8 @@ const BillHistory = ({route}) => {
           patient_id: patientId,
         },
       );
-      console.log(
-        'patientBillDataRes : ',
-        patientBillDataRes.data.OutBillArrayss,
-      );
+
       const data = patientBillDataRes.data;
-      console.log('Data : ......', data);
       const tableRows = data?.OutBillArrayss?.map((res, i) => {
         return `
           <tr key=${i}>
@@ -332,28 +322,323 @@ const BillHistory = ({route}) => {
      </div>
   </body>
   </html>
-  `;
-      setSharePdf(html);
+                        `;
       await RNPrint.print({
         html,
       });
     } catch (error) {
       console.error(error);
     }
-    // You can implement further logic, such as opening a PDF or navigating to another screen
   };
 
-  const sharePdfhandler = async () => {
+  const sharePdfhandler = async (patientId, hospitalId, billId) => {
     try {
-      // Share the generated PDF
-      const shareOptions = {
-        title: 'Share PDF',
-        // url: pdfFilePath,
-        // type: 'application/pdf',
-        message: `${sharePdf}`,
+      const patientBillDataRes = await axios.post(
+        `${api.baseurl}/GenerateBillPdf`,
+        {
+          bill_id: billId,
+          hospital_id: hospitalId,
+          patient_id: patientId,
+        },
+      );
+
+      const data = patientBillDataRes.data;
+      const tableRows = data?.OutBillArrayss?.map((res, i) => {
+        return `
+          <tr key=${i}>
+            <td>${i + 1}</td>
+            <td>${res.billname}</td>
+            <td>${res.outbillingtype}</td>
+            <td>${res.amount}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const html = `
+  <html>
+  <head>
+  <meta name="viewport"
+       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <style>
+       .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+            border-bottom: 1px solid;
+       }
+  
+       .head-content {
+            line-height: 0.5;
+       }
+  
+       .head-content p,
+       h1 {
+            text-align: right;
+       }
+       .head-content p{
+        word-break: break-all;
+       }
+       .head-content2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+       }
+  
+       .head-content2-part1 {
+            border-right: 1px solid;
+            width: 50%;
+       }
+       .head-content2-part2 p{
+            text-align: right;
+       }
+       table {
+            width: 100%;
+       }
+  
+       thead {
+            background-color: green;
+       }
+  
+       table tr th {
+            padding: 6px;
+            color: white;
+            border: 1px solid black
+       }
+       table tr td {
+        padding: 6px;
+        border: 1px solid black;
+        text-align:"center"
+       }
+       
+       .head-content2-part3 p{
+        word-break: break-all;
+       }
+       .main-part1,
+          .main-part2 {
+               width: 50%;
+          }
+          .main,
+          .main3 {
+               display: flex;
+          }
+
+          .main2,
+          .main-part3,
+          .main-part4,
+          .main-part5 {
+               border: 1px solid black
+          }
+
+          .main2 p {
+            text-align: center;
+               margin-top: 0;
+               margin-bottom: 0;
+               padding: 6px;
+          }
+          .main-part3 p {
+               text-align: center;
+               margin-top: 0;
+               margin-bottom: 0;
+               padding: 6px;
+          }
+
+          .main2 p:nth-child(odd) {
+               background-color: green;
+               color: white;
+               font-weight: 600;
+          }
+          .main-part3 p:nth-child(odd) {
+               background-color: green;
+               color: white;
+               font-weight: 600;
+          }
+          .main-part3-p p{
+               text-align: left;
+          }
+          .main-part3, .main-part4 , .main-part5{
+            width:100%;
+          }
+          .main4{
+            display: flex;
+            align-items: center;
+       }
+       .main4 div p{
+        text-align: center;
+               margin-top: 0;
+               margin-bottom: 0;
+       }
+  </style>
+  </head>
+  
+  <body style="border: 1px solid;">
+  <div class="head">
+       <div>
+            <img src='${data.hosp_logo}' style="width: 15vw;" />
+       </div>
+       <div class="head-content">
+            <h1>${data.hosp_name}</h1>
+            <p>${data.hosp_address}</p>
+            <p>Phone no . ${data.hosp_mobile} - Email : ${data.hosp_email}</p>
+            <p>GSTIN : ${data.hosp_gst} - STATE : ${data.hosp_state}</p>
+       </div>
+  </div>
+  <div class="head-content2">
+       <div class="head-content2-part1">
+            <div style="background-color: green;">
+                 <h3 style="color: white;    margin: 0;
+                 padding: 8px;">Bill To</h3>
+            </div>
+            <div class="head-content2-part3" style="padding: 0 10px;line-height: 1">
+                 <h3>${data.patientname}</h3>
+                 <p>Phone no . ${data.mobilenumber} - Email : sumitqwert21@gmail.com</p>
+                 <p>STATE : ${data.patientstate}</p>
+            </div>
+       </div>
+       <div class="head-content2-part2" style="padding: 0 10px;">
+            <p>Place of Supply : ${data.patientstate}</p>
+            <p>Invoice No : ${data.invoiceno}</p>
+            <p>Date : ${data.invoicedate}</p>
+       </div>
+  </div>
+  <table style="border-collapse: collapse;">
+       <thead style="background-color: green ;">
+            <th>#</th>
+            <th>Particulars</th>
+            <th>Type of services</th>
+            <th>Amount</th>
+       </thead>
+       <tbody>
+       ${tableRows}
+      </tbody>
+  </table>
+  <div class="main">
+          <div class="main-part1">
+               <table style="border-collapse: collapse;">
+                    <thead>
+                         <th>Tax Type</th>
+                         <th>Taxable Abount</th>
+                         <th>Rate</th>
+                         <th>Tax Amount</th>
+                    </thead>
+                    <tbody>
+                         <tr>
+                              <td>SGST</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                         </tr>
+                         <tr>
+                              <td>CGST</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                         </tr>
+                    </tbody>
+               </table>
+          </div>
+          <div class="main-part2">
+               <table style="border-collapse: collapse;">
+
+                    <thead>
+                         <th colspan="2">Amount</th>
+                    </thead>
+                    <tbody>
+                         
+                         <tr>
+                              <td>Total</td>
+                              <td>${data.totalamount}</td>
+                         </tr>
+                         <tr>
+                              <td>Received</td>
+                              <td>${data.receiveamount}</td>
+                         </tr>
+                         
+                         <tr>
+                              <td>Previous Balance</td>
+                              <td>${data.previous_balance}</td>
+                         </tr>
+
+                         <tr>
+                              <td>Total Balance</td>
+                              <td>${data.totalbalance}</td>
+                         </tr>
+                        
+                    </tbody>
+               </table>
+          </div>
+          </div>
+          <div class="main2">
+          <p>Invoice Amount In Words</p>
+          <p>${data.words} </p>
+          <p>Payment Mode</p>
+          <p>Cash</p>
+     </div>
+     <div class="main3">
+     <div class="main-part3">
+          <p>Terms and Conditions</p>
+          <p>Thanks for doing business with us !</p>
+          <p>Bank Details</p>
+          <div class="main-part3-p">
+               <p style="background-color: transparent;color: black;font-weight: normal;">BankName : STATE BANK OF INDIA</p>
+               <p>BANK ACC NO : 99898765456</p>
+               <p style="background-color: transparent;color: black;font-weight: normal;">BANK IFSC CODE : SBIN0011154</p>
+               <p>ACC HOLDER'S NAME : </p>
+          </div>
+     </div>
+     <div class="main-part4">
+     <div style="align-self:center;">
+     <img src="${data.bill_qr}" alt="qr code" style="width: 15vw;" />
+     <p>Scan and Pay</p>
+     </div>
+     </div>
+     <div class="main-part5" style="line-height: 6;">
+          <p>For , </p>
+          <p>Authorized Signatory</p>
+     </div>
+</div>
+<div class="main4">
+          <div style="width: 100%;"><p>${data.patientname}</p></div>
+          <div style="width: 100%;"><p>Acknowledgemant</p><p style="color:green">${data.hosp_name}</p><p style="margin-top: 16%;">Receiver's seal and sign</p></div>
+          <div style="width: 100%;">
+          <p>Invoice No : ${data.invoiceno}</p>
+          <p>Invoice Date : ${data.invoicedate}</p>
+               <p>Invoice Amount : ${data.OutBillArrayss[0].amount} </p>
+          </div>
+     </div>
+  </body>
+  </html>
+                        `;
+
+      const {fs} = RNFetchBlob;
+      const path = fs.dirs.DocumentDir + '/bill.pdf';
+      console.log('share path:', path);
+      const options = {
+        html: html,
+        fileName: 'bill',
+        directory: '',
       };
 
-      await Share.share(shareOptions);
+      const pdf = await RNHTMLtoPDF.convert(options);
+      // console.log('shaer pdf path : ', pdf.filePath);
+
+      // setPdfPath(pdf.filePath);
+      const sharePdf = async () => {
+        if (pdf.filePath) {
+          const shareOptions = {
+            title: 'Share file',
+            failOnCancel: false,
+            url: `file://${pdf.filePath}`,
+          };
+
+          try {
+            await Share.open(shareOptions);
+          } catch (error) {
+            console.log('Error sharing PDF:', error.message);
+          }
+        }
+      };
+      sharePdf();
     } catch (error) {
       console.error(error);
     }
@@ -470,7 +755,10 @@ const BillHistory = ({route}) => {
                     }}>
                     <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => sharePdfhandler()}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      sharePdfhandler(patient_id, hospital_id, res.bill_id)
+                    }>
                     <FontAwesome6 name="share" color="#1669f0" size={18} />
                   </TouchableOpacity>
                   <TouchableOpacity

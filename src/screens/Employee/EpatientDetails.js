@@ -8,21 +8,18 @@ import {
   ToastAndroid,
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
-import medayuLogo from '../../images/medayu.jpeg';
 import doctorImg from '../../images/doctor.png';
 import ipd from '../../images/ipd.png';
 import billHistory from '../../images/billHistory.png';
 import panchakarma from '../../images/panchakarma.png';
 import invoice from '../../images/invoice.png';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 
 const EpatientDetails = ({route}) => {
   const navigation = useNavigation();
-  const {userData, setPatientsData} = useContext(UserContext);
-  // const {patientData} = route.params;
-  // console.log(patientData);
+  const {setPatientsData} = useContext(UserContext);
+
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
     route.params?.patientData;
   const {reception_id, hospital_id} = route.params;

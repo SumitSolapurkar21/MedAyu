@@ -48,7 +48,7 @@ const BillLayout = ({route}) => {
           })
           .then(res => {
             setBillPatientData(res.data);
-            // console.log('res.data', res);
+            // console.log('res.data', res.data);
             return res.data;
           })
           .finally(() =>

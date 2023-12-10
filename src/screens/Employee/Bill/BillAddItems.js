@@ -90,7 +90,7 @@ const BillAddItems = ({route}) => {
   const servicesArray = [
     {
       amount: selectedItemCharge.amount,
-      outbillingname: selectedItemCharge.outbillingname,
+      billname: selectedItemCharge.outbillingname,
       outbillingtype: outbillingtype,
     },
   ];
@@ -136,22 +136,7 @@ const BillAddItems = ({route}) => {
             onChangeText={e => setItemQuantity(e)}
             keyboardType="numeric"
           />
-          {/* <View style={{width: '49%'}}>
-            <DropDown
-              label={'Unit'}
-              mode={'outlined'}
-              visible={showDropDown}
-              showDropDown={() => setShowDropDown(true)}
-              onDismiss={() => setShowDropDown(false)}
-              value={gender || ''}
-              setValue={setGender}
-              list={opdServices?.map((res, i) => ({
-                label: res.outbillingtype,
-                key: i,
-                value: res.outbillingtype,
-              }))}
-            />
-          </View> */}
+
           <TextInput
             mode="outlined"
             label="Doctor Name"
@@ -192,186 +177,6 @@ const BillAddItems = ({route}) => {
         </Text>
       </View>
 
-      {/* card 2 */}
-      {/* <View style={styles.card}>
-        <View style={styles.header2}>
-          <Text style={styles.headerTxt}>Totals & Taxes</Text>
-        </View>
-
-        <View style={styles.billContent}>
-          <Text style={styles.billTxt}>Subtotal (Rate x Qty)</Text>
-          <Text style={styles.billTxt}>
-            <FontAwesome6 name="indian-rupee-sign" color="black" size={10} />
-            &nbsp;&nbsp; 99999
-          </Text>
-        </View>
-
-        <View style={styles.billSum}>
-          <View style={[styles.billContent]}>
-            <Text style={[styles.billTxt, {marginBottom: 8}]}>Discount</Text>
-            <View style={{flexDirection: 'row', gap: 6}}>
-              <View style={[styles.billContent, {gap: 0}]}>
-                <View
-                  style={[
-                    styles.ttAmtTxt,
-                    {
-                      borderColor: 'orange',
-                      borderWidth: 2,
-                      borderTopLeftRadius: 6,
-                      borderBottomLeftRadius: 6,
-                      height: 35,
-                    },
-                  ]}>
-                  <TextInput
-                    placeholder="0"
-                    autoComplete="off"
-                    keyboardType="numeric"
-                    value={'8'}
-                    style={{height: 30, backgroundColor: '#ffffff'}}
-                    mode="flat"
-                  />
-                </View>
-                <Text
-                  style={[
-                    styles.billTxt2,
-                    {
-                      backgroundColor: 'orange',
-                      borderTopRightRadius: 6,
-                      borderBottomRightRadius: 6,
-                      height: 35,
-                    },
-                  ]}>
-                  %
-                </Text>
-              </View>
-              <View style={[styles.billContent, {gap: 0}]}>
-                <View
-                  style={[
-                    styles.billTxt2,
-                    {
-                      borderTopLeftRadius: 6,
-                      borderBottomLeftRadius: 6,
-                      backgroundColor: '#b9cceb',
-                      borderColor: '#b9cceb',
-                      height: 35,
-                    },
-                  ]}>
-                  <FontAwesome6
-                    name="indian-rupee-sign"
-                    color="black"
-                    size={12}
-                  />
-                </View>
-                <View
-                  style={[
-                    styles.ttAmtTxt,
-                    {
-                      borderTopRightRadius: 6,
-                      borderBottomRightRadius: 6,
-                      borderColor: '#b9cceb',
-                      borderWidth: 2,
-                      height: 35,
-                    },
-                  ]}>
-                  <TextInput
-                    placeholder="0"
-                    autoComplete="off"
-                    keyboardType="numeric"
-                    value={'9'}
-                    style={{height: 30, backgroundColor: '#ffffff'}}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={styles.billSum}>
-          <View style={[styles.billContent]}>
-            <Text style={[styles.billTxt]}>Tax %</Text>
-            <View style={{flexDirection: 'row', gap: 6}}>
-              <View style={[styles.billContent, {gap: 0}]}>
-                <View
-                  style={[
-                    styles.ttAmtTxt,
-                    {
-                      borderColor: 'orange',
-                      borderWidth: 2,
-                      borderTopLeftRadius: 6,
-                      borderBottomLeftRadius: 6,
-                      height: 35,
-                    },
-                  ]}>
-                  <TextInput
-                    placeholder="0"
-                    autoComplete="off"
-                    keyboardType="numeric"
-                    value={'8'}
-                    style={{height: 30, backgroundColor: '#ffffff'}}
-                    mode="flat"
-                  />
-                </View>
-                <Text
-                  style={[
-                    styles.billTxt2,
-                    {
-                      backgroundColor: 'orange',
-                      borderTopRightRadius: 6,
-                      borderBottomRightRadius: 6,
-                      height: 35,
-                    },
-                  ]}>
-                  %
-                </Text>
-              </View>
-              <View style={[styles.billContent, {gap: 0}]}>
-                <View
-                  style={[
-                    styles.billTxt2,
-                    {
-                      borderTopLeftRadius: 6,
-                      borderBottomLeftRadius: 6,
-                      backgroundColor: '#b9cceb',
-                      borderColor: '#b9cceb',
-                      height: 35,
-                    },
-                  ]}>
-                  <FontAwesome6
-                    name="indian-rupee-sign"
-                    color="black"
-                    size={12}
-                  />
-                </View>
-                <View
-                  style={[
-                    styles.ttAmtTxt,
-                    {
-                      borderTopRightRadius: 6,
-                      borderBottomRightRadius: 6,
-                      borderColor: '#b9cceb',
-                      borderWidth: 2,
-                      height: 35,
-                    },
-                  ]}>
-                  <TextInput
-                    placeholder="0"
-                    autoComplete="off"
-                    keyboardType="numeric"
-                    value={'9'}
-                    style={{height: 30, backgroundColor: '#ffffff'}}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={styles.billContent}>
-          <Text style={styles.billTxt}>Total Amount</Text>
-          <Text style={styles.billTxt}>
-            <FontAwesome6 name="indian-rupee-sign" color="black" size={10} />
-            &nbsp;0
-          </Text>
-        </View>
-      </View> */}
       {/* dialog box */}
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
@@ -392,7 +197,6 @@ const BillAddItems = ({route}) => {
         </Dialog>
       </Portal>
       <Button
-        //    icon="camera"
         style={{
           position: 'absolute',
           bottom: 0,
@@ -433,32 +237,4 @@ const styles = StyleSheet.create({
     gap: 5,
     marginTop: 10,
   },
-  //   header2: {
-  //     padding: 6,
-  //     borderBottomWidth: 1,
-  //     borderBottomColor: 'lightgrey',
-  //     marginBottom: 10,
-  //   },
-  //   headerTxt: {
-  //     fontWeight: '600',
-  //     color: 'black',
-  //   },
-  //   billContent: {
-  //     paddingBottom: 6,
-  //     flexDirection: 'row',
-  //     justifyContent: 'space-between',
-  //     alignItems: 'center',
-  //     gap: 6,
-  //   },
-  //   billTxt: {
-  //     fontSize: 12,
-  //     color: 'black',
-  //     fontWeight: '600',
-  //   },
-
-  //   billTxt2: {
-  //     borderWidth: 2,
-  //     borderColor: 'orange',
-  //     padding: 6,
-  //   },
 });

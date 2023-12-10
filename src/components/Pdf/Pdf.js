@@ -1,16 +1,44 @@
-import {StyleSheet, Text, View, Alert, TouchableOpacity} from 'react-native';
-import React, {useEffect} from 'react';
-// import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import RNPrint from 'react-native-print';
+import React, {useEffect, useState} from 'react';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import RNPrint from 'react-native-print';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import RNFetchBlob from 'rn-fetch-blob';
+import Share from 'react-native-share';
 
-const Pdf = ({patient_id, bill_id, hospital_id}) => {
-  const handlePdfIconClick = (patientId, hospitalId, bill_id) => {
-    // Perform any action you want when the PDF icon is clicked
-    console.log('Patient ID:', patientId);
-    console.log('Hospital ID:', hospitalId);
-    console.log('Bill ID:', bill_id);
-    // You can implement further logic, such as opening a PDF or navigating to another screen
+const Pdf = () => {
+  const [pdfPath, setPdfPath] = useState('');
+  const generatePDF = async () => {
+    const {fs} = RNFetchBlob;
+    const path = fs.dirs.DocumentDir + '/bill.pdf';
+    console.log(path);
+    const options = {
+      html: html,
+      fileName: 'bill',
+      directory: '',
+    };
+
+    const pdf = await RNHTMLtoPDF.convert(options);
+
+    setPdfPath(pdf.filePath);
+  };
+  useEffect(() => {
+    generatePDF();
+  }, []);
+  const sharePdf = async () => {
+    if (pdfPath) {
+      const shareOptions = {
+        title: 'Share file',
+        failOnCancel: false,
+        url: `file://${pdfPath}`,
+      };
+
+      try {
+        await Share.open(shareOptions);
+      } catch (error) {
+        console.log('Error sharing PDF:', error.message);
+      }
+    }
   };
   const html = `
   <html>
@@ -112,13 +140,16 @@ const Pdf = ({patient_id, bill_id, hospital_id}) => {
     });
   };
   return (
-    <TouchableOpacity
-      onPress={
-        (() => handlePdfIconClick(patient_id, hospital_id, bill_id),
-        exportPdf())
-      }>
-      <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
-    </TouchableOpacity>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <TouchableOpacity onPress={sharePdf}>
+        <FontAwesome6 name="file-pdf" color="#1669f0" size={30} />
+      </TouchableOpacity>
+    </View>
   );
 };
 

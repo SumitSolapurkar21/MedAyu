@@ -79,16 +79,6 @@ const DateTimeAppointment = ({
 
   // Add Appointments handler .....
   const handleSubmit = async () => {
-    // console.log(
-    //   'Add Appoint:',
-    //   reception_id,
-    //   doctor_id,
-    //   patient_id,
-    //   hospital_id,
-    //   selectedTime,
-    //   selectedDate,
-    //   department_id,
-    // );
     try {
       await axios
         .post(`${api.baseurl}/AddDirectMobileAppointments`, {
@@ -104,7 +94,6 @@ const DateTimeAppointment = ({
         .then(res => {
           return res.data;
         });
-      // setFormData([]);
       setMsgPopup(true);
       setBackdropOpacity(0.5);
     } catch (error) {
