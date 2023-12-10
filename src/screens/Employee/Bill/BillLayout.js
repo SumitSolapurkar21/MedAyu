@@ -8,7 +8,7 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import {Switch} from 'react-native-switch';
@@ -19,12 +19,11 @@ import {ToastAndroid} from 'react-native';
 import axios from 'axios';
 import api from '../../../../api.json';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserContext from '../../../components/Context/Context';
 
 const BillLayout = ({route}) => {
   const navigation = useNavigation();
   const [toggleValue, setToggleValue] = useState(true);
-  const {uhid, patient_id, reception_id, hospital_id} = route.params;
   const [billPatientData, setBillPatientData] = useState(null);
   const [receivedAmt, setReceivedAmt] = useState('');
   const [discountAmt, setDiscountAmt] = useState('');
@@ -32,15 +31,11 @@ const BillLayout = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const storeData = async () => {
-    await AsyncStorage?.setItem(
-      'userToken',
-      JSON.stringify({res: route.params}),
-    );
-  };
-  // console.log('storeData : ', storeData);
+  const {patientsData} = useContext(UserContext);
+  const {uhid, patient_id, reception_id, hospital_id} = patientsData;
+
   useEffect(() => {
-    storeData();
+    // storeData();
     try {
       const patientBillData = async () => {
         setLoading(true);
@@ -122,8 +117,6 @@ const BillLayout = ({route}) => {
       console.error(error);
     }
   };
-
-  // console.log('res.data : ', billPatientData.data[0].bill_id);
 
   return (
     <>

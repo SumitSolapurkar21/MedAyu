@@ -7,7 +7,7 @@ import {
   Image,
   ToastAndroid,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import doctorImg from '../../images/doctor.png';
 import ipd from '../../images/ipd.png';
@@ -20,13 +20,21 @@ import UserContext from '../../components/Context/Context';
 
 const EpatientDetails = ({route}) => {
   const navigation = useNavigation();
-  const {userData} = useContext(UserContext);
+  const {userData, setPatientsData} = useContext(UserContext);
   // const {patientData} = route.params;
   // console.log(patientData);
-
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
     route.params?.patientData;
   const {reception_id, hospital_id} = route.params;
+
+  useEffect(() => {
+    setPatientsData({
+      uhid: uhid,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      hospital_id: hospital_id,
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
