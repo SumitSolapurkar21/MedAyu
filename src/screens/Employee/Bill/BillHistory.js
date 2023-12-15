@@ -6,6 +6,7 @@ import {
   ToastAndroid,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -18,7 +19,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import Share from 'react-native-share';
 
 const BillHistory = ({route}) => {
-  const [pdfPath, setPdfPath] = useState('');
+  const navigation = useNavigation();
   const {uhid, patient_id, reception_id, hospital_id} = route.params;
   const [billPatientHistory, setBillPatientHistory] = useState([]);
 
@@ -716,66 +717,80 @@ const BillHistory = ({route}) => {
         </View>
       </View>
       {/* Patient Bills... */}
-      {historyArray?.length > 0 &&
-        historyArray?.map((res, i) => {
-          return (
-            <View style={[styles.card, {marginVertical: 6}]} key={res.bill_id}>
-              <View style={styles.cardBody}>
-                <View>
-                  <Text style={[styles.pData, {fontSize: 16}]}>Sale</Text>
+      <ScrollView vertical>
+        {historyArray?.length > 0 &&
+          historyArray?.map((res, i) => {
+            return (
+              <View
+                style={[styles.card, {marginVertical: 6}]}
+                key={res.bill_id}>
+                <View style={styles.cardBody}>
+                  <View>
+                    <Text style={[styles.pData, {fontSize: 16}]}>Sale</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.pData}>
+                      Invoice No : &nbsp; <Text>{res.invoiceno}</Text>
+                    </Text>
+                    <Text style={styles.pData}>
+                      Date : &nbsp; <Text>{res.mobilepaymentdate}</Text>
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.pData}>
-                    Invoice No : &nbsp; <Text>{res.invoiceno}</Text>
-                  </Text>
-                  <Text style={styles.pData}>
-                    Date : &nbsp; <Text>{res.mobilepaymentdate}</Text>
-                  </Text>
+                <View style={styles.cardFooter2}>
+                  <View>
+                    <Text style={[styles.pData1, {color: '#04c227'}]}>
+                      Total
+                    </Text>
+                    <Text style={styles.pData}>
+                      <FontAwesome6 name="indian-rupee-sign" size={12} />
+                      &nbsp;{res.totalamount}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={[styles.pData1, {color: 'red'}]}>Balance</Text>
+                    <Text style={styles.pData}>
+                      <FontAwesome6 name="indian-rupee-sign" size={12} />
+                      &nbsp;{res.totalbalance}
+                    </Text>
+                  </View>
+                  <View style={styles.grpShare}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handlePdfIconClick(
+                          patient_id,
+                          hospital_id,
+                          res.bill_id,
+                        );
+                      }}>
+                      <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        sharePdfhandler(patient_id, hospital_id, res.bill_id)
+                      }>
+                      <FontAwesome6 name="share" color="#1669f0" size={18} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('BillEditItems', {
+                          patient_id: patient_id,
+                          hospital_id: hospital_id,
+                          bill_id: res.bill_id,
+                        })
+                      }>
+                      <FontAwesome6
+                        name="pen-to-square"
+                        color="#1669f0"
+                        size={18}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-              <View style={styles.cardFooter2}>
-                <View>
-                  <Text style={[styles.pData1, {color: '#04c227'}]}>Total</Text>
-                  <Text style={styles.pData}>
-                    <FontAwesome6 name="indian-rupee-sign" size={12} />
-                    &nbsp;{res.totalamount}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={[styles.pData1, {color: 'red'}]}>Balance</Text>
-                  <Text style={styles.pData}>
-                    <FontAwesome6 name="indian-rupee-sign" size={12} />
-                    &nbsp;{res.totalbalance}
-                  </Text>
-                </View>
-                <View style={styles.grpShare}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      handlePdfIconClick(patient_id, hospital_id, res.bill_id);
-                    }}>
-                    <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                      sharePdfhandler(patient_id, hospital_id, res.bill_id)
-                    }>
-                    <FontAwesome6 name="share" color="#1669f0" size={18} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                      ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
-                    }>
-                    <FontAwesome6
-                      name="ellipsis-vertical"
-                      color="#1669f0"
-                      size={18}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          );
-        })}
+            );
+          })}
+      </ScrollView>
     </SafeAreaView>
   );
 };
