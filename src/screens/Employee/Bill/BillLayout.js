@@ -18,8 +18,8 @@ import {TouchableOpacity} from 'react-native';
 import {ToastAndroid} from 'react-native';
 import axios from 'axios';
 import api from '../../../../api.json';
-import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 import UserContext from '../../../components/Context/Context';
+import HomeButton from '../../../components/HomeButton/HomeButton';
 
 const BillLayout = ({route}) => {
   const navigation = useNavigation();
@@ -29,16 +29,13 @@ const BillLayout = ({route}) => {
   const [discountAmt, setDiscountAmt] = useState('');
   const [discountAmtRs, setDiscountAmtRs] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   const {patientsData} = useContext(UserContext);
   const {uhid, patient_id, reception_id, hospital_id} = patientsData;
 
   useEffect(() => {
-    // storeData();
     try {
       const patientBillData = async () => {
-        setLoading(true);
         await axios
           .post(`${api.baseurl}/GetAllBillsForMobile`, {
             uhid: uhid,
@@ -48,19 +45,12 @@ const BillLayout = ({route}) => {
           })
           .then(res => {
             setBillPatientData(res.data);
-            // console.log('res.data', res.data);
             return res.data;
-          })
-          .finally(() =>
-            setTimeout(() => {
-              setLoading(false);
-            }, 3000),
-          );
+          });
       };
       patientBillData();
     } catch (error) {
-      console.log('Error :', error);
-      setLoading(false);
+      console.error('Error :', error);
     }
   }, []);
 
@@ -120,16 +110,6 @@ const BillLayout = ({route}) => {
 
   return (
     <>
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator
-            animating={true}
-            color={MD2Colors.red800}
-            size={70}
-            style={styles.activityIndicator}
-          />
-        </View>
-      )}
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <View
@@ -139,12 +119,6 @@ const BillLayout = ({route}) => {
               alignItems: 'center',
               padding: 10,
             }}>
-            {/* <FontAwesome6
-              name="arrow-left-long"
-              color="#127359"
-              size={28}
-              onPress={() => navigation.navigate('EpatientDetails')}
-            /> */}
             <Text style={{color: 'black', fontWeight: '600', fontSize: 16}}>
               Patient Bill
             </Text>
@@ -181,7 +155,7 @@ const BillLayout = ({route}) => {
               <FontAwesome6 name="angle-down" color="#ffffff" size={16} />
               <Text style={{color: 'white'}}>Bill Items</Text>
             </View>
-            <ScrollView vertical>
+            <ScrollView vertical style={styles.scrollView}>
               {billPatientData?.status === false
                 ? ToastAndroid.show(
                     `${billPatientData?.message}`,
@@ -469,7 +443,7 @@ const BillLayout = ({route}) => {
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
                     setModalVisible(!modalVisible),
-                      navigation.navigate('Ehome');
+                      navigation.navigate('BillHistory');
                   }}>
                   <Text style={styles.textStyle}>Ok</Text>
                 </Pressable>
@@ -477,6 +451,7 @@ const BillLayout = ({route}) => {
             </View>
           </Modal>
         </View>
+        {/* <HomeButton /> */}
       </SafeAreaView>
     </>
   );
@@ -685,4 +660,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
   },
+  // scrollView: {
+  //   height: 110,
+  // },
 });

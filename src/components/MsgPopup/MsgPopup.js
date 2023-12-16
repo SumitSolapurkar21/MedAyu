@@ -24,7 +24,7 @@ const MsgPopup = ({msgPopup, setMsgPopup, backdropOpacity}) => {
                   style={styles.modalBtnText}
                   onPress={() => {
                     setMsgPopup(false);
-                    navigation.navigate('Ehome');
+                    navigation.navigate('EpatientDetails');
                   }}>
                   Ok
                 </Text>

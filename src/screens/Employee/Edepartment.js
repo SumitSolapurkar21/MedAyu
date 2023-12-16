@@ -15,10 +15,11 @@ import axios from 'axios';
 import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome';
 import ayu from '../../images/ayurveda.png';
+import HomeButton from '../../components/HomeButton/HomeButton';
 
 const Edepartment = ({route}) => {
-  const {userData} = useContext(UserContext);
-  const {patient_id} = route.params;
+  const {userData, scannedPatientsData} = useContext(UserContext);
+  const {patient_id} = scannedPatientsData;
   const navigation = useNavigation();
   const [departmentData, setDepartmentData] = useState([]);
 
@@ -103,6 +104,7 @@ const Edepartment = ({route}) => {
           </ScrollView>
         </View>
       </View>
+      <HomeButton />
     </SafeAreaView>
   );
 };

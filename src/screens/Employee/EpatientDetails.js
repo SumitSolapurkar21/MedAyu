@@ -15,20 +15,23 @@ import panchakarma from '../../images/panchakarma.png';
 import invoice from '../../images/invoice.png';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome';
+import HomeButton from '../../components/HomeButton/HomeButton';
 
-const EpatientDetails = ({route}) => {
+const EpatientDetails = () => {
   const navigation = useNavigation();
-  const {setPatientsData} = useContext(UserContext);
+  const {setPatientsData, scannedPatientsData, userData} =
+    useContext(UserContext);
 
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
-    route.params?.patientData;
-  const {reception_id, hospital_id} = route.params;
+    scannedPatientsData;
+  const {_id, hospital_id} = userData.data[0];
 
   useEffect(() => {
     setPatientsData({
       uhid: uhid,
       patient_id: patient_id,
-      reception_id: reception_id,
+      reception_id: _id,
       hospital_id: hospital_id,
     });
   }, []);
@@ -59,10 +62,7 @@ const EpatientDetails = ({route}) => {
       <View style={styles.cardSelection}>
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() =>
-            // navigation.navigate('Eappointment', {patient_id: patient_id}
-            navigation.navigate('Edepartment', {patient_id: patient_id})
-          }>
+          onPress={() => navigation.navigate('Edepartment')}>
           <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
           <Text style={styles.uName}>Appointment</Text>
         </TouchableOpacity>
@@ -88,7 +88,7 @@ const EpatientDetails = ({route}) => {
             navigation.navigate('BillLayout', {
               uhid: uhid,
               patient_id: patient_id,
-              reception_id: reception_id,
+              reception_id: _id,
               hospital_id: hospital_id,
             })
           }>
@@ -103,7 +103,7 @@ const EpatientDetails = ({route}) => {
             navigation.navigate('BillHistory', {
               uhid: uhid,
               patient_id: patient_id,
-              reception_id: reception_id,
+              reception_id: _id,
               hospital_id: hospital_id,
             })
           }>
@@ -111,6 +111,7 @@ const EpatientDetails = ({route}) => {
           <Text style={styles.uName}>History</Text>
         </TouchableOpacity>
       </View>
+      <HomeButton />
     </SafeAreaView>
   );
 };

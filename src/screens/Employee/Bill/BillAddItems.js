@@ -104,6 +104,7 @@ const BillAddItems = ({route}) => {
       })
       .then(res => {
         console.log(res.data);
+        return res.data;
       });
   };
   return (

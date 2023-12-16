@@ -15,6 +15,7 @@ import axios from 'axios';
 import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {ToastAndroid} from 'react-native';
+import HomeButton from '../../components/HomeButton/HomeButton';
 
 const Edoctors = ({route}) => {
   const {userData} = useContext(UserContext);
@@ -150,6 +151,7 @@ const Edoctors = ({route}) => {
           </View>
         ))}
       </ScrollView>
+      <HomeButton />
     </SafeAreaView>
   );
 };

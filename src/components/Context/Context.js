@@ -5,7 +5,9 @@ const UserContext = createContext();
 export const UserProvider = ({children}) => {
   const [userData, setUserData] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
+  const [scannedPatientsData, setScannedPatientsData] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const contextValue = {
     userData,
@@ -14,6 +16,8 @@ export const UserProvider = ({children}) => {
     setIsLoggedIn,
     patientsData,
     setPatientsData,
+    scannedPatientsData,
+    setScannedPatientsData,
   };
 
   return (

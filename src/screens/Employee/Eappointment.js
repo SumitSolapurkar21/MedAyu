@@ -20,9 +20,10 @@ import MsgPopup from '../../components/MsgPopup/MsgPopup';
 import UserContext from '../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../api.json';
+import HomeButton from '../../components/HomeButton/HomeButton';
 
 const Eappointment = ({route}) => {
-  const {userData} = useContext(UserContext);
+  const {scannedPatientsData, userData} = useContext(UserContext);
   const [backdropOpacity, setBackdropOpacity] = useState(0);
   const navigation = useNavigation();
 
@@ -62,7 +63,6 @@ const Eappointment = ({route}) => {
           todaysdates: date,
         })
         .then(res => {
-          // console.log('Date Data : ', res.data.mydates);
           setDateArray(res.data.mydates);
         });
     } catch (error) {
@@ -117,6 +117,7 @@ const Eappointment = ({route}) => {
         setMsgPopup={setMsgPopup}
         setBackdropOpacity={setBackdropOpacity}
       />
+      <HomeButton />
     </SafeAreaView>
   );
 };

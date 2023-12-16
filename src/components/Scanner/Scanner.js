@@ -25,7 +25,7 @@ LogBox.ignoreLogs([
 export default function Scanner({route}) {
   const navigation = useNavigation();
 
-  const {userData} = useContext(UserContext);
+  const {userData, setScannedPatientsData} = useContext(UserContext);
   const {value} = route.params;
 
   const [msgPopup, setMsgPopup] = useState(false);
@@ -87,8 +87,6 @@ export default function Scanner({route}) {
 
   //Get Data By QR Scan
   const patientDetail = async () => {
-    // console.log('run');
-
     try {
       await axios
         .post(`${api.baseurl}/ScanQrForMobile`, {
@@ -99,10 +97,8 @@ export default function Scanner({route}) {
           type: 'QR',
         })
         .then(res => {
-          // setPatientData(res.data);
-          // console.log(res.data);
-
-          navigation.navigate('EpatientDetails', {patientData: res.data});
+          setScannedPatientsData(res.data);
+          res.data === 'true' ? navigation.navigate('EpatientDetails') : null;
           return res.data;
         });
     } catch (error) {
@@ -110,18 +106,8 @@ export default function Scanner({route}) {
     }
   };
 
-  // const data = {
-  //   inputvalue: searchInput,
-  //   appoint_id,
-  //   reception_id: _id,
-  //   hospital_id: hospital_id,
-  //   type: 'SEARCH',
-  // };
-  // console.log('Data ; ', data);
-
   // Get Data By Search Input :
   const patientDetailBySearchInput = async () => {
-    // console.log('data : run', searchInput);
     try {
       if (searchInput !== '')
         await axios
@@ -133,16 +119,14 @@ export default function Scanner({route}) {
             type: 'SEARCH',
           })
           .then(res => {
-            // console.log('patientDetailBySearchInput : ', res.data);
-
-            navigation.navigate('EpatientDetails', {
-              patientData: res.data,
-              reception_id: _id,
-              hospital_id: hospital_id,
-            });
+            console.log('patientDetailBySearchInput : ', res.data);
+            setScannedPatientsData(res.data);
+            res.data.status === true
+              ? navigation.navigate('EpatientDetails')
+              : console.warn(`Data Not Available`);
             return res.data;
           });
-      else return console.error('API Not Run');
+      else return console.warn('Mobile Number or UHID Required!');
     } catch (error) {
       console.error(error);
     }
@@ -151,9 +135,6 @@ export default function Scanner({route}) {
   return (
     <>
       <View style={styles.container}>
-        {/* <TouchableOpacity style={styles.buttonTouchable}>
-          <Text style={styles.buttonText}>Search</Text>
-        </TouchableOpacity> */}
         <QRCodeScanner
           onRead={handleScannerSuccess}
           flashMode={RNCamera.Constants.FlashMode.off}

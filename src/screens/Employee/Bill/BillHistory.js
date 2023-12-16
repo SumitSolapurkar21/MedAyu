@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import api from '../../../../api.json';
@@ -17,34 +18,50 @@ import RNPrint from 'react-native-print';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import Share from 'react-native-share';
+import UserContext from '../../../components/Context/Context';
 
 const BillHistory = ({route}) => {
+  const {scannedPatientsData, userData} = useContext(UserContext);
   const navigation = useNavigation();
-  const {uhid, patient_id, reception_id, hospital_id} = route.params;
+  const {uhid, patient_id} = scannedPatientsData;
+  const {_id, hospital_id} = userData.data[0];
   const [billPatientHistory, setBillPatientHistory] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  //   refresh control .....
+  const onRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      await patientBillHistory();
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
+    patientBillHistory();
+  }, [patient_id]);
+
+  const patientBillHistory = async () => {
     try {
-      const patientBillHistory = async () => {
-        await axios
-          .post(`${api.baseurl}/GetMobileBillHistory`, {
-            uhid: uhid,
-            patient_id: patient_id,
-            reception_id: reception_id,
-            hospital_id: hospital_id,
-            historytype: 'Personal',
-          })
-          .then(res => {
-            setBillPatientHistory(res.data);
-            return res.data;
-          });
-      };
-      patientBillHistory();
+      await axios
+        .post(`${api.baseurl}/GetMobileBillHistory`, {
+          uhid: uhid,
+          patient_id: patient_id,
+          reception_id: _id,
+          hospital_id: hospital_id,
+          historytype: 'Personal',
+        })
+        .then(res => {
+          setBillPatientHistory(res.data);
+          return res.data;
+        });
     } catch (error) {
       console.log('Error :', error);
     }
-  }, []);
-
+  };
   let historyArray = billPatientHistory?.HistoryArray;
 
   const handlePdfIconClick = async (patientId, hospitalId, billId) => {
@@ -635,7 +652,7 @@ const BillHistory = ({route}) => {
           try {
             await Share.open(shareOptions);
           } catch (error) {
-            console.log('Error sharing PDF:', error.message);
+            console.error('Error sharing PDF:', error.message);
           }
         }
       };
@@ -717,7 +734,11 @@ const BillHistory = ({route}) => {
         </View>
       </View>
       {/* Patient Bills... */}
-      <ScrollView vertical>
+      <ScrollView
+        vertical
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }>
         {historyArray?.length > 0 &&
           historyArray?.map((res, i) => {
             return (
@@ -791,6 +812,7 @@ const BillHistory = ({route}) => {
             );
           })}
       </ScrollView>
+      {/* <HomeButton /> */}
     </SafeAreaView>
   );
 };
