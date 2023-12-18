@@ -172,7 +172,6 @@ const EpatientRegistration = () => {
           })
           .then(res => {
             const dpt_data = res.data.data;
-            // console.log('dpt_data :', dpt_data);
             setDepartmentData(dpt_data);
           });
       } catch (error) {

@@ -12,16 +12,22 @@ import {useNavigation} from '@react-navigation/native';
 
 const BillAddItems = ({route}) => {
   const navigation = useNavigation();
-  const {bill_id} = route.params;
+  const {bill_type} = route.params;
   const [itemName, setItemName] = useState('');
   const [outbillingtype, setOutbillingtype] = useState('');
   const [itemQuantity, setItemQuantity] = useState('1');
   const [showDropDown2, setShowDropDown2] = useState(false);
   const [showDropDown3, setShowDropDown3] = useState(false);
   const [tax, setTax] = useState('');
-  const {userData} = useContext(UserContext);
+  const {userData, scannedPatientsData, billHistoryArray} =
+    useContext(UserContext);
+
   const [opdServices, setOpdServices] = useState([]);
   const [selectedItemCharge, setSelectedItemCharge] = useState('');
+
+  const {_id, hospital_id, name} = userData.data[0];
+  const {firstname, mobilenumber, patient_id, patientgender, uhid} =
+    scannedPatientsData;
 
   //diaglog...
   const [visible, setVisible] = React.useState(false);
@@ -29,8 +35,6 @@ const BillAddItems = ({route}) => {
   const showDialog = () => setVisible(true);
 
   const hideDialog = () => setVisible(false);
-
-  const hospital_id = userData?.data[0].hospital_id;
 
   const taxList = [
     {
@@ -53,6 +57,7 @@ const BillAddItems = ({route}) => {
         );
 
         const data = GetOPDServicesRes.data.servicesArray || [];
+        console.log('GetOPDServices : ', data);
         setOpdServices(data);
       } catch (error) {
         console.error('Error : ', error);
@@ -77,7 +82,6 @@ const BillAddItems = ({route}) => {
               service => service.service_id === service_id,
             );
             setOutbillingtype(matchingService.outbillingtype);
-            //   console.log('matching : ', matchingService);
           });
       } catch (error) {
         console.error(error);
@@ -87,6 +91,7 @@ const BillAddItems = ({route}) => {
   }, [service_id]);
 
   // submit bill item handler .......
+
   const servicesArray = [
     {
       amount: selectedItemCharge.amount,
@@ -95,17 +100,48 @@ const BillAddItems = ({route}) => {
     },
   ];
   const submitBillItemHandler = async () => {
-    await axios
-      .post(`${api.baseurl}/UpdateMobileOPDServices`, {
-        hospital_id: hospital_id,
-        bill_id,
-        nettotal: itemQuantity * selectedItemCharge.amount,
-        servicesArray,
-      })
-      .then(res => {
-        console.log(res.data);
-        return res.data;
-      });
+    bill_type === 'ADD'
+      ? await axios
+          .post(`${api.baseurl}/UpdateMobileOPDServices`, {
+            reception_id: _id,
+            hospital_id: hospital_id,
+            fullname: name,
+            firstname: firstname,
+            mobilenumber: mobilenumber,
+            patient_id: patient_id,
+            patientgender: patientgender,
+            uhid: uhid,
+            nettotal: itemQuantity * selectedItemCharge.amount,
+            servicesArray,
+          })
+          .then(res => {
+            console.log('UpdateMobileOPDServices_ADD', res.data);
+            res.data.status === true
+              ? showDialog()
+              : console.warn(`${res.data.message}`);
+            return res.data;
+          })
+      : await axios
+          .post(`${api.baseurl}/UpdateMobileOPDServices`, {
+            reception_id: _id,
+            hospital_id: hospital_id,
+            fullname: name,
+            firstname: firstname,
+            mobilenumber: mobilenumber,
+            patient_id: patient_id,
+            patientgender: patientgender,
+            uhid: uhid,
+            nettotal: itemQuantity * selectedItemCharge.amount,
+            servicesArray,
+            bill_id: billHistoryArray,
+          })
+          .then(res => {
+            console.log('UpdateMobileOPDServices', res.data);
+            res.data.status === true
+              ? showDialog()
+              : console.warn(`${res.data.message}`);
+            return res.data;
+          });
   };
   return (
     <View style={styles.container}>
@@ -190,7 +226,9 @@ const BillAddItems = ({route}) => {
               onPress={() => {
                 hideDialog(),
                   navigation.goBack(),
-                  navigation.replace('BillLayout');
+                  bill_type === 'ADD'
+                    ? navigation.replace('BillLayout')
+                    : navigation.replace('BillEditItems');
               }}>
               Done
             </Button>
@@ -206,7 +244,7 @@ const BillAddItems = ({route}) => {
         }}
         mode="contained"
         onPress={() => {
-          submitBillItemHandler(), showDialog();
+          submitBillItemHandler();
         }}>
         Save
       </Button>

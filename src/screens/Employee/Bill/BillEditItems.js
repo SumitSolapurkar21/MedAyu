@@ -7,6 +7,7 @@ import {
   Modal,
   ScrollView,
   Pressable,
+  Image,
 } from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -16,9 +17,10 @@ import {ToastAndroid} from 'react-native';
 import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
+import barcode from '../../../images/barcode.png';
 
 const BillEditItems = ({route}) => {
-  const {bill_id} = route.params;
+  // const {bill_id} = route.params;
   const navigation = useNavigation();
   const [billPatientData, setBillPatientData] = useState(null);
   const [receivedAmt, setReceivedAmt] = useState('');
@@ -26,31 +28,31 @@ const BillEditItems = ({route}) => {
   const [discountAmtRs, setDiscountAmtRs] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
-  const {patientsData} = useContext(UserContext);
+  const {patientsData, setUpdateBillRes, billHistoryArray} =
+    useContext(UserContext);
   const {uhid, patient_id, reception_id, hospital_id} = patientsData;
 
   useEffect(() => {
     // storeData();
     try {
-      const patientBillData = async () => {
-        await axios
-          .post(`${api.baseurl}/GenerateBillPdf`, {
-            patient_id: patient_id,
-            hospital_id: hospital_id,
-            bill_id: bill_id,
-          })
-          .then(res => {
-            console.log('edit bill : ', res.data);
-            setBillPatientData(res.data);
-            // return res.data;
-          });
-      };
       patientBillData();
     } catch (error) {
-      console.log('Error :', error);
+      console.error('Error :', error);
     }
-  }, [bill_id]);
-
+  }, [billHistoryArray]);
+  const patientBillData = async () => {
+    await axios
+      .post(`${api.baseurl}/GenerateBillPdf`, {
+        patient_id: patient_id,
+        hospital_id: hospital_id,
+        bill_id: billHistoryArray,
+      })
+      .then(res => {
+        setBillPatientData(res.data);
+        console.log('generate bill pdf : ', res.data);
+        // return res.data;
+      });
+  };
   const billDataArray = billPatientData?.OutBillArrayss.map(res => res);
 
   let totalAmtAfterDiscountPercent =
@@ -86,21 +88,6 @@ const BillEditItems = ({route}) => {
     today.getDate().toString().padStart(2, '0');
 
   const addMobileBillHandler = async () => {
-    const data = {
-      uhid: uhid,
-      patient_id: patient_id,
-      reception_id: reception_id,
-      hospital_id: hospital_id,
-      invoiceno: billPatientData?.invoiceno,
-      totalamount: billPatientData?.totalamount,
-      totalbalance: totalbalance,
-      OutBillArrayss: billPatientData?.OutBillArrayss,
-      mobilepaymentdate: date,
-      mobilediscountpercentage: discountAmt,
-      mobilediscountrupees: discountAmtRs,
-      mobilereceiveamount: receivedAmt,
-    };
-    console.log('Data ; ', data);
     try {
       const billDataRes = await axios
         .post(`${api.baseurl}/AddMobileBills`, {
@@ -116,10 +103,11 @@ const BillEditItems = ({route}) => {
           mobilediscountpercentage: discountAmt,
           mobilediscountrupees: discountAmtRs,
           mobilereceiveamount: receivedAmt,
-          bill_id: bill_id,
+          bill_id: billHistoryArray,
         })
         .then(res => {
           console.log('bill update res : ', res.data);
+          setUpdateBillRes(res.data);
           return res.data;
         });
       return billDataRes;
@@ -127,7 +115,27 @@ const BillEditItems = ({route}) => {
       console.error(error);
     }
   };
+  // delete Handler :
+  const deleteHandler = async data => {
+    const {bill_id, serviceArray} = data;
+    try {
+      await axios
+        .post(`${api.baseurl}/DeleteOpdItem`, {
+          bill_id: bill_id,
+          servicesArray: [serviceArray],
+        })
+        .then(res => {
+          console.log('DeleteOpdItem : ', res.data);
+          res.data.status === true
+            ? patientBillData()
+            : console.error(`${res.data.message}`);
+        });
+    } catch (error) {
+      console.error(error);
+    }
 
+    // Rest of the deleteHandler logic
+  };
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -233,11 +241,50 @@ const BillEditItems = ({route}) => {
                           <Text style={styles.billTxt}>Date</Text>
                           <Text style={styles.billTxt}>{date}</Text>
                         </View>
+                        <TouchableOpacity
+                          style={styles.deleteButton}
+                          onPress={() =>
+                            deleteHandler({
+                              bill_id: res.bill_id,
+                              serviceArray: {
+                                amount: res.amount,
+                                billname: res.billname,
+                                outbillingtype: res.outbillingtype,
+                              },
+                            })
+                          }>
+                          <FontAwesome6 name="trash" color="red" size={18} />
+                        </TouchableOpacity>
                       </View>
                     );
                   })}
             </ScrollView>
-
+            <View style={styles.billGrpBtn}>
+              <TouchableOpacity
+                style={styles.billAdd}
+                onPress={() =>
+                  navigation.navigate('BillAddItems', {
+                    bill_type: 'EDIT',
+                  })
+                }>
+                <FontAwesome6 name="circle-plus" color="#3763ae" size={16} />
+                <Text
+                  style={{color: '#3763ae', fontWeight: 'bold', fontSize: 14}}>
+                  Add Items
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.billScan}
+                onPress={() =>
+                  ToastAndroid.show(
+                    'Comming Soon',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.BOTTOM,
+                  )
+                }>
+                <Image source={barcode} alt="barcode" style={styles.img} />
+              </TouchableOpacity>
+            </View>
             <View style={styles.billSum}>
               <View
                 style={[
@@ -385,7 +432,7 @@ const BillEditItems = ({route}) => {
                       size={12}
                     />
                     <Text style={[styles.ttAmtTxt, {color: '#15cf84'}]}>
-                      {receivedAmt == '' ? previousbalance : totalbalance}
+                      {receivedAmt == '' ? totalbalance : previousbalance}
                     </Text>
                   </View>
                 </View>
@@ -416,7 +463,7 @@ const BillEditItems = ({route}) => {
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
                     setModalVisible(!modalVisible),
-                      navigation.navigate('BillHistory', {refresh: true});
+                      navigation.navigate('BillHistory', {pat_id: patient_id});
                   }}>
                   <Text style={styles.textStyle}>Ok</Text>
                 </Pressable>
@@ -632,7 +679,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
   },
-  scrollView: {
-    height: 210,
+
+  deleteButton: {
+    alignSelf: 'flex-end',
+    marginVertical: 4,
   },
 });

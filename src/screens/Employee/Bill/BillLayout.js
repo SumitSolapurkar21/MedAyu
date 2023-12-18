@@ -19,9 +19,8 @@ import {ToastAndroid} from 'react-native';
 import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
-import HomeButton from '../../../components/HomeButton/HomeButton';
 
-const BillLayout = ({route}) => {
+const BillLayout = () => {
   const navigation = useNavigation();
   const [toggleValue, setToggleValue] = useState(true);
   const [billPatientData, setBillPatientData] = useState(null);
@@ -45,6 +44,7 @@ const BillLayout = ({route}) => {
           })
           .then(res => {
             setBillPatientData(res.data);
+            console.log('patientBillData : ', res.data);
             return res.data;
           });
       };
@@ -244,7 +244,7 @@ const BillLayout = ({route}) => {
                 style={styles.billAdd}
                 onPress={() =>
                   navigation.navigate('BillAddItems', {
-                    bill_id: billPatientData.data[0].bill_id,
+                    bill_type: 'ADD',
                   })
                 }>
                 <FontAwesome6 name="circle-plus" color="#3763ae" size={16} />
@@ -379,7 +379,7 @@ const BillLayout = ({route}) => {
                       color="black"
                       size={12}
                     />
-                    <Text style={styles.ttAmtTxt}>{TOTAL_AMOUNT}</Text>
+                    <Text style={styles.ttAmtTxt}>{TOTAL_AMOUNT || '0'}</Text>
                   </View>
                 </View>
                 <View style={styles.ttAmt}>
@@ -412,7 +412,9 @@ const BillLayout = ({route}) => {
                       size={12}
                     />
                     <Text style={[styles.ttAmtTxt, {color: '#15cf84'}]}>
-                      {receivedAmt == '' ? previousbalance : totalbalance}
+                      {receivedAmt == ''
+                        ? previousbalance || '0'
+                        : totalbalance || '0'}
                     </Text>
                   </View>
                 </View>
@@ -443,7 +445,7 @@ const BillLayout = ({route}) => {
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
                     setModalVisible(!modalVisible),
-                      navigation.navigate('BillHistory');
+                      navigation.navigate('BillHistory', {billHistory_id: 1});
                   }}>
                   <Text style={styles.textStyle}>Ok</Text>
                 </Pressable>

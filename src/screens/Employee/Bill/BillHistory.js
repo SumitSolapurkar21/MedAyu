@@ -8,9 +8,11 @@ import {
   TextInput,
   ScrollView,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import api from '../../../../api.json';
 import {useNavigation} from '@react-navigation/native';
@@ -19,14 +21,23 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import Share from 'react-native-share';
 import UserContext from '../../../components/Context/Context';
+import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 
 const BillHistory = ({route}) => {
-  const {scannedPatientsData, userData} = useContext(UserContext);
+  const {
+    scannedPatientsData,
+    userData,
+    updateBillRes,
+
+    setBillHistoryArray,
+  } = useContext(UserContext);
   const navigation = useNavigation();
   const {uhid, patient_id} = scannedPatientsData;
   const {_id, hospital_id} = userData.data[0];
   const [billPatientHistory, setBillPatientHistory] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const {pat_id} = route.params;
 
   //   refresh control .....
   const onRefresh = async () => {
@@ -40,11 +51,14 @@ const BillHistory = ({route}) => {
     }
   };
 
+  // patientBillHistory api....
   useEffect(() => {
-    patientBillHistory();
+    if (patient_id) patientBillHistory();
   }, [patient_id]);
 
+  // patientBillHistory api........
   const patientBillHistory = async () => {
+    setLoading(true);
     try {
       await axios
         .post(`${api.baseurl}/GetMobileBillHistory`, {
@@ -56,13 +70,21 @@ const BillHistory = ({route}) => {
         })
         .then(res => {
           setBillPatientHistory(res.data);
+          res.data.status === true ? setLoading(false) : null;
           return res.data;
         });
     } catch (error) {
       console.log('Error :', error);
     }
   };
+
   let historyArray = billPatientHistory?.HistoryArray;
+  // useEffect(() => {
+  //   const bill_history = historyArray?.map(res => {
+  //     return res;
+  //   });
+  //   console.log('his : ', bill_history);
+  // }, [historyArray]);
 
   const handlePdfIconClick = async (patientId, hospitalId, billId) => {
     try {
@@ -663,157 +685,198 @@ const BillHistory = ({route}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Patient Detail... */}
-      <View style={styles.card}>
-        <View style={styles.main}>
-          <View style={styles.pDetail}>
-            <Text style={styles.pData}>{billPatientHistory?.fullname} </Text>
-            <Text style={[styles.pData, {fontWeight: 'normal'}]}>
-              <FontAwesome6 name="phone" color="#1669f0" size={11} />
-              &nbsp;
-              {billPatientHistory?.mobilenumber}{' '}
-            </Text>
-          </View>
-          <View style={styles.pDetail}>
-            <Text style={[styles.pLabel, {color: '#04c227'}]}>
-              <FontAwesome6 name="arrow-trend-down" color="#04c227" size={14} />
-              &nbsp;Receivable &nbsp;&nbsp;
-              <FontAwesome6
-                name="indian-rupee-sign"
-                color="#04c227"
-                size={12}
-              />
-              &nbsp;{billPatientHistory?.totalreceived} &nbsp;&nbsp;
-            </Text>
-            <Text style={[styles.pLabel, {color: 'red'}]}>
-              <FontAwesome6 name="arrow-trend-down" color="red" size={14} />
-              &nbsp;Balance &nbsp;&nbsp;
-              <FontAwesome6 name="indian-rupee-sign" color="red" size={12} />
-              &nbsp;{billPatientHistory?.totalbalance} &nbsp;&nbsp;
-            </Text>
-          </View>
-        </View>
-        <View style={styles.cardFooter}>
-          <TouchableOpacity
-            style={styles.cardGrpBtn}
-            onPress={() =>
-              ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
-            }>
-            <FontAwesome6 name="bell" color="#1669f0" size={16} />
-            <Text style={styles.cardGrpTxt}>Send Reminder</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.cardGrpBtn}
-            onPress={() =>
-              ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
-            }>
-            <FontAwesome6 name="list-alt" color="#1669f0" size={16} />
-            <Text style={styles.cardGrpTxt}>Send Statement</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* Search Patient Data.... */}
-      <View style={styles.card}>
-        <View
-          style={[
-            styles.ttAmtTxt,
-            {
-              borderColor: 'orange',
-              borderWidth: 2,
-              borderTopLeftRadius: 6,
-              borderBottomLeftRadius: 6,
-              //     width: 70,
-            },
-          ]}>
-          <TextInput
-            style={{padding: 6}}
-            placeholder="Search"
-            autoComplete="off"
+    <>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator
+            animating={true}
+            color={MD2Colors.red800}
+            size={70}
+            style={styles.activityIndicator}
           />
         </View>
-      </View>
-      {/* Patient Bills... */}
-      <ScrollView
-        vertical
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-        }>
-        {historyArray?.length > 0 &&
-          historyArray?.map((res, i) => {
-            return (
-              <View
-                style={[styles.card, {marginVertical: 6}]}
-                key={res.bill_id}>
-                <View style={styles.cardBody}>
-                  <View>
-                    <Text style={[styles.pData, {fontSize: 16}]}>Sale</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.pData}>
-                      Invoice No : &nbsp; <Text>{res.invoiceno}</Text>
-                    </Text>
-                    <Text style={styles.pData}>
-                      Date : &nbsp; <Text>{res.mobilepaymentdate}</Text>
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardFooter2}>
-                  <View>
-                    <Text style={[styles.pData1, {color: '#04c227'}]}>
-                      Total
-                    </Text>
-                    <Text style={styles.pData}>
-                      <FontAwesome6 name="indian-rupee-sign" size={12} />
-                      &nbsp;{res.totalamount}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text style={[styles.pData1, {color: 'red'}]}>Balance</Text>
-                    <Text style={styles.pData}>
-                      <FontAwesome6 name="indian-rupee-sign" size={12} />
-                      &nbsp;{res.totalbalance}
-                    </Text>
-                  </View>
-                  <View style={styles.grpShare}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        handlePdfIconClick(
-                          patient_id,
-                          hospital_id,
-                          res.bill_id,
-                        );
-                      }}>
-                      <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() =>
-                        sharePdfhandler(patient_id, hospital_id, res.bill_id)
-                      }>
-                      <FontAwesome6 name="share" color="#1669f0" size={18} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('BillEditItems', {
-                          patient_id: patient_id,
-                          hospital_id: hospital_id,
-                          bill_id: res.bill_id,
-                        })
-                      }>
-                      <FontAwesome6
-                        name="pen-to-square"
-                        color="#1669f0"
-                        size={18}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
+      )}
+      <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+          {/* Patient Detail... */}
+          <View style={styles.card}>
+            <View style={styles.main}>
+              <View style={styles.pDetail}>
+                <Text style={styles.pData}>
+                  {billPatientHistory?.fullname}{' '}
+                </Text>
+                <Text style={[styles.pData, {fontWeight: 'normal'}]}>
+                  <FontAwesome6 name="phone" color="#1669f0" size={11} />
+                  &nbsp;
+                  {billPatientHistory?.mobilenumber}{' '}
+                </Text>
               </View>
-            );
-          })}
-      </ScrollView>
-      {/* <HomeButton /> */}
-    </SafeAreaView>
+              <View style={styles.pDetail}>
+                <Text style={[styles.pLabel, {color: '#04c227'}]}>
+                  <FontAwesome6
+                    name="arrow-trend-down"
+                    color="#04c227"
+                    size={14}
+                  />
+                  &nbsp;Receivable &nbsp;&nbsp;
+                  <FontAwesome6
+                    name="indian-rupee-sign"
+                    color="#04c227"
+                    size={12}
+                  />
+                  &nbsp;{billPatientHistory?.totalreceived} &nbsp;&nbsp;
+                </Text>
+                <Text style={[styles.pLabel, {color: 'red'}]}>
+                  <FontAwesome6 name="arrow-trend-down" color="red" size={14} />
+                  &nbsp;Balance &nbsp;&nbsp;
+                  <FontAwesome6
+                    name="indian-rupee-sign"
+                    color="red"
+                    size={12}
+                  />
+                  &nbsp;{billPatientHistory?.totalbalance} &nbsp;&nbsp;
+                </Text>
+              </View>
+            </View>
+            <View style={styles.cardFooter}>
+              <TouchableOpacity
+                style={styles.cardGrpBtn}
+                onPress={() =>
+                  ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
+                }>
+                <FontAwesome6 name="bell" color="#1669f0" size={16} />
+                <Text style={styles.cardGrpTxt}>Send Reminder</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.cardGrpBtn}
+                onPress={() =>
+                  ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
+                }>
+                <FontAwesome6 name="list-alt" color="#1669f0" size={16} />
+                <Text style={styles.cardGrpTxt}>Send Statement</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* Search Patient Data.... */}
+          <View style={styles.card}>
+            <View
+              style={[
+                styles.ttAmtTxt,
+                {
+                  borderColor: 'orange',
+                  borderWidth: 2,
+                  borderTopLeftRadius: 6,
+                  borderBottomLeftRadius: 6,
+                  //     width: 70,
+                },
+              ]}>
+              <TextInput
+                style={{padding: 6}}
+                placeholder="Search"
+                autoComplete="off"
+              />
+            </View>
+          </View>
+          {/* Patient Bills... */}
+          <ScrollView
+            vertical
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            }>
+            {historyArray?.length > 0 &&
+              historyArray?.map((res, i) => {
+                return (
+                  <View
+                    style={[styles.card, {marginVertical: 6}]}
+                    key={res.bill_id}>
+                    <View style={styles.cardBody}>
+                      <View>
+                        <Text style={[styles.pData, {fontSize: 16}]}>Sale</Text>
+                      </View>
+                      <View>
+                        <Text style={styles.pData}>
+                          Invoice No : &nbsp; <Text>{res.invoiceno}</Text>
+                        </Text>
+                        <Text style={styles.pData}>
+                          Date : &nbsp; <Text>{res.mobilepaymentdate}</Text>
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.cardFooter2}>
+                      <View>
+                        <Text style={[styles.pData1, {color: '#04c227'}]}>
+                          Total
+                        </Text>
+                        <Text style={styles.pData}>
+                          <FontAwesome6 name="indian-rupee-sign" size={12} />
+                          &nbsp;{res.totalamount}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text style={[styles.pData1, {color: 'red'}]}>
+                          Balance
+                        </Text>
+                        <Text style={styles.pData}>
+                          <FontAwesome6 name="indian-rupee-sign" size={12} />
+                          &nbsp;{res.totalbalance}
+                        </Text>
+                      </View>
+                      <View style={styles.grpShare}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            handlePdfIconClick(
+                              patient_id,
+                              hospital_id,
+                              res.bill_id,
+                            );
+                          }}>
+                          <FontAwesome6
+                            name="file-pdf"
+                            color="#1669f0"
+                            size={18}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() =>
+                            sharePdfhandler(
+                              patient_id,
+                              hospital_id,
+                              res.bill_id,
+                            )
+                          }>
+                          <FontAwesome6
+                            name="share"
+                            color="#1669f0"
+                            size={18}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigation.navigate('BillEditItems'),
+                              setBillHistoryArray(res.bill_id);
+                          }}>
+                          <FontAwesome6
+                            name="pen-to-square"
+                            color="#1669f0"
+                            size={18}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+          </ScrollView>
+        </SafeAreaView>
+        <View style={styles.homeDiv}>
+          <TouchableOpacity
+            style={styles.homeBnt}
+            onPress={() => navigation.navigate('EpatientDetails')}>
+            <FontAwesome name="home" size={26} color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
   );
 };
 
@@ -885,5 +948,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 8,
+  },
+  homeDiv: {
+    backgroundColor: '#5c86fa',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 0,
+    elevation: 4,
+    borderRadius: 8,
+    width: 45,
+    padding: 8,
+    alignSelf: 'flex-end',
+    marginVertical: 10,
+    marginHorizontal: 16,
+  },
+  homeBnt: {
+    alignSelf: 'center',
+  },
+  loadingContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Light black background
+    zIndex: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activityIndicator: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
   },
 });

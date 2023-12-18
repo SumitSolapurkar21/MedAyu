@@ -30,8 +30,6 @@ const Eappointment = ({route}) => {
   let reception_id = userData.data[0]._id;
   const {department_id, patient_id, doctor_id} = route.params;
 
-  // console.log('Data :', department_id, patient_id, doctor_id);
-
   const [formData, setFormData] = useState({
     department: '',
     doctor: '',
