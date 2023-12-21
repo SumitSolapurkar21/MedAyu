@@ -7,8 +7,10 @@ import {
   TextInput,
   SafeAreaView,
   ToastAndroid,
+  BackHandler,
+  Alert,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -33,6 +35,32 @@ const Ehome = () => {
     setIsLoggedIn(false);
   };
 
+  //backHandler ...
+  // useEffect(() => {
+  //   const backAction = () => {
+  //     Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+  //       {
+  //         text: 'Cancel',
+  //         onPress: () => null,
+  //         style: 'cancel',
+  //       },
+  //       {
+  //         text: 'YES',
+  //         onPress: () => {
+  //           BackHandler.exitApp(), logoutHandler();
+  //         },
+  //       },
+  //     ]);
+  //     return true;
+  //   };
+
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     backAction,
+  //   );
+
+  //   return () => backHandler.remove();
+  // }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>

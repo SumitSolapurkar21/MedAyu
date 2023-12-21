@@ -137,7 +137,7 @@ const Routes = () => {
           name="EipdregistrationProfile"
           component={EipregistrationProfile}
           options={() => ({
-            title: 'Patient Registration',
+            title: 'IPD',
             headerRight: () => (
               <>
                 <FontAwesome6
@@ -158,7 +158,7 @@ const Routes = () => {
           name="EipdregistrationSocioeconomics"
           component={EipdregistrationSocioeconomics}
           options={() => ({
-            title: 'Patient Registration',
+            title: 'IPD',
             headerRight: () => (
               <>
                 <FontAwesome6
@@ -179,7 +179,7 @@ const Routes = () => {
           name="EipdregistrationIdentification"
           component={EipdregistrationIdentification}
           options={() => ({
-            title: 'Patient Registration',
+            title: 'IPD',
             headerRight: () => (
               <>
                 <FontAwesome6
@@ -200,7 +200,7 @@ const Routes = () => {
           name="EipdregistrationInsurance"
           component={EipdregistrationInsurance}
           options={() => ({
-            title: 'Patient Registration',
+            title: 'IPD',
             headerRight: () => (
               <>
                 <FontAwesome6
@@ -221,7 +221,7 @@ const Routes = () => {
           name="EipdregistrationEmergencyContact"
           component={EipdregistrationEmergencyContact}
           options={() => ({
-            title: 'Patient Registration',
+            title: 'IPD',
             headerRight: () => (
               <>
                 <FontAwesome6

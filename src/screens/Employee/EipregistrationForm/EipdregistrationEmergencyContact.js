@@ -7,12 +7,49 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
+import api from '../../../../api.json';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import axios from 'axios';
 
 const EipdregistrationEmergencyContact = () => {
   const navigation = useNavigation();
+  //form data ....
+  const [formData, setFormData] = useState({
+    nameofrelatives: '',
+    relation: '',
+    mobilenumber: '',
+    altmobilenumber: '',
+    emailid: '',
+  });
+  //input handler ....
+  const handleInputChange = (fieldName, value) => {
+    setFormData({
+      ...formData,
+      [fieldName]: value,
+    });
+  };
+  //submit handler.....
+  const addEmergencyContactData = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileIPD`, {
+          role: 'EmergencyContact',
+          nameofrelatives: formData.nameofrelatives,
+          relation: formData.relation,
+          mobilenumber: formData.mobilenumber,
+          altmobilenumber: formData.altmobilenumber,
+          emailid: formData.emailid,
+        })
+        .then(res => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView vertical>
@@ -26,17 +63,28 @@ const EipdregistrationEmergencyContact = () => {
               <TextInput
                 style={styles.fieldInput}
                 placeholder="Name of Relatives"
+                value={formData.nameofrelatives}
+                onChangeText={text =>
+                  handleInputChange('nameofrelatives', text)
+                }
               />
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>Relation </Text>
-              <TextInput style={styles.fieldInput} placeholder="Relation" />
+              <TextInput
+                style={styles.fieldInput}
+                placeholder="Relation"
+                value={formData.relation}
+                onChangeText={text => handleInputChange('relation', text)}
+              />
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>Mobile Number </Text>
               <TextInput
                 style={styles.fieldInput}
                 placeholder="Mobile Number"
+                value={formData.mobilenumber}
+                onChangeText={text => handleInputChange('mobilenumber', text)}
               />
             </View>
             <View style={styles.formGroup}>
@@ -44,11 +92,20 @@ const EipdregistrationEmergencyContact = () => {
               <TextInput
                 style={styles.fieldInput}
                 placeholder="Alternate Mobile Number"
+                value={formData.altmobilenumber}
+                onChangeText={text =>
+                  handleInputChange('altmobilenumber', text)
+                }
               />
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>Email ID </Text>
-              <TextInput style={styles.fieldInput} placeholder="Email ID" />
+              <TextInput
+                style={styles.fieldInput}
+                placeholder="Email ID"
+                value={formData.emailid}
+                onChangeText={text => handleInputChange('emailid', text)}
+              />
             </View>
           </View>
         </View>
@@ -61,14 +118,16 @@ const EipdregistrationEmergencyContact = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('EipdregistrationEmergencyContact')
-          }>
+          onPress={() => {
+            navigation.navigate('EipdregistrationEmergencyContact'),
+              addEmergencyContactData();
+          }}>
           <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
             Save
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Ehome')}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('EpatientDetails')}>
           <Text
             style={[
               styles.formButton,
