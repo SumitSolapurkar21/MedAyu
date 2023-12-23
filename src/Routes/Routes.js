@@ -29,6 +29,8 @@ import UserContext from '../components/Context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BillAddItems from '../screens/Employee/Bill/BillAddItems';
 import BillEditItems from '../screens/Employee/Bill/BillEditItems';
+import Eipdoptions from '../screens/Employee/Eipdoptions';
+import Epatientvital from '../screens/Employee/Epatientvital';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -331,6 +333,46 @@ const Routes = () => {
           name="ExportPdf"
           component={Pdf}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Eipdoptions"
+          component={Eipdoptions}
+          options={({navigation}) => ({
+            title: 'Select IPD Option',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="Epatientvital"
+          component={Epatientvital}
+          options={({navigation}) => ({
+            title: 'Add Vitals',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

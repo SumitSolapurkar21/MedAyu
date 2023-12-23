@@ -8,8 +8,8 @@ import {
   ToastAndroid,
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
-import doctorImg from '../../images/doctor.png';
-import ipd from '../../images/ipd.png';
+import vital from '../../images/vital.png';
+import admission from '../../images/admission.png';
 import billHistory from '../../images/billHistory.png';
 import panchakarma from '../../images/panchakarma.png';
 import invoice from '../../images/invoice.png';
@@ -18,7 +18,7 @@ import UserContext from '../../components/Context/Context';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome';
 import HomeButton from '../../components/HomeButton/HomeButton';
 
-const EpatientDetails = () => {
+const Eipdoptions = () => {
   const navigation = useNavigation();
   const {setPatientsData, scannedPatientsData, userData} =
     useContext(UserContext);
@@ -38,85 +38,28 @@ const EpatientDetails = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.card}>
-        <View style={[styles.cardContent, {backgroundColor: '#afcafa'}]}>
-          <Text style={styles.cardlabel}>Patient Name</Text>
-          <Text style={styles.cardData}>{firstname}</Text>
-        </View>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardlabel}>UHID No.</Text>
-          <Text style={styles.cardData}>{uhid}</Text>
-        </View>
-        <View style={[styles.cardContent, {backgroundColor: '#afcafa'}]}>
-          <Text style={styles.cardlabel}>Mobile No.</Text>
-          <Text style={styles.cardData}>{mobilenumber}</Text>
-        </View>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardlabel}>Gender / Age</Text>
-          <Text style={styles.cardData}>
-            {patientgender} / {patientage}
-          </Text>
-        </View>
-      </View>
-
       <View style={styles.cardSelection}>
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => navigation.navigate('Edepartment')}>
-          <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
-          <Text style={styles.uName}>Appointment</Text>
+          onPress={() => navigation.navigate('EipdregistrationProfile')}>
+          <Image source={admission} alt="admission" style={styles.img} />
+          <Text style={styles.uName}>Adimission</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => navigation.navigate('Eipdoptions')}>
-          <Image source={ipd} alt="IPD" style={styles.img} />
-          <Text style={[styles.uName, {marginLeft: 10}]}>IPD</Text>
+          onPress={() => navigation.navigate('Epatientvital')}>
+          <Image source={vital} alt="vital" style={styles.img} />
+          <Text style={[styles.uName, {marginLeft: 10}]}>Vitals</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.cardSelection}>
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() => navigation.navigate('Eappointment')}>
-          <Image source={panchakarma} alt="DoctorImg" style={styles.img} />
-          <Text style={styles.uName}>Panchakarma</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() =>
-            navigation.navigate('BillLayout', {
-              uhid: uhid,
-              patient_id: patient_id,
-              reception_id: _id,
-              hospital_id: hospital_id,
-            })
-          }>
-          <Image source={invoice} alt="IPD" style={styles.img} />
-          <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.cardSelection}>
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() =>
-            navigation.navigate('BillHistory', {
-              uhid: uhid,
-              patient_id: patient_id,
-              reception_id: _id,
-              hospital_id: hospital_id,
-            })
-          }>
-          <Image source={billHistory} alt="billHistory" style={styles.img} />
-          <Text style={styles.uName}>History</Text>
-        </TouchableOpacity>
-      </View>
-      <HomeButton />
+      {/* <HomeButton /> */}
     </SafeAreaView>
   );
 };
 
-export default EpatientDetails;
+export default Eipdoptions;
 
 const styles = StyleSheet.create({
   container: {

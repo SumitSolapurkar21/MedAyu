@@ -11,11 +11,44 @@ import React, {useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../../../api.json';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import axios from 'axios';
+import DropDown from 'react-native-paper-dropdown';
 
 const EipdregistrationEmergencyContact = () => {
   const navigation = useNavigation();
+  const [p_relation, setP_relation] = useState('');
+  const [showRelation, setShowRelation] = useState(false);
+  //relation....
+  let relation = [
+    {
+      label: 'Father',
+      value: 'Father',
+    },
+    {
+      label: 'Mother',
+      value: 'Mother',
+    },
+    {
+      label: 'Son',
+      value: 'Son',
+    },
+    {
+      label: 'Daughter',
+      value: 'Daughter',
+    },
+    {
+      label: 'Husband',
+      value: 'Husband',
+    },
+    {
+      label: 'Wife',
+      value: 'Wife',
+    },
+    {
+      label: 'Guardian',
+      value: 'Guardian',
+    },
+  ];
   //form data ....
   const [formData, setFormData] = useState({
     nameofrelatives: '',
@@ -38,7 +71,7 @@ const EipdregistrationEmergencyContact = () => {
         .post(`${api.baseurl}/AddMobileIPD`, {
           role: 'EmergencyContact',
           nameofrelatives: formData.nameofrelatives,
-          relation: formData.relation,
+          relation: p_relation,
           mobilenumber: formData.mobilenumber,
           altmobilenumber: formData.altmobilenumber,
           emailid: formData.emailid,
@@ -70,12 +103,18 @@ const EipdregistrationEmergencyContact = () => {
               />
             </View>
             <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Relation </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Relation"
-                value={formData.relation}
-                onChangeText={text => handleInputChange('relation', text)}
+              <DropDown
+                label={'Relation'}
+                mode={'outlined'}
+                visible={showRelation}
+                showDropDown={() => setShowRelation(true)}
+                onDismiss={() => setShowRelation(false)}
+                value={p_relation}
+                setValue={setP_relation}
+                list={relation?.map(res => ({
+                  label: res.label,
+                  value: res.value,
+                }))}
               />
             </View>
             <View style={styles.formGroup}>
@@ -119,15 +158,13 @@ const EipdregistrationEmergencyContact = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('EipdregistrationEmergencyContact'),
-              addEmergencyContactData();
+            navigation.navigate('Eipdoptions'), addEmergencyContactData();
           }}>
           <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
             Save
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EpatientDetails')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Eipdoptions')}>
           <Text
             style={[
               styles.formButton,

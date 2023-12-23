@@ -51,8 +51,8 @@ const EipdregistrationSocioeconomics = () => {
       value: 'Professional',
     },
     {
-      label: 'Semi Profission',
-      value: 'Semi Profission',
+      label: 'Semi Profession',
+      value: 'Semi Profession',
     },
     {
       label: 'Clerical/shop/farm',
@@ -116,8 +116,8 @@ const EipdregistrationSocioeconomics = () => {
           education: p_education,
           occupation: p_occupation,
           familyincome: p_income,
-          kpsscore: p_kpsscore,
-          kpsclass: p_kpsclass,
+          kpsscore: kpscal?.data.kps_value1,
+          kpsclass: kpscal?.data.kps_class,
         })
         .then(res => {
           console.log(res);

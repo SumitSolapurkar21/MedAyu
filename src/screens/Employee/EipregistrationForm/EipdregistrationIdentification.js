@@ -7,7 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
@@ -19,11 +19,77 @@ const EipdregistrationIdentification = () => {
   const navigation = useNavigation();
   const [datePicker, setDatePicker] = useState(false);
   const [datePicker2, setDatePicker2] = useState(false);
+  const [showPhotoid_dd, setPhotoid_dd] = useState(false);
+  const [p_photoid, setP_photoid] = useState('');
+  const [authority, setAuthority] = useState(null);
+
+  //photo id type array .....
+  let p_photoid_type = [
+    {
+      label: 'Aadhaar Card',
+      value: 'Aadhaar Card',
+    },
+    {
+      label: 'Passport',
+      value: 'Passport',
+    },
+    {
+      label: 'Driving License',
+      value: 'Driving License',
+    },
+    {
+      label: 'Election Commission ID Card',
+      value: 'Election Commission ID Card',
+    },
+    {
+      label: 'Ration Card',
+      value: 'Ration Card',
+    },
+    {
+      label: 'Pan Card',
+      value: 'Pan Card',
+    },
+    {
+      label: 'Kissan Passbook',
+      value: 'Kissan Passbook',
+    },
+    {
+      label: 'Others',
+      value: 'Others',
+    },
+  ];
+
+  // useEffect to update authority when p_photoid changes
+  useEffect(() => {
+    // Define the authority based on p_photoid
+    const selectedAuthority =
+      p_photoid === 'Aadhaar Card'
+        ? 'Unique Identification Authority Of India'
+        : p_photoid === 'Passport'
+        ? 'The Ministry Of External Affairs'
+        : p_photoid === 'Driving License'
+        ? 'Ministry Of Road Transport'
+        : p_photoid === 'Election Commission ID Card'
+        ? 'The Election Commission ID Card'
+        : p_photoid === 'Ration Card'
+        ? 'Sub-Divisional Controller Of Food and Supplies'
+        : p_photoid === 'Pan Card'
+        ? 'The Income Tax Department'
+        : p_photoid === 'Kissan Passbook'
+        ? 'Kissan Passbook'
+        : p_photoid === 'Others'
+        ? 'Others'
+        : null;
+
+    // Update the state with the calculated authority
+    setAuthority(selectedAuthority);
+  }, [p_photoid]);
+
   //form data ....
   const [formData, setFormData] = useState({
-    photoidtype: '',
+    photoidtype: p_photoid,
     occupation: '',
-    issuingauthoritydetail: '',
+    issuingauthoritydetail: authority,
     fullname: '',
     idnumber: '',
     validfrom: '',
@@ -79,6 +145,16 @@ const EipdregistrationIdentification = () => {
   };
   //submit handler.....
   const addIdentificationData = async () => {
+    const data = {
+      role: 'Identification',
+      photoidtype: p_photoid,
+      issuingauthoritydetail: authority,
+      fullname: formData.fullname,
+      idnumber: formData.idnumber,
+      validfrom: formData.validfrom,
+      validtill: formData.validtill,
+    };
+    console.log(data);
     try {
       await axios
         .post(`${api.baseurl}/AddMobileIPD`, {
@@ -97,6 +173,7 @@ const EipdregistrationIdentification = () => {
       console.error(error);
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView vertical>
@@ -106,12 +183,19 @@ const EipdregistrationIdentification = () => {
           </View>
           <View style={styles.form}>
             <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Photo Id Type</Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Photo Id Type"
-                value={formData.photoidtype}
-                onChangeText={text => handleInputChange('photoidtype', text)}
+              <DropDown
+                label={'Photo ID Type'}
+                mode={'outlined'}
+                visible={showPhotoid_dd}
+                showDropDown={() => setPhotoid_dd(true)}
+                onDismiss={() => setPhotoid_dd(false)}
+                value={p_photoid}
+                setValue={setP_photoid}
+                list={p_photoid_type?.map((res, index) => ({
+                  label: res.label,
+                  value: res.value,
+                  key: index.toString(),
+                }))}
               />
             </View>
             <View style={styles.formGroup}>
@@ -119,10 +203,7 @@ const EipdregistrationIdentification = () => {
               <TextInput
                 style={styles.fieldInput}
                 placeholder="Issuing Authority Detail"
-                value={formData.issuingauthoritydetail}
-                onChangeText={text =>
-                  handleInputChange('issuingauthoritydetail', text)
-                }
+                value={authority}
               />
             </View>
             <View style={styles.formGroup}>
