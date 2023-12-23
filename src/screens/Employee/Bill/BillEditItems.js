@@ -49,7 +49,6 @@ const BillEditItems = ({route}) => {
       })
       .then(res => {
         setBillPatientData(res.data);
-        console.log('generate bill pdf : ', res.data);
         // return res.data;
       });
   };

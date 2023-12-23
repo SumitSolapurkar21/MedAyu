@@ -10,7 +10,7 @@ import {
 import React, {useContext, useEffect} from 'react';
 import vital from '../../images/vital.png';
 import admission from '../../images/admission.png';
-import billHistory from '../../images/billHistory.png';
+import adt from '../../images/adt.png';
 import panchakarma from '../../images/panchakarma.png';
 import invoice from '../../images/invoice.png';
 import {useNavigation} from '@react-navigation/native';
@@ -43,7 +43,7 @@ const Eipdoptions = () => {
           style={styles.selectDiv}
           onPress={() => navigation.navigate('EipdregistrationProfile')}>
           <Image source={admission} alt="admission" style={styles.img} />
-          <Text style={styles.uName}>Adimission</Text>
+          <Text style={styles.uName}>Register</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -51,6 +51,14 @@ const Eipdoptions = () => {
           onPress={() => navigation.navigate('Epatientvital')}>
           <Image source={vital} alt="vital" style={styles.img} />
           <Text style={[styles.uName, {marginLeft: 10}]}>Vitals</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.cardSelection}>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('EipdregistrationProfile')}>
+          <Image source={adt} alt="admission" style={styles.img} />
+          <Text style={styles.uName}>A-D-T</Text>
         </TouchableOpacity>
       </View>
 

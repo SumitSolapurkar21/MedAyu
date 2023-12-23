@@ -161,10 +161,11 @@ const EipdregistrationEmergencyContact = () => {
             navigation.navigate('Eipdoptions'), addEmergencyContactData();
           }}>
           <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
-            Save
+            Save & Next
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Eipdoptions')}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Epatientconsentform')}>
           <Text
             style={[
               styles.formButton,

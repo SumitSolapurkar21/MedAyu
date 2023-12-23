@@ -31,6 +31,8 @@ import BillAddItems from '../screens/Employee/Bill/BillAddItems';
 import BillEditItems from '../screens/Employee/Bill/BillEditItems';
 import Eipdoptions from '../screens/Employee/Eipdoptions';
 import Epatientvital from '../screens/Employee/Epatientvital';
+import Signature from '../components/Signature/Signature';
+import Epatientconsentform from '../screens/Employee/EipregistrationForm/Epatientconsentform';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -359,6 +361,46 @@ const Routes = () => {
           component={Epatientvital}
           options={({navigation}) => ({
             title: 'Add Vitals',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="Signature"
+          component={Signature}
+          options={({navigation}) => ({
+            title: 'Add Signature',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="Epatientconsentform"
+          component={Epatientconsentform}
+          options={({navigation}) => ({
+            title: 'Consent Form',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
