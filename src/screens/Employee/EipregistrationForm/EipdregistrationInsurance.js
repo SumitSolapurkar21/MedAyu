@@ -7,14 +7,18 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import api from '../../../../api.json';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import UserContext from '../../../components/Context/Context';
 
 const EipdregistrationInsurance = () => {
+  const {scannedPatientsData, userData} = useContext(UserContext);
+  const {_id, hospital_id} = userData?.data[0];
+  const {patient_id} = scannedPatientsData;
   const navigation = useNavigation();
   const [datePicker, setDatePicker] = useState(false);
   const [datePicker2, setDatePicker2] = useState(false);
@@ -88,6 +92,9 @@ const EipdregistrationInsurance = () => {
           policynumber: formData.policynumber,
           validfrom: formData.validfrom,
           validto: formData.validto,
+          reception_id: _id,
+          hospital_id: hospital_id,
+          patient_id: patient_id,
         })
         .then(res => {
           console.log(res);

@@ -7,14 +7,18 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 // import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import api from '../../../../api.json';
 import DropDown from 'react-native-paper-dropdown';
+import UserContext from '../../../components/Context/Context';
 
 const EipdregistrationSocioeconomics = () => {
+  const {scannedPatientsData, userData} = useContext(UserContext);
+  const {_id, hospital_id} = userData?.data[0];
+  const {patient_id} = scannedPatientsData;
   const education = [
     {
       label: 'Professional degree',
@@ -118,6 +122,9 @@ const EipdregistrationSocioeconomics = () => {
           familyincome: p_income,
           kpsscore: kpscal?.data.kps_value1,
           kpsclass: kpscal?.data.kps_class,
+          reception_id: _id,
+          hospital_id: hospital_id,
+          patient_id: patient_id,
         })
         .then(res => {
           console.log(res);

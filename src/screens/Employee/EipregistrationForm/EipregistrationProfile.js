@@ -18,8 +18,8 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 // import {TextInput} from 'react-native-paper';
 
 const EipregistrationProfile = () => {
-  const {scannedPatientsData} = useContext(UserContext);
-  console.log(scannedPatientsData);
+  const {scannedPatientsData, userData} = useContext(UserContext);
+  const {_id, hospital_id} = userData?.data[0];
   const {
     firstname,
     mobilenumber,
@@ -33,6 +33,7 @@ const EipregistrationProfile = () => {
     patientnationality,
     registerdate,
     appoint_id,
+    patient_id,
   } = scannedPatientsData;
 
   const [countryData, setCountryData] = useState([]);
@@ -192,7 +193,7 @@ const EipregistrationProfile = () => {
       [fieldName]: value,
     });
   };
-  
+
   //submit profile handler.....
   // const _profiledata = {
   //   registerdate: registerdate,
@@ -254,6 +255,9 @@ const EipregistrationProfile = () => {
           pincode: formData.pincode,
           landlineno: formData.landlineno,
           whatsappno: formData.whatsappno,
+          reception_id: _id,
+          hospital_id: hospital_id,
+          patient_id: patient_id,
         })
         .then(res => {
           console.log(res);

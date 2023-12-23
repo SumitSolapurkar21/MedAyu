@@ -7,14 +7,32 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../../../api.json';
 import axios from 'axios';
 import DropDown from 'react-native-paper-dropdown';
+import UserContext from '../../../components/Context/Context';
 
 const EipdregistrationEmergencyContact = () => {
+  const {scannedPatientsData, userData} = useContext(UserContext);
+  const {_id, hospital_id} = userData?.data[0];
+  const {
+    firstname,
+    mobilenumber,
+    patientage,
+    patientgender,
+    uhid,
+    patientaddress,
+    patientdob,
+    patientlanguage,
+    patientmartial,
+    patientnationality,
+    registerdate,
+    appoint_id,
+    patient_id,
+  } = scannedPatientsData;
   const navigation = useNavigation();
   const [p_relation, setP_relation] = useState('');
   const [showRelation, setShowRelation] = useState(false);
@@ -75,6 +93,9 @@ const EipdregistrationEmergencyContact = () => {
           mobilenumber: formData.mobilenumber,
           altmobilenumber: formData.altmobilenumber,
           emailid: formData.emailid,
+          reception_id: _id,
+          hospital_id: hospital_id,
+          patient_id: patient_id,
         })
         .then(res => {
           console.log(res);
@@ -158,7 +179,8 @@ const EipdregistrationEmergencyContact = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Eipdoptions'), addEmergencyContactData();
+            navigation.navigate('Epatientconsentform'),
+              addEmergencyContactData();
           }}>
           <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
             Save & Next

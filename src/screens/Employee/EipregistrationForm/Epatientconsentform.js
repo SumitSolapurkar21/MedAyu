@@ -1,10 +1,18 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useContext} from 'react';
 import {StyleSheet, ScrollView, View, TouchableOpacity} from 'react-native';
 import {Text, Checkbox, Button, TextInput} from 'react-native-paper';
 import SignatureScreen from 'react-native-signature-canvas';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import api from '../../../../api.json';
+import axios from 'axios';
+import UserContext from '../../../components/Context/Context';
+import {useNavigation} from '@react-navigation/native';
 
 const Epatientconsentform = () => {
+  const navigation = useNavigation();
+  const {scannedPatientsData, userData} = useContext(UserContext);
+  const {_id, hospital_id} = userData?.data[0];
+  const {patient_id} = scannedPatientsData;
   const ref = useRef();
   const [isBloodTransfusionChecked, setBloodTransfusionChecked] =
     useState(true);
@@ -38,20 +46,37 @@ const Epatientconsentform = () => {
     ref.current.readSignature();
   };
 
-  const handleSubmit = signature => {
-    ref.current.readSignature();
+  //   const handleSubmit = signature => {
+  //     ref.current.readSignature();
 
-    // Handle form submission here
-    // You can access form data using state variables (patientName, patientSignature, parentSignature, isBloodTransfusionChecked, consent1Checked, consent2Checked, ...)
-    console.log('Form submitted:', {
-      patientName,
-      isBloodTransfusionChecked,
-      consent1Checked,
-      consent2Checked,
-      p_signature: p_signature,
-    });
+  //     // Handle form submission here
+  //     // You can access form data using state variables (patientName, patientSignature, parentSignature, isBloodTransfusionChecked, consent1Checked, consent2Checked, ...)
+  //     console.log('Form submitted:', {
+  //       patientName,
+  //       isBloodTransfusionChecked,
+  //       consent1Checked,
+  //       consent2Checked,
+  //       p_signature: p_signature,
+  //     });
+  //   };
+  //submit handler.....
+  const addConsentData = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileIPD`, {
+          role: 'Consentform',
+          patientsignature: p_signature,
+          reception_id: _id,
+          hospital_id: hospital_id,
+          patient_id: patient_id,
+        })
+        .then(res => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
-
   return (
     <>
       <ScrollView style={styles.container}>
@@ -170,7 +195,9 @@ const Epatientconsentform = () => {
         <Button
           mode="contained"
           onPress={() => {
-            handleSubmit(), handleConfirm();
+            addConsentData(),
+              handleConfirm(),
+              navigation.navigate('Eipdoptions');
           }}
           style={styles.button}>
           Submit
