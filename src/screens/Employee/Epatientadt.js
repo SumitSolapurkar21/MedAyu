@@ -14,8 +14,9 @@ import adt from '../../images/adt.png';
 
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
+import {Button} from 'react-native-paper';
 
-const Eipdoptions = () => {
+const Epatientadt = () => {
   const navigation = useNavigation();
   const {setPatientsData, scannedPatientsData, userData} =
     useContext(UserContext);
@@ -36,27 +37,42 @@ const Eipdoptions = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardSelection}>
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() => navigation.navigate('EipdregistrationProfile')}>
-          <Image source={admission} alt="admission" style={styles.img} />
-          <Text style={styles.uName}>Register</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() => navigation.navigate('Epatientvital')}>
-          <Image source={vital} alt="vital" style={styles.img} />
-          <Text style={[styles.uName, {marginLeft: 10}]}>Vitals</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.cardSelection}>
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() => navigation.navigate('Epatientadt')}>
-          <Image source={adt} alt="admission" style={styles.img} />
-          <Text style={styles.uName}>A-D-T</Text>
-        </TouchableOpacity>
+        <Button
+          mode="contained-tonal"
+          onPress={() => console.log('Pressed')}
+          style={styles.btn}>
+          <Text style={styles.btnTxt}>ADMITED</Text>
+        </Button>
+        <Button
+          mode="contained-tonal"
+          onPress={() => console.log('Pressed')}
+          style={styles.btn}>
+          <Text style={styles.btnTxt}>DISCHARGE</Text>
+        </Button>
+        <Button
+          mode="contained-tonal"
+          onPress={() => console.log('Pressed')}
+          style={styles.btn}>
+          <Text style={styles.btnTxt}>DEATH</Text>
+        </Button>
+        <Button
+          mode="contained-tonal"
+          onPress={() => console.log('Pressed')}
+          style={styles.btn}>
+          <Text style={styles.btnTxt}>DAMA</Text>
+        </Button>
+        <Button
+          mode="contained-tonal"
+          onPress={() => console.log('Pressed')}
+          style={styles.btn}>
+          <Text style={styles.btnTxt}>HOME</Text>
+        </Button>
+        <Button
+          mode="contained-tonal"
+          onPress={() => console.log('Pressed')}
+          style={styles.btn}>
+          <Text style={styles.btnTxt}>TRANSFER</Text>
+        </Button>
       </View>
 
       {/* <HomeButton /> */}
@@ -64,7 +80,7 @@ const Eipdoptions = () => {
   );
 };
 
-export default Eipdoptions;
+export default Epatientadt;
 
 const styles = StyleSheet.create({
   container: {
@@ -125,21 +141,17 @@ const styles = StyleSheet.create({
   },
   cardSelection: {
     flexDirection: 'row',
-    marginHorizontal: 16,
+    marginHorizontal: 10,
+    justifyContent: 'space-between',
     marginVertical: 16,
-    gap: 20,
+    gap: 4,
+    flexWrap: 'wrap',
   },
-  selectDiv: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 0,
-    elevation: 5,
-    borderRadius: 6,
-    padding: 10,
-    width: '47%',
+
+  btn: {
+    width: 110,
+  },
+  btnTxt: {
+    fontSize: 12,
   },
 });

@@ -33,6 +33,7 @@ import Eipdoptions from '../screens/Employee/Eipdoptions';
 import Epatientvital from '../screens/Employee/Epatientvital';
 import Signature from '../components/Signature/Signature';
 import Epatientconsentform from '../screens/Employee/EipregistrationForm/Epatientconsentform';
+import Epatientadt from '../screens/Employee/Epatientadt';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -401,6 +402,26 @@ const Routes = () => {
           component={Epatientconsentform}
           options={({navigation}) => ({
             title: 'Consent Form',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="Epatientadt"
+          component={Epatientadt}
+          options={({navigation}) => ({
+            title: 'A-D-T',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"

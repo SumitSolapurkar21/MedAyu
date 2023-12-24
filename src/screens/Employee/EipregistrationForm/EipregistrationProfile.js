@@ -566,7 +566,7 @@ const EipregistrationProfile = () => {
             Save & Next
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate('EipdregistrationSocioeconomics')}>
           <Text
             style={[
@@ -575,7 +575,7 @@ const EipregistrationProfile = () => {
             ]}>
             Skip
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );
