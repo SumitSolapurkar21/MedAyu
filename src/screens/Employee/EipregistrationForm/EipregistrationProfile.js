@@ -47,12 +47,16 @@ const EipregistrationProfile = () => {
 
   // current data ...
   let today = new Date();
+  // let currentDate =
+  //   today.getDate().toString().padStart(2, '0') +
+  //   '-' +
+  //   (today.getMonth() + 1).toString().padStart(2, '0') +
+  //   '-' +
+  //   today.getFullYear();
   let currentDate =
-    today.getDate().toString().padStart(2, '0') +
-    '-' +
+    today.getFullYear() +
     (today.getMonth() + 1).toString().padStart(2, '0') +
-    '-' +
-    today.getFullYear();
+    today.getDate().toString().padStart(2, '0');
 
   //current time ...
   const dt = new Date();

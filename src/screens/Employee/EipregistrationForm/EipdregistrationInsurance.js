@@ -95,6 +95,7 @@ const EipdregistrationInsurance = () => {
           reception_id: _id,
           hospital_id: hospital_id,
           patient_id: patient_id,
+          suminsured: formData.suminsured,
         })
         .then(res => {
           console.log(res);
