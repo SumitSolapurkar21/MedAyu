@@ -11,7 +11,6 @@ const Pdf = () => {
   const generatePDF = async () => {
     const {fs} = RNFetchBlob;
     const path = fs.dirs.DocumentDir + '/bill.pdf';
-    console.log(path);
     const options = {
       html: html,
       fileName: 'bill',
@@ -36,7 +35,7 @@ const Pdf = () => {
       try {
         await Share.open(shareOptions);
       } catch (error) {
-        console.log('Error sharing PDF:', error.message);
+        console.error('Error sharing PDF:', error.message);
       }
     }
   };

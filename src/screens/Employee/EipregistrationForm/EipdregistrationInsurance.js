@@ -98,7 +98,7 @@ const EipdregistrationInsurance = () => {
           suminsured: formData.suminsured,
         })
         .then(res => {
-          console.log(res);
+          return res;
         });
     } catch (error) {
       console.error(error);

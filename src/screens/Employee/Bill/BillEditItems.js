@@ -49,7 +49,7 @@ const BillEditItems = ({route}) => {
       })
       .then(res => {
         setBillPatientData(res.data);
-        // return res.data;
+        return res.data;
       });
   };
   const billDataArray = billPatientData?.OutBillArrayss.map(res => res);
@@ -105,7 +105,6 @@ const BillEditItems = ({route}) => {
           bill_id: billHistoryArray,
         })
         .then(res => {
-          console.log('bill update res : ', res.data);
           setUpdateBillRes(res.data);
           return res.data;
         });
@@ -124,7 +123,6 @@ const BillEditItems = ({route}) => {
           servicesArray: [serviceArray],
         })
         .then(res => {
-          console.log('DeleteOpdItem : ', res.data);
           res.data.status === true
             ? patientBillData()
             : console.error(`${res.data.message}`);

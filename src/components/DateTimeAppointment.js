@@ -72,7 +72,6 @@ const DateTimeAppointment = ({
         mydate: selectedDate,
       })
       .then(res => {
-        // console.log('Time Slot : ', res.data.data);
         setTimeSlotArray(res.data.data);
       });
   };

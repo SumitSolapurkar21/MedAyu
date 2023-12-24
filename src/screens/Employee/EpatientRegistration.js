@@ -191,7 +191,6 @@ const EpatientRegistration = () => {
           })
           .then(res => {
             const consultDoctor_data = res.data.data;
-            // console.log('consultDoctor_data :', consultDoctor_data);
             setConsultDoctorData(consultDoctor_data);
           });
       } catch (error) {
@@ -333,7 +332,6 @@ const EpatientRegistration = () => {
   //   slot_id: formData?.slot_id,
   //   roomno: doctorRoomData,
   // };
-  // console.log('first : ', formSubmitedData);
 
   const handleSubmit = async () => {
     const errors = {};

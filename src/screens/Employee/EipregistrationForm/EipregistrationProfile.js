@@ -227,7 +227,6 @@ const EipregistrationProfile = () => {
   //   landlineno: formData.landlineno,
   //   whatsappno: formData.whatsappno,
   // };
-  // console.log('_profiledata : ', _profiledata);
   const addProfileData = async () => {
     try {
       await axios
@@ -264,7 +263,7 @@ const EipregistrationProfile = () => {
           patient_id: patient_id,
         })
         .then(res => {
-          console.log(res);
+          return res;
         });
     } catch (error) {
       console.error(error);

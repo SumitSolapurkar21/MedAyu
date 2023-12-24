@@ -158,7 +158,6 @@ const EipdregistrationIdentification = () => {
       validfrom: formData.validfrom,
       validtill: formData.validtill,
     };
-    console.log(data);
     try {
       await axios
         .post(`${api.baseurl}/AddMobileIPD`, {
@@ -174,7 +173,7 @@ const EipdregistrationIdentification = () => {
           patient_id: patient_id,
         })
         .then(res => {
-          console.log(res);
+          return res;
         });
     } catch (error) {
       console.error(error);

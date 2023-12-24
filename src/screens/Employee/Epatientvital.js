@@ -36,7 +36,7 @@ const Epatientvital = () => {
           p_temp: p_temp,
         })
         .then(res => {
-          console.log(res);
+          return res;
         });
     } catch (error) {
       console.error(error);
@@ -53,7 +53,7 @@ const Epatientvital = () => {
             <Text variant="bodyMedium">Vital Data Add Successfully!</Text>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => console.log('Cancel')}>Cancel</Button>
+            <Button onPress={() => hideDialog()}>Cancel</Button>
             <Button onPress={() => navigation.navigate('Eipdoptions')}>
               Ok
             </Button>

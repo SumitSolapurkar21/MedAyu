@@ -34,26 +34,24 @@ const BillLayout = () => {
 
   useEffect(() => {
     try {
-      const patientBillData = async () => {
-        await axios
-          .post(`${api.baseurl}/GetAllBillsForMobile`, {
-            uhid: uhid,
-            patient_id: patient_id,
-            reception_id: reception_id,
-            hospital_id: hospital_id,
-          })
-          .then(res => {
-            setBillPatientData(res.data);
-            console.log('patientBillData : ', res.data);
-            return res.data;
-          });
-      };
       patientBillData();
     } catch (error) {
       console.error('Error :', error);
     }
   }, []);
-
+  const patientBillData = async () => {
+    await axios
+      .post(`${api.baseurl}/GetAllBillsForMobile`, {
+        uhid: uhid,
+        patient_id: patient_id,
+        reception_id: reception_id,
+        hospital_id: hospital_id,
+      })
+      .then(res => {
+        setBillPatientData(res.data);
+        return res.data;
+      });
+  };
   let totalAmtAfterDiscountPercent =
     billPatientData?.totalamount -
     (billPatientData?.totalamount * discountAmt ?? 0) / 100;
@@ -103,6 +101,24 @@ const BillLayout = () => {
         mobilereceiveamount: receivedAmt,
       });
       return billDataRes;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // delete Handler :
+  const deleteHandler = async data => {
+    const {bill_id, serviceArray} = data;
+    try {
+      await axios
+        .post(`${api.baseurl}/DeleteOpdItem`, {
+          bill_id: bill_id,
+          servicesArray: [serviceArray],
+        })
+        .then(res => {
+          res.data.status === true
+            ? patientBillData()
+            : console.error(`${res.data.message}`);
+        });
     } catch (error) {
       console.error(error);
     }
@@ -234,6 +250,20 @@ const BillLayout = () => {
                           <Text style={styles.billTxt}>Date</Text>
                           <Text style={styles.billTxt}>{res.bill_date}</Text>
                         </View>
+                        <TouchableOpacity
+                          style={styles.deleteButton}
+                          onPress={() =>
+                            deleteHandler({
+                              bill_id: res.bill_id,
+                              serviceArray: {
+                                amount: res.amount,
+                                billname: res.billname,
+                                outbillingtype: res.outbillingtype,
+                              },
+                            })
+                          }>
+                          <FontAwesome6 name="trash" color="red" size={18} />
+                        </TouchableOpacity>
                       </View>
                     );
                   })}
@@ -665,4 +695,8 @@ const styles = StyleSheet.create({
   // scrollView: {
   //   height: 110,
   // },
+  deleteButton: {
+    alignSelf: 'flex-end',
+    marginVertical: 4,
+  },
 });

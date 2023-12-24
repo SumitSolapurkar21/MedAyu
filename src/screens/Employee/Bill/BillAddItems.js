@@ -57,7 +57,6 @@ const BillAddItems = ({route}) => {
         );
 
         const data = GetOPDServicesRes.data.servicesArray || [];
-        console.log('GetOPDServices : ', data);
         setOpdServices(data);
       } catch (error) {
         console.error('Error : ', error);
@@ -76,7 +75,6 @@ const BillAddItems = ({route}) => {
             service_id: service_id,
           })
           .then(res => {
-            //   console.log(res.data);
             setSelectedItemCharge(res.data);
             const matchingService = opdServices.find(
               service => service.service_id === service_id,
@@ -115,7 +113,6 @@ const BillAddItems = ({route}) => {
             servicesArray,
           })
           .then(res => {
-            console.log('UpdateMobileOPDServices_ADD', res.data);
             res.data.status === true
               ? showDialog()
               : console.warn(`${res.data.message}`);
@@ -136,7 +133,6 @@ const BillAddItems = ({route}) => {
             bill_id: billHistoryArray,
           })
           .then(res => {
-            console.log('UpdateMobileOPDServices', res.data);
             res.data.status === true
               ? showDialog()
               : console.warn(`${res.data.message}`);

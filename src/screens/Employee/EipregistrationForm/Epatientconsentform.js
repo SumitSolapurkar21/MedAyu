@@ -68,7 +68,6 @@ const Epatientconsentform = () => {
   const currenttime = `${hours}.${minutes}`;
   //submit handler.....
   const addConsentData = async signature => {
-    console.log('signature : ', signature);
     const sign = signature;
 
     try {
@@ -79,7 +78,6 @@ const Epatientconsentform = () => {
       //    hospital_id: hospital_id,
       //    patient_id: patient_id,
       //  };
-      //  console.log('data : ', data);
       await axios
         .post(`${api.baseurl}/AddMobileIPD`, {
           role: 'Consentform',
@@ -89,7 +87,6 @@ const Epatientconsentform = () => {
           patient_id: patient_id,
         })
         .then(res => {
-          console.log('signature res : ', res);
           if (res.data.status === true) {
             setVisible(true);
           } else {

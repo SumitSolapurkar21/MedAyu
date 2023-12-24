@@ -98,7 +98,7 @@ const EipdregistrationEmergencyContact = () => {
           patient_id: patient_id,
         })
         .then(res => {
-          console.log(res);
+          return res;
         });
     } catch (error) {
       console.error(error);

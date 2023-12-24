@@ -10,13 +10,11 @@ const Signature = () => {
   const handleOK = signature => {
     setSignature(signature);
   };
-  console.log('signture : ', signture);
   //   const handleClear = () => {
   //     ref.current.clearSignature();
   //   };
 
   //   const handleConfirm = () => {
-  //     console.log('end');
   //     ref.current.readSignature();
   //   };
 

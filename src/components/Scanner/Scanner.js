@@ -71,9 +71,8 @@ export default function Scanner({route}) {
             location: 'Nagpur',
           })
           .then(response => {
-            // return response.data;
-            // console.log(response.data);
             setMessage(response.data.message);
+            return response.data;
           });
       } catch (error) {
         console.error(error);
@@ -119,7 +118,6 @@ export default function Scanner({route}) {
             type: 'SEARCH',
           })
           .then(res => {
-            console.log('patientDetailBySearchInput : ', res.data);
             setScannedPatientsData(res.data);
             res.data.status === true
               ? navigation.navigate('EpatientDetails')

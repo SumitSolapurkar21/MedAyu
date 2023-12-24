@@ -74,7 +74,7 @@ const BillHistory = ({route}) => {
           return res.data;
         });
     } catch (error) {
-      console.log('Error :', error);
+      console.error('Error :', error);
     }
   };
 
@@ -83,7 +83,6 @@ const BillHistory = ({route}) => {
   //   const bill_history = historyArray?.map(res => {
   //     return res;
   //   });
-  //   console.log('his : ', bill_history);
   // }, [historyArray]);
 
   const handlePdfIconClick = async (patientId, hospitalId, billId) => {
@@ -652,7 +651,6 @@ const BillHistory = ({route}) => {
 
       const {fs} = RNFetchBlob;
       const path = fs.dirs.DocumentDir + '/bill.pdf';
-      console.log('share path:', path);
       const options = {
         html: html,
         fileName: 'bill',
@@ -660,7 +658,6 @@ const BillHistory = ({route}) => {
       };
 
       const pdf = await RNHTMLtoPDF.convert(options);
-      // console.log('shaer pdf path : ', pdf.filePath);
 
       // setPdfPath(pdf.filePath);
       const sharePdf = async () => {

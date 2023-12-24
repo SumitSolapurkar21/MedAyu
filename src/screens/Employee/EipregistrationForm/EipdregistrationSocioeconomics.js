@@ -127,7 +127,7 @@ const EipdregistrationSocioeconomics = () => {
           patient_id: patient_id,
         })
         .then(res => {
-          console.log(res);
+          return res;
         });
     } catch (error) {
       console.error(error);
@@ -158,7 +158,6 @@ const EipdregistrationSocioeconomics = () => {
   }, [p_income]);
 
   // const {kps_value, kps_class} = kpscal?.data;
-  // console.log('kpscal', kps_value, kps_class);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView vertical>
