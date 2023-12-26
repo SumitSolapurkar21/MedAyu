@@ -28,10 +28,16 @@ const BillEditItems = ({route}) => {
   const [discountAmtRs, setDiscountAmtRs] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
-  const {patientsData, setUpdateBillRes, billHistoryArray} =
-    useContext(UserContext);
+  const {
+    patientsData,
+    setUpdateBillRes,
+    billHistoryArray,
+    patientEditArray,
+    setPatientEditArray,
+  } = useContext(UserContext);
   const {uhid, patient_id, reception_id, hospital_id} = patientsData;
 
+  console.log('patientEditArray : ', patientEditArray);
   useEffect(() => {
     // storeData();
     try {
@@ -52,6 +58,10 @@ const BillEditItems = ({route}) => {
         return res.data;
       });
   };
+  const editData = patientEditArray;
+  // const sumOfAmount = editData.reduce((total, item) => total + item.amount, '');
+  // console.log('summ  : ', sumOfAmount);
+
   const billDataArray = billPatientData?.OutBillArrayss.map(res => res);
 
   let totalAmtAfterDiscountPercent =
@@ -61,15 +71,24 @@ const BillEditItems = ({route}) => {
   let totalAmtAfterDiscountRupees =
     billPatientData?.totalamount - discountAmtRs ?? 0;
 
-  let TOTAL_AMOUNT =
-    discountAmtRs == ''
-      ? totalAmtAfterDiscountPercent
-      : totalAmtAfterDiscountRupees;
-
-  // let totalbalanceTemp = TOTAL_AMOUNT - receivedAmt;
-
+  // let totalbalance = parseInt(billPatientData?.totalbalance - receivedAmt);
   let totalbalance = parseInt(billPatientData?.totalbalance - receivedAmt);
-  let previousbalance = parseInt(billPatientData?.totalbalance);
+  const totalBalance = parseInt(billPatientData?.totalbalance) || 0;
+  const sumOfAmount = editData.reduce(
+    (total, item) => total + parseInt(item.amount),
+    0,
+  );
+
+  let TOTAL_AMOUNT =
+    (discountAmtRs == ''
+      ? totalAmtAfterDiscountPercent
+      : totalAmtAfterDiscountRupees) + sumOfAmount;
+
+  const previousbalance = totalBalance + sumOfAmount;
+  const nxtbalance = previousbalance - receivedAmt;
+
+  console.log('Previous Balance + Sum of Amount:', previousbalance);
+  // let totalbalanceTemp = totalbalance + TOTAL_AMOUNT;
 
   let today = new Date();
   let currentDate =
@@ -133,6 +152,12 @@ const BillEditItems = ({route}) => {
 
     // Rest of the deleteHandler logic
   };
+
+  const handleDelete = id => {
+    const updatedEditData = editData.filter(item => item.id !== id);
+    setPatientEditArray(updatedEditData);
+  };
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -160,101 +185,184 @@ const BillEditItems = ({route}) => {
               <Text style={{color: 'white'}}>Bill Items</Text>
             </View>
             <ScrollView vertical style={styles.scrollView}>
-              {billPatientData?.status === false
-                ? ToastAndroid.show(
-                    `${billPatientData?.message}`,
-                    ToastAndroid.SHORT,
-                  )
-                : billDataArray?.map((res, i) => {
-                    return (
-                      <View style={styles.billDiv} key={i}>
-                        <View style={styles.billContent}>
-                          <Text
-                            style={[
-                              styles.billTxt,
-                              {fontWeight: 'bold', fontSize: 14},
-                            ]}>
-                            #{res.srno}. {res.outbillingtype}
-                          </Text>
-                          <Text
-                            style={[
-                              styles.billTxt,
-                              {fontWeight: 'bold', fontSize: 14},
-                            ]}>
-                            <FontAwesome6
-                              name="indian-rupee-sign"
-                              color="black"
-                              size={12}
-                            />
-                            &nbsp;{res.amount}
-                          </Text>
+              <>
+                {billPatientData?.status === false
+                  ? ToastAndroid.show(
+                      `${billPatientData?.message}`,
+                      ToastAndroid.SHORT,
+                    )
+                  : billDataArray?.map((res, i) => {
+                      return (
+                        <View style={styles.billDiv} key={i}>
+                          <View style={styles.billContent}>
+                            <Text
+                              style={[
+                                styles.billTxt,
+                                {fontWeight: 'bold', fontSize: 14},
+                              ]}>
+                              #{res.srno}. {res.outbillingtype}
+                            </Text>
+                            <Text
+                              style={[
+                                styles.billTxt,
+                                {fontWeight: 'bold', fontSize: 14},
+                              ]}>
+                              <FontAwesome6
+                                name="indian-rupee-sign"
+                                color="black"
+                                size={12}
+                              />
+                              &nbsp;{res.amount}
+                            </Text>
+                          </View>
+                          <View style={styles.billContent}>
+                            <Text style={styles.billTxt}>Item Subtotal</Text>
+                            <Text style={styles.billTxt}>
+                              1 x {res.amount} = &nbsp;
+                              <FontAwesome6
+                                name="indian-rupee-sign"
+                                color="black"
+                                size={10}
+                              />
+                              &nbsp;{res.amount}
+                            </Text>
+                          </View>
+                          <View style={styles.billContent}>
+                            <Text style={[styles.billTxt, {color: 'orange'}]}>
+                              Discount(%) : 0
+                            </Text>
+                            <Text style={[styles.billTxt, {color: 'orange'}]}>
+                              <FontAwesome6
+                                name="indian-rupee-sign"
+                                color="orange"
+                                size={10}
+                              />
+                              &nbsp;0
+                            </Text>
+                          </View>
+                          <View style={styles.billContent}>
+                            <Text style={styles.billTxt}>Tax : 0 %</Text>
+                            <Text style={styles.billTxt}>
+                              <FontAwesome6
+                                name="indian-rupee-sign"
+                                color="black"
+                                size={10}
+                              />
+                              &nbsp;0
+                            </Text>
+                          </View>
+                          <View style={styles.billContent}>
+                            <Text
+                              style={[
+                                styles.billTxt,
+                                {fontSize: 14, fontWeight: 'bold'},
+                              ]}>
+                              {res.billname}
+                            </Text>
+                          </View>
+                          <View style={styles.billContent}>
+                            <Text style={styles.billTxt}>Date</Text>
+                            <Text style={styles.billTxt}>{date}</Text>
+                          </View>
+                          <TouchableOpacity
+                            style={styles.deleteButton}
+                            onPress={() =>
+                              deleteHandler({
+                                bill_id: res.bill_id,
+                                serviceArray: {
+                                  amount: res.amount,
+                                  billname: res.billname,
+                                  outbillingtype: res.outbillingtype,
+                                },
+                              })
+                            }>
+                            <FontAwesome6 name="trash" color="red" size={18} />
+                          </TouchableOpacity>
                         </View>
-                        <View style={styles.billContent}>
-                          <Text style={styles.billTxt}>Item Subtotal</Text>
-                          <Text style={styles.billTxt}>
-                            1 x {res.amount} = &nbsp;
-                            <FontAwesome6
-                              name="indian-rupee-sign"
-                              color="black"
-                              size={10}
-                            />
-                            &nbsp;{res.amount}
-                          </Text>
-                        </View>
-                        <View style={styles.billContent}>
-                          <Text style={[styles.billTxt, {color: 'orange'}]}>
-                            Discount(%) : 0
-                          </Text>
-                          <Text style={[styles.billTxt, {color: 'orange'}]}>
-                            <FontAwesome6
-                              name="indian-rupee-sign"
-                              color="orange"
-                              size={10}
-                            />
-                            &nbsp;0
-                          </Text>
-                        </View>
-                        <View style={styles.billContent}>
-                          <Text style={styles.billTxt}>Tax : 0 %</Text>
-                          <Text style={styles.billTxt}>
-                            <FontAwesome6
-                              name="indian-rupee-sign"
-                              color="black"
-                              size={10}
-                            />
-                            &nbsp;0
-                          </Text>
-                        </View>
-                        <View style={styles.billContent}>
-                          <Text
-                            style={[
-                              styles.billTxt,
-                              {fontSize: 14, fontWeight: 'bold'},
-                            ]}>
-                            {res.billname}
-                          </Text>
-                        </View>
-                        <View style={styles.billContent}>
-                          <Text style={styles.billTxt}>Date</Text>
-                          <Text style={styles.billTxt}>{date}</Text>
-                        </View>
-                        <TouchableOpacity
-                          style={styles.deleteButton}
-                          onPress={() =>
-                            deleteHandler({
-                              bill_id: res.bill_id,
-                              serviceArray: {
-                                amount: res.amount,
-                                billname: res.billname,
-                                outbillingtype: res.outbillingtype,
-                              },
-                            })
-                          }>
-                          <FontAwesome6 name="trash" color="red" size={18} />
-                        </TouchableOpacity>
+                      );
+                    })}
+                {editData?.map((res, i) => {
+                  return (
+                    <View style={styles.billDiv} key={i}>
+                      <View style={styles.billContent}>
+                        <Text
+                          style={[
+                            styles.billTxt,
+                            {fontWeight: 'bold', fontSize: 14},
+                          ]}>
+                          #{res.srno}. {res.outbillingtype}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.billTxt,
+                            {fontWeight: 'bold', fontSize: 14},
+                          ]}>
+                          <FontAwesome6
+                            name="indian-rupee-sign"
+                            color="black"
+                            size={12}
+                          />
+                          &nbsp;{res.amount}
+                        </Text>
                       </View>
-                    );
-                  })}
+                      <View style={styles.billContent}>
+                        <Text style={styles.billTxt}>Item Subtotal</Text>
+                        <Text style={styles.billTxt}>
+                          1 x {res.amount} = &nbsp;
+                          <FontAwesome6
+                            name="indian-rupee-sign"
+                            color="black"
+                            size={10}
+                          />
+                          &nbsp;{res.amount}
+                        </Text>
+                      </View>
+                      <View style={styles.billContent}>
+                        <Text style={[styles.billTxt, {color: 'orange'}]}>
+                          Discount(%) : 0
+                        </Text>
+                        <Text style={[styles.billTxt, {color: 'orange'}]}>
+                          <FontAwesome6
+                            name="indian-rupee-sign"
+                            color="orange"
+                            size={10}
+                          />
+                          &nbsp;0
+                        </Text>
+                      </View>
+                      <View style={styles.billContent}>
+                        <Text style={styles.billTxt}>Tax : 0 %</Text>
+                        <Text style={styles.billTxt}>
+                          <FontAwesome6
+                            name="indian-rupee-sign"
+                            color="black"
+                            size={10}
+                          />
+                          &nbsp;0
+                        </Text>
+                      </View>
+                      <View style={styles.billContent}>
+                        <Text
+                          style={[
+                            styles.billTxt,
+                            {fontSize: 14, fontWeight: 'bold'},
+                          ]}>
+                          {res.billname}
+                        </Text>
+                      </View>
+                      <View style={styles.billContent}>
+                        <Text style={styles.billTxt}>Date</Text>
+                        <Text style={styles.billTxt}>{date}</Text>
+                      </View>
+                      <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={() => handleDelete(res.id)}>
+                        <FontAwesome6 name="trash" color="red" size={18} />
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })}
+              </>
             </ScrollView>
             <View style={styles.billGrpBtn}>
               <TouchableOpacity
@@ -429,7 +537,7 @@ const BillEditItems = ({route}) => {
                       size={12}
                     />
                     <Text style={[styles.ttAmtTxt, {color: '#15cf84'}]}>
-                      {receivedAmt == '' ? totalbalance : previousbalance}
+                      {receivedAmt === '' ? previousbalance : nxtbalance}
                     </Text>
                   </View>
                 </View>

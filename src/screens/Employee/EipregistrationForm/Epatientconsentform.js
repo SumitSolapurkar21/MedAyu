@@ -14,6 +14,7 @@ import api from '../../../../api.json';
 import axios from 'axios';
 import UserContext from '../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Epatientconsentform = () => {
   const navigation = useNavigation();
@@ -69,25 +70,44 @@ const Epatientconsentform = () => {
   //submit handler.....
   const addConsentData = async signature => {
     const sign = signature;
+    let currentIndexString = await AsyncStorage.getItem('currentIndex');
+    // Increment the index
+    let index = parseInt(currentIndexString, 10) || 0;
+
+    index++;
+    // Store the updated index in local storage
+    AsyncStorage.setItem('currentIndex', index.toString());
+    console.log('index', index);
+
+    const fileData = {
+      filetype: sign.split(';')[0], // "image/png"
+      // encoding: sign.split(';')[1], // "base64"
+      filename: `PS${index}.png`,
+      filesize: 4127,
+      base64: sign.split(',')[1], // "iVBORw0KGgoAAAANSUhEUgAAA64AAA"
+    };
+    // console.log('fileData : ', fileData);
 
     try {
-      //  const data = {
-      //    role: 'Consentform',
-      //    patientsignature: sign,
-      //    reception_id: _id,
-      //    hospital_id: hospital_id,
-      //    patient_id: patient_id,
-      //  };
+      const data = {
+        role: 'Consentform',
+        file: fileData,
+        reception_id: _id,
+        hospital_id: hospital_id,
+        patient_id: patient_id,
+      };
+      console.log('data ::::: ', data);
       await axios
         .post(`${api.baseurl}/AddMobileIPD`, {
           role: 'Consentform',
-          patientsignature: sign,
+          file: fileData,
           reception_id: _id,
           hospital_id: hospital_id,
           patient_id: patient_id,
         })
         .then(res => {
           if (res.data.status === true) {
+            AsyncStorage.setItem('currentIndex', index.toString());
             setVisible(true);
           } else {
             console.error('Something went wrong');
@@ -333,7 +353,11 @@ const Epatientconsentform = () => {
           backgroundColor: '#ffffff',
         }}>
         <View style={styles.signatureContainer}>
-          <SignatureScreen ref={ref} onOK={handleOK} />
+          <SignatureScreen
+            ref={ref}
+            onOK={handleOK}
+            backgroundColor={'white'}
+          />
           <TouchableOpacity onPress={handleClear} style={styles.clearSign}>
             <FontAwesome6 name="trash" size={16} color="red" />
           </TouchableOpacity>

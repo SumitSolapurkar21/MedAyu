@@ -9,7 +9,12 @@ export const UserProvider = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [updateBillRes, setUpdateBillRes] = useState([]);
   const [billHistoryArray, setBillHistoryArray] = useState([]);
+  const [patientEditArray, setPatientEditArray] = useState([]);
+  const [surveyArray, setSurveyArray] = useState([]);
 
+  const updateSharedData = data => {
+    setPatientEditArray(prevData => [...prevData, data]);
+  };
   const contextValue = {
     userData,
     setUserData,
@@ -23,6 +28,11 @@ export const UserProvider = ({children}) => {
     setUpdateBillRes,
     billHistoryArray,
     setBillHistoryArray,
+    patientEditArray,
+    setPatientEditArray,
+    surveyArray,
+    setSurveyArray,
+    updateSharedData,
   };
 
   return (

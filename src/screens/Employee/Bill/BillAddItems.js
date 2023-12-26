@@ -19,7 +19,7 @@ const BillAddItems = ({route}) => {
   const [showDropDown2, setShowDropDown2] = useState(false);
   const [showDropDown3, setShowDropDown3] = useState(false);
   const [tax, setTax] = useState('');
-  const {userData, scannedPatientsData, billHistoryArray} =
+  const {userData, scannedPatientsData, setPatientEditArray} =
     useContext(UserContext);
 
   const [opdServices, setOpdServices] = useState([]);
@@ -89,6 +89,17 @@ const BillAddItems = ({route}) => {
   }, [service_id]);
 
   // submit bill item handler .......
+  function generateRandom16DigitNumber() {
+    let randomNumber = '';
+    for (let i = 0; i < 16; i++) {
+      const digit = Math.floor(Math.random() * 10);
+      randomNumber += digit;
+    }
+    return randomNumber;
+  }
+
+  // Example: Generate a random 16-digit number
+  const random16DigitNumber = generateRandom16DigitNumber();
 
   const servicesArray = [
     {
@@ -97,6 +108,15 @@ const BillAddItems = ({route}) => {
       outbillingtype: outbillingtype,
     },
   ];
+  const servicesArray2 = [
+    {
+      amount: selectedItemCharge.amount,
+      billname: selectedItemCharge.outbillingname,
+      outbillingtype: outbillingtype,
+      id: random16DigitNumber,
+    },
+  ];
+
   const submitBillItemHandler = async () => {
     bill_type === 'ADD'
       ? await axios
@@ -113,31 +133,35 @@ const BillAddItems = ({route}) => {
             servicesArray,
           })
           .then(res => {
+            console.log('res : ', res.data);
             res.data.status === true
               ? showDialog()
               : console.warn(`${res.data.message}`);
             return res.data;
           })
-      : await axios
-          .post(`${api.baseurl}/UpdateMobileOPDServices`, {
-            reception_id: _id,
-            hospital_id: hospital_id,
-            fullname: name,
-            firstname: firstname,
-            mobilenumber: mobilenumber,
-            patient_id: patient_id,
-            patientgender: patientgender,
-            uhid: uhid,
-            nettotal: itemQuantity * selectedItemCharge.amount,
-            servicesArray,
-            bill_id: billHistoryArray,
-          })
-          .then(res => {
-            res.data.status === true
-              ? showDialog()
-              : console.warn(`${res.data.message}`);
-            return res.data;
-          });
+      : setPatientEditArray(prevArray => [...prevArray, ...servicesArray2]),
+      showDialog(true);
+
+    // : await axios
+    //     .post(`${api.baseurl}/UpdateMobileOPDServices`, {
+    //       reception_id: _id,
+    //       hospital_id: hospital_id,
+    //       fullname: name,
+    //       firstname: firstname,
+    //       mobilenumber: mobilenumber,
+    //       patient_id: patient_id,
+    //       patientgender: patientgender,
+    //       uhid: uhid,
+    //       nettotal: itemQuantity * selectedItemCharge.amount,
+    //       servicesArray,
+    //       bill_id: billHistoryArray,
+    //     })
+    //     .then(res => {
+    //       res.data.status === true
+    //         ? showDialog()
+    //         : console.warn(`${res.data.message}`);
+    //       return res.data;
+    //     });
   };
   return (
     <View style={styles.container}>
