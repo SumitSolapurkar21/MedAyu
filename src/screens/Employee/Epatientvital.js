@@ -119,15 +119,25 @@ const Epatientvital = () => {
             </View>
           </View>
         </ScrollView>
-        <Button
-          mode="contained"
-          style={styles.btn}
-          onPress={() => {
-            addVitalsData();
-            setVisible(true);
-          }}>
-          Update Vitals
-        </Button>
+        <View style={styles.grpBtn}>
+          <Button
+            mode="contained"
+            style={styles.btn}
+            onPress={() => {
+              addVitalsData();
+              setVisible(true);
+            }}>
+            Update Vitals
+          </Button>
+          <Button
+            mode="contained"
+            style={styles.btn}
+            onPress={() => {
+              navigation.navigate('Epatientvitalhistory');
+            }}>
+            Vitals History
+          </Button>
+        </View>
       </SafeAreaView>
     </>
   );
@@ -158,11 +168,16 @@ const styles = StyleSheet.create({
     width: 200,
   },
   btn: {
-    width: 180,
+    width: 140,
     alignSelf: 'center',
     marginVertical: 10,
   },
   title: {
     textAlign: 'center',
+  },
+  grpBtn: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    gap: 10,
   },
 });

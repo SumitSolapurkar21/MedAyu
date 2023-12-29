@@ -34,6 +34,7 @@ import Epatientvital from '../screens/Employee/Epatientvital';
 import Signature from '../components/Signature/Signature';
 import Epatientconsentform from '../screens/Employee/EipregistrationForm/Epatientconsentform';
 import Epatientadt from '../screens/Employee/Epatientadt';
+import Epatientvitalhistory from '../screens/Employee/Epatientvitalhistory';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -422,6 +423,26 @@ const Routes = () => {
           component={Epatientadt}
           options={({navigation}) => ({
             title: 'A-D-T',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="Epatientvitalhistory"
+          component={Epatientvitalhistory}
+          options={({navigation}) => ({
+            title: 'Vitals History',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"

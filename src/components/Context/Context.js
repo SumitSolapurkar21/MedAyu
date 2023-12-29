@@ -11,6 +11,7 @@ export const UserProvider = ({children}) => {
   const [billHistoryArray, setBillHistoryArray] = useState([]);
   const [patientEditArray, setPatientEditArray] = useState([]);
   const [surveyArray, setSurveyArray] = useState([]);
+  const [admittedList, setAdmittedList] = useState([]);
 
   const updateSharedData = data => {
     setPatientEditArray(prevData => [...prevData, data]);
@@ -33,6 +34,8 @@ export const UserProvider = ({children}) => {
     surveyArray,
     setSurveyArray,
     updateSharedData,
+    admittedList,
+    setAdmittedList,
   };
 
   return (

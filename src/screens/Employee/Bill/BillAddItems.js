@@ -19,9 +19,9 @@ const BillAddItems = ({route}) => {
   const [showDropDown2, setShowDropDown2] = useState(false);
   const [showDropDown3, setShowDropDown3] = useState(false);
   const [tax, setTax] = useState('');
-  const {userData, scannedPatientsData, setPatientEditArray} =
+  const {userData, scannedPatientsData, setPatientEditArray, billHistoryArray} =
     useContext(UserContext);
-
+  console.log('billHistoryArray : ', billHistoryArray);
   const [opdServices, setOpdServices] = useState([]);
   const [selectedItemCharge, setSelectedItemCharge] = useState('');
 
@@ -113,7 +113,7 @@ const BillAddItems = ({route}) => {
       amount: selectedItemCharge.amount,
       billname: selectedItemCharge.outbillingname,
       outbillingtype: outbillingtype,
-      id: random16DigitNumber,
+      bill_id: billHistoryArray,
     },
   ];
 

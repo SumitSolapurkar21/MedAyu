@@ -30,6 +30,7 @@ const BillEditItems = ({route}) => {
 
   const {
     patientsData,
+
     setUpdateBillRes,
     billHistoryArray,
     patientEditArray,
@@ -37,7 +38,6 @@ const BillEditItems = ({route}) => {
   } = useContext(UserContext);
   const {uhid, patient_id, reception_id, hospital_id} = patientsData;
 
-  console.log('patientEditArray : ', patientEditArray);
   useEffect(() => {
     // storeData();
     try {
@@ -55,6 +55,7 @@ const BillEditItems = ({route}) => {
       })
       .then(res => {
         setBillPatientData(res.data);
+        console.log('data 3 : ', res);
         return res.data;
       });
   };
@@ -62,7 +63,10 @@ const BillEditItems = ({route}) => {
   // const sumOfAmount = editData.reduce((total, item) => total + item.amount, '');
   // console.log('summ  : ', sumOfAmount);
 
-  const billDataArray = billPatientData?.OutBillArrayss.map(res => res);
+  const billDataArray = billPatientData?.OutBillArrayss?.map(res => res) || [];
+
+  let outbillArray2 = [...billDataArray, ...editData];
+  console.log('outBill Array2 : ', outbillArray2);
 
   let totalAmtAfterDiscountPercent =
     billPatientData?.totalamount -
@@ -84,10 +88,9 @@ const BillEditItems = ({route}) => {
       ? totalAmtAfterDiscountPercent
       : totalAmtAfterDiscountRupees) + sumOfAmount;
 
-  const previousbalance = totalBalance + sumOfAmount;
-  const nxtbalance = previousbalance - receivedAmt;
+  let previousbalance = totalBalance + sumOfAmount;
+  let nxtbalance = previousbalance - receivedAmt;
 
-  console.log('Previous Balance + Sum of Amount:', previousbalance);
   // let totalbalanceTemp = totalbalance + TOTAL_AMOUNT;
 
   let today = new Date();
@@ -114,9 +117,9 @@ const BillEditItems = ({route}) => {
           reception_id: reception_id,
           hospital_id: hospital_id,
           invoiceno: billPatientData?.invoiceno,
-          totalamount: billPatientData?.totalamount,
-          totalbalance: totalbalance,
-          OutBillArrayss: billPatientData?.OutBillArrayss,
+          totalamount: TOTAL_AMOUNT,
+          totalbalance: receivedAmt === '' ? previousbalance : nxtbalance,
+          OutBillArrayss: outbillArray2,
           mobilepaymentdate: date,
           mobilediscountpercentage: discountAmt,
           mobilediscountrupees: discountAmtRs,
@@ -125,6 +128,8 @@ const BillEditItems = ({route}) => {
         })
         .then(res => {
           setUpdateBillRes(res.data);
+          // setPatientEditArray([]);
+          // setBillPatientData([]);
           return res.data;
         });
       return billDataRes;
@@ -568,6 +573,8 @@ const BillEditItems = ({route}) => {
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
                     setModalVisible(!modalVisible),
+                      setPatientEditArray([]),
+                      setBillPatientData([]),
                       navigation.navigate('BillHistory', {pat_id: patient_id});
                   }}>
                   <Text style={styles.textStyle}>Ok</Text>

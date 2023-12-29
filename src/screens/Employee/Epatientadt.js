@@ -7,7 +7,7 @@ import {
   Image,
   ToastAndroid,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import vital from '../../images/vital.png';
 import admission from '../../images/admission.png';
 import adt from '../../images/adt.png';
@@ -15,6 +15,7 @@ import adt from '../../images/adt.png';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 import {Button} from 'react-native-paper';
+import Eadtpatientadmitted from './ADT/Eadtpatientadmitted';
 
 const Epatientadt = () => {
   const navigation = useNavigation();
@@ -24,6 +25,7 @@ const Epatientadt = () => {
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
     scannedPatientsData;
   const {_id, hospital_id} = userData.data[0];
+  const [adtListOptions, setAdtListOptions] = useState('');
 
   useEffect(() => {
     setPatientsData({
@@ -34,12 +36,16 @@ const Epatientadt = () => {
     });
   }, []);
 
+  const clickHandler = e => {
+    console.log(e);
+    setAdtListOptions(e);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardSelection}>
         <Button
           mode="contained-tonal"
-          onPress={() => console.log('Pressed')}
+          onPress={e => clickHandler('Admitted', e)}
           style={styles.btn}>
           <Text style={styles.btnTxt}>ADMITED</Text>
         </Button>
@@ -74,7 +80,8 @@ const Epatientadt = () => {
           <Text style={styles.btnTxt}>TRANSFER</Text>
         </Button>
       </View>
-
+      {/* Selected List */}
+      <Eadtpatientadmitted />
       {/* <HomeButton /> */}
     </SafeAreaView>
   );
