@@ -16,6 +16,12 @@ import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 import {Button} from 'react-native-paper';
 import Eadtpatientadmitted from './ADT/Eadtpatientadmitted';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Eadtpatientdischarge from './ADT/Eadtpatientdischarge';
+import Eadtpatientdeath from './ADT/Eadtpatientdeath';
+import Eadtpatientdama from './ADT/Eadtpatientdama';
+import Eadtpatienthome from './ADT/Eadtpatienthome';
+import Eadtpatienttransfer from './ADT/Eadtpatienttransfer';
 
 const Epatientadt = () => {
   const navigation = useNavigation();
@@ -25,7 +31,7 @@ const Epatientadt = () => {
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
     scannedPatientsData;
   const {_id, hospital_id} = userData.data[0];
-  const [adtListOptions, setAdtListOptions] = useState('');
+  const [selectedButton, setSelectedButton] = useState('Admitted');
 
   useEffect(() => {
     setPatientsData({
@@ -36,52 +42,94 @@ const Epatientadt = () => {
     });
   }, []);
 
-  const clickHandler = e => {
-    console.log(e);
-    setAdtListOptions(e);
+  const getButtonStyle = buttonType => {
+    return buttonType === selectedButton ? styles.selectedBtn : styles.btn;
   };
+  const clickHandler = buttonType => {
+    setSelectedButton(buttonType);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardSelection}>
         <Button
           mode="contained-tonal"
-          onPress={e => clickHandler('Admitted', e)}
-          style={styles.btn}>
+          onPress={() => clickHandler('Admitted')}
+          style={[styles.btn, getButtonStyle('Admitted')]}>
           <Text style={styles.btnTxt}>ADMITED</Text>
         </Button>
         <Button
           mode="contained-tonal"
-          onPress={() => console.log('Pressed')}
-          style={styles.btn}>
+          onPress={() => clickHandler('Discharge')}
+          style={[styles.btn, getButtonStyle('Discharge')]}>
           <Text style={styles.btnTxt}>DISCHARGE</Text>
         </Button>
         <Button
           mode="contained-tonal"
-          onPress={() => console.log('Pressed')}
-          style={styles.btn}>
+          onPress={() => clickHandler('Death')}
+          style={[styles.btn, getButtonStyle('Death')]}>
           <Text style={styles.btnTxt}>DEATH</Text>
         </Button>
         <Button
           mode="contained-tonal"
-          onPress={() => console.log('Pressed')}
-          style={styles.btn}>
+          onPress={() => clickHandler('Dama')}
+          style={[styles.btn, getButtonStyle('Dama')]}>
           <Text style={styles.btnTxt}>DAMA</Text>
         </Button>
         <Button
           mode="contained-tonal"
-          onPress={() => console.log('Pressed')}
-          style={styles.btn}>
+          onPress={() => clickHandler('Home')}
+          style={[styles.btn, getButtonStyle('Home')]}>
           <Text style={styles.btnTxt}>HOME</Text>
         </Button>
         <Button
           mode="contained-tonal"
-          onPress={() => console.log('Pressed')}
-          style={styles.btn}>
+          onPress={() => clickHandler('Transfer')}
+          style={[styles.btn, getButtonStyle('Transfer')]}>
           <Text style={styles.btnTxt}>TRANSFER</Text>
         </Button>
       </View>
+      <View style={[styles.legend, {marginBottom: 10}]}>
+        <View style={styles.legend}>
+          <FontAwesome6
+            name="arrow-right-from-bracket"
+            size={18}
+            color="#127359"
+          />
+          <Text>DISCHARGE</Text>
+        </View>
+        <View style={styles.legend}>
+          <FontAwesome6 name="xmark" size={18} color="red" />
+          <Text>DEATH</Text>
+        </View>
+        <View style={styles.legend}>
+          <FontAwesome6 name="cloud-arrow-up" size={18} color="blue" />
+          <Text>DAMA</Text>
+        </View>
+        <View style={styles.legend}>
+          <FontAwesome6 name="cloud-arrow-up" size={18} color="#cc66ff" />
+          <Text>TRANSFER</Text>
+        </View>
+        <View style={styles.legend}>
+          <FontAwesome6 name="house" size={16} color="#127359" />
+          <Text>WENT HOME</Text>
+        </View>
+      </View>
       {/* Selected List */}
-      <Eadtpatientadmitted />
+      {selectedButton === 'Admitted' ? (
+        <Eadtpatientadmitted />
+      ) : selectedButton === 'Discharge' ? (
+        <Eadtpatientdischarge />
+      ) : selectedButton === 'Death' ? (
+        <Eadtpatientdeath />
+      ) : selectedButton === 'Dama' ? (
+        <Eadtpatientdama />
+      ) : selectedButton === 'Home' ? (
+        <Eadtpatienthome />
+      ) : selectedButton === 'Transfer' ? (
+        <Eadtpatienttransfer />
+      ) : null}
+
       {/* <HomeButton /> */}
     </SafeAreaView>
   );
@@ -160,5 +208,20 @@ const styles = StyleSheet.create({
   },
   btnTxt: {
     fontSize: 12,
+  },
+  legend: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+    gap: 6,
+    alignItems: 'center',
+    padding: '0px 20px',
+    marginHorizontal: 14,
+  },
+  btn: {
+    // backgroundColor: 'blue', // Set your default color here
+  },
+  selectedBtn: {
+    backgroundColor: '#3fe067', // Set your selected color here
   },
 });

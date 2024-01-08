@@ -55,18 +55,14 @@ const BillEditItems = ({route}) => {
       })
       .then(res => {
         setBillPatientData(res.data);
-        console.log('data 3 : ', res);
         return res.data;
       });
   };
   const editData = patientEditArray;
-  // const sumOfAmount = editData.reduce((total, item) => total + item.amount, '');
-  // console.log('summ  : ', sumOfAmount);
 
   const billDataArray = billPatientData?.OutBillArrayss?.map(res => res) || [];
 
   let outbillArray2 = [...billDataArray, ...editData];
-  console.log('outBill Array2 : ', outbillArray2);
 
   let totalAmtAfterDiscountPercent =
     billPatientData?.totalamount -

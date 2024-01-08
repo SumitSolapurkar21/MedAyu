@@ -43,7 +43,6 @@ const Eadtpatientadmitted = () => {
           hospital_id: hospital_id,
         })
         .then(res => {
-          console.log(res.data.data);
           if (res.data.data.length > 0) {
             const keys = [
               'NAME',
@@ -156,7 +155,6 @@ const Eadtpatientadmitted = () => {
   const onConfirm = React.useCallback(
     ({hours, minutes}) => {
       setVisibleTime(false);
-      console.log({hours, minutes});
       setSelectedTime({hours, minutes});
     },
     [setVisibleTime],
@@ -165,14 +163,6 @@ const Eadtpatientadmitted = () => {
   const onDismissSingle = React.useCallback(() => {
     setOpen(false);
   }, [setOpen]);
-
-  // const onConfirmSingle = React.useCallback(
-  //   params => {
-  //     setOpen(false);
-  //     setDate(params.date);
-  //   },
-  //   [setOpen, setDate],
-  // );
 
   let today = new Date();
   let currentDate =
@@ -203,7 +193,6 @@ const Eadtpatientadmitted = () => {
           patient_id: editText?.e,
         })
         .then(res => {
-          console.log(res);
           if (res.data.status === true) {
             setShowIndicator(true);
             hideDialog();
@@ -270,32 +259,7 @@ const Eadtpatientadmitted = () => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-      <View style={[styles.legend, {marginBottom: 10}]}>
-        <View style={styles.legend}>
-          <FontAwesome6
-            name="arrow-right-from-bracket"
-            size={18}
-            color="#127359"
-          />
-          <Text>DISCHARGE</Text>
-        </View>
-        <View style={styles.legend}>
-          <FontAwesome6 name="xmark" size={18} color="red" />
-          <Text>DEATH</Text>
-        </View>
-        <View style={styles.legend}>
-          <FontAwesome6 name="cloud-arrow-up" size={18} color="blue" />
-          <Text>DAMA</Text>
-        </View>
-        <View style={styles.legend}>
-          <FontAwesome6 name="cloud-arrow-up" size={18} color="#cc66ff" />
-          <Text>TRANSFER</Text>
-        </View>
-        <View style={styles.legend}>
-          <FontAwesome6 name="house" size={16} color="#127359" />
-          <Text>WENT HOME</Text>
-        </View>
-      </View>
+
       <ScrollView horizontal={true}>
         <View>
           <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>

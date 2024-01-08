@@ -77,7 +77,6 @@ const Epatientconsentform = () => {
     index++;
     // Store the updated index in local storage
     AsyncStorage.setItem('currentIndex', index.toString());
-    console.log('index', index);
 
     const fileData = {
       filetype: sign.split(';')[0], // "image/png"
@@ -86,7 +85,6 @@ const Epatientconsentform = () => {
       filesize: 4127,
       base64: sign.split(',')[1], // "iVBORw0KGgoAAAANSUhEUgAAA64AAA"
     };
-    // console.log('fileData : ', fileData);
 
     try {
       const data = {
@@ -96,7 +94,6 @@ const Epatientconsentform = () => {
         hospital_id: hospital_id,
         patient_id: patient_id,
       };
-      console.log('data ::::: ', data);
       await axios
         .post(`${api.baseurl}/AddMobileIPD`, {
           role: 'Consentform',

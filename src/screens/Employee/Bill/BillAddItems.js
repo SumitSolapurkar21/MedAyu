@@ -21,7 +21,6 @@ const BillAddItems = ({route}) => {
   const [tax, setTax] = useState('');
   const {userData, scannedPatientsData, setPatientEditArray, billHistoryArray} =
     useContext(UserContext);
-  console.log('billHistoryArray : ', billHistoryArray);
   const [opdServices, setOpdServices] = useState([]);
   const [selectedItemCharge, setSelectedItemCharge] = useState('');
 
@@ -133,7 +132,6 @@ const BillAddItems = ({route}) => {
             servicesArray,
           })
           .then(res => {
-            console.log('res : ', res.data);
             res.data.status === true
               ? showDialog()
               : console.warn(`${res.data.message}`);

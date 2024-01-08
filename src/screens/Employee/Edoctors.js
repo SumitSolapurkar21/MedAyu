@@ -33,7 +33,6 @@ const Edoctors = ({route}) => {
           })
           .then(res => {
             const doct_data = res.data.data;
-            console.log('docyor data: ', doct_data);
             setDoctorData(doct_data);
           });
       } catch (error) {

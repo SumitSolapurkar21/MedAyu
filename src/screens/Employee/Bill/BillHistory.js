@@ -70,7 +70,6 @@ const BillHistory = ({route}) => {
         })
         .then(res => {
           setBillPatientHistory(res.data);
-          console.log('get mobile bill hist ; ', res);
           res.data.status === true ? setLoading(false) : null;
           return res.data;
         });
@@ -80,12 +79,6 @@ const BillHistory = ({route}) => {
   };
 
   let historyArray = billPatientHistory?.HistoryArray;
-  console.log('hist array : ', historyArray);
-  // useEffect(() => {
-  //   const bill_history = historyArray?.map(res => {
-  //     return res;
-  //   });
-  // }, [historyArray]);
 
   const handlePdfIconClick = async (patientId, hospitalId, billId) => {
     try {
