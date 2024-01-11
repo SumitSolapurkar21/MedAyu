@@ -6,11 +6,9 @@ import {
   TouchableOpacity,
   Image,
   ToastAndroid,
+  LogBox,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import vital from '../../images/vital.png';
-import admission from '../../images/admission.png';
-import adt from '../../images/adt.png';
 
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
@@ -23,13 +21,15 @@ import Eadtpatientdama from './ADT/Eadtpatientdama';
 import Eadtpatienthome from './ADT/Eadtpatienthome';
 import Eadtpatienttransfer from './ADT/Eadtpatienttransfer';
 
+LogBox.ignoreLogs([
+  'Warning: Failed prop type: Invalid prop `textStyle` of type `array` supplied to `Cell`, expected `object`.',
+]);
+
 const Epatientadt = () => {
-  const navigation = useNavigation();
   const {setPatientsData, scannedPatientsData, userData} =
     useContext(UserContext);
 
-  const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
-    scannedPatientsData;
+  const {uhid, patient_id} = scannedPatientsData;
   const {_id, hospital_id} = userData.data[0];
   const [selectedButton, setSelectedButton] = useState('Admitted');
 

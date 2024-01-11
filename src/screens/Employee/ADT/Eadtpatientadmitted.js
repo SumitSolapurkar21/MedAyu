@@ -20,11 +20,15 @@ import {
   ActivityIndicator,
 } from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
+import DropDown from 'react-native-paper-dropdown';
 
 const Eadtpatientadmitted = () => {
   const {userData} = useContext(UserContext);
   const {_id, hospital_id} = userData?.data[0];
   const [editText, setEditText] = useState('');
+  const [showDropDown, setShowDropDown] = useState(false);
+  const [showDropDown1, setShowDropDown1] = useState(false);
+  const [showDropDown2, setShowDropDown2] = useState(false);
 
   const onClickHandler = (fieldname, e, bed_id) => {
     showDialog();
@@ -148,6 +152,14 @@ const Eadtpatientadmitted = () => {
   const [open, setOpen] = React.useState(false);
   const [showIndicator, setShowIndicator] = React.useState(false);
 
+  // transfer data ....
+  const [hospital, setHospital] = useState([]);
+  const [selectedHospital, setSelectedHospital] = useState('');
+  const [department, setDepartment] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [doctor, setDoctor] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState('');
+
   const onDismiss = React.useCallback(() => {
     setVisibleTime(false);
   }, [setVisibleTime]);
@@ -177,6 +189,12 @@ const Eadtpatientadmitted = () => {
 
   //UpdateMobileDischargeDateTime handler :
   const UpdateMobileDischargeDateTime = async () => {
+    if (editText?.fieldname !== 'Transfer') updateMobileData();
+    else updateTransferData();
+  };
+
+  //update admitted, home,dama,discharge.....
+  const updateMobileData = async () => {
     try {
       await axios
         .post(`${api.baseurl}/UpdateMobileDischargeDateTime`, {
@@ -214,6 +232,118 @@ const Eadtpatientadmitted = () => {
     }
   };
 
+  //update transfer ......
+
+  const updateTransferData = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/AddTransferDateTimeMobile`, {
+          reception_id: _id,
+          patient_id: editText?.e,
+          hospital_id: selectedHospital,
+          department_id: selectedDepartment,
+          doctor_id: selectedDoctor,
+          actionsymptoms: text,
+          patient_status: editText?.fieldname,
+          actiondate: currentDate,
+          actiontime:
+            selectedTime === null
+              ? currentTime
+              : `${selectedTime?.hours}.${selectedTime?.minutes}`,
+        })
+        .then(res => {
+          // console.log('update transfer : ', res);
+          if (res.data.status === true) {
+            setShowIndicator(true);
+            hideDialog();
+            setText('');
+            setTimeout(() => {
+              setShowIndicator(false);
+            }, 5000);
+            admittedList();
+          } else {
+            ToastAndroid.show(
+              `${res.data.message}`,
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM,
+            );
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // fetch hospital ....
+  useEffect(() => {
+    const fetchHospital = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/FetchHospitalForTransfer`)
+          .then(res => {
+            const hospitalObj = res.data.data.map((res, index) => {
+              return {
+                key: index, // Adding the key prop
+                label: res.hospname,
+                value: res.hospital_id,
+              };
+            });
+            setHospital(hospitalObj);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchHospital();
+  }, []);
+
+  // fetch department ....
+  useEffect(() => {
+    const fetchDepartment = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/ViewDepartment_acc_Hospital`, {
+            hospital_id: selectedHospital,
+          })
+          .then(res => {
+            const departObj = res.data.data.map((res, index) => {
+              return {
+                key: index, // Adding the key prop
+                label: res.deptname,
+                value: res.department_id,
+              };
+            });
+            setDepartment(departObj);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchDepartment();
+  }, [selectedHospital]);
+  // fetch doctor ....
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/ViewDoctor_acc_Dept`, {
+            department_id: selectedDepartment,
+          })
+          .then(res => {
+            const departObj = res.data.data.map((res, index) => {
+              return {
+                key: index, // Adding the key prop
+                label: res.doctorname,
+                value: res.doctor_id,
+              };
+            });
+            setDoctor(departObj);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchDoctor();
+  }, [selectedDepartment]);
   return (
     <View style={styles.container}>
       {showIndicator && (
@@ -240,10 +370,60 @@ const Eadtpatientadmitted = () => {
                     : `${selectedTime?.hours}.${selectedTime?.minutes}`}
                 </Text>
               </Text>
+
               <TouchableOpacity onPress={() => setVisibleTime(!visibleTime)}>
                 <FontAwesome6 name="clock" size={20} color="red" />
               </TouchableOpacity>
             </View>
+            {editText?.fieldname === 'Transfer' && (
+              <View>
+                <View style={styles.dropdown}>
+                  <DropDown
+                    label={'Hospital'}
+                    mode={'outlined'}
+                    visible={showDropDown}
+                    showDropDown={() => setShowDropDown(true)}
+                    onDismiss={() => setShowDropDown(false)}
+                    value={selectedHospital}
+                    setValue={setSelectedHospital}
+                    list={hospital.map(res => ({
+                      label: res.label,
+                      value: res.value,
+                    }))}
+                  />
+                </View>
+                <View style={styles.dropdown}>
+                  <DropDown
+                    label={'Department'}
+                    mode={'outlined'}
+                    visible={showDropDown1}
+                    showDropDown={() => setShowDropDown1(true)}
+                    onDismiss={() => setShowDropDown1(false)}
+                    value={selectedDepartment}
+                    setValue={setSelectedDepartment}
+                    list={department.map(res => ({
+                      label: res.label,
+                      value: res.value,
+                    }))}
+                  />
+                </View>
+                <View style={styles.dropdown}>
+                  <DropDown
+                    label={'Doctor'}
+                    mode={'outlined'}
+                    visible={showDropDown2}
+                    showDropDown={() => setShowDropDown2(true)}
+                    onDismiss={() => setShowDropDown2(false)}
+                    value={selectedDoctor}
+                    setValue={setSelectedDoctor}
+                    list={doctor.map(res => ({
+                      label: res.label,
+                      value: res.value,
+                    }))}
+                  />
+                </View>
+              </View>
+            )}
             <TextInput label="Notes" value={text} onChangeText={onChangeText} />
             <TimePickerModal
               visible={visibleTime}
@@ -328,5 +508,8 @@ const styles = StyleSheet.create({
     top: '50%',
     left: '50%',
     zIndex: 2,
+  },
+  dropdown: {
+    marginBottom: 4,
   },
 });

@@ -53,6 +53,7 @@ export default function Scanner({route}) {
 
   const handleScannerSuccess = e => {
     const data = e.data.split(',');
+    console.log('data : ', data);
     uhid = data[0];
     appoint_id = data[1];
 
@@ -65,12 +66,13 @@ export default function Scanner({route}) {
         await axios
           .post(`${api.baseurl}/AddMobileAttendence`, {
             reception_id: _id,
-            hospital_id: hospital_id,
+            hospital_id: appoint_id,
             login_time: `${hours}.${minutes}`,
             login_date: date,
             location: 'Nagpur',
           })
           .then(response => {
+            console.log('res : ', response);
             setMessage(response.data.message);
             return response.data;
           });
@@ -97,7 +99,9 @@ export default function Scanner({route}) {
         })
         .then(res => {
           setScannedPatientsData(res.data);
-          res.data === 'true' ? navigation.navigate('EpatientDetails') : null;
+          if (res.data.status === true) navigation.navigate('EpatientDetails');
+          else console.warn(res.data.message);
+
           return res.data;
         });
     } catch (error) {
@@ -145,23 +149,25 @@ export default function Scanner({route}) {
           topViewStyle={{marginVertical: 30}}
           bottomViewStyle={{marginVertical: 20}}
         />
-        <View style={styles.bottomContent}>
-          <Text style={styles.bottomTxt}>- OR -</Text>
-          <TextInput
-            style={styles.mobileInput}
-            placeholder="Enter Mobile Number or UHID No"
-            value={searchInput}
-            onChangeText={text => setSearchInput(text)}
-            autoComplete="off"
-            textAlign="center"
-            placeholderTextColor="black"
-          />
-          <TouchableOpacity
-            style={styles.buttonTouchable}
-            onPress={patientDetailBySearchInput}>
-            <Text style={styles.buttonText}>Search</Text>
-          </TouchableOpacity>
-        </View>
+        {value == 1 && (
+          <View style={styles.bottomContent}>
+            <Text style={styles.bottomTxt}>- OR -</Text>
+            <TextInput
+              style={styles.mobileInput}
+              placeholder="Enter Mobile Number or UHID No"
+              value={searchInput}
+              onChangeText={text => setSearchInput(text)}
+              autoComplete="off"
+              textAlign="center"
+              placeholderTextColor="black"
+            />
+            <TouchableOpacity
+              style={styles.buttonTouchable}
+              onPress={patientDetailBySearchInput}>
+              <Text style={styles.buttonText}>Search</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {msgPopup && (
           <View style={styles.modalContainer}>
