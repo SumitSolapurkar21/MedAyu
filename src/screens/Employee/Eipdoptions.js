@@ -57,6 +57,12 @@ const Eipdoptions = () => {
           <Image source={adt} alt="admission" style={styles.img} />
           <Text style={styles.uName}>A-D-T</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('Eipdbeds')}>
+          <Image source={adt} alt="admission" style={styles.img} />
+          <Text style={styles.uName}>Beds</Text>
+        </TouchableOpacity>
       </View>
 
       {/* <HomeButton /> */}
