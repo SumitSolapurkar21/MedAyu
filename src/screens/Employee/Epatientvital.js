@@ -58,6 +58,9 @@ const Epatientvital = () => {
     p_systolicbp: '',
     p_diastolicbp: '',
     p_rsprate: '',
+    motorResponse: '',
+    verbalResponse: '',
+    eyeopening: '',
   });
   const [showEyeopening, setshowEyeopening] = useState(false);
   const [showverbalReaponse, setshowverbalReaponse] = useState(false);
@@ -96,6 +99,24 @@ const Epatientvital = () => {
       errors.p_rsprate = 'Respiratory Rate Not in Range';
       isValidInput = false;
     }
+    if (!validateInputRange(eyeopening, 1, 4)) {
+      errors.eyeopening = 'EyeOpening Range 1-4';
+      isValidInput = false;
+    } else {
+      errors.eyeopening = ''; // Clear error if input is in range
+    }
+    if (!validateInputRange(verbalResponse, 1, 5)) {
+      errors.verbalResponse = 'Verbal Range 1-5';
+      isValidInput = false;
+    } else {
+      errors.verbalResponse = ''; // Clear error if input is in range
+    }
+    if (!validateInputRange(motorResponse, 1, 6)) {
+      errors.motorResponse = 'Motor Range 1-6';
+      isValidInput = false;
+    } else {
+      errors.motorResponse = ''; // Clear error if input is in range
+    }
 
     if (isValidInput) {
       try {
@@ -110,6 +131,9 @@ const Epatientvital = () => {
             p_spo2: p_spo2,
             p_pulse: p_pulse,
             p_temp: p_temp,
+            eyeopening: eyeopening,
+            motorResponse: motorResponse,
+            verbalResponse: verbalResponse,
           })
           .then(res => {
             console.log(res.data);
@@ -431,8 +455,22 @@ const Epatientvital = () => {
                 style={styles.textinput}
                 value={eyeopening}
                 keyboardType="numeric"
-                onChangeText={text => seteyeopening(text)}
+                onChangeText={text => {
+                  seteyeopening(text);
+                  setValidationErrors(prevState => ({
+                    ...prevState,
+                    eyeopening: validateInputRange(text, 1, 4)
+                      ? ''
+                      : 'Eye Opening range 1-4',
+                  }));
+                }}
+                error={!!validationErrors.eyeopening}
               />
+              {validationErrors.eyeopening && (
+                <Text style={styles.errorText}>
+                  {validationErrors.eyeopening}
+                </Text>
+              )}
             </View>
             <View style={styles.txtInput}>
               <Text style={styles.tableWrapperTXT}>Verbal Resp.</Text>
@@ -440,8 +478,22 @@ const Epatientvital = () => {
                 style={styles.textinput}
                 value={verbalResponse}
                 keyboardType="numeric"
-                onChangeText={text => setverbalResponse(text)}
+                onChangeText={text => {
+                  setverbalResponse(text);
+                  setValidationErrors(prevState => ({
+                    ...prevState,
+                    verbalResponse: validateInputRange(text, 1, 5)
+                      ? ''
+                      : 'Verbal range 1-5',
+                  }));
+                }}
+                error={!!validationErrors.verbalResponse}
               />
+              {validationErrors.verbalResponse && (
+                <Text style={styles.errorText}>
+                  {validationErrors.verbalResponse}
+                </Text>
+              )}
             </View>
             <View style={styles.txtInput}>
               <Text style={styles.tableWrapperTXT}>Motor Resp.</Text>
@@ -449,8 +501,22 @@ const Epatientvital = () => {
                 style={styles.textinput}
                 value={motorResponse}
                 keyboardType="numeric"
-                onChangeText={text => setmotorResponse(text)}
+                onChangeText={text => {
+                  setmotorResponse(text);
+                  setValidationErrors(prevState => ({
+                    ...prevState,
+                    motorResponse: validateInputRange(text, 1, 6)
+                      ? ''
+                      : 'Motor range 1-6',
+                  }));
+                }}
+                error={!!validationErrors.motorResponse}
               />
+              {validationErrors.motorResponse && (
+                <Text style={styles.errorText}>
+                  {validationErrors.motorResponse}
+                </Text>
+              )}
             </View>
           </View>
           <View style={styles.tableWrapper3}>
@@ -603,8 +669,8 @@ const styles = StyleSheet.create({
   },
   grpBtn: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    gap: 10,
+    justifyContent: 'center',
+    gap: 2,
   },
   img: {
     resizeMode: 'contain',

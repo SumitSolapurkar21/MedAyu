@@ -24,7 +24,7 @@ const EpatientDetails = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      navigation.navigate('Ehome');
       return true;
     };
 
