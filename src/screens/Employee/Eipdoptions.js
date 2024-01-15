@@ -14,9 +14,24 @@ import adt from '../../images/adt.png';
 
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
+import {BackHandler} from 'react-native';
 
 const Eipdoptions = () => {
   const navigation = useNavigation();
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const {setPatientsData, scannedPatientsData, userData} =
     useContext(UserContext);
 

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   ToastAndroid,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
 import doctorImg from '../../images/doctor.png';
@@ -20,6 +21,20 @@ import HomeButton from '../../components/HomeButton/HomeButton';
 
 const EpatientDetails = () => {
   const navigation = useNavigation();
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const {setPatientsData, scannedPatientsData, userData} =
     useContext(UserContext);
 

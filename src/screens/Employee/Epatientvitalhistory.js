@@ -1,11 +1,27 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, BackHandler} from 'react-native';
 import {Table, Row, Rows} from 'react-native-table-component';
 import axios from 'axios';
 import api from '../../../api.json';
 import UserContext from '../../components/Context/Context';
+import {useNavigation} from '@react-navigation/native';
 
 const Epatientvitalhistory = () => {
+  const navigation = useNavigation();
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const {scannedPatientsData, userData} = useContext(UserContext);
   const {_id, hospital_id} = userData?.data[0];
   const {patient_id} = scannedPatientsData;

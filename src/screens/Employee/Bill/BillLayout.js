@@ -7,6 +7,7 @@ import {
   Modal,
   ScrollView,
   Pressable,
+  BackHandler,
 } from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -31,7 +32,20 @@ const BillLayout = () => {
 
   const {patientsData} = useContext(UserContext);
   const {uhid, patient_id, reception_id, hospital_id} = patientsData;
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   useEffect(() => {
     try {
       patientBillData();

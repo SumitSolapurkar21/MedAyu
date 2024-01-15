@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  BackHandler,
 } from 'react-native';
 import medayuLogo from '../../images/medayu.jpeg';
 
@@ -23,6 +24,20 @@ import api from '../../../api.json';
 import HomeButton from '../../components/HomeButton/HomeButton';
 
 const Eappointment = ({route}) => {
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const {scannedPatientsData, userData} = useContext(UserContext);
   const [backdropOpacity, setBackdropOpacity] = useState(0);
   const navigation = useNavigation();

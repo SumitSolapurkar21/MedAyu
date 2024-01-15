@@ -6,7 +6,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, TextInput, Dialog, Portal} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
@@ -21,9 +21,25 @@ import rr from '../../images/rr.png';
 import pulse from '../../images/pulse.png';
 import sysbp from '../../images/sysbp.png';
 import diabp from '../../images/diabp.png';
+import DropDown from 'react-native-paper-dropdown';
+import {BackHandler} from 'react-native';
 
 const Epatientvital = () => {
   const navigation = useNavigation();
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const [p_temp, setP_Temp] = useState('');
   const [p_pulse, setP_Pulse] = useState('');
   const [p_spo2, setP_SPO2] = useState('');
@@ -43,7 +59,9 @@ const Epatientvital = () => {
     p_diastolicbp: '',
     p_rsprate: '',
   });
-
+  const [showEyeopening, setshowEyeopening] = useState(false);
+  const [showverbalReaponse, setshowverbalReaponse] = useState(false);
+  const [showMotorResponse, setshowMotorResponse] = useState(false);
   // Input handler
   const addVitalsData = async () => {
     const errors = {};
@@ -132,6 +150,99 @@ const Epatientvital = () => {
     return !isNaN(numericValue) && numericValue >= min && numericValue <= max;
   };
 
+  let relation = [
+    {
+      label: 'Spontaneous',
+      value: '4',
+    },
+    {
+      label: 'To sound',
+      value: '3',
+    },
+    {
+      label: 'To pressure',
+      value: '2',
+    },
+    {
+      label: 'None',
+      value: '1',
+    },
+  ];
+  let relationV = [
+    {
+      label: 'Orientated',
+      value: '5',
+    },
+    {
+      label: 'Confused',
+      value: '4',
+    },
+    {
+      label: 'Words',
+      value: '3',
+    },
+    {
+      label: 'Sounds',
+      value: '2',
+    },
+    {
+      label: 'None',
+      value: '1',
+    },
+  ];
+  let relationM = [
+    {
+      label: 'Obey commands',
+      value: '6',
+    },
+    {
+      label: 'Localising',
+      value: '5',
+    },
+    {
+      label: 'Normal flexion',
+      value: '4',
+    },
+    {
+      label: 'Abnormal flexion',
+      value: '3',
+    },
+    {
+      label: 'Extension',
+      value: '2',
+    },
+    {
+      label: 'None',
+      value: '1',
+    },
+  ];
+  const [eyeopening, seteyeopening] = useState('');
+  const [verbalResponse, setverbalResponse] = useState('');
+  const [motorResponse, setmotorResponse] = useState('');
+  const [mildColor, setmildColor] = useState('');
+  const [moderateColor, setmoderateColor] = useState('');
+  const [severeColor, setsevereColor] = useState('');
+
+  useEffect(() => {
+    const scalecount =
+      parseInt(eyeopening) + parseInt(verbalResponse) + parseInt(motorResponse);
+
+    if (scalecount >= 13) {
+      setmildColor('green');
+      setmoderateColor('white');
+      setsevereColor('white');
+    } else if (scalecount >= 9 && scalecount <= 12) {
+      setmoderateColor('yellow');
+      setmildColor('white');
+      setsevereColor('white');
+    } else if (scalecount >= 3 && scalecount <= 8) {
+      setsevereColor('red');
+      setmoderateColor('white');
+      setmildColor('white');
+    } else {
+      null;
+    }
+  }, [eyeopening, verbalResponse, motorResponse]);
   return (
     <>
       <Portal>
@@ -312,6 +423,129 @@ const Epatientvital = () => {
               <Text style={styles.errorText}>{validationErrors.p_rsprate}</Text>
             )}
           </View>
+          <Text style={styles.tableWrapper2TXT}>Glasgow Coma Scale</Text>
+          <View style={styles.tableWrapper2}>
+            <View style={styles.txtInput}>
+              <Text style={styles.tableWrapperTXT}>Eye Opening</Text>
+              <TextInput
+                style={styles.textinput}
+                value={eyeopening}
+                keyboardType="numeric"
+                onChangeText={text => seteyeopening(text)}
+              />
+            </View>
+            <View style={styles.txtInput}>
+              <Text style={styles.tableWrapperTXT}>Verbal Resp.</Text>
+              <TextInput
+                style={styles.textinput}
+                value={verbalResponse}
+                keyboardType="numeric"
+                onChangeText={text => setverbalResponse(text)}
+              />
+            </View>
+            <View style={styles.txtInput}>
+              <Text style={styles.tableWrapperTXT}>Motor Resp.</Text>
+              <TextInput
+                style={styles.textinput}
+                value={motorResponse}
+                keyboardType="numeric"
+                onChangeText={text => setmotorResponse(text)}
+              />
+            </View>
+          </View>
+          <View style={styles.tableWrapper3}>
+            <View style={styles.formGroup}>
+              <Text style={styles.tableWrapper3TXT}>Eye Opening</Text>
+              <View style={{width: '60%'}}>
+                <DropDown
+                  mode={'outlined'}
+                  dropDownStyle={{backgroundColor: 'white'}}
+                  visible={showEyeopening}
+                  showDropDown={() => setshowEyeopening(true)}
+                  onDismiss={() => setshowEyeopening(false)}
+                  value={eyeopening}
+                  setValue={seteyeopening}
+                  list={relation?.map(res => ({
+                    label: res.label,
+                    value: res.value,
+                  }))}
+                />
+              </View>
+            </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.tableWrapper3TXT}>Verbal Response</Text>
+              <View style={{width: '60%'}}>
+                <DropDown
+                  mode={'outlined'}
+                  visible={showverbalReaponse}
+                  style={styles.dropdown}
+                  showDropDown={() => setshowverbalReaponse(true)}
+                  onDismiss={() => setshowverbalReaponse(false)}
+                  value={verbalResponse}
+                  setValue={setverbalResponse}
+                  list={relationV?.map(res => ({
+                    label: res.label,
+                    value: res.value,
+                  }))}
+                />
+              </View>
+            </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.tableWrapper3TXT}>Motor Response</Text>
+              <View style={{width: '60%'}}>
+                <DropDown
+                  mode={'outlined'}
+                  visible={showMotorResponse}
+                  style={styles.dropdown}
+                  showDropDown={() => setshowMotorResponse(true)}
+                  onDismiss={() => setshowMotorResponse(false)}
+                  value={motorResponse}
+                  setValue={setmotorResponse}
+                  list={relationM?.map(res => ({
+                    label: res.label,
+                    value: res.value,
+                  }))}
+                />
+                <View style={styles.spacerStyle} />
+              </View>
+            </View>
+          </View>
+          <Text style={styles.tableWrapper2TXT}>Glasgow Coma Scale Score</Text>
+          <View style={styles.tableWrapper4}>
+            <View
+              key="Mild"
+              style={[
+                styles.gcsStatus,
+                {
+                  backgroundColor: mildColor,
+                },
+              ]}>
+              <Text style={styles.gcsStatusTxt}>Mild</Text>
+              <Text style={styles.gcsStatusTxt}>13-15</Text>
+            </View>
+            <View
+              key="Moderate"
+              style={[
+                styles.gcsStatus,
+                {
+                  backgroundColor: moderateColor,
+                },
+              ]}>
+              <Text style={styles.gcsStatusTxt}>Moderate</Text>
+              <Text style={styles.gcsStatusTxt}>9-12</Text>
+            </View>
+            <View
+              key="Severe"
+              style={[
+                styles.gcsStatus,
+                {
+                  backgroundColor: severeColor,
+                },
+              ]}>
+              <Text style={styles.gcsStatusTxt}>Severe</Text>
+              <Text style={styles.gcsStatusTxt}>3-8</Text>
+            </View>
+          </View>
         </ScrollView>
         <View style={styles.grpBtn}>
           <Button
@@ -381,13 +615,73 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  // errorInput: {
-  //   borderColor: 'red',
-  //   borderWidth: 1,
-  // },
+
   errorText: {
     color: 'red',
     fontSize: 12,
     textAlign: 'right',
+  },
+  tableWrapper2: {
+    marginVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  txtInput: {
+    flexDirection: 'column',
+    gap: 10,
+    alignItems: 'center',
+  },
+  tableWrapperTXT: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'black',
+  },
+  tableWrapper2TXT: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#3888ff',
+    marginVertical: 10,
+    textAlign: 'center',
+  },
+  tableWrapper3: {
+    marginVertical: 10,
+    marginHorizontal: 16,
+  },
+  tableWrapper3TXT: {
+    fontWeight: '600',
+    color: 'black',
+  },
+  formGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+  },
+  textinput: {
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 5,
+    backgroundColor: 'white',
+  },
+  tableWrapper4: {
+    marginVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginHorizontal: 10,
+    marginBottom: 10,
+  },
+  gcsStatus: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    borderWidth: 0.9,
+    padding: 4,
+    borderColor: '#f0f2f0',
+    borderRadius: 16,
+    width: '30%',
+  },
+  gcsStatusTxt: {
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

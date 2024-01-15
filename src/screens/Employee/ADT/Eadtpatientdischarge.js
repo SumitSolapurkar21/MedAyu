@@ -20,12 +20,29 @@ import {
   ActivityIndicator,
 } from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
+import {useNavigation} from '@react-navigation/native';
+import {BackHandler} from 'react-native';
 
 const Eadtpatientdischarge = ({selectedStatus}) => {
   const {userData} = useContext(UserContext);
   const {_id, hospital_id} = userData?.data[0];
   const [editText, setEditText] = useState('');
+  const navigation = useNavigation();
 
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const onClickHandler = (fieldname, e, bed_id) => {
     showDialog();
     setEditText({e: e, fieldname: fieldname, bed_id: bed_id});

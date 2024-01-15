@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import UserContext from '../../components/Context/Context';
@@ -22,6 +23,20 @@ const Edoctors = ({route}) => {
   const {department_id, patient_id} = route.params;
   const navigation = useNavigation();
   const [doctorData, setDoctorData] = useState([]);
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   // Get Doctor Data ...
   useEffect(() => {

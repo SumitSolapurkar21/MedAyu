@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -36,6 +37,20 @@ const EipdregistrationEmergencyContact = () => {
   const navigation = useNavigation();
   const [p_relation, setP_relation] = useState('');
   const [showRelation, setShowRelation] = useState(false);
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   //relation....
   let relation = [
     {

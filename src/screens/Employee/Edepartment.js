@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import UserContext from '../../components/Context/Context';
@@ -18,6 +19,20 @@ import ayu from '../../images/ayurveda.png';
 import HomeButton from '../../components/HomeButton/HomeButton';
 
 const Edepartment = ({route}) => {
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const {userData, scannedPatientsData} = useContext(UserContext);
   const {patient_id} = scannedPatientsData;
   const navigation = useNavigation();

@@ -6,8 +6,9 @@ import {
   View,
   Image,
   TextInput,
+  BackHandler,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../Context/Context';
 
@@ -35,6 +36,30 @@ export default function Scanner({route}) {
 
   const {_id, hospital_id} = userData.data[0];
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  useEffect(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   //Date Code in YYYY-MM-DD
   let today = new Date();
 
@@ -50,14 +75,25 @@ export default function Scanner({route}) {
 
   let uhid;
   let appoint_id;
-
+  useEffect(() => {
+    if (uhid != '') handleScannerSuccess();
+  }, [uhid]);
   const handleScannerSuccess = e => {
-    const data = e.data.split(',');
-    console.log('data : ', data);
-    uhid = data[0];
-    appoint_id = data[1];
+    if (e) {
+      const data = e.data.split(',');
+      console.log('data : ', data);
+      uhid = data[0];
+      appoint_id = data[1];
 
-    handleNavigation();
+      handleNavigation();
+      // Clear the variables after handling the scan
+      uhid = '';
+      appoint_id = '';
+
+      setScannedPatientsData([]);
+    } else {
+      return;
+    }
   };
 
   const handleNavigation = async () => {
@@ -99,9 +135,13 @@ export default function Scanner({route}) {
         })
         .then(res => {
           setScannedPatientsData(res.data);
-          if (res.data.status === true) navigation.navigate('EpatientDetails');
-          else console.warn(res.data.message);
-
+          if (res.data.status === true) {
+            navigation.navigate('EpatientDetails');
+            uhid = '';
+            appoint_id = '';
+          } else {
+            console.warn(res.data.message);
+          }
           return res.data;
         });
     } catch (error) {
@@ -123,9 +163,12 @@ export default function Scanner({route}) {
           })
           .then(res => {
             setScannedPatientsData(res.data);
-            res.data.status === true
-              ? navigation.navigate('EpatientDetails')
-              : console.warn(`Data Not Available`);
+            if (res.data.status === true) {
+              navigation.navigate('EpatientDetails');
+              setSearchInput('');
+            } else {
+              console.warn(`Data Not Available`);
+            }
             return res.data;
           });
       else return console.warn('Mobile Number or UHID Required!');
@@ -136,70 +179,72 @@ export default function Scanner({route}) {
 
   return (
     <>
-      <View style={styles.container}>
-        <QRCodeScanner
-          onRead={handleScannerSuccess}
-          flashMode={RNCamera.Constants.FlashMode.off}
-          showMarker={true}
-          topContent={
-            <Text style={styles.centerText}>
-              <Text style={styles.textBold}>QR Code Scanner</Text>
-            </Text>
-          }
-          topViewStyle={{marginVertical: 30}}
-          bottomViewStyle={{marginVertical: 20}}
-        />
-        {value == 1 && (
-          <View style={styles.bottomContent}>
-            <Text style={styles.bottomTxt}>- OR -</Text>
-            <TextInput
-              style={styles.mobileInput}
-              placeholder="Enter Mobile Number or UHID No"
-              value={searchInput}
-              onChangeText={text => setSearchInput(text)}
-              autoComplete="off"
-              textAlign="center"
-              placeholderTextColor="black"
-            />
-            <TouchableOpacity
-              style={styles.buttonTouchable}
-              onPress={patientDetailBySearchInput}>
-              <Text style={styles.buttonText}>Search</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+      {!refreshing && (
+        <View style={styles.container}>
+          <QRCodeScanner
+            onRead={handleScannerSuccess}
+            flashMode={RNCamera.Constants.FlashMode.off}
+            showMarker={true}
+            topContent={
+              <Text style={styles.centerText}>
+                <Text style={styles.textBold}>QR Code Scanner</Text>
+              </Text>
+            }
+            topViewStyle={{marginVertical: 30}}
+            bottomViewStyle={{marginVertical: 20}}
+          />
+          {value == 1 && (
+            <View style={styles.bottomContent}>
+              <Text style={styles.bottomTxt}>- OR -</Text>
+              <TextInput
+                style={styles.mobileInput}
+                placeholder="Enter Mobile Number or UHID No"
+                value={searchInput}
+                onChangeText={text => setSearchInput(text)}
+                autoComplete="off"
+                textAlign="center"
+                placeholderTextColor="black"
+              />
+              <TouchableOpacity
+                style={styles.buttonTouchable}
+                onPress={patientDetailBySearchInput}>
+                <Text style={styles.buttonText}>Search</Text>
+              </TouchableOpacity>
+            </View>
+          )}
 
-        {msgPopup && (
-          <View style={styles.modalContainer}>
-            <View style={styles.modal}>
-              <View style={styles.modalBody}>
-                <Image
-                  source={successIcon}
-                  alt="successIcon"
-                  style={styles.img}
-                />
-                <Text style={styles.modalText}>{message}</Text>
-                <TouchableOpacity
-                  style={styles.modalBtn}
-                  onPress={() => {
-                    setMsgPopup(false);
-                    navigation.navigate('Ehome');
-                  }}>
-                  <Text style={styles.modalBtnText}>Ok</Text>
-                </TouchableOpacity>
+          {msgPopup && (
+            <View style={styles.modalContainer}>
+              <View style={styles.modal}>
+                <View style={styles.modalBody}>
+                  <Image
+                    source={successIcon}
+                    alt="successIcon"
+                    style={styles.img}
+                  />
+                  <Text style={styles.modalText}>{message}</Text>
+                  <TouchableOpacity
+                    style={styles.modalBtn}
+                    onPress={() => {
+                      setMsgPopup(false);
+                      navigation.navigate('Ehome');
+                    }}>
+                    <Text style={styles.modalBtnText}>Ok</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        )}
-        {msgPopup && (
-          <View
-            style={[
-              styles.backdrop,
-              {backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`},
-            ]}
-          />
-        )}
-      </View>
+          )}
+          {msgPopup && (
+            <View
+              style={[
+                styles.backdrop,
+                {backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`},
+              ]}
+            />
+          )}
+        </View>
+      )}
     </>
   );
 }

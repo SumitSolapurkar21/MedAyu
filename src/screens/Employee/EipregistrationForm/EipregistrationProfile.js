@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -44,7 +45,20 @@ const EipregistrationProfile = () => {
 
   const [cityData, setCityData] = useState([]);
   const [datePicker, setDatePicker] = useState(false);
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   // current data ...
   let today = new Date();
   // let currentDate =

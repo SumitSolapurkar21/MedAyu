@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -21,6 +22,20 @@ import axios from 'axios';
 
 const EpatientRegistration = () => {
   const navigation = useNavigation();
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const {userData} = useContext(UserContext);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);

@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -26,7 +27,20 @@ const EipdregistrationIdentification = () => {
   const [showPhotoid_dd, setPhotoid_dd] = useState(false);
   const [p_photoid, setP_photoid] = useState('');
   const [authority, setAuthority] = useState(null);
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   //photo id type array .....
   let p_photoid_type = [
     {

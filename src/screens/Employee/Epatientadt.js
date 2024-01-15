@@ -7,6 +7,7 @@ import {
   Image,
   ToastAndroid,
   LogBox,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 
@@ -26,13 +27,27 @@ LogBox.ignoreLogs([
 ]);
 
 const Epatientadt = () => {
-
+  const navigation = useNavigation();
   const {setPatientsData, scannedPatientsData, userData} =
     useContext(UserContext);
 
   const {uhid, patient_id} = scannedPatientsData;
   const {_id, hospital_id} = userData.data[0];
   const [selectedButton, setSelectedButton] = useState('Admitted');
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   useEffect(() => {
     setPatientsData({

@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {BackHandler, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -8,43 +8,35 @@ import {Button} from 'react-native-paper';
 import UserContext from '../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../api.json';
+import {useNavigation} from '@react-navigation/native';
 
 const Eipdbeds = () => {
   const {userData} = useContext(UserContext);
   const {_id, hospital_id} = userData?.data[0];
+  const navigation = useNavigation();
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   //table content ....
   const [tableData, setTableData] = useState([]);
-  const [tableHead, setTableHead] = useState([]);
   const [widthArr, setWidthArr] = useState([]);
+  const [selectedBed, setSelectedBed] = useState(null);
+  const [isClicked, setIsClicked] = useState(false);
 
-  const renderBedIcons = () => {
-    // Your logic for rendering bed icons goes here
-    return [
-      <View style={styles.bedSelection} key="bedIcons">
-        <TouchableOpacity
-          key={1}
-          style={{marginHorizontal: 6}}
-          onPress={() => console.log('pressed')}>
-          <FontAwesome6 name="bed" size={22} color="#127359" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          key={2}
-          style={{marginHorizontal: 6}}
-          onPress={() => console.log('pressed')}>
-          <FontAwesome6 name="bed" size={22} color="#127359" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          key={3}
-          style={{marginHorizontal: 6}}
-          onPress={() => console.log('pressed')}>
-          <FontAwesome6 name="bed" size={22} color="#127359" />
-        </TouchableOpacity>
-      </View>,
-    ];
-  };
   const keys = ['Category', 'Total Bed Status'];
-  const tableValues = [['General Room', renderBedIcons()]];
 
+  // to set width of table ......
   useEffect(() => {
     setWidthArr(Array(keys.length).fill(170));
   }, []);
@@ -53,6 +45,7 @@ const Eipdbeds = () => {
     CheckRoomBedStatusMobile();
   }, [_id, hospital_id]);
 
+  // bed status api ......
   const CheckRoomBedStatusMobile = async () => {
     await axios
       .post(`${api.baseurl}/CheckRoomBedStatusMobile`, {
@@ -60,9 +53,60 @@ const Eipdbeds = () => {
         hospital_id: hospital_id,
       })
       .then(res => {
-        console.log('bed_status res : ', JSON.stringify(res.data.data));
+        const bedData = res.data.data.map(item => [
+          item.roomname,
+          renderBedIcons(item.roomDataArray),
+        ]);
+        setTableData(bedData);
       });
   };
+
+  //bed status color .......
+  const bedStatusColors = {
+    EMPTY: '#018433',
+    OCCUPIED: '#Fe0bd1',
+    BOOKED: 'red',
+    MAINTAINCE: '#1a0099',
+    DIRTY: '#fef616',
+  };
+
+  //bed status wise color .....
+  const getBedColor = bedStatus => bedStatusColors[bedStatus];
+
+  //on click bed status data ......
+  const onClickStatus = res => {
+    setSelectedBed(res);
+    setIsClicked(!isClicked);
+  };
+
+  //render icons .....
+  const renderBedIcons = bedDataArray => {
+    return bedDataArray.map(res => (
+      <View style={styles.bedSelection} key={res.bed_id}>
+        {res.bed_status === 'EMPTY' ? (
+          <TouchableOpacity
+            style={{marginLeft: 6}}
+            key={res.bed_id}
+            onPress={() => onClickStatus(res)}>
+            <FontAwesome6
+              name="bed"
+              size={22}
+              color={getBedColor(res.bed_status)}
+            />
+          </TouchableOpacity>
+        ) : (
+          <View style={{marginLeft: 6}}>
+            <FontAwesome6
+              name="bed"
+              size={22}
+              color={getBedColor(res.bed_status)}
+            />
+          </View>
+        )}
+      </View>
+    ));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.bedLegend}>
@@ -107,7 +151,7 @@ const Eipdbeds = () => {
             <ScrollView style={styles.dataWrapper}>
               <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
                 <Rows
-                  data={tableValues}
+                  data={tableData}
                   widthArr={widthArr}
                   style={styles.row}
                   textStyle={styles.text}
@@ -160,5 +204,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     bottom: 12,
+  },
+  color: {
+    color: 'red',
   },
 });

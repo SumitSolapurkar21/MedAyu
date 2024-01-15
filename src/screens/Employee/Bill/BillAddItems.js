@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {BackHandler, StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect, useContext} from 'react';
 import {TextInput} from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
@@ -34,7 +34,20 @@ const BillAddItems = ({route}) => {
   const showDialog = () => setVisible(true);
 
   const hideDialog = () => setVisible(false);
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const taxList = [
     {
       label: 'With Tax',

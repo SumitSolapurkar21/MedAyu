@@ -21,6 +21,8 @@ import {
 } from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
 import DropDown from 'react-native-paper-dropdown';
+import {useNavigation} from '@react-navigation/native';
+import {BackHandler} from 'react-native';
 
 const Eadtpatientadmitted = () => {
   const {userData} = useContext(UserContext);
@@ -29,7 +31,22 @@ const Eadtpatientadmitted = () => {
   const [showDropDown, setShowDropDown] = useState(false);
   const [showDropDown1, setShowDropDown1] = useState(false);
   const [showDropDown2, setShowDropDown2] = useState(false);
+  const navigation = useNavigation();
 
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const onClickHandler = (fieldname, e, bed_id) => {
     showDialog();
     setEditText({e: e, fieldname: fieldname, bed_id: bed_id});

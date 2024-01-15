@@ -1,15 +1,31 @@
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {BackHandler, ScrollView, StyleSheet, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import UserContext from '../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../api.json';
 import {Table, Row, Rows} from 'react-native-table-component';
 import {ActivityIndicator} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 
 const Eadtpatientdama = () => {
   const {userData} = useContext(UserContext);
   const {_id, hospital_id} = userData?.data[0];
+  const navigation = useNavigation();
 
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   useEffect(() => {
     dischargeList();
   }, []);

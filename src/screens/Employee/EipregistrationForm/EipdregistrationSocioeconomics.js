@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 // import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -141,7 +142,20 @@ const EipdregistrationSocioeconomics = () => {
   const [showDropDown2, setShowDropDown2] = useState(false);
   const [showDropDown3, setShowDropDown3] = useState(false);
   const [showDropDown4, setShowDropDown4] = useState(false);
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   useEffect(() => {
     const calculate_kpsHandler = async () => {
       await axios

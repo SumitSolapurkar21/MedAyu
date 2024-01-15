@@ -22,6 +22,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import Share from 'react-native-share';
 import UserContext from '../../../components/Context/Context';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
+import {BackHandler} from 'react-native';
 
 const BillHistory = ({route}) => {
   const {
@@ -39,6 +40,20 @@ const BillHistory = ({route}) => {
   const [loading, setLoading] = useState(true);
   const {pat_id} = route.params;
 
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   //   refresh control .....
   const onRefresh = async () => {
     try {

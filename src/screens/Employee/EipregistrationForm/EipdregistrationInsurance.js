@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -22,6 +23,21 @@ const EipdregistrationInsurance = () => {
   const navigation = useNavigation();
   const [datePicker, setDatePicker] = useState(false);
   const [datePicker2, setDatePicker2] = useState(false);
+
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   //form data ....
   const [formData, setFormData] = useState({
     insurancecompany: '',

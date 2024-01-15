@@ -15,6 +15,7 @@ import axios from 'axios';
 import UserContext from '../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BackHandler} from 'react-native';
 
 const Epatientconsentform = () => {
   const navigation = useNavigation();
@@ -38,7 +39,20 @@ const Epatientconsentform = () => {
 
   const [visible, setVisible] = useState(false);
   const hideDialog = () => setVisible(false);
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   // Add more state variables for additional checkboxes as needed
 
   const handleOK = signature => {

@@ -33,34 +33,35 @@ const Ehome = () => {
     // Clear user token from AsyncStorage
     await AsyncStorage.removeItem('userToken');
     setIsLoggedIn(false);
+    navigation.navigate('LoginPage');
   };
 
   //backHandler ...
-  // useEffect(() => {
-  //   const backAction = () => {
-  //     Alert.alert('Hold on!', 'Are you sure you want to go back?', [
-  //       {
-  //         text: 'Cancel',
-  //         onPress: () => null,
-  //         style: 'cancel',
-  //       },
-  //       {
-  //         text: 'YES',
-  //         onPress: () => {
-  //           BackHandler.exitApp(), logoutHandler();
-  //         },
-  //       },
-  //     ]);
-  //     return true;
-  //   };
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert('Hold on!', 'Are you sure you want to Logout?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'YES',
+          onPress: () => {
+            logoutHandler();
+          },
+        },
+      ]);
+      return true;
+    };
 
-  //   const backHandler = BackHandler.addEventListener(
-  //     'hardwareBackPress',
-  //     backAction,
-  //   );
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
 
-  //   return () => backHandler.remove();
-  // }, []);
+    return () => backHandler.remove();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>
