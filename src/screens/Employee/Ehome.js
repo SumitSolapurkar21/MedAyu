@@ -39,7 +39,7 @@ const Ehome = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      Alert.alert('Hold on!', 'Are you sure you want to Logout?', [
+      Alert.alert('Hold on!', 'Are you sure you want to Exit App?', [
         {
           text: 'Cancel',
           onPress: () => null,
@@ -48,7 +48,7 @@ const Ehome = () => {
         {
           text: 'YES',
           onPress: () => {
-            logoutHandler();
+            BackHandler.exitApp();
           },
         },
       ]);
