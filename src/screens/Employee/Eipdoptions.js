@@ -11,6 +11,8 @@ import React, {useContext, useEffect} from 'react';
 import vital from '../../images/vital.png';
 import admission from '../../images/admission.png';
 import adt from '../../images/adt.png';
+import diagnosis from '../../images/diagnosis.png';
+import treatment from '../../images/treatment.png';
 
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
@@ -35,8 +37,7 @@ const Eipdoptions = () => {
   const {setPatientsData, scannedPatientsData, userData} =
     useContext(UserContext);
 
-  const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
-    scannedPatientsData;
+  const {uhid, patient_id} = scannedPatientsData;
   const {_id, hospital_id} = userData.data[0];
 
   useEffect(() => {
@@ -69,14 +70,28 @@ const Eipdoptions = () => {
         <TouchableOpacity
           style={styles.selectDiv}
           onPress={() => navigation.navigate('Epatientadt')}>
-          <Image source={adt} alt="admission" style={styles.img} />
+          <Image source={adt} alt="adt" style={styles.img} />
           <Text style={styles.uName}>A-D-T</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.selectDiv}
           onPress={() => navigation.navigate('Eipdbeds')}>
-          <Image source={adt} alt="admission" style={styles.img} />
+          <Image source={adt} alt="beds" style={styles.img} />
           <Text style={styles.uName}>Beds</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.cardSelection}>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('EpatientDiagnosis')}>
+          <Image source={diagnosis} alt="diagnosis" style={styles.img} />
+          <Text style={styles.uName}>Diagnosis</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('EpatientTreatment')}>
+          <Image source={treatment} alt="treatment" style={styles.img} />
+          <Text style={styles.uName}>Treatment</Text>
         </TouchableOpacity>
       </View>
 
@@ -147,7 +162,7 @@ const styles = StyleSheet.create({
   cardSelection: {
     flexDirection: 'row',
     marginHorizontal: 16,
-    marginVertical: 16,
+    marginTop: 16,
     gap: 20,
   },
   selectDiv: {

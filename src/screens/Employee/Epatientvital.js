@@ -40,6 +40,7 @@ const Epatientvital = () => {
 
     return () => backHandler.remove();
   }, []);
+
   const [p_temp, setP_Temp] = useState('');
   const [p_pulse, setP_Pulse] = useState('');
   const [p_spo2, setP_SPO2] = useState('');
