@@ -194,8 +194,8 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   contentText: {
-    textAlign: 'left',
-    width: 95,
+    flexWrap: 'wrap',
+    width: 90,
     fontSize: 14,
     color: '#127359',
     fontWeight: '600',
