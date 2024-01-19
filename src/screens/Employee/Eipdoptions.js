@@ -89,7 +89,7 @@ const Eipdoptions = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => navigation.navigate('EpatientTreatment')}>
+          onPress={() => navigation.navigate('EpatientPresentComplaint')}>
           <Image source={treatment} alt="treatment" style={styles.img} />
           <Text style={styles.uName}>Present Complaint</Text>
         </TouchableOpacity>

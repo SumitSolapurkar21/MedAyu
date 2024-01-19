@@ -6,14 +6,66 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DropDown from 'react-native-paper-dropdown';
 import {Button, TextInput} from 'react-native-paper';
+import {Table, Row, Rows} from 'react-native-table-component';
 
-const EpatientTreatment = () => {
+const EpatientPresentComplaint = () => {
   const [showCategory, setShowCategory] = useState(false);
   const [p_category, setP_category] = useState('');
   const [selectedCategoryData, setSelectedCategoryData] = useState([]);
+  //table content ....
+  const [tableData, setTableData] = useState([]);
+  const [widthArr, setWidthArr] = useState([]);
+  const [p_relation, setP_relation] = useState('');
+  const [showRelation, setShowRelation] = useState(false);
+
+  const keys = ['Name', 'Symptoms', 'Days', 'Hrs', 'Min', 'Frequency'];
+  let relation = [
+    {
+      label: 'Father',
+      value: 'Father',
+    },
+    {
+      label: 'Mother',
+      value: 'Mother',
+    },
+  ];
+  const dataSet = [
+    {
+      Name: 'Sumit Sjkhkjkjhkjhl kjjhkjhkh',
+      Symptoms: 'fever',
+      Days: '4',
+      Hrs: '3',
+      Min: '35',
+      Frequency: (
+        <View
+          style={{width: '85%', marginBottom: 5, marginLeft: 10, marginTop: 5}}>
+          <DropDown
+            placeholder="Frequency"
+            mode={'outlined'}
+            dropDownStyle={{backgroundColor: 'white', height: 150}}
+            visible={showRelation}
+            showDropDown={() => setShowRelation(true)}
+            onDismiss={() => setShowRelation(false)}
+            value={p_relation}
+            setValue={setP_relation}
+            list={relation?.map(res => ({
+              label: res.label,
+              value: res.value,
+            }))}
+          />
+        </View>
+      ),
+    },
+  ];
+
+  // to set width of table ......
+  useEffect(() => {
+    // Set a specific width for the 'Sr.No' column, and the same width for the rest
+    setWidthArr([120, 80, 50, 50, 50, 120, ...Array(keys.length).fill(2)]);
+  }, []);
 
   const category = [
     {
@@ -114,30 +166,45 @@ const EpatientTreatment = () => {
       </View>
       <View style={styles.categorySelection}>
         <Text style={styles.tableWrapper3TXT}>Category Details</Text>
-        <ScrollView vertical style={styles.grpData}>
-          {selectedCategoryData.map((data, index) => (
-            <View style={styles.selectedView} key={index}>
-              <Text style={styles.label}>{data.label}</Text>
-              <View style={styles.input}>
-                <TextInput mode="flat" />
-              </View>
-            </View>
-          ))}
+
+        <ScrollView horizontal={true} style={{padding: 10}}>
+          <View style={{height: 300}}>
+            <Table
+              borderStyle={{
+                borderWidth: 1,
+                borderColor: 'gray',
+              }}>
+              <Row
+                data={keys}
+                widthArr={widthArr}
+                style={styles.head}
+                textStyle={styles.text}
+              />
+            </Table>
+            <ScrollView style={styles.dataWrapper}>
+              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                <Rows
+                  data={dataSet.map(row => Object.values(row))}
+                  widthArr={widthArr}
+                  style={styles.row}
+                  textStyle={styles.text}
+                />
+              </Table>
+            </ScrollView>
+          </View>
         </ScrollView>
-        <View>
-          <Button
-            style={styles.submitBtn}
-            mode="contained"
-            onPress={() => console.log('Pressed')}>
-            Save
-          </Button>
-        </View>
       </View>
+      <Button
+        style={styles.submitBtn}
+        mode="contained"
+        onPress={() => console.log('Pressed')}>
+        Save
+      </Button>
     </SafeAreaView>
   );
 };
 
-export default EpatientTreatment;
+export default EpatientPresentComplaint;
 
 const styles = StyleSheet.create({
   container: {
@@ -157,7 +224,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   categorySelection: {
-    padding: 12,
+    marginHorizontal: 16,
   },
   grpData: {
     flexDirection: 'column',
@@ -184,6 +251,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     marginVertical: 10,
+    bottom: 0,
   },
   label: {
     fontWeight: '600',
@@ -191,4 +259,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: 150,
   },
+  head: {height: 40, backgroundColor: '#80aaff'},
+  text: {textAlign: 'center', color: 'black', padding: 2},
+  row: {height: 'auto'},
 });

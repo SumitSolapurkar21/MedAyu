@@ -413,7 +413,7 @@ const Epatientvital = () => {
                 right={
                   <TextInput.Affix
                     textStyle={{fontSize: 13}}
-                    text=" 10-100 mmHg"
+                    text=" 10-200 mmHg"
                   />
                 }
                 backgroundColor={'white'}

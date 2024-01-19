@@ -37,7 +37,8 @@ import Epatientadt from '../screens/Employee/Epatientadt';
 import Epatientvitalhistory from '../screens/Employee/Epatientvitalhistory';
 import Eipdbeds from '../screens/Employee/Eipdbeds';
 import EpatientDiagnosis from '../screens/Employee/EpatientDiagnosis';
-import EpatientTreatment from '../screens/Employee/EpatientTreatment';
+import EpatientTreatment from '../screens/Employee/EpatientPresentComplaint';
+import EpatientPresentComplaint from '../screens/Employee/EpatientPresentComplaint';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -502,10 +503,10 @@ const Routes = () => {
           })}
         />
         <Stack.Screen
-          name="EpatientTreatment"
-          component={EpatientTreatment}
+          name="EpatientPresentComplaint"
+          component={EpatientPresentComplaint}
           options={({navigation}) => ({
-            title: 'Treatment',
+            title: 'Present Complaint',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
