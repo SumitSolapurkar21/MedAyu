@@ -152,6 +152,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#127359',
+    flexWrap: 'wrap',
+    width: 80,
   },
   hrcontent: {
     flexDirection: 'row',
@@ -161,8 +163,8 @@ const styles = StyleSheet.create({
   },
   img: {
     resizeMode: 'contain',
-    width: 50,
-    height: 50,
+    width: 45,
+    height: 45,
   },
   card: {
     backgroundColor: 'white',

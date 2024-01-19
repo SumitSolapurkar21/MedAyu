@@ -91,7 +91,7 @@ const Eipdoptions = () => {
           style={styles.selectDiv}
           onPress={() => navigation.navigate('EpatientTreatment')}>
           <Image source={treatment} alt="treatment" style={styles.img} />
-          <Text style={styles.uName}>Treatment</Text>
+          <Text style={styles.uName}>Present Complaint</Text>
         </TouchableOpacity>
       </View>
 
@@ -121,6 +121,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#127359',
+    flexWrap: 'wrap',
+    width: 100,
   },
   hrcontent: {
     flexDirection: 'row',

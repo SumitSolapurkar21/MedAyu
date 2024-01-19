@@ -27,19 +27,19 @@ import {BackHandler} from 'react-native';
 const Epatientvital = () => {
   const navigation = useNavigation();
   //backHandler ...
-  useEffect(() => {
-    const backAction = () => {
-      navigation.goBack();
-      return true;
-    };
+  // useEffect(() => {
+  //   const backAction = () => {
+  //     navigation.goBack();
+  //     return true;
+  //   };
 
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     backAction,
+  //   );
 
-    return () => backHandler.remove();
-  }, []);
+  //   return () => backHandler.remove();
+  // }, []);
 
   const [p_temp, setP_Temp] = useState('');
   const [p_pulse, setP_Pulse] = useState('');
@@ -71,32 +71,32 @@ const Epatientvital = () => {
     const errors = {};
     let isValidInput = true;
 
-    if (!validateInputRange(p_temp, 95, 105)) {
+    if (!validateInputRange(p_temp, 90, 110)) {
       errors.p_temp = 'Temperature Not in Range';
       isValidInput = false;
     }
 
-    if (!validateInputRange(p_pulse, 60, 100)) {
+    if (!validateInputRange(p_pulse, 20, 300)) {
       errors.p_pulse = 'Pulse Not in Range';
       isValidInput = false;
     }
 
-    if (!validateInputRange(p_spo2, 92, 94)) {
+    if (!validateInputRange(p_spo2, 30, 100)) {
       errors.p_spo2 = 'SPO2 Not in Range';
       isValidInput = false;
     }
 
-    if (!validateInputRange(p_systolicbp, 0, 120)) {
+    if (!validateInputRange(p_systolicbp, 30, 240)) {
       errors.p_systolicbp = 'Systolic BP Not in Range';
       isValidInput = false;
     }
 
-    if (!validateInputRange(p_diastolicbp, 70, 100)) {
+    if (!validateInputRange(p_diastolicbp, 10, 200)) {
       errors.p_diastolicbp = 'Diastolic BP Not in Range';
       isValidInput = false;
     }
 
-    if (!validateInputRange(p_rsprate, 24, 30)) {
+    if (!validateInputRange(p_rsprate, 5, 50)) {
       errors.p_rsprate = 'Respiratory Rate Not in Range';
       isValidInput = false;
     }
@@ -307,7 +307,7 @@ const Epatientvital = () => {
                 right={
                   <TextInput.Affix
                     textStyle={{fontSize: 13}}
-                    text=" 95 to 105  °F"
+                    text=" 90 to 110  °F"
                   />
                 }
                 backgroundColor={'white'}
@@ -333,7 +333,7 @@ const Epatientvital = () => {
                 right={
                   <TextInput.Affix
                     textStyle={{fontSize: 13}}
-                    text=" 60-100 /min"
+                    text=" 20-300 /min"
                   />
                 }
                 backgroundColor={'white'}
@@ -357,7 +357,10 @@ const Epatientvital = () => {
                 error={!!validationErrors.p_spo2}
                 onChangeText={text => setP_SPO2(text)}
                 right={
-                  <TextInput.Affix textStyle={{fontSize: 13}} text=" 92-94 %" />
+                  <TextInput.Affix
+                    textStyle={{fontSize: 13}}
+                    text=" 30-100 %"
+                  />
                 }
                 backgroundColor={'white'}
               />
@@ -382,7 +385,7 @@ const Epatientvital = () => {
                 right={
                   <TextInput.Affix
                     textStyle={{fontSize: 13}}
-                    text=" < 120 mmHg"
+                    text=" 30-240 mmHg"
                   />
                 }
                 backgroundColor={'white'}
@@ -410,7 +413,7 @@ const Epatientvital = () => {
                 right={
                   <TextInput.Affix
                     textStyle={{fontSize: 13}}
-                    text=" 70-100 mmHg"
+                    text=" 10-100 mmHg"
                   />
                 }
                 backgroundColor={'white'}
@@ -438,7 +441,7 @@ const Epatientvital = () => {
                 right={
                   <TextInput.Affix
                     textStyle={{fontSize: 13}}
-                    text=" 24-30 /min"
+                    text=" 05-50 /min"
                   />
                 }
                 backgroundColor={'white'}
@@ -661,7 +664,7 @@ const styles = StyleSheet.create({
     width: 150,
   },
   btn: {
-    width: 140,
+    width: 'auto',
     alignSelf: 'center',
     marginVertical: 10,
   },
