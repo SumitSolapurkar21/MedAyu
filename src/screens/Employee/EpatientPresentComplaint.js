@@ -10,19 +10,19 @@ import {
   Keyboard,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import DropDown from 'react-native-paper-dropdown';
 import {Button, TextInput} from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
 import axios from 'axios';
 import api from '../../../api.json';
 import UserContext from '../../components/Context/Context';
 import {Dropdown} from 'react-native-element-dropdown';
+import {useNavigation} from '@react-navigation/native';
 
 const EpatientPresentComplaint = () => {
+  const navigation = useNavigation();
   const [p_category, setP_category] = useState('');
   const [selectedCategoryData, setSelectedCategoryData] = useState('');
   //table content ....
-  const [tableData, setTableData] = useState([]);
   const [widthArr, setWidthArr] = useState([]);
 
   const {patientsData} = useContext(UserContext);
@@ -124,13 +124,35 @@ const EpatientPresentComplaint = () => {
   ];
 
   const updateSelectedCategoryData = selectedValue => {
-    // const selectedData = categoryData[selectedValue] || [];
     setSelectedCategoryData(selectedValue);
   };
-  const [value, setValue] = useState('');
   const [dropdownValues, setDropdownValues] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
+  const _data = {
+    symptoms: '',
+    days: '',
+    hours: '',
+    minute: '',
+    frequency: '',
+  };
+  const [rowData, setRowData] = useState([]);
+
+  const inputChangeHandler = (rowIndex, field, text) => {
+    // Copy the existing array
+    const newData = [...rowData];
+
+    // Update the specific row and field
+    newData[rowIndex] = {
+      ...newData[rowIndex],
+      [field]: text,
+    };
+
+    // Update the state with the new data
+    setRowData(newData);
+  };
+
   //list of category....
+
   const FetchSysmptomsAccCategory = async () => {
     try {
       await axios
@@ -141,63 +163,19 @@ const EpatientPresentComplaint = () => {
           patient_id: patient_id,
         })
         .then(res => {
-          const SymptomsData = res.data.data.map(res => [
-            res.illnessname,
-            <TextInput style={styles.tableInput} />,
-            <TextInput style={styles.tableInput} />,
-            <TextInput style={styles.tableInput} />,
-            <TextInput style={styles.tableInput} />,
+          const _data = res.data.data.map(res => ({
+            illnessname: res.illnessname,
+            symptoms: '',
+            days: '',
+            hours: '',
+            minute: '',
+            frequency: '',
+            id: res._id,
+          }));
 
-            // <Dropdown
-            //   key={res._id}
-            //   style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-            //   placeholderStyle={styles.placeholderStyle}
-            //   selectedTextStyle={styles.selectedTextStyle}
-            //   inputSearchStyle={styles.inputSearchStyle}
-            //   iconStyle={styles.iconStyle}
-            //   data={data}
-            //   // search
-            //   maxHeight={300}
-            //   labelField="label"
-            //   valueField="value"
-            //   placeholder={!isFocus ? 'Select' : '...'}
-            //   // searchPlaceholder="Search..."
-            //   value={value}
-            //   onFocus={() => setIsFocus(true)}
-            //   onBlur={() => setIsFocus(false)}
-            //   onChange={item => {
-            //     setValue(item.value);
-            //     setIsFocus(false);
-            //   }}
-            // />,
-            <Dropdown
-              key={res._id}
-              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={data}
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!isFocus ? 'Select' : '...'}
-              value={dropdownValues[res._id] || ''} // Use the value from the array
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={item => {
-                // Update the array with the new value
-                setDropdownValues(prevValues => ({
-                  ...prevValues,
-                  [res._id]: item.value,
-                }));
-                setIsFocus(false);
-              }}
-            />,
-          ]);
-          setTableData(SymptomsData);
+          setRowData(_data);
+          console.log('update data ; ', _data);
         });
-      6;
     } catch (error) {
       console.error(error);
     }
@@ -211,6 +189,26 @@ const EpatientPresentComplaint = () => {
     setDropdownValues([]); // Clear the value when category changes
   }, [selectedCategoryData]);
 
+  const submitHandler = () => {
+    // Filter out the rows where all fields are filled
+    const filledRows = rowData.filter(
+      row =>
+        (row.symptoms !== '' && row.frequency !== '') ||
+        row.days !== '' ||
+        row.hours !== '' ||
+        row.minute !== '',
+    );
+
+    // Do something with the filtered rows, for example, send them to the server
+    console.log('Filled Rows:', filledRows);
+
+    // Clear the form data
+    setRowData([]);
+    setSelectedCategoryData([]);
+    setDropdownValues([]);
+    setP_category('');
+    navigation.navigate('Eipdoptions');
+  };
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -268,8 +266,68 @@ const EpatientPresentComplaint = () => {
               <ScrollView vertical={true} style={styles.dataWrapper}>
                 <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
                   <Rows
-                    // data={dataSet.map(row => Object.values(row))}
-                    data={tableData}
+                    // data={tableData}
+                    data={rowData.map((row, rowIndex) => [
+                      row.illnessname,
+                      <TextInput
+                        key={row.id}
+                        style={styles.tableInput}
+                        onChangeText={text =>
+                          inputChangeHandler(rowIndex, 'symptoms', text)
+                        }
+                      />,
+                      <TextInput
+                        key={row.id}
+                        style={styles.tableInput}
+                        keyboardType="numeric"
+                        onChangeText={text =>
+                          inputChangeHandler(rowIndex, 'days', text)
+                        }
+                      />,
+                      <TextInput
+                        key={row.id}
+                        style={styles.tableInput}
+                        keyboardType="numeric"
+                        onChangeText={text =>
+                          inputChangeHandler(rowIndex, 'hours', text)
+                        }
+                      />,
+                      <TextInput
+                        key={row.id}
+                        style={styles.tableInput}
+                        keyboardType="numeric"
+                        onChangeText={text =>
+                          inputChangeHandler(rowIndex, 'minute', text)
+                        }
+                      />,
+                      <Dropdown
+                        key={row.id}
+                        style={[
+                          styles.dropdown,
+                          isFocus && {borderColor: 'blue'},
+                        ]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={!isFocus ? 'Select' : '...'}
+                        value={dropdownValues[row.id] || ''}
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+                        onChange={item => {
+                          setDropdownValues(prevValues => ({
+                            ...prevValues,
+                            [row.id]: item.value,
+                          }));
+                          setIsFocus(false);
+                          inputChangeHandler(rowIndex, 'frequency', item.value);
+                        }}
+                      />,
+                    ])}
                     widthArr={widthArr}
                     style={styles.row}
                     textStyle={styles.text}
@@ -280,10 +338,11 @@ const EpatientPresentComplaint = () => {
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
+
       <Button
         style={styles.submitBtn}
         mode="contained"
-        onPress={() => console.log('Pressed')}>
+        onPress={() => submitHandler()}>
         Save
       </Button>
     </SafeAreaView>

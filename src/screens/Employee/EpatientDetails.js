@@ -92,7 +92,7 @@ const EpatientDetails = () => {
       <View style={styles.cardSelection}>
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => navigation.navigate('Eappointment')}>
+          onPress={() => ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)}>
           <Image source={panchakarma} alt="DoctorImg" style={styles.img} />
           <Text style={styles.uName}>Panchakarma</Text>
         </TouchableOpacity>
