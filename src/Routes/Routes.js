@@ -506,7 +506,7 @@ const Routes = () => {
           name="EpatientPresentComplaint"
           component={EpatientPresentComplaint}
           options={({navigation}) => ({
-            title: 'Present Complaint',
+            title: 'Complaint',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"

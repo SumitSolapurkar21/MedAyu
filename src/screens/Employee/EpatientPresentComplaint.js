@@ -1,199 +1,285 @@
 import {
   KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
+  Keyboard,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import DropDown from 'react-native-paper-dropdown';
 import {Button, TextInput} from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
+import axios from 'axios';
+import api from '../../../api.json';
+import UserContext from '../../components/Context/Context';
+import {Dropdown} from 'react-native-element-dropdown';
 
 const EpatientPresentComplaint = () => {
-  const [showCategory, setShowCategory] = useState(false);
   const [p_category, setP_category] = useState('');
-  const [selectedCategoryData, setSelectedCategoryData] = useState([]);
+  const [selectedCategoryData, setSelectedCategoryData] = useState('');
   //table content ....
   const [tableData, setTableData] = useState([]);
   const [widthArr, setWidthArr] = useState([]);
-  const [p_relation, setP_relation] = useState('');
-  const [showRelation, setShowRelation] = useState(false);
+
+  const {patientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id} = patientsData;
 
   const keys = ['Name', 'Symptoms', 'Days', 'Hrs', 'Min', 'Frequency'];
-  let relation = [
+  let data = [
     {
-      label: 'Father',
-      value: 'Father',
+      label: 'Often',
+      value: 'Often',
     },
     {
-      label: 'Mother',
-      value: 'Mother',
-    },
-  ];
-  const dataSet = [
-    {
-      Name: 'Sumit Sjkhkjkjhkjhl kjjhkjhkh',
-      Symptoms: 'fever',
-      Days: '4',
-      Hrs: '3',
-      Min: '35',
-      Frequency: (
-        <View
-          style={{width: '85%', marginBottom: 5, marginLeft: 10, marginTop: 5}}>
-          <DropDown
-            placeholder="Frequency"
-            mode={'outlined'}
-            dropDownStyle={{backgroundColor: 'white', height: 150}}
-            visible={showRelation}
-            showDropDown={() => setShowRelation(true)}
-            onDismiss={() => setShowRelation(false)}
-            value={p_relation}
-            setValue={setP_relation}
-            list={relation?.map(res => ({
-              label: res.label,
-              value: res.value,
-            }))}
-          />
-        </View>
-      ),
+      label: 'Once',
+      value: 'Once',
     },
   ];
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
+  useEffect(() => {
+    // Listen to keyboard events and update keyboard height
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      e => {
+        setKeyboardHeight(e.endCoordinates.height);
+      },
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardHeight(0);
+      },
+    );
+
+    return () => {
+      // Clean up listeners when the component is unmounted
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   // to set width of table ......
   useEffect(() => {
-    // Set a specific width for the 'Sr.No' column, and the same width for the rest
-    setWidthArr([120, 80, 50, 50, 50, 120, ...Array(keys.length).fill(2)]);
+    setWidthArr([120, 120, 60, 60, 60, 120, ...Array(keys.length).fill(2)]);
   }, []);
 
   const category = [
     {
-      value: 'Male',
-      label: 'Male',
+      value: 'GENERAL',
+      label: 'GENERAL',
     },
     {
-      value: 'Female',
-      label: 'Female',
+      value: 'CARDIO-VASCULAR',
+      label: 'CARDIO-VASCULAR',
     },
     {
-      value: 'Other',
-      label: 'Other',
+      value: 'RESPIRATORY',
+      label: 'RESPIRATORY',
+    },
+    {
+      value: 'Gastro-Intestinal',
+      label: 'GASTRO-INTESTINAL',
+    },
+    {
+      value: 'EYE',
+      label: 'EYE',
+    },
+    {
+      value: 'ENT',
+      label: 'ENT',
+    },
+    {
+      value: 'NEUROLOGICAL',
+      label: 'NEUROLOGICAL',
+    },
+    {
+      value: 'MUSCULO-SKELETAL',
+      label: 'MUSCULO-SKELETAL',
+    },
+    {
+      value: 'GenitoUrinary',
+      label: 'GENITOURINARY',
+    },
+    {
+      value: 'Endocrine',
+      label: 'ENDOCRINE',
+    },
+    {
+      value: 'SKIN',
+      label: 'SKIN',
+    },
+    {
+      value: 'PSYCHITRIC',
+      label: 'PSYCHITRIC',
+    },
+    {
+      value: 'OTHER',
+      label: 'OTHER',
     },
   ];
 
-  const categoryData = {
-    Male: [
-      {
-        value: 'Sumit',
-        label: 'Sumit Solapurkar',
-      },
-      {
-        value: 'Pranay',
-        label: 'Pranay',
-      },
-      {
-        value: 'Master',
-        label: 'Master',
-      },
-      {
-        value: 'Pawan',
-        label: 'Pawan',
-      },
-      {
-        value: 'John',
-        label: 'John',
-      },
-      {
-        value: 'Sam',
-        label: 'Sam',
-      },
-      {
-        value: 'Jack',
-        label: 'Jack',
-      },
-      {
-        value: 'Oggy',
-        label: 'Oggy',
-      },
-    ],
-    Female: [
-      {
-        value: 'Sayali',
-        label: 'Sayali',
-      },
-      {
-        value: 'Neha',
-        label: 'Neha',
-      },
-    ],
-    Other: [
-      {
-        value: 'Yash',
-        label: 'Yash',
-      },
-    ],
+  const updateSelectedCategoryData = selectedValue => {
+    // const selectedData = categoryData[selectedValue] || [];
+    setSelectedCategoryData(selectedValue);
+  };
+  const [value, setValue] = useState('');
+  const [dropdownValues, setDropdownValues] = useState([]);
+  const [isFocus, setIsFocus] = useState(false);
+  //list of category....
+  const FetchSysmptomsAccCategory = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/FetchSysmptomsAccCategory`, {
+          category: selectedCategoryData,
+          hospital_id: hospital_id,
+          reception_id: reception_id,
+          patient_id: patient_id,
+        })
+        .then(res => {
+          const SymptomsData = res.data.data.map(res => [
+            res.illnessname,
+            <TextInput style={styles.tableInput} />,
+            <TextInput style={styles.tableInput} />,
+            <TextInput style={styles.tableInput} />,
+            <TextInput style={styles.tableInput} />,
+
+            // <Dropdown
+            //   key={res._id}
+            //   style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+            //   placeholderStyle={styles.placeholderStyle}
+            //   selectedTextStyle={styles.selectedTextStyle}
+            //   inputSearchStyle={styles.inputSearchStyle}
+            //   iconStyle={styles.iconStyle}
+            //   data={data}
+            //   // search
+            //   maxHeight={300}
+            //   labelField="label"
+            //   valueField="value"
+            //   placeholder={!isFocus ? 'Select' : '...'}
+            //   // searchPlaceholder="Search..."
+            //   value={value}
+            //   onFocus={() => setIsFocus(true)}
+            //   onBlur={() => setIsFocus(false)}
+            //   onChange={item => {
+            //     setValue(item.value);
+            //     setIsFocus(false);
+            //   }}
+            // />,
+            <Dropdown
+              key={res._id}
+              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Select' : '...'}
+              value={dropdownValues[res._id] || ''} // Use the value from the array
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                // Update the array with the new value
+                setDropdownValues(prevValues => ({
+                  ...prevValues,
+                  [res._id]: item.value,
+                }));
+                setIsFocus(false);
+              }}
+            />,
+          ]);
+          setTableData(SymptomsData);
+        });
+      6;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const updateSelectedCategoryData = selectedValue => {
-    const selectedData = categoryData[selectedValue] || [];
-    setSelectedCategoryData(selectedData);
-  };
+  // fetch FetchSysmptomsAccCategory .......
+  useEffect(() => {
+    if (selectedCategoryData !== '') {
+      FetchSysmptomsAccCategory();
+    }
+    setDropdownValues([]); // Clear the value when category changes
+  }, [selectedCategoryData]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.formGroup}>
-        <Text style={styles.tableWrapper3TXT}>Category</Text>
-        <View style={{width: '60%'}}>
-          <DropDown
-            mode={'outlined'}
-            label="Category"
-            dropDownStyle={{backgroundColor: 'white'}}
-            visible={showCategory}
-            showDropDown={() => setShowCategory(true)}
-            onDismiss={() => setShowCategory(false)}
-            value={p_category}
-            setValue={value => {
-              setP_category(value);
-              updateSelectedCategoryData(value);
-            }}
-            list={category?.map(res => ({
-              label: res.label,
-              value: res.value,
-            }))}
-          />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <View style={styles.formGroup}>
+          <Text style={styles.tableWrapper3TXT}>Category</Text>
+          <View style={{width: '70%'}}>
+            <Dropdown
+              mode={'outlined'}
+              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={category?.map(res => ({
+                label: res.label,
+                value: res.value,
+              }))}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Select' : '...'}
+              searchPlaceholder="Search..."
+              value={p_category}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setP_category(item.value);
+                updateSelectedCategoryData(item.value);
+                setIsFocus(false);
+              }}
+            />
+          </View>
         </View>
-      </View>
-      <View style={styles.categorySelection}>
-        <Text style={styles.tableWrapper3TXT}>Category Details</Text>
+        <View
+          style={[styles.categorySelection, {marginBottom: keyboardHeight}]}>
+          <Text style={styles.tableWrapper3TXT}>Category Details</Text>
 
-        <ScrollView horizontal={true} style={{padding: 10}}>
-          <View style={{height: 300}}>
-            <Table
-              borderStyle={{
-                borderWidth: 1,
-                borderColor: 'gray',
-              }}>
-              <Row
-                data={keys}
-                widthArr={widthArr}
-                style={styles.head}
-                textStyle={styles.text}
-              />
-            </Table>
-            <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                <Rows
-                  data={dataSet.map(row => Object.values(row))}
+          <ScrollView horizontal={true} style={{padding: 10}}>
+            <View style={{height: '90%', minHeight: 300}}>
+              <Table
+                borderStyle={{
+                  borderWidth: 1,
+                  borderColor: 'gray',
+                }}>
+                <Row
+                  data={keys}
                   widthArr={widthArr}
-                  style={styles.row}
+                  style={styles.head}
                   textStyle={styles.text}
                 />
               </Table>
-            </ScrollView>
-          </View>
-        </ScrollView>
-      </View>
+              <ScrollView vertical={true} style={styles.dataWrapper}>
+                <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                  <Rows
+                    // data={dataSet.map(row => Object.values(row))}
+                    data={tableData}
+                    widthArr={widthArr}
+                    style={styles.row}
+                    textStyle={styles.text}
+                  />
+                </Table>
+              </ScrollView>
+            </View>
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
       <Button
         style={styles.submitBtn}
         mode="contained"
@@ -262,4 +348,32 @@ const styles = StyleSheet.create({
   head: {height: 40, backgroundColor: '#80aaff'},
   text: {textAlign: 'center', color: 'black', padding: 2},
   row: {height: 'auto'},
+  tableInput: {
+    height: 40,
+    marginHorizontal: 6,
+    marginVertical: 6,
+  },
+
+  dropdown: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    marginHorizontal: 6,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
 });

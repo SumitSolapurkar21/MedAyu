@@ -91,7 +91,7 @@ const Eipdoptions = () => {
           style={styles.selectDiv}
           onPress={() => navigation.navigate('EpatientPresentComplaint')}>
           <Image source={treatment} alt="treatment" style={styles.img} />
-          <Text style={styles.uName}>Present Complaint</Text>
+          <Text style={styles.uName}>Complaint</Text>
         </TouchableOpacity>
       </View>
 
