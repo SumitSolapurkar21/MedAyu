@@ -94,6 +94,14 @@ const Eipdoptions = () => {
           <Text style={styles.uName}>Complaint</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.cardSelection}>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('EpatientTreatment')}>
+          <Image source={diagnosis} alt="diagnosis" style={styles.img} />
+          <Text style={styles.uName}>Treatement</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* <HomeButton /> */}
     </SafeAreaView>
@@ -132,8 +140,8 @@ const styles = StyleSheet.create({
   },
   img: {
     resizeMode: 'contain',
-    width: 50,
-    height: 50,
+    width: 35,
+    height: 35,
   },
   card: {
     backgroundColor: 'white',

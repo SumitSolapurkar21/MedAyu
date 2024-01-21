@@ -37,7 +37,7 @@ import Epatientadt from '../screens/Employee/Epatientadt';
 import Epatientvitalhistory from '../screens/Employee/Epatientvitalhistory';
 import Eipdbeds from '../screens/Employee/Eipdbeds';
 import EpatientDiagnosis from '../screens/Employee/EpatientDiagnosis';
-import EpatientTreatment from '../screens/Employee/EpatientPresentComplaint';
+import EpatientTreatment from '../screens/Employee/EpatientTreatment';
 import EpatientPresentComplaint from '../screens/Employee/EpatientPresentComplaint';
 
 const Stack = createNativeStackNavigator();
@@ -507,6 +507,26 @@ const Routes = () => {
           component={EpatientPresentComplaint}
           options={({navigation}) => ({
             title: 'Complaint',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="EpatientTreatment"
+          component={EpatientTreatment}
+          options={({navigation}) => ({
+            title: 'Treatments',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"

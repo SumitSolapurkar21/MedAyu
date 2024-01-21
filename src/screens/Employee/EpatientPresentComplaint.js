@@ -10,7 +10,7 @@ import {
   Keyboard,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, TextInput} from 'react-native-paper';
+import {Button, Dialog, Portal, Snackbar, TextInput} from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
 import axios from 'axios';
 import api from '../../../api.json';
@@ -28,7 +28,18 @@ const EpatientPresentComplaint = () => {
   const {patientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id} = patientsData;
 
-  const keys = ['Name', 'Symptoms', 'Days', 'Hrs', 'Min', 'Frequency'];
+  //popup msg....
+  const [visible, setVisible] = useState(false);
+  const hideDialog = () => setVisible(false);
+
+  //toaster msg....
+  const [visibleMsg, setVisibleMsg] = React.useState(false);
+
+  const onToggleSnackBar = () => setVisibleMsg(!visibleMsg);
+
+  const onDismissSnackBar = () => setVisibleMsg(false);
+
+  const keys = ['Symptoms', 'Duration', 'Time', 'Frequency'];
   let data = [
     {
       label: 'Often',
@@ -37,6 +48,28 @@ const EpatientPresentComplaint = () => {
     {
       label: 'Once',
       value: 'Once',
+    },
+  ];
+  let data2 = [
+    {
+      label: 'Minutes',
+      value: 'Minutes',
+    },
+    {
+      label: 'Hours',
+      value: 'Hours',
+    },
+    {
+      label: 'Days',
+      value: 'Days',
+    },
+    {
+      label: 'Months',
+      value: 'Months',
+    },
+    {
+      label: 'Year',
+      value: 'Year',
     },
   ];
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -65,7 +98,7 @@ const EpatientPresentComplaint = () => {
   }, []);
   // to set width of table ......
   useEffect(() => {
-    setWidthArr([120, 120, 60, 60, 60, 120, ...Array(keys.length).fill(2)]);
+    setWidthArr([120, 80, 120, 120, ...Array(keys.length).fill(2)]);
   }, []);
 
   const category = [
@@ -127,7 +160,9 @@ const EpatientPresentComplaint = () => {
     setSelectedCategoryData(selectedValue);
   };
   const [dropdownValues, setDropdownValues] = useState([]);
+  const [dropdownValues2, setDropdownValues2] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
+  const [isFocus2, setIsFocus2] = useState(false);
   const _data = {
     symptoms: '',
     days: '',
@@ -164,11 +199,9 @@ const EpatientPresentComplaint = () => {
         })
         .then(res => {
           const _data = res.data.data.map(res => ({
-            illnessname: res.illnessname,
-            symptoms: '',
-            days: '',
-            hours: '',
-            minute: '',
+            symptoms: res.illnessname,
+            duration: '',
+            time: '',
             frequency: '',
             id: res._id,
           }));
@@ -189,28 +222,88 @@ const EpatientPresentComplaint = () => {
     setDropdownValues([]); // Clear the value when category changes
   }, [selectedCategoryData]);
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     // Filter out the rows where all fields are filled
     const filledRows = rowData.filter(
       row =>
-        (row.symptoms !== '' && row.frequency !== '') ||
-        row.days !== '' ||
-        row.hours !== '' ||
-        row.minute !== '',
+        row.symptoms !== '' &&
+        row.frequency !== '' &&
+        row.duration !== '' &&
+        row.time !== '',
     );
 
     // Do something with the filtered rows, for example, send them to the server
-    console.log('Filled Rows:', filledRows);
+    // const data = {
+    //   hospital_id: hospital_id,
+    //   reception_id: reception_id,
+    //   patient_id: patient_id,
+    //   category: selectedCategoryData,
+    //   complaintArray: filledRows,
+    // };
+    console.log('data : ', filledRows);
+    // try {
+    //   await axios
+    //     .post(`${api.baseurl}/AddMobileComplaints`, {
+    //       hospital_id: hospital_id,
+    //       reception_id: reception_id,
+    //       patient_id: patient_id,
+    //       category: selectedCategoryData,
+    //       complaintArray: filledRows,
+    //     })
+    //     .then(res => {
+    //       console.log(res.data);
+    //       const {status} = res.data;
+    //       if (status === true) {
+    //       } else {
+    //       }
+    //     });
+    // } catch (error) {
+    // console.error(error);
+    // }
 
     // Clear the form data
     setRowData([]);
     setSelectedCategoryData([]);
     setDropdownValues([]);
+    setDropdownValues2([]);
     setP_category('');
-    navigation.navigate('Eipdoptions');
+    setVisible(true);
+    // onToggleSnackBar();
+
+    // navigation.navigate('Eipdoptions');
   };
   return (
     <SafeAreaView style={styles.container}>
+      {/* after submit Msg... */}
+      <Portal>
+        <Dialog visible={visible}>
+          <Dialog.Icon icon="check-all" style={{color: 'green'}} />
+          <Dialog.Title style={styles.title}>Success!</Dialog.Title>
+          <Dialog.Content>
+            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
+              Complaint Added Successfully!
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => hideDialog()}>Cancel</Button>
+            <Button onPress={() => navigation.navigate('Eipdoptions')}>
+              Ok
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+      {/* Error Msg */}
+      <Snackbar
+        visible={visibleMsg}
+        onDismiss={() => onDismissSnackBar()}
+        action={{
+          label: 'Undo',
+          onPress: () => {
+            // Do something
+          },
+        }}>
+        Hey there! I'm a Snackbar.
+      </Snackbar>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
@@ -232,15 +325,15 @@ const EpatientPresentComplaint = () => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={!isFocus ? 'Select' : '...'}
+              placeholder={!isFocus2 ? 'Select' : '...'}
               searchPlaceholder="Search..."
               value={p_category}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
+              onFocus={() => setIsFocus2(true)}
+              onBlur={() => setIsFocus2(false)}
               onChange={item => {
                 setP_category(item.value);
                 updateSelectedCategoryData(item.value);
-                setIsFocus(false);
+                setIsFocus2(false);
               }}
             />
           </View>
@@ -268,37 +361,41 @@ const EpatientPresentComplaint = () => {
                   <Rows
                     // data={tableData}
                     data={rowData.map((row, rowIndex) => [
-                      row.illnessname,
-                      <TextInput
-                        key={row.id}
-                        style={styles.tableInput}
-                        onChangeText={text =>
-                          inputChangeHandler(rowIndex, 'symptoms', text)
-                        }
-                      />,
+                      row.symptoms,
                       <TextInput
                         key={row.id}
                         style={styles.tableInput}
                         keyboardType="numeric"
                         onChangeText={text =>
-                          inputChangeHandler(rowIndex, 'days', text)
+                          inputChangeHandler(rowIndex, 'duration', text)
                         }
                       />,
-                      <TextInput
+                      <Dropdown
                         key={row.id}
-                        style={styles.tableInput}
-                        keyboardType="numeric"
-                        onChangeText={text =>
-                          inputChangeHandler(rowIndex, 'hours', text)
-                        }
-                      />,
-                      <TextInput
-                        key={row.id}
-                        style={styles.tableInput}
-                        keyboardType="numeric"
-                        onChangeText={text =>
-                          inputChangeHandler(rowIndex, 'minute', text)
-                        }
+                        style={[
+                          styles.dropdown,
+                          isFocus && {borderColor: 'blue'},
+                        ]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data2}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={!isFocus2 ? 'Select' : '...'}
+                        value={dropdownValues2[row.id] || ''}
+                        onFocus={() => setIsFocus2(true)}
+                        onBlur={() => setIsFocus2(false)}
+                        onChange={item => {
+                          setDropdownValues2(prevValues => ({
+                            ...prevValues,
+                            [row.id]: item.value,
+                          }));
+                          setIsFocus2(false);
+                          inputChangeHandler(rowIndex, 'time', item.value);
+                        }}
                       />,
                       <Dropdown
                         key={row.id}
@@ -355,6 +452,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
+  },
+  title: {
+    textAlign: 'center',
   },
   formGroup: {
     flexDirection: 'column',
@@ -416,7 +516,7 @@ const styles = StyleSheet.create({
   dropdown: {
     height: 40,
     borderColor: 'gray',
-    borderWidth: 0.5,
+    borderWidth: 1.5,
     borderRadius: 4,
     paddingHorizontal: 6,
     marginHorizontal: 6,
