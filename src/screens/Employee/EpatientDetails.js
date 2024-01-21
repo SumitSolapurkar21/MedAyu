@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
   },
   img: {
     resizeMode: 'contain',
-    width: 45,
-    height: 45,
+    width: 35,
+    height: 35,
   },
   card: {
     backgroundColor: 'white',
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   cardSelection: {
     flexDirection: 'row',
     marginHorizontal: 16,
-    marginVertical: 16,
+    marginVertical: 6,
     gap: 20,
   },
   selectDiv: {

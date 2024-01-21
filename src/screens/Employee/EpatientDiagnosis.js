@@ -39,9 +39,7 @@ const EpatientDiagnosis = () => {
   // to set width of table ......
   useEffect(() => {
     // Set a specific width for the 'Sr.No' column, and the same width for the rest
-    setWidthArr([
-     60, 
-     ...Array(keys.length - 1).fill(170)]);
+    setWidthArr([60, ...Array(keys.length - 1).fill(170)]);
   }, []);
 
   const onDismissSnackBar = () => setVisible(false);
