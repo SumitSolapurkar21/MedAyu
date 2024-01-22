@@ -305,10 +305,7 @@ const Epatientvital = () => {
                 keyboardType="numeric"
                 error={!!validationErrors.p_temp}
                 right={
-                  <TextInput.Affix
-                    textStyle={{fontSize: 13}}
-                    text=" 90 to 110  °F"
-                  />
+                  <TextInput.Affix textStyle={{fontSize: 13}} text=" °F" />
                 }
                 backgroundColor={'white'}
               />
@@ -331,10 +328,7 @@ const Epatientvital = () => {
                 onChangeText={text => setP_Pulse(text)}
                 error={!!validationErrors.p_pulse}
                 right={
-                  <TextInput.Affix
-                    textStyle={{fontSize: 13}}
-                    text=" 20-300 /min"
-                  />
+                  <TextInput.Affix textStyle={{fontSize: 13}} text=" /min" />
                 }
                 backgroundColor={'white'}
               />
@@ -357,10 +351,7 @@ const Epatientvital = () => {
                 error={!!validationErrors.p_spo2}
                 onChangeText={text => setP_SPO2(text)}
                 right={
-                  <TextInput.Affix
-                    textStyle={{fontSize: 13}}
-                    text=" 30-100 %"
-                  />
+                  <TextInput.Affix textStyle={{fontSize: 13}} text="  %" />
                 }
                 backgroundColor={'white'}
               />
@@ -383,10 +374,7 @@ const Epatientvital = () => {
                 error={!!validationErrors.p_systolicbp}
                 onChangeText={text => setP_SystolicBP(text)}
                 right={
-                  <TextInput.Affix
-                    textStyle={{fontSize: 13}}
-                    text=" 30-240 mmHg"
-                  />
+                  <TextInput.Affix textStyle={{fontSize: 13}} text="  mmHg" />
                 }
                 backgroundColor={'white'}
               />
@@ -411,10 +399,7 @@ const Epatientvital = () => {
                 error={!!validationErrors.p_diastolicbp}
                 onChangeText={text => setP_DiastolicBP(text)}
                 right={
-                  <TextInput.Affix
-                    textStyle={{fontSize: 13}}
-                    text=" 10-200 mmHg"
-                  />
+                  <TextInput.Affix textStyle={{fontSize: 13}} text="  mmHg" />
                 }
                 backgroundColor={'white'}
               />
@@ -439,10 +424,7 @@ const Epatientvital = () => {
                 error={!!validationErrors.p_rsprate}
                 onChangeText={text => setP_Rsprate(text)}
                 right={
-                  <TextInput.Affix
-                    textStyle={{fontSize: 13}}
-                    text=" 05-50 /min"
-                  />
+                  <TextInput.Affix textStyle={{fontSize: 13}} text="  /min" />
                 }
                 backgroundColor={'white'}
               />

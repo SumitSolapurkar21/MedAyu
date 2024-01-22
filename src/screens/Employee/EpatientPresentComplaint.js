@@ -8,9 +8,18 @@ import {
   Text,
   View,
   Keyboard,
+  ToastAndroid,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Dialog, Portal, Snackbar, TextInput} from 'react-native-paper';
+import {
+  Button,
+  Dialog,
+  Portal,
+  Snackbar,
+  TextInput,
+  SegmentedButtons,
+  DefaultTheme,
+} from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
 import axios from 'axios';
 import api from '../../../api.json';
@@ -35,8 +44,6 @@ const EpatientPresentComplaint = () => {
   //toaster msg....
   const [visibleMsg, setVisibleMsg] = React.useState(false);
 
-  const onToggleSnackBar = () => setVisibleMsg(!visibleMsg);
-
   const onDismissSnackBar = () => setVisibleMsg(false);
 
   const keys = ['Symptoms', 'Duration', 'Time', 'Frequency'];
@@ -48,6 +55,18 @@ const EpatientPresentComplaint = () => {
     {
       label: 'Once',
       value: 'Once',
+    },
+    {
+      label: 'Sometime',
+      value: 'Sometime',
+    },
+    {
+      label: 'Manytime',
+      value: 'Manytime',
+    },
+    {
+      label: 'Continuous',
+      value: 'Continuous',
     },
   ];
   let data2 = [
@@ -98,7 +117,7 @@ const EpatientPresentComplaint = () => {
   }, []);
   // to set width of table ......
   useEffect(() => {
-    setWidthArr([120, 80, 120, 120, ...Array(keys.length).fill(2)]);
+    setWidthArr([120, 80, 120, 150, ...Array(keys.length).fill(2)]);
   }, []);
 
   const category = [
@@ -163,13 +182,9 @@ const EpatientPresentComplaint = () => {
   const [dropdownValues2, setDropdownValues2] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
   const [isFocus2, setIsFocus2] = useState(false);
-  const _data = {
-    symptoms: '',
-    days: '',
-    hours: '',
-    minute: '',
-    frequency: '',
-  };
+  const [selectionValue, setSelectionValue] = useState('Medical');
+  const [selectionCategory, setSelectionCategory] = useState([]);
+
   const [rowData, setRowData] = useState([]);
 
   const inputChangeHandler = (rowIndex, field, text) => {
@@ -186,8 +201,37 @@ const EpatientPresentComplaint = () => {
     setRowData(newData);
   };
 
+  useEffect(() => {
+    if (selectionValue) {
+      FetchMobileComplaintsCategory();
+      setRowData([]);
+      setSelectedCategoryData([]);
+      setP_category('');
+    }
+  }, [selectionValue]);
+  //FetchMobileComplaintsCategory .....
+  const FetchMobileComplaintsCategory = async () => {
+    await axios
+      .post(`${api.baseurl}/FetchMobileComplaintsCategory`, {
+        hospital_id: hospital_id,
+        reception_id: reception_id,
+        patient_id: patient_id,
+        type: selectionValue,
+      })
+      .then(res => {
+        const {status, message} = res.data;
+        if (status === false) {
+          ToastAndroid.show(
+            `${message}`,
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+          );
+        } else {
+          setSelectionCategory(res.data.data);
+        }
+      });
+  };
   //list of category....
-
   const FetchSysmptomsAccCategory = async () => {
     try {
       await axios
@@ -196,6 +240,7 @@ const EpatientPresentComplaint = () => {
           hospital_id: hospital_id,
           reception_id: reception_id,
           patient_id: patient_id,
+          type: selectionValue,
         })
         .then(res => {
           const _data = res.data.data.map(res => ({
@@ -207,7 +252,6 @@ const EpatientPresentComplaint = () => {
           }));
 
           setRowData(_data);
-          console.log('update data ; ', _data);
         });
     } catch (error) {
       console.error(error);
@@ -233,33 +277,31 @@ const EpatientPresentComplaint = () => {
     );
 
     // Do something with the filtered rows, for example, send them to the server
-    // const data = {
-    //   hospital_id: hospital_id,
-    //   reception_id: reception_id,
-    //   patient_id: patient_id,
-    //   category: selectedCategoryData,
-    //   complaintArray: filledRows,
-    // };
-    console.log('data : ', filledRows);
-    // try {
-    //   await axios
-    //     .post(`${api.baseurl}/AddMobileComplaints`, {
-    //       hospital_id: hospital_id,
-    //       reception_id: reception_id,
-    //       patient_id: patient_id,
-    //       category: selectedCategoryData,
-    //       complaintArray: filledRows,
-    //     })
-    //     .then(res => {
-    //       console.log(res.data);
-    //       const {status} = res.data;
-    //       if (status === true) {
-    //       } else {
-    //       }
-    //     });
-    // } catch (error) {
-    // console.error(error);
-    // }
+
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileComplaints`, {
+          hospital_id: hospital_id,
+          reception_id: reception_id,
+          patient_id: patient_id,
+          category: selectedCategoryData,
+          complaintArray: filledRows,
+        })
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            return res.data;
+          } else {
+            ToastAndroid.show(
+              `${message}`,
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM,
+            );
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
 
     // Clear the form data
     setRowData([]);
@@ -272,8 +314,12 @@ const EpatientPresentComplaint = () => {
 
     // navigation.navigate('Eipdoptions');
   };
+  const theme = {
+    ...DefaultTheme,
+    roundness: 0, // Set roundness to 0 to remove borderRadius
+  };
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* after submit Msg... */}
       <Portal>
         <Dialog visible={visible}>
@@ -307,6 +353,22 @@ const EpatientPresentComplaint = () => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
+        <SegmentedButtons
+          theme={theme}
+          style={styles.segmentBtn}
+          value={selectionValue}
+          onValueChange={setSelectionValue}
+          buttons={[
+            {
+              value: 'Medical',
+              label: 'Medical',
+            },
+            {
+              value: 'Ayurvedic',
+              label: 'Ayurvedic',
+            },
+          ]}
+        />
         <View style={styles.formGroup}>
           <Text style={styles.tableWrapper3TXT}>Category</Text>
           <View style={{width: '70%'}}>
@@ -317,9 +379,9 @@ const EpatientPresentComplaint = () => {
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
-              data={category?.map(res => ({
-                label: res.label,
-                value: res.value,
+              data={selectionCategory?.map(res => ({
+                label: res.categoryname,
+                value: res.categoryvalue,
               }))}
               search
               maxHeight={300}
@@ -435,14 +497,15 @@ const EpatientPresentComplaint = () => {
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
-
-      <Button
-        style={styles.submitBtn}
-        mode="contained"
-        onPress={() => submitHandler()}>
-        Save
-      </Button>
-    </SafeAreaView>
+      <View>
+        <Button
+          style={styles.submitBtn}
+          mode="contained"
+          onPress={() => submitHandler()}>
+          Save
+        </Button>
+      </View>
+    </View>
   );
 };
 
@@ -497,6 +560,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 10,
     bottom: 0,
+    zIndex: 0,
   },
   label: {
     fontWeight: '600',
@@ -534,5 +598,9 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+  },
+  segmentBtn: {
+    marginHorizontal: 14,
+    marginTop: '5%',
   },
 });

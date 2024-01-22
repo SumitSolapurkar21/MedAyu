@@ -76,6 +76,7 @@ const EpatientTreatment = () => {
     setSearchInput('');
     setSelectedDrugCode([]);
     setVisibleList(false);
+    setNewArray([]);
   };
 
   return (
@@ -90,7 +91,7 @@ const EpatientTreatment = () => {
           selectedDrugCode?.drugcode ? selectedDrugCode?.drugcode : searchInput
         }
         onChangeText={text => {
-          setSearchInput(text), setSelectedDrugCode('');
+          setSearchInput(text), setSelectedDrugCode(''), setNewArray([]);
         }}
         right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
       />
