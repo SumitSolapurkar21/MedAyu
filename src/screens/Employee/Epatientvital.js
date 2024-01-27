@@ -137,7 +137,6 @@ const Epatientvital = () => {
             verbalResponse: verbalResponse,
           })
           .then(res => {
-            console.log(res.data);
             if (res.data.status === false) {
               ToastAndroid.show(
                 `${res.data.message}`,
@@ -281,7 +280,10 @@ const Epatientvital = () => {
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => hideDialog()}>Cancel</Button>
-            <Button onPress={() => navigation.navigate('Eipdoptions')}>
+            <Button
+              onPress={() => {
+                navigation.navigate('Epatientvitalhistory'), hideDialog();
+              }}>
               Ok
             </Button>
           </Dialog.Actions>

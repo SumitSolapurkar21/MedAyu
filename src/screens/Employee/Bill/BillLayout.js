@@ -63,6 +63,7 @@ const BillLayout = () => {
       })
       .then(res => {
         setBillPatientData(res.data);
+        console.log('bill data : ', res.data);
         return res.data;
       });
   };

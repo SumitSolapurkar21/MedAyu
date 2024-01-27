@@ -8,26 +8,48 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {List, TextInput} from 'react-native-paper';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import {Button, Dialog, List, Portal, TextInput} from 'react-native-paper';
 import api from '../../../api.json';
 import UserContext from '../../components/Context/Context';
+import DateTimePicker from 'react-native-ui-datepicker';
+import {useNavigation} from '@react-navigation/native';
 
 const EpatientTreatment = () => {
+  const navigation = useNavigation();
   const [searchInput, setSearchInput] = useState('');
   const [drugCode, setDrugCode] = useState('');
   const [selectedDrugCode, setSelectedDrugCode] = useState('');
   const [visibleList, setVisibleList] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
-  const [newArray, setNewArray] = useState([]); // State to store new data
+  const [temp, setTemp] = useState([]); // State to store filtered data
+  const [value, setValue] = useState();
+  const [showCalender, setShowCalender] = useState(false);
+  const [dateValues, setDateValues] = useState([]); // State to store date values for each field
+  const [datePickerIndex, setDatePickerIndex] = useState([]);
+
+  const [visibleMsg, setVisibleMsg] = useState(false);
+
+  const hideDialog = () => {
+    setVisibleMsg(false);
+    navigation.navigate('Eipdoptions');
+  };
 
   const {patientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id} = patientsData;
-  const [drugCodeChanges, setDrugCodeChanges] = useState(0);
 
   useEffect(() => {
     if (searchInput !== '') searchInputHandler();
   }, [searchInput]);
+
+  useEffect(() => {
+    // Update temp array when selectedDrugCode changes
+    if (selectedDrugCode !== '') {
+      const filteredData = selectedData.filter(
+        res => res.drugcode === selectedDrugCode.drugcode,
+      );
+      setTemp(prevData => [...prevData, ...filteredData]);
+    }
+  }, [selectedDrugCode, selectedData]);
 
   const searchInputHandler = async () => {
     try {
@@ -54,33 +76,47 @@ const EpatientTreatment = () => {
     }
   };
 
-  const _filterData = selectedData.filter(
-    res => res.drugcode === selectedDrugCode.drugcode,
-  );
-
-  const addButtonPressHandler = () => {
-    const newDrugData = {
-      drugcode: '',
-      drugname: '',
-      dose: '',
-      anupan: '',
-      route: '',
-      schedule: '',
-      duration: '',
-    };
-    setNewArray([...newArray, newDrugData]);
-    setVisibleList(false);
-  };
-
   const resetHandler = () => {
     setSearchInput('');
-    setSelectedDrugCode([]);
-    setVisibleList(false);
-    setNewArray([]);
+    setSelectedDrugCode('');
+    //     setTemp([]);
+    //     setVisibleList(false);
+  };
+  const Themes = [{mainColor: '#F5803E', activeTextColor: '#fff'}];
+
+  const calenderHandler = index => {
+    setShowCalender(true);
+    setDatePickerIndex(index); // Set the index of the date field for which the calendar is being opened
   };
 
+  const handleDateChange = (date, index) => {
+    const updatedTemp = [...temp];
+    updatedTemp[index].dateValues = date; // Update the dateValues property in the temp array
+    setTemp(updatedTemp);
+    setShowCalender(false); // Hide the calendar after selecting a date
+  };
+
+  //submit handler ....
+  const submitTreatmenthandler = () => {
+    console.log('temp : ', temp);
+    setVisibleMsg(true);
+    setTemp([]);
+  };
   return (
     <SafeAreaView style={styles.container}>
+      {/* success popup ... */}
+      <Portal>
+        <Dialog visible={visibleMsg}>
+          <Dialog.Title>Success</Dialog.Title>
+          <Dialog.Content>
+            <Text variant="bodyMedium">Treatment Is Added Successfully !</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Done</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+      {/* success popup end .... */}
       <Text style={styles.heading}>Treatments</Text>
       <TextInput
         mode="outlined"
@@ -91,7 +127,7 @@ const EpatientTreatment = () => {
           selectedDrugCode?.drugcode ? selectedDrugCode?.drugcode : searchInput
         }
         onChangeText={text => {
-          setSearchInput(text), setSelectedDrugCode(''), setNewArray([]);
+          setSearchInput(text), setSelectedDrugCode('');
         }}
         right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
       />
@@ -124,83 +160,165 @@ const EpatientTreatment = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.inputGroup}>
-        {_filterData.map(res => {
+        {temp.map((res, index) => {
           return (
-            <View style={styles.card}>
+            <View style={styles.card} key={index}>
               <View style={styles.cardContent}>
                 <Text style={styles.label}>Drug Code : </Text>
-                <Text style={styles.para}>{res.drugcode}</Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={res.drugcode}
+                  onChangeText={text => {
+                    // Update the value in temp array
+                    const updatedTemp = [...temp];
+                    updatedTemp[index].drugcode = text;
+                    setTemp(updatedTemp);
+                  }}
+                  editable={true}
+                />
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.label}>Drug Name : </Text>
-                <Text style={styles.para}>{res.drugname}</Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={res.drugname}
+                  onChangeText={text => {
+                    const updatedTemp = [...temp];
+                    updatedTemp[index].drugname = text;
+                    setTemp(updatedTemp);
+                  }}
+                  editable={true}
+                />
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Brand Name : </Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={res.brandname}
+                  onChangeText={text => {
+                    const updatedTemp = [...temp];
+                    updatedTemp[index].brandname = text;
+                    setTemp(updatedTemp);
+                  }}
+                  editable={true}
+                />
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.label}>Dose : </Text>
-                <Text style={styles.para}>{res.dose}</Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={res.dose}
+                  onChangeText={text => {
+                    const updatedTemp = [...temp];
+                    updatedTemp[index].dose = text;
+                    setTemp(updatedTemp);
+                  }}
+                  editable={true}
+                />
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.label}>Instruction : </Text>
-                <Text style={styles.para}>{res.anupan}</Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={res.anupan}
+                  onChangeText={text => {
+                    const updatedTemp = [...temp];
+                    updatedTemp[index].anupan = text;
+                    setTemp(updatedTemp);
+                  }}
+                  editable={true}
+                />
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.label}>Route : </Text>
-                <Text style={styles.para}>{res.route}</Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={res.route}
+                  onChangeText={text => {
+                    const updatedTemp = [...temp];
+                    updatedTemp[index].route = text;
+                    setTemp(updatedTemp);
+                  }}
+                  editable={true}
+                />
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.label}>Schedule : </Text>
-                <Text style={styles.para}>{res.schedule}</Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={res.schedule}
+                  onChangeText={text => {
+                    const updatedTemp = [...temp];
+                    updatedTemp[index].schedule = text;
+                    setTemp(updatedTemp);
+                  }}
+                  editable={true}
+                />
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.label}>Days : </Text>
-                <Text style={styles.para}>{res.duration}</Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={res.duration}
+                  onChangeText={text => {
+                    const updatedTemp = [...temp];
+                    updatedTemp[index].duration = text;
+                    setTemp(updatedTemp);
+                  }}
+                  editable={true}
+                />
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>From Date : </Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={temp[index].dateValues} // Use the dateValues property from the temp array
+                  editable={false}
+                  right={
+                    <TextInput.Icon
+                      icon="calendar"
+                      onPress={() => calenderHandler(index)}
+                    />
+                  }
+                />
               </View>
             </View>
           );
         })}
-        {newArray.map((newData, index) => (
-          <View style={styles.card} key={index}>
-            {/* Render new data with empty values */}
-            <View style={styles.cardContent}>
-              <Text style={styles.label}>Drug Code : </Text>
-              <Text style={styles.para}>{newData.drugcode}</Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={styles.label}>Drug Name : </Text>
-              <Text style={styles.para}>{newData.drugname}</Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={styles.label}>Dose : </Text>
-              <Text style={styles.para}>{newData.dose}</Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={styles.label}>Instruction : </Text>
-              <Text style={styles.para}>{newData.anupan}</Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={styles.label}>Route : </Text>
-              <Text style={styles.para}>{newData.route}</Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={styles.label}>Schedule : </Text>
-              <Text style={styles.para}>{newData.schedule}</Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={styles.label}>Duration : </Text>
-              <Text style={styles.para}>{newData.duration}</Text>
+        {showCalender && (
+          <View style={styles.datePickerContainer}>
+            <View style={styles.datePicker}>
+              <DateTimePicker
+                mode="date"
+                headerButtonColor={Themes[0]?.mainColor}
+                selectedItemColor={Themes[0]?.mainColor}
+                selectedTextStyle={{
+                  fontWeight: 'bold',
+                  color: Themes[0]?.activeTextColor,
+                }}
+                value={dateValues[datePickerIndex]} // Use separate state variable for each date field
+                onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
+              />
             </View>
           </View>
-        ))}
+        )}
       </ScrollView>
-      <View style={styles.addButton}>
-        <TouchableOpacity style={styles.btn} onPress={addButtonPressHandler}>
-          <FontAwesome6
-            name="plus"
-            size={18}
-            color="#ffffff"
-            style={{textAlign: 'center'}}
-          />
-        </TouchableOpacity>
+      <View>
+        <Button
+          mode="contained"
+          style={styles.btn}
+          onPress={() => submitTreatmenthandler()}>
+          Save
+        </Button>
       </View>
     </SafeAreaView>
   );
@@ -226,17 +344,22 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 8,
   },
+  input2: {
+    //     backgroundColor: '#ffffff',
+    paddingTop: 0,
+    paddingLeft: 0,
+    height: 35,
+    width: 210,
+    maxWidth: 220,
+  },
   addButton: {
     marginVertical: 10,
     marginHorizontal: 14,
     alignSelf: 'flex-end',
   },
   btn: {
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: '#289ffa',
-    height: 40,
-    width: 40,
+    marginVertical: 12,
+    alignSelf: 'center',
   },
   listView: {
     backgroundColor: '#ede8ed',
@@ -264,5 +387,20 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: 225,
     maxWidth: 225,
+  },
+  datePickerContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  datePicker: {
+    width: 300,
+    height: 330,
+    backgroundColor: '#d1e8ff',
+    padding: 10,
+    borderRadius: 15,
+    shadowRadius: 20,
+    shadowColor: '#e6e8eb',
+    shadowOpacity: 0.2,
+    shadowOffset: {width: 10, height: 10},
   },
 });

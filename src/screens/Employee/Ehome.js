@@ -39,7 +39,7 @@ const Ehome = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      Alert.alert('Hold on!', 'Are you sure you want to Exit App?', [
+      Alert.alert('', 'Are you sure you want to Exit App?', [
         {
           text: 'Cancel',
           onPress: () => null,
@@ -62,6 +62,9 @@ const Ehome = () => {
 
     return () => backHandler.remove();
   }, []);
+
+
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>

@@ -77,47 +77,11 @@ const BillAddItems = ({route}) => {
     if (hospital_id !== '') GetOPDServices();
   }, [hospital_id]);
 
-  let service_id = itemName;
-
-  useEffect(() => {
-    const serviceAmountRes = async () => {
-      try {
-        await axios
-          .post(`${api.baseurl}/GetServiceAmount`, {
-            service_id: service_id,
-          })
-          .then(res => {
-            setSelectedItemCharge(res.data);
-            const matchingService = opdServices.find(
-              service => service.service_id === service_id,
-            );
-            setOutbillingtype(matchingService.outbillingtype);
-          });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (service_id != '' || undefined) serviceAmountRes();
-  }, [service_id]);
-
-  // submit bill item handler .......
-  function generateRandom16DigitNumber() {
-    let randomNumber = '';
-    for (let i = 0; i < 16; i++) {
-      const digit = Math.floor(Math.random() * 10);
-      randomNumber += digit;
-    }
-    return randomNumber;
-  }
-
-  // Example: Generate a random 16-digit number
-  const random16DigitNumber = generateRandom16DigitNumber();
-
   const servicesArray = [
     {
       amount: selectedItemCharge.amount,
       billname: selectedItemCharge.outbillingname,
-      outbillingtype: outbillingtype,
+      outbillingtype: selectedItemCharge.outbillingtype,
     },
   ];
   const servicesArray2 = [
@@ -152,48 +116,169 @@ const BillAddItems = ({route}) => {
           })
       : setPatientEditArray(prevArray => [...prevArray, ...servicesArray2]),
       showDialog(true);
-
-    // : await axios
-    //     .post(`${api.baseurl}/UpdateMobileOPDServices`, {
-    //       reception_id: _id,
-    //       hospital_id: hospital_id,
-    //       fullname: name,
-    //       firstname: firstname,
-    //       mobilenumber: mobilenumber,
-    //       patient_id: patient_id,
-    //       patientgender: patientgender,
-    //       uhid: uhid,
-    //       nettotal: itemQuantity * selectedItemCharge.amount,
-    //       servicesArray,
-    //       bill_id: billHistoryArray,
-    //     })
-    //     .then(res => {
-    //       res.data.status === true
-    //         ? showDialog()
-    //         : console.warn(`${res.data.message}`);
-    //       return res.data;
-    //     });
   };
+
+  //service type ....
+  const [_serviceTypeDropdown, _setServiceTypeDropdown] = useState(false);
+  const [_serviceTypeSelected, _setServiceTypeSelected] = useState('');
+  const [_serviceTypeArray, _setServiceTypeArray] = useState([]);
+
+  useEffect(() => {
+    const _fetchservicetype = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/FetchServiceType`, {
+            hospital_id: hospital_id,
+          })
+          .then(res => {
+            _setServiceTypeArray(res.data.data);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (hospital_id !== '' || undefined || null) _fetchservicetype();
+  }, []);
+
+  //service category ......
+  const [_serviceCategoryDropdown, _setServiceCategoryDropdown] =
+    useState(false);
+  const [_serviceCategorySelected, _setServiceCategorySelected] = useState('');
+  const [_serviceCategoryArray, _setServiceCategoryArray] = useState([]);
+
+  useEffect(() => {
+    const _fetchservicecategory = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/getservicecategoryacctype`, {
+            hospital_id: hospital_id,
+            servicetype_id: _serviceTypeSelected,
+          })
+          .then(res => {
+            _setServiceCategoryArray(res.data.data);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (_serviceTypeSelected !== '' || undefined || null)
+      _fetchservicecategory();
+  }, [_serviceTypeSelected]);
+
+  //service item ......
+  const [_serviceItemDropdown, _setServiceItemDropdown] = useState(false);
+  const [_serviceItemSelected, _setServiceItemSelected] = useState('');
+  const [_serviceItemArray, _setServiceItemArray] = useState([]);
+
+  useEffect(() => {
+    const _fetchserviceitem = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/getserviceitemaccboth`, {
+            hospital_id: hospital_id,
+            servicetype_id: _serviceTypeSelected,
+            servicecategory_id: _serviceCategorySelected,
+          })
+          .then(res => {
+            _setServiceItemArray(res.data.data);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (
+      _serviceCategorySelected !== '' ||
+      undefined ||
+      (null && _serviceCategorySelected !== '') ||
+      undefined ||
+      null
+    )
+      _fetchserviceitem();
+  }, [_serviceCategorySelected, _serviceCategorySelected]);
+
+  useEffect(() => {
+    const serviceAmountRes = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/GetServiceAmount`, {
+            service_id: _serviceItemSelected,
+          })
+          .then(res => {
+            console.log('first', res.data);
+            setSelectedItemCharge(res.data);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (_serviceItemSelected != '' || undefined) serviceAmountRes();
+  }, [_serviceItemSelected]);
   return (
     <View style={styles.container}>
       {/* card 1 */}
       <View style={styles.card}>
-        <View style={styles.header}>
-          <DropDown
-            label={'Item Name'}
-            mode={'outlined'}
-            visible={showDropDown3}
-            showDropDown={() => setShowDropDown3(true)}
-            onDismiss={() => setShowDropDown3(false)}
-            value={itemName}
-            setValue={setItemName}
-            list={opdServices?.map((res, i) => ({
-              label: res.outbillingtype,
-              key: [res.amount, res.outbillingtype],
-              value: res.service_id,
-            }))}
-          />
-        </View>
+        {/* service type .... */}
+        <DropDown
+          label={'Service Type'}
+          mode={'outlined'}
+          visible={_serviceTypeDropdown}
+          showDropDown={() => _setServiceTypeDropdown(true)}
+          onDismiss={() => _setServiceTypeDropdown(false)}
+          value={_serviceTypeSelected}
+          setValue={_setServiceTypeSelected}
+          list={_serviceTypeArray?.map((res, i) => ({
+            label: res.servicetype,
+            key: [res._id, res.servicetype],
+            value: res._id,
+          }))}
+        />
+
+        {/* service category .... */}
+        <DropDown
+          label={'Service Category'}
+          mode={'outlined'}
+          visible={_serviceCategoryDropdown}
+          showDropDown={() => _setServiceCategoryDropdown(true)}
+          onDismiss={() => _setServiceCategoryDropdown(false)}
+          value={_serviceCategorySelected}
+          setValue={_setServiceCategorySelected}
+          list={_serviceCategoryArray?.map((res, i) => ({
+            label: res.servicecategory,
+            key: [res._id, res.servicecategory],
+            value: res._id,
+          }))}
+        />
+
+        {/* service item .... */}
+        <DropDown
+          label={'Service Item'}
+          mode={'outlined'}
+          visible={_serviceItemDropdown}
+          showDropDown={() => _setServiceItemDropdown(true)}
+          onDismiss={() => _setServiceItemDropdown(false)}
+          value={_serviceItemSelected}
+          setValue={_setServiceItemSelected}
+          list={_serviceItemArray?.map((res, i) => ({
+            label: res.outbillingname,
+            key: [res._id, res.outbillingname],
+            value: res._id,
+          }))}
+        />
+        {/* <DropDown
+          label={'Item Name'}
+          mode={'outlined'}
+          visible={showDropDown3}
+          showDropDown={() => setShowDropDown3(true)}
+          onDismiss={() => setShowDropDown3(false)}
+          value={itemName}
+          setValue={setItemName}
+          list={opdServices?.map((res, i) => ({
+            label: res.outbillingtype,
+            key: [res.amount, res.outbillingtype],
+            value: res.service_id,
+          }))}
+        /> */}
+        {/* </View> */}
         <View style={styles.grpMain}>
           <TextInput
             mode="outlined"
@@ -205,7 +290,7 @@ const BillAddItems = ({route}) => {
             keyboardType="numeric"
           />
 
-          <TextInput
+          {/* <TextInput
             mode="outlined"
             label="Doctor Name"
             placeholder="Quantity"
@@ -213,9 +298,8 @@ const BillAddItems = ({route}) => {
             value={selectedItemCharge.outbillingname}
             editable={false}
             multiline={true}
-          />
-        </View>
-        <View style={styles.grpMain}>
+          /> */}
+
           <TextInput
             mode="outlined"
             label="Rate(Price/Unit)"
@@ -224,6 +308,8 @@ const BillAddItems = ({route}) => {
             value={selectedItemCharge.amount}
             editable={false}
           />
+        </View>
+        <View style={styles.grpMain}>
           <View style={{width: '49%'}}>
             <DropDown
               label={'Tax'}
@@ -306,5 +392,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
     marginTop: 10,
+  },
+  dropdown: {
+    marginBottom: 8,
   },
 });
