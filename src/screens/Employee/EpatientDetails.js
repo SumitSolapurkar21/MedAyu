@@ -100,7 +100,7 @@ const EpatientDetails = () => {
         <TouchableOpacity
           style={styles.selectDiv}
           onPress={() =>
-            navigation.navigate('BillLayout', {
+            navigation.replace('BillLayout', {
               uhid: uhid,
               patient_id: patient_id,
               reception_id: _id,

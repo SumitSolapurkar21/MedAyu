@@ -35,7 +35,7 @@ const BillLayout = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      navigation.replace('EpatientDetails');
       return true;
     };
 
@@ -53,6 +53,7 @@ const BillLayout = () => {
       console.error('Error :', error);
     }
   }, []);
+
   const patientBillData = async () => {
     await axios
       .post(`${api.baseurl}/GetAllBillsForMobile`, {
@@ -63,7 +64,6 @@ const BillLayout = () => {
       })
       .then(res => {
         setBillPatientData(res.data);
-        console.log('bill data : ', res.data);
         return res.data;
       });
   };
@@ -194,7 +194,15 @@ const BillLayout = () => {
                   )
                 : billPatientData?.data.map((res, i) => {
                     return (
-                      <View style={styles.billDiv} key={i}>
+                      <TouchableOpacity
+                        style={styles.billDiv}
+                        key={i}
+                        onPress={() => {
+                          navigation.navigate('BillEditItemForm', {
+                            bill_id: res.bill_id,
+                          });
+                          console.log('bill_id ...', res.bill_id);
+                        }}>
                         <View style={styles.billContent}>
                           <Text
                             style={[
@@ -219,13 +227,13 @@ const BillLayout = () => {
                         <View style={styles.billContent}>
                           <Text style={styles.billTxt}>Item Subtotal</Text>
                           <Text style={styles.billTxt}>
-                            1 x {res.amount} = &nbsp;
+                            {res.quantity} x {res.amount} = &nbsp;
                             <FontAwesome6
                               name="indian-rupee-sign"
                               color="black"
                               size={10}
                             />
-                            &nbsp;{res.amount}
+                            &nbsp;{res.tempfullamount}
                           </Text>
                         </View>
                         <View style={styles.billContent}>
@@ -265,7 +273,7 @@ const BillLayout = () => {
                           <Text style={styles.billTxt}>Date</Text>
                           <Text style={styles.billTxt}>{res.bill_date}</Text>
                         </View>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                           style={styles.deleteButton}
                           onPress={() =>
                             deleteHandler({
@@ -278,8 +286,8 @@ const BillLayout = () => {
                             })
                           }>
                           <FontAwesome6 name="trash" color="red" size={18} />
-                        </TouchableOpacity>
-                      </View>
+                        </TouchableOpacity> */}
+                      </TouchableOpacity>
                     );
                   })}
             </ScrollView>

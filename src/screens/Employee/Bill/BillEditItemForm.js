@@ -10,20 +10,16 @@ import api from '../../../../api.json';
 import {Dialog, Portal} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
-const BillAddItems = ({route}) => {
+const BillEditItemForm = ({route}) => {
+  const {bill_id} = route.params;
   const navigation = useNavigation();
-  const {bill_type} = route.params;
-  const [itemQuantity, setItemQuantity] = useState('1');
-  const [showDropDown2, setShowDropDown2] = useState(false);
-  const [tax, setTax] = useState('');
-  const {userData, scannedPatientsData, setPatientEditArray, billHistoryArray} =
-    useContext(UserContext);
-  const [opdServices, setOpdServices] = useState([]);
+
+  const [editArray, setEditArray] = useState([]);
+  const {userData, scannedPatientsData} = useContext(UserContext);
   const [selectedItemCharge, setSelectedItemCharge] = useState('');
 
-  const {_id, hospital_id, name} = userData.data[0];
-  const {firstname, mobilenumber, patient_id, patientgender, uhid} =
-    scannedPatientsData;
+  const {_id, hospital_id} = userData.data[0];
+  const {patient_id} = scannedPatientsData;
 
   //diaglog...
   const [visible, setVisible] = React.useState(false);
@@ -34,7 +30,7 @@ const BillAddItems = ({route}) => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack('EpatientDetails');
+      navigation.goBack();
       return true;
     };
 
@@ -45,35 +41,44 @@ const BillAddItems = ({route}) => {
 
     return () => backHandler.remove();
   }, []);
-  const taxList = [
-    {
-      label: 'With Tax',
-      value: '1',
-    },
-    {
-      label: 'Without Tax',
-      value: '2',
-    },
-  ];
+  // get data for edit ......
 
-  // api ....
   useEffect(() => {
-    const GetOPDServices = async () => {
+    const fetchData = async () => {
       try {
-        const GetOPDServicesRes = await axios.post(
-          `${api.baseurl}/GetOPDServices`,
-          {hospital_id: hospital_id},
-        );
+        const res = await axios.post(`${api.baseurl}/EditMobileBills`, {
+          reception_id: _id,
+          hospital_id: hospital_id,
+          patient_id: patient_id,
+          bill_id: bill_id,
+        });
 
-        const data = GetOPDServicesRes.data.servicesArray || [];
-        console.log('data : ', data);
-        setOpdServices(data);
+        setEditArray(res.data.data);
+        const {billname_id, outbillingtype_id, servicetype_id} =
+          res.data.data[0];
+
+        // Set initial values for dropdowns based on the data
+        _setServiceTypeSelected(servicetype_id || '');
+        _setServiceCategorySelected(outbillingtype_id || '');
+        _setServiceItemSelected(billname_id || '');
+
+        // Extract quantity and set it in formData
+        const quantityFromEditArray = res.data.data[0]?.quantity || '';
+        setFormData(prevData => ({
+          ...prevData,
+          quantity: quantityFromEditArray,
+        }));
       } catch (error) {
-        console.error('Error : ', error);
+        console.error(error);
       }
     };
-    if (hospital_id !== '') GetOPDServices();
-  }, [hospital_id]);
+
+    // Include necessary dependencies in the dependency array
+    fetchData();
+  }, [hospital_id, _id, patient_id, bill_id]);
+
+  // Include _serviceCategoryArray in the dependency array
+
   //service type ....
   const [_serviceTypeDropdown, _setServiceTypeDropdown] = useState(false);
   const [_serviceTypeSelected, _setServiceTypeSelected] = useState('');
@@ -93,9 +98,8 @@ const BillAddItems = ({route}) => {
         console.error(error);
       }
     };
-    if (hospital_id !== '' || undefined || null) _fetchservicetype();
+    if (hospital_id !== '') _fetchservicetype();
   }, []);
-
   //service category ......
   const [_serviceCategoryDropdown, _setServiceCategoryDropdown] =
     useState(false);
@@ -108,7 +112,7 @@ const BillAddItems = ({route}) => {
         await axios
           .post(`${api.baseurl}/getservicecategoryacctype`, {
             hospital_id: hospital_id,
-            servicetype_id: _serviceTypeSelected._id,
+            servicetype_id: _serviceTypeSelected,
           })
           .then(res => {
             _setServiceCategoryArray(res.data.data);
@@ -117,14 +121,12 @@ const BillAddItems = ({route}) => {
         console.error(error);
       }
     };
-    if (_serviceTypeSelected !== '' || undefined || null)
-      _fetchservicecategory();
+    if (_serviceTypeSelected !== '') _fetchservicecategory();
   }, [_serviceTypeSelected]);
 
   //service item ......
   const [_serviceItemDropdown, _setServiceItemDropdown] = useState(false);
   const [_serviceItemSelected, _setServiceItemSelected] = useState('');
-  const [_serviceItemSelected2, _setServiceItemSelected2] = useState('');
   const [_serviceItemArray, _setServiceItemArray] = useState([]);
 
   useEffect(() => {
@@ -133,7 +135,7 @@ const BillAddItems = ({route}) => {
         await axios
           .post(`${api.baseurl}/getserviceitemaccboth`, {
             hospital_id: hospital_id,
-            servicetype_id: _serviceTypeSelected._id,
+            servicetype_id: _serviceTypeSelected,
             servicecategory_id: _serviceCategorySelected,
           })
           .then(res => {
@@ -151,7 +153,7 @@ const BillAddItems = ({route}) => {
       null
     )
       _fetchserviceitem();
-  }, [_serviceTypeSelected, _serviceCategorySelected]);
+  }, [_serviceCategorySelected, _serviceCategorySelected]);
 
   useEffect(() => {
     const serviceAmountRes = async () => {
@@ -167,58 +169,88 @@ const BillAddItems = ({route}) => {
         console.error(error);
       }
     };
-    if (_serviceItemSelected != '' || undefined) serviceAmountRes();
+    if (_serviceItemSelected !== '' || undefined || null) serviceAmountRes();
   }, [_serviceItemSelected]);
 
-  // while add data ....
+  // delete Handler :
+  const deleteHandler = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/DeleteOpdItem`, {
+          bill_id: bill_id,
+          servicesArray: [servicesArray],
+        })
+        .then(res => {
+          res.data.status === true
+            ? navigation.replace('BillLayout')
+            : console.error(`${res.data.message}`);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //   const _quantity = itemQuantity !== '' ? itemQuantity : editArray[0]?.quantity;
+
+  const [formData, setFormData] = useState({
+    totalamount: selectedItemCharge?.amount,
+  });
+
+  //
+  const handleInputChange = (fieldName, value) => {
+    setFormData({
+      ...formData,
+      [fieldName]: value,
+    });
+  };
+
+  // total amount for edit item....
+  const _totalamount =
+    parseInt(formData.quantity) * parseInt(selectedItemCharge?.amount);
+  //   console.log('selectedItemCharge : ', editArray[0]);
+  // bill service array ......
   const servicesArray = [
     {
       amount: selectedItemCharge.amount,
+      servicetype: editArray[0]?.servicetype,
       billname: selectedItemCharge.outbillingname,
-      billname_id: _serviceItemSelected,
       outbillingtype: selectedItemCharge.outbillingtype,
+      quantity: formData.quantity,
+      servicetype_id: _serviceTypeSelected,
       outbillingtype_id: _serviceCategorySelected,
-      quantity: itemQuantity,
-      servicetype: _serviceTypeSelected?.servicetype,
-      servicetype_id: _serviceTypeSelected?._id,
-    },
-  ];
-  // while edit data .......
-  const servicesArray2 = [
-    {
-      amount: selectedItemCharge.amount,
-      billname: selectedItemCharge.outbillingname,
-      outbillingtype: selectedItemCharge.outbillingtype,
-      bill_id: billHistoryArray,
+      billname_id: _serviceItemSelected,
     },
   ];
 
-  // submit Bill Item Handler .......
-
+  //edit bill items .....
   const submitBillItemHandler = async () => {
-    bill_type === 'ADD'
-      ? await axios
-          .post(`${api.baseurl}/UpdateMobileOPDServices`, {
-            reception_id: _id,
-            hospital_id: hospital_id,
-            fullname: name,
-            firstname: firstname,
-            mobilenumber: mobilenumber,
-            patient_id: patient_id,
-            patientgender: patientgender,
-            uhid: uhid,
-            nettotal: itemQuantity * selectedItemCharge.amount,
-            servicesArray,
-          })
-          .then(res => {
-            res.data.status === true
-              ? // showDialog()
-                navigation.replace('BillLayout')
-              : console.warn(`${res.data.message}`);
-            return res.data;
-          })
-      : setPatientEditArray(prevArray => [...prevArray, ...servicesArray2]),
+    //     const data = {
+    //       bill_id: bill_id,
+    //       reception_id: _id,
+    //       hospital_id: hospital_id,
+    //       nettotal: formData.quantity * selectedItemCharge.amount,
+    //       servicesArray,
+    //     };
+    //     console.log(data);
+    try {
+      await axios
+        .post(`${api.baseurl}/UpdateMobileBills`, {
+          bill_id: bill_id,
+          reception_id: _id,
+          hospital_id: hospital_id,
+          nettotal: formData.quantity * selectedItemCharge.amount,
+          servicesArray,
+        })
+        .then(res => {
+          res.data.status === true
+            ? showDialog()
+            : console.warn(`${res.data.message}`);
+          return res.data;
+        });
       showDialog(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -227,6 +259,7 @@ const BillAddItems = ({route}) => {
       <View style={styles.card}>
         {/* service type .... */}
         <DropDown
+          key={`ServiceTypeDropDown_${_serviceTypeSelected}`}
           label={'Service Type'}
           mode={'outlined'}
           visible={_serviceTypeDropdown}
@@ -237,12 +270,12 @@ const BillAddItems = ({route}) => {
           list={_serviceTypeArray?.map((res, i) => ({
             label: res.servicetype,
             key: [res._id, res.servicetype],
-            value: res,
+            value: res._id,
           }))}
         />
 
-        {/* service category .... */}
         <DropDown
+          key={`ServiceCategoryDropDown_${_serviceCategorySelected}`}
           label={'Service Category'}
           mode={'outlined'}
           visible={_serviceCategoryDropdown}
@@ -250,15 +283,15 @@ const BillAddItems = ({route}) => {
           onDismiss={() => _setServiceCategoryDropdown(false)}
           value={_serviceCategorySelected}
           setValue={_setServiceCategorySelected}
-          list={_serviceCategoryArray?.map(res => ({
+          list={_serviceCategoryArray?.map((res, i) => ({
             label: res.servicecategory,
             key: [res._id, res.servicecategory],
             value: res._id,
           }))}
         />
 
-        {/* service item .... */}
         <DropDown
+          key={`ServiceItemDropDown_${_serviceItemSelected}`}
           label={'Service Item'}
           mode={'outlined'}
           visible={_serviceItemDropdown}
@@ -266,7 +299,7 @@ const BillAddItems = ({route}) => {
           onDismiss={() => _setServiceItemDropdown(false)}
           value={_serviceItemSelected}
           setValue={_setServiceItemSelected}
-          list={_serviceItemArray?.map(res => ({
+          list={_serviceItemArray?.map((res, i) => ({
             label: res.outbillingname,
             key: [res._id, res.outbillingname],
             value: res._id,
@@ -280,11 +313,11 @@ const BillAddItems = ({route}) => {
             label="Quantity"
             placeholder="Quantity"
             style={{width: '49%'}}
-            value={itemQuantity}
-            onChangeText={e => setItemQuantity(e)}
+            value={formData.quantity}
+            onChangeText={text => handleInputChange('quantity', text)}
             keyboardType="numeric"
+            editable={true}
           />
-
           <TextInput
             mode="outlined"
             label="Rate(Price/Unit)"
@@ -294,25 +327,12 @@ const BillAddItems = ({route}) => {
             editable={false}
           />
         </View>
-        <View style={styles.grpMain}>
-          <View style={{width: '49%'}}>
-            <DropDown
-              label={'Tax'}
-              mode={'outlined'}
-              visible={showDropDown2}
-              showDropDown={() => setShowDropDown2(true)}
-              onDismiss={() => setShowDropDown2(false)}
-              value={tax}
-              setValue={setTax}
-              list={taxList}
-            />
-          </View>
-        </View>
+
         <Text style={{fontWeight: '600', marginTop: 20, color: 'black'}}>
           Total Amount : &nbsp; &nbsp;
           <FontAwesome6 name="indian-rupee-sign" color="black" size={12} />
           &nbsp; &nbsp;
-          {itemQuantity * selectedItemCharge.amount || '0.00'}
+          {_totalamount || selectedItemCharge.amount}
         </Text>
       </View>
 
@@ -328,47 +348,46 @@ const BillAddItems = ({route}) => {
               onPress={() => {
                 hideDialog(),
                   navigation.goBack(),
-                  bill_type === 'ADD'
-                    ? navigation.replace('BillLayout')
-                    : navigation.replace('BillEditItems');
+                  navigation.replace('BillLayout');
               }}>
               Done
             </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
-      <Button
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          alignSelf: 'center',
-          marginVertical: 10,
-        }}
-        mode="contained"
-        onPress={() => {
-          submitBillItemHandler();
-        }}>
-        Save
-      </Button>
+      <View style={styles.btngrp}>
+        <Button
+          style={styles.btn}
+          mode="contained"
+          onPress={() => {
+            submitBillItemHandler();
+          }}>
+          Update
+        </Button>
+        <Button
+          style={styles.btn}
+          mode="contained"
+          onPress={() => {
+            deleteHandler();
+          }}>
+          Delete
+        </Button>
+      </View>
     </View>
   );
 };
 
-export default BillAddItems;
+export default BillEditItemForm;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   card: {
     backgroundColor: 'white',
     marginTop: 10,
     marginHorizontal: 12,
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 0,
-    elevation: 4,
-    borderRadius: 8,
     padding: 6,
     paddingBottom: 10,
   },
@@ -380,5 +399,16 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     marginBottom: 8,
+  },
+  btngrp: {
+    position: 'absolute',
+    flexDirection: 'row',
+    marginHorizontal: 14,
+    bottom: 0,
+    gap: 10,
+    marginVertical: 10,
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
 });

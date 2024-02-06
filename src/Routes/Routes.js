@@ -39,6 +39,7 @@ import Eipdbeds from '../screens/Employee/Eipdbeds';
 import EpatientDiagnosis from '../screens/Employee/EpatientDiagnosis';
 import EpatientTreatment from '../screens/Employee/EpatientTreatment';
 import EpatientPresentComplaint from '../screens/Employee/EpatientPresentComplaint';
+import BillEditItemForm from '../screens/Employee/Bill/BillEditItemForm';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -262,6 +263,7 @@ const Routes = () => {
           name="BillLayout"
           component={BillLayout}
           options={({navigation}) => ({
+            headerShown: false,
             title: 'Patient Bill',
             headerRight: () => (
               <FontAwesome
@@ -527,6 +529,26 @@ const Routes = () => {
           component={EpatientTreatment}
           options={({navigation}) => ({
             title: 'Treatments',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="BillEditItemForm"
+          component={BillEditItemForm}
+          options={({navigation}) => ({
+            title: 'Edit Bill Details',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
