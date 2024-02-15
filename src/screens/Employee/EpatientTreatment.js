@@ -31,7 +31,7 @@ const EpatientTreatment = () => {
 
   const hideDialog = () => {
     setVisibleMsg(false);
-    navigation.navigate('Eipdoptions');
+    navigation.navigate('EpatientTreatmentHistory');
   };
 
   const {patientsData} = useContext(UserContext);
@@ -92,15 +92,46 @@ const EpatientTreatment = () => {
   const handleDateChange = (date, index) => {
     const updatedTemp = [...temp];
     updatedTemp[index].dateValues = date; // Update the dateValues property in the temp array
+    updatedTemp[index].activestatus = true;
     setTemp(updatedTemp);
     setShowCalender(false); // Hide the calendar after selecting a date
   };
 
+  //currrent date  .....
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const currentdate = `${year}-${month}-${day}`;
+
+  // current time .....
+  const hours = String(today.getHours()).padStart(2, '0');
+  const minutes = String(today.getMinutes()).padStart(2, '0');
+  const currenttime = `${hours}:${minutes}`;
   //submit handler ....
-  const submitTreatmenthandler = () => {
-    console.log('temp : ', temp);
-    setVisibleMsg(true);
-    setTemp([]);
+  const submitTreatmenthandler = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileTreatment`, {
+          hospital_id: hospital_id,
+          patient_id: patient_id,
+          reception_id: reception_id,
+          dateadd: currentdate,
+          timeadd: currenttime,
+          medicineprescriptionarray: temp,
+        })
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            setVisibleMsg(true);
+            setTemp([]);
+          } else {
+            console.error(`${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -312,12 +343,18 @@ const EpatientTreatment = () => {
           </View>
         )}
       </ScrollView>
-      <View>
+      <View style={styles.submitbutton}>
         <Button
           mode="contained"
           style={styles.btn}
           onPress={() => submitTreatmenthandler()}>
           Save
+        </Button>
+        <Button
+          mode="contained"
+          style={styles.btn}
+          onPress={() => navigation.navigate('EpatientTreatmentHistory')}>
+          History
         </Button>
       </View>
     </SafeAreaView>
@@ -402,5 +439,10 @@ const styles = StyleSheet.create({
     shadowColor: '#e6e8eb',
     shadowOpacity: 0.2,
     shadowOffset: {width: 10, height: 10},
+  },
+  submitbutton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
   },
 });

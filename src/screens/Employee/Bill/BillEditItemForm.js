@@ -224,14 +224,6 @@ const BillEditItemForm = ({route}) => {
 
   //edit bill items .....
   const submitBillItemHandler = async () => {
-    //     const data = {
-    //       bill_id: bill_id,
-    //       reception_id: _id,
-    //       hospital_id: hospital_id,
-    //       nettotal: formData.quantity * selectedItemCharge.amount,
-    //       servicesArray,
-    //     };
-    //     console.log(data);
     try {
       await axios
         .post(`${api.baseurl}/UpdateMobileBills`, {
