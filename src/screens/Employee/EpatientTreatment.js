@@ -148,6 +148,23 @@ const EpatientTreatment = () => {
         </Dialog>
       </Portal>
       {/* success popup end .... */}
+      {showCalender && (
+        <View style={styles.datePickerContainer}>
+          <View style={styles.datePicker}>
+            <DateTimePicker
+              mode="date"
+              headerButtonColor={Themes[0]?.mainColor}
+              selectedItemColor={Themes[0]?.mainColor}
+              selectedTextStyle={{
+                fontWeight: 'bold',
+                color: Themes[0]?.activeTextColor,
+              }}
+              value={dateValues[datePickerIndex]} // Use separate state variable for each date field
+              onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
+            />
+          </View>
+        </View>
+      )}
       <Text style={styles.heading}>Treatments</Text>
       <TextInput
         mode="outlined"
@@ -312,7 +329,7 @@ const EpatientTreatment = () => {
                 <TextInput
                   mode="flat"
                   style={[styles.input2]}
-                  value={temp[index].dateValues} // Use the dateValues property from the temp array
+                  value={temp[index].dateValues}
                   editable={false}
                   right={
                     <TextInput.Icon
@@ -325,23 +342,13 @@ const EpatientTreatment = () => {
             </View>
           );
         })}
-        {showCalender && (
-          <View style={styles.datePickerContainer}>
-            <View style={styles.datePicker}>
-              <DateTimePicker
-                mode="date"
-                headerButtonColor={Themes[0]?.mainColor}
-                selectedItemColor={Themes[0]?.mainColor}
-                selectedTextStyle={{
-                  fontWeight: 'bold',
-                  color: Themes[0]?.activeTextColor,
-                }}
-                value={dateValues[datePickerIndex]} // Use separate state variable for each date field
-                onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
-              />
-            </View>
-          </View>
-        )}
+
+        <Button
+          mode="contained"
+          style={[styles.btn, {alignSelf: 'flex-start'}]}
+          onPress={() => resetHandler()}>
+          Add More
+        </Button>
       </ScrollView>
       <View style={styles.submitbutton}>
         <Button
@@ -355,6 +362,12 @@ const EpatientTreatment = () => {
           style={styles.btn}
           onPress={() => navigation.navigate('EpatientTreatmentHistory')}>
           History
+        </Button>
+        <Button
+          mode="contained"
+          style={styles.btn}
+          onPress={() => navigation.navigate('EpatientTreatmentPrescription')}>
+          Prescription
         </Button>
       </View>
     </SafeAreaView>
@@ -428,6 +441,8 @@ const styles = StyleSheet.create({
   datePickerContainer: {
     alignItems: 'center',
     flex: 1,
+    top: 100,
+    zIndex: 10,
   },
   datePicker: {
     width: 300,

@@ -33,17 +33,13 @@ const EpatientTreatmentHistory = () => {
 
     return () => backHandler.remove();
   }, []);
+
   const onToggleSwitch = (uniqueid, currentStatus) => {
     const newSwitchStates = {...switchStates};
     newSwitchStates[uniqueid] = !currentStatus;
     setSwitchStates(newSwitchStates);
 
     // Make the API call or perform any desired action here
-    // console.log('Prescription ID:', {uniqueid: uniqueid});
-    // console.log('New Status:', {
-    //   uniqueid: uniqueid,
-    //   activestatus: newSwitchStates[uniqueid],
-    // });
 
     try {
       axios
@@ -67,6 +63,7 @@ const EpatientTreatmentHistory = () => {
       console.warn(error);
     }
   };
+
   //get patient treatment history ......
   useEffect(() => {
     _fetchtreatmenthistory();

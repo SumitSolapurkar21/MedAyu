@@ -41,6 +41,7 @@ import EpatientTreatment from '../screens/Employee/EpatientTreatment';
 import EpatientPresentComplaint from '../screens/Employee/EpatientPresentComplaint';
 import BillEditItemForm from '../screens/Employee/Bill/BillEditItemForm';
 import EpatientTreatmentHistory from '../screens/Employee/EpatientTreatmentHistory';
+import EpatientTreatmentPrescription from '../screens/Employee/EpatientTreatmentPrescription';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -550,6 +551,26 @@ const Routes = () => {
           component={EpatientTreatmentHistory}
           options={({navigation}) => ({
             title: 'Treatment History',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="EpatientTreatmentPrescription"
+          component={EpatientTreatmentPrescription}
+          options={({navigation}) => ({
+            title: 'Treatment Prescription',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
