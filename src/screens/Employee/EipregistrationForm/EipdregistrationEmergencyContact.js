@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../../../api.json';

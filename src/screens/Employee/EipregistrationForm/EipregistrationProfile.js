@@ -45,6 +45,12 @@ const EipregistrationProfile = () => {
 
   const [cityData, setCityData] = useState([]);
   const [datePicker, setDatePicker] = useState(false);
+
+  const [departmentData, setDepartmentData] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+
+  const [doctorData, setDoctorData] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState('');
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -182,6 +188,8 @@ const EipregistrationProfile = () => {
     pincode: '',
     landlineno: '',
     whatsappno: '',
+    // depart_id: '',
+    // doctor_id: '',
   });
   // Date
   const datePickerHandler = () => {
@@ -211,6 +219,47 @@ const EipregistrationProfile = () => {
       [fieldName]: value,
     });
   };
+
+  //   Get Department Data ...
+  // let reception_id = userData.data[0]._id;
+  // useEffect(() => {
+  //   const departmentData = async () => {
+  //     try {
+  //       await axios
+  //         .post(`${api.baseurl}/FetchReceptionDepartmentDeopdown`, {
+  //           reception_id: userData.data[0]._id,
+  //         })
+  //         .then(res => {
+  //           const dpt_data = res.data.data;
+  //           console.log('depart data : ', dpt_data);
+  //           setDepartmentData(dpt_data);
+  //         });
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   if (reception_id !== '') departmentData();
+  // }, [reception_id]);
+
+  // let department_id = formData.depart_id;
+  // console.log('id : ', department_id);
+  // useEffect(() => {
+  //   const consultDoctorData = async () => {
+  //     try {
+  //       await axios
+  //         .post(`${api.baseurl}/DoctorAccDepartmentinAppmtRecpt`, {
+  //           depart_id: department_id,
+  //         })
+  //         .then(res => {
+  //           const consultDoctor_data = res.data.data;
+  //           setDoctorData(consultDoctor_data);
+  //         });
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   if (department_id !== '') consultDoctorData();
+  // }, [department_id]);
 
   //submit profile handler.....
   // const _profiledata = {
@@ -331,6 +380,40 @@ const EipregistrationProfile = () => {
                 value={appoint_id}
               />
             </View>
+            {/* <View style={styles.formGroup}>
+              <View style={styles.fields}>
+                <Text style={styles.fieldText}>Department</Text>
+                <SelectList
+                  setSelected={val => {
+                    setSelectedDepartment(val);
+                    handleInputChange('depart_id', val);
+                  }}
+                  data={departmentData.map(res => ({
+                    key: [res.depart_id, res.deptname],
+                    value: res.deptname,
+                  }))}
+                  search={false}
+                  boxStyles={styles.selectBox}
+                />
+              </View>
+            </View>
+            <View style={styles.formGroup}>
+              <View style={styles.fields}>
+                <Text style={styles.fieldText}>Treating Doctor</Text>
+                <SelectList
+                  setSelected={val => {
+                    setSelectedDoctor(val);
+                    handleInputChange('doctor_id', val);
+                  }}
+                  data={doctorData.map(res => ({
+                    key: res._id,
+                    value: res.name,
+                  }))}
+                  search={false}
+                  boxStyles={styles.selectBox}
+                />
+              </View>
+            </View> */}
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>Full Name </Text>
               <TextInput

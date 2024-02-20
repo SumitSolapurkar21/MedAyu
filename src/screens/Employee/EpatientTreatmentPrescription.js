@@ -1,5 +1,4 @@
 import {
-  BackHandler,
   ScrollView,
   StyleSheet,
   ToastAndroid,
@@ -10,14 +9,12 @@ import React, {useContext, useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import api from '../../../api.json';
-import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 import {Text} from 'react-native-paper';
 import RNPrint from 'react-native-print';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import Share from 'react-native-share';
-import logo from '../../images/medayu.jpeg';
 
 const EpatientTreatmentPrescription = () => {
   const {patientsData, scannedPatientsData} = useContext(UserContext);
@@ -80,9 +77,21 @@ const EpatientTreatmentPrescription = () => {
         },
       );
 
-      const {medicineprescriptionarray, ..._prescriptiondata} =
+      const {medicineprescriptionarray, complaintarray, ..._prescriptiondata} =
         patientTreatmentPrescriptionDataRes.data;
-
+      console.log('_prescriptiondata : ', _prescriptiondata);
+      const _complainttableRows = complaintarray
+        ?.map((res, i) => {
+          return `
+                     <tr key=${i}>
+                       <td>${res.symptoms}</td>
+                       <td>${res.duration}</td>
+                       <td>${res.time}</td>
+                       <td>${res.frequency}</td>
+                     </tr>
+                   `;
+        })
+        .join('');
       const tableRows = medicineprescriptionarray
         ?.map((res, i) => {
           return `
@@ -230,53 +239,79 @@ const EpatientTreatmentPrescription = () => {
                      border-top: 2px solid green;
                 }
                 span{
-                     color: green;
+                     color: black;
                 }
            </style>
       </head>
-      
+      z
       <body style="border: 1px solid;">
            <div class="head">
                 <div>
-                     <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
+                     <img src=${
+                       _prescriptiondata?.hosp_logo
+                     } style="width: 14vw;" />
                 </div>
                 <div class="head-content">
                      <h1>SAMADHAN HOSPITAL</h1>
                      <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
-                     <p>50, GANESH NAGAR, NAGPUE.440024</p>
+                     <p>50, GANESH NAGAR, NAGPUR.440024</p>
                 </div>
                 <div class="head-content"></div>
            </div>
            <div class="head-content2">
                 <div class="head-content2-part1">
                      <h3 style="margin: 0;
-                          padding: 8px;">REGISTRATION NO : </h3>
+                          padding: 8px;">REG. NO : </h3>
                 </div>
       
            </div>
            <div class="head-content3">
                 <div class="head-content3-part1">
                      <h3 style="margin: 0;
-                          padding: 8px;">UHID NO : <span>${_prescriptiondata?.uhid}</span> </h3>
+                          padding: 8px;">UHID NO : <span>${
+                            _prescriptiondata?.uhid
+                          }</span> </h3>
                      <h3 style="margin: 0;
-                          padding: 8px;">OP/IP NO : <span>${_prescriptiondata?.opno}</span> </h3>
+                          padding: 8px;">OP/IP NO : <span>${
+                            _prescriptiondata?.ipno || _prescriptiondata?.opno
+                          }</span> </h3>
                      <h3 style="margin: 0;
-                          padding: 8px;">DATE : <span>${_prescriptiondata?.registerdate}</span> </h3>
+                          padding: 8px;">DATE : <span>${
+                            _prescriptiondata?.registerdate
+                          }</span> </h3>
                 </div>
                 <div class="head-content3-part2">
                      <h3 style="margin: 0;
-                          padding: 8px;">NAME : <span>${_prescriptiondata?.firstname}</span> </h3>
+                          padding: 8px;">NAME : <span>${
+                            _prescriptiondata?.firstname
+                          }</span> </h3>
                      <h3 style="margin: 0;
-                          padding: 8px;">AGE : <span>${_prescriptiondata?.patientage}</span></h3>
+                          padding: 8px;">AGE : <span>${
+                            _prescriptiondata?.patientage
+                          }</span></h3>
                      <h3 style="margin: 0;
-                          padding: 8px;">GENDER :<span>${_prescriptiondata?.patientgender}</span> </h3>
+                          padding: 8px;">GENDER : <span>${
+                            _prescriptiondata?.patientgender
+                          }</span> </h3>
                 </div>
                 <div class="head-content3-part3">
                      <h3 style="margin: 0;
-                          padding: 8px; width: 100%;">CONSULTANT NAME : <span>${_prescriptiondata?.consultantname}</span> </h3>
+                          padding: 8px; width: 106%;">CONSULTANT NAME : <span>${
+                            _prescriptiondata?.consultantname
+                          }</span> </h3>
                      
                      <h3 style="margin: 0;width: 50%;
-                          padding: 8px;">TIME : <span>${_prescriptiondata?.time}</span></h3>
+                          padding: 8px;">TIME : <span>${
+                            _prescriptiondata?.time
+                          }</span></h3>
+                </div>
+                <div class="head-content3-part3">
+                     <h3 style="margin: 0;
+                          padding: 8px; width: 106%;">TREATING DOCTOR NAME : <span>${
+                            //    _prescriptiondata?.treating_doctor ||
+                            _prescriptiondata?.consultantname
+                          }</span> </h3>
+                     
                 </div>
       
            </div>
@@ -293,19 +328,11 @@ const EpatientTreatmentPrescription = () => {
                      <thead>
                           <th>COMPLAINTS</th>
                           <th>DURATION</th>
+                          <th>TIME</th>
                           <th>FREQUENCY</th>
                      </thead>
                      <tbody>
-                          <tr>
-                               <td>-</td>
-                               <td>-</td>
-                               <td>-</td>
-                          </tr>
-                          <tr>
-                               <td>-</td>
-                               <td>-</td>
-                               <td>-</td>
-                          </tr>
+                         ${_complainttableRows}
                      </tbody>
                 </table>
            </div>
@@ -334,8 +361,8 @@ const EpatientTreatmentPrescription = () => {
            <br /><br />
            <div class="main4">
                 <div style="width: 100%;">
-                     <p><b>Dr. SHAILESH GAHUKAR</b></p>
-                     <p>MBBS, MD </p>
+                <p><b>${_prescriptiondata?.consultantname || '-----'}</b></p>
+                    <p>${_prescriptiondata?.designation || '-----'} </p>
                      <p>REG. NO. 2008/10/3546 </p>
                 </div>
            </div>
@@ -370,9 +397,21 @@ const EpatientTreatmentPrescription = () => {
         },
       );
 
-      const {medicineprescriptionarray, ..._prescriptiondata} =
+      const {medicineprescriptionarray, complaintarray, ..._prescriptiondata} =
         patientTreatmentPrescriptionDataRes.data;
-
+      console.log('_prescriptiondata : ', _prescriptiondata);
+      const _complainttableRows = complaintarray
+        ?.map((res, i) => {
+          return `
+                       <tr key=${i}>
+                         <td>${res.symptoms}</td>
+                         <td>${res.duration}</td>
+                         <td>${res.time}</td>
+                         <td>${res.frequency}</td>
+                       </tr>
+                     `;
+        })
+        .join('');
       const tableRows = medicineprescriptionarray
         ?.map((res, i) => {
           return `
@@ -417,7 +456,10 @@ const EpatientTreatmentPrescription = () => {
         
                   }
         
-                 
+                  /* thead {
+                       background-color: green;
+                  } */
+        
                   table tr th {
                        padding: 6px;
                        border: 1px solid black
@@ -495,12 +537,14 @@ const EpatientTreatmentPrescription = () => {
                   .head-content3-part3 {
                        display: flex;
                        justify-content: space-between;
+                       
                   }
         
                   .head-content3-part1 h3,
                   .head-content3-part2 h3,
                   .head-content3-part3 h3 {
                        width: 33%;
+                       font-size: 16px;
                   }
         
                   .head-content h1,
@@ -515,54 +559,79 @@ const EpatientTreatmentPrescription = () => {
                        border-top: 2px solid green;
                   }
                   span{
-                       color: green;
+                       color: black;
                   }
              </style>
         </head>
-        
+        z
         <body style="border: 1px solid;">
              <div class="head">
                   <div>
-                       <img src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png" style="width: 10vw;" />
+                       <img src=${
+                         _prescriptiondata?.hosp_logo
+                       } style="width: 14vw;" />
                   </div>
                   <div class="head-content">
                        <h1>SAMADHAN HOSPITAL</h1>
-                       <p>( OPERATED BY <img src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png"
-                                 style="width: 6vw;" /> HEALTHCARE LLP )</p>
-                       <p>50, GANESH NAGAR, NAGPUE.440024</p>
+                       <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
+                       <p>50, GANESH NAGAR, NAGPUR.440024</p>
                   </div>
                   <div class="head-content"></div>
              </div>
              <div class="head-content2">
                   <div class="head-content2-part1">
                        <h3 style="margin: 0;
-                            padding: 8px;">REGISTRATION NO : </h3>
+                            padding: 8px;">REG. NO : </h3>
                   </div>
         
              </div>
              <div class="head-content3">
                   <div class="head-content3-part1">
                        <h3 style="margin: 0;
-                            padding: 8px;">UHID : <span>${_prescriptiondata?.uhid}</span> </h3>
+                            padding: 8px;">UHID NO : <span>${
+                              _prescriptiondata?.uhid
+                            }</span> </h3>
                        <h3 style="margin: 0;
-                            padding: 8px;">OP/IP : <span>${_prescriptiondata?.opno}</span> </h3>
+                            padding: 8px;">OP/IP NO : <span>${
+                              _prescriptiondata?.ipno || _prescriptiondata?.opno
+                            }</span> </h3>
                        <h3 style="margin: 0;
-                            padding: 8px;">DATE : <span>${_prescriptiondata?.registerdate}</span> </h3>
+                            padding: 8px;">DATE : <span>${
+                              _prescriptiondata?.registerdate
+                            }</span> </h3>
                   </div>
                   <div class="head-content3-part2">
                        <h3 style="margin: 0;
-                            padding: 8px;">NAME : <span>${_prescriptiondata?.firstname}</span> </h3>
+                            padding: 8px;">NAME : <span>${
+                              _prescriptiondata?.firstname
+                            }</span> </h3>
                        <h3 style="margin: 0;
-                            padding: 8px;">AGE : <span>${_prescriptiondata?.patientage}</span></h3>
+                            padding: 8px;">AGE : <span>${
+                              _prescriptiondata?.patientage
+                            }</span></h3>
                        <h3 style="margin: 0;
-                            padding: 8px;">GENDER : <span>${_prescriptiondata?.patientgender}</span> </h3>
+                            padding: 8px;">GENDER : <span>${
+                              _prescriptiondata?.patientgender
+                            }</span> </h3>
                   </div>
                   <div class="head-content3-part3">
                        <h3 style="margin: 0;
-                            padding: 8px; width: 60%;">CONSULTENT NAME : <span>${_prescriptiondata?.consultantname}</span> </h3>
+                            padding: 8px; width: 106%;">CONSULTANT NAME : <span>${
+                              _prescriptiondata?.consultantname
+                            }</span> </h3>
                        
-                       <h3 style="margin: 0;width: 40%;
-                            padding: 8px;">TIME : <span>${_prescriptiondata?.time}</span></h3>
+                       <h3 style="margin: 0;width: 50%;
+                            padding: 8px;">TIME : <span>${
+                              _prescriptiondata?.time
+                            }</span></h3>
+                  </div>
+                  <div class="head-content3-part3">
+                       <h3 style="margin: 0;
+                            padding: 8px; width: 106%;">TREATING DOCTOR NAME : <span>${
+                              // _prescriptiondata?.treating_doctor || '-'
+                              _prescriptiondata?.consultantname
+                            }</span> </h3>
+                       
                   </div>
         
              </div>
@@ -579,19 +648,11 @@ const EpatientTreatmentPrescription = () => {
                        <thead>
                             <th>COMPLAINTS</th>
                             <th>DURATION</th>
+                            <th>TIME</th>
                             <th>FREQUENCY</th>
                        </thead>
                        <tbody>
-                            <tr>
-                                 <td>-</td>
-                                 <td>-</td>
-                                 <td>-</td>
-                            </tr>
-                            <tr>
-                                 <td>-</td>
-                                 <td>-</td>
-                                 <td>-</td>
-                            </tr>
+                           ${_complainttableRows}
                        </tbody>
                   </table>
              </div>
@@ -620,8 +681,8 @@ const EpatientTreatmentPrescription = () => {
              <br /><br />
              <div class="main4">
                   <div style="width: 100%;">
-                       <p><b>Dr. SHAILESH GAHUKAR</b></p>
-                       <p>MBBS, MD </p>
+                  <p><b>${_prescriptiondata?.consultantname || '-----'}</b></p>
+                      <p>${_prescriptiondata?.designation || '-----'} </p>
                        <p>REG. NO. 2008/10/3546 </p>
                   </div>
              </div>
@@ -632,8 +693,7 @@ const EpatientTreatmentPrescription = () => {
              </div>
         </body>
         
-        </html>
-                                    `;
+        </html> `;
 
       const {fs} = RNFetchBlob;
       const path = fs.dirs.DocumentDir + '/Prescription.pdf';
