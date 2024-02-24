@@ -42,6 +42,8 @@ import EpatientPresentComplaint from '../screens/Employee/EpatientPresentComplai
 import BillEditItemForm from '../screens/Employee/Bill/BillEditItemForm';
 import EpatientTreatmentHistory from '../screens/Employee/EpatientTreatmentHistory';
 import EpatientTreatmentPrescription from '../screens/Employee/EpatientTreatmentPrescription';
+import EpatientTreatmentPrescriptionEdit from '../screens/Employee/EpatientTreatmentPrescriptionEdit';
+import EpatientProcedure from '../screens/Employee/Procedure/EpatientProcedure';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -591,6 +593,46 @@ const Routes = () => {
           component={BillEditItemForm}
           options={({navigation}) => ({
             title: 'Edit Bill Details',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="EpatientTreatmentPrescriptionEdit"
+          component={EpatientTreatmentPrescriptionEdit}
+          options={({navigation}) => ({
+            title: 'Edit Treatment Prescription',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="EpatientProcedure"
+          component={EpatientProcedure}
+          options={({navigation}) => ({
+            title: 'Procedure',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"

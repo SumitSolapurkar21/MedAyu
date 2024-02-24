@@ -15,8 +15,10 @@ import RNPrint from 'react-native-print';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import Share from 'react-native-share';
+import {useNavigation} from '@react-navigation/native';
 
 const EpatientTreatmentPrescription = () => {
+  const navigation = useNavigation();
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id} = patientsData;
   const [prescriptionArray, setPrescriptionArray] = useState(null);
@@ -79,7 +81,7 @@ const EpatientTreatmentPrescription = () => {
 
       const {medicineprescriptionarray, complaintarray, ..._prescriptiondata} =
         patientTreatmentPrescriptionDataRes.data;
-      console.log('_prescriptiondata : ', _prescriptiondata);
+
       const _complainttableRows = complaintarray
         ?.map((res, i) => {
           return `
@@ -399,7 +401,7 @@ const EpatientTreatmentPrescription = () => {
 
       const {medicineprescriptionarray, complaintarray, ..._prescriptiondata} =
         patientTreatmentPrescriptionDataRes.data;
-      console.log('_prescriptiondata : ', _prescriptiondata);
+
       const _complainttableRows = complaintarray
         ?.map((res, i) => {
           return `
@@ -726,6 +728,7 @@ const EpatientTreatmentPrescription = () => {
       console.error(error);
     }
   };
+
   return (
     <View style={styles.container}>
       {/* Patient Detail... */}
@@ -810,7 +813,12 @@ const EpatientTreatmentPrescription = () => {
                     }}>
                     <FontAwesome6 name="share" color="#1669f0" size={18} />
                   </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('EpatientTreatmentPrescriptionEdit', {
+                        prescription_id: res._id,
+                      })
+                    }>
                     <FontAwesome6
                       name="pen-to-square"
                       color="#1669f0"

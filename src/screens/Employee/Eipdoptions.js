@@ -7,6 +7,7 @@ import {
   Image,
   ToastAndroid,
 } from 'react-native';
+
 import React, {useContext, useEffect} from 'react';
 import vital from '../../images/vital.png';
 import admission from '../../images/admission.png';
@@ -100,6 +101,12 @@ const Eipdoptions = () => {
           onPress={() => navigation.navigate('EpatientTreatment')}>
           <Image source={diagnosis} alt="diagnosis" style={styles.img} />
           <Text style={styles.uName}>Treatement</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('EpatientProcedure')}>
+          <Image source={diagnosis} alt="diagnosis" style={styles.img} />
+          <Text style={styles.uName}>Procedure</Text>
         </TouchableOpacity>
       </View>
 
