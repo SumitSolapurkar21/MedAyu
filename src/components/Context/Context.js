@@ -12,6 +12,8 @@ export const UserProvider = ({children}) => {
   const [patientEditArray, setPatientEditArray] = useState([]);
   const [surveyArray, setSurveyArray] = useState([]);
   const [admittedList, setAdmittedList] = useState([]);
+  const [opdServices, setOpdServices] = useState([]);
+  const [selectCategory, setSelectedCategory] = useState([]);
 
   const updateSharedData = data => {
     setPatientEditArray(prevData => [...prevData, data]);
@@ -36,6 +38,10 @@ export const UserProvider = ({children}) => {
     updateSharedData,
     admittedList,
     setAdmittedList,
+    opdServices,
+    setOpdServices,
+    selectCategory,
+    setSelectedCategory,
   };
 
   return (

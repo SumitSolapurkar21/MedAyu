@@ -44,12 +44,14 @@ import EpatientTreatmentHistory from '../screens/Employee/EpatientTreatmentHisto
 import EpatientTreatmentPrescription from '../screens/Employee/EpatientTreatmentPrescription';
 import EpatientTreatmentPrescriptionEdit from '../screens/Employee/EpatientTreatmentPrescriptionEdit';
 import EpatientProcedure from '../screens/Employee/Procedure/EpatientProcedure';
+import ProcedureContent from '../screens/Employee/Procedure/ProcedureContent';
+import ProcedureServiceType from '../screens/Employee/Procedure/ProcedureServiceType';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Routes = () => {
-  const {setIsLoggedIn} = useContext(UserContext);
+  const {setIsLoggedIn, selectCategory} = useContext(UserContext);
   const logoutHandler = async () => {
     // Clear user token from AsyncStorage
     await AsyncStorage.removeItem('userToken');
@@ -633,6 +635,46 @@ const Routes = () => {
           component={EpatientProcedure}
           options={({navigation}) => ({
             title: 'Procedure',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="ProcedureContent"
+          component={ProcedureContent}
+          options={({navigation}) => ({
+            title: 'Select Procedure',
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="ProcedureServiceType"
+          component={ProcedureServiceType}
+          options={({navigation}) => ({
+            title: `${selectCategory}`,
             headerRight: () => (
               <FontAwesome
                 name="sign-out"

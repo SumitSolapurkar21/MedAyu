@@ -8,7 +8,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import vital from '../../images/vital.png';
 import admission from '../../images/admission.png';
 import adt from '../../images/adt.png';
@@ -18,9 +18,12 @@ import treatment from '../../images/treatment.png';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 import {BackHandler} from 'react-native';
+import axios from 'axios';
+import api from '../../../api.json';
 
 const Eipdoptions = () => {
   const navigation = useNavigation();
+  const [_serviceTypeArray, _setServiceTypeArray] = useState([]);
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -35,7 +38,7 @@ const Eipdoptions = () => {
 
     return () => backHandler.remove();
   }, []);
-  const {setPatientsData, scannedPatientsData, userData} =
+  const {setPatientsData, scannedPatientsData, userData, setOpdServices} =
     useContext(UserContext);
 
   const {uhid, patient_id} = scannedPatientsData;
@@ -50,6 +53,24 @@ const Eipdoptions = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const _fetchservicetype = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/FetchServiceType`, {
+            hospital_id: hospital_id,
+          })
+          .then(res => {
+            _setServiceTypeArray(res.data.data);
+
+            setOpdServices(res.data.data);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (hospital_id !== '' || undefined || null) _fetchservicetype();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardSelection}>
@@ -104,7 +125,7 @@ const Eipdoptions = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => navigation.navigate('EpatientProcedure')}>
+          onPress={() => navigation.navigate('ProcedureContent')}>
           <Image source={diagnosis} alt="diagnosis" style={styles.img} />
           <Text style={styles.uName}>Procedure</Text>
         </TouchableOpacity>
