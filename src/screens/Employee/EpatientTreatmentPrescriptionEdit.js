@@ -33,7 +33,6 @@ const EpatientTreatmentPrescriptionEdit = ({route}) => {
             prescription_id: prescription_id,
           })
           .then(res => {
-            //   console.log('res: ', res.data.data);
             //   const {medicineprescriptionarray, ...otherData} = res.data;
             //   //   setPrescriptionArrayData(medicineprescriptionarray);
             setTemp(res.data.data);

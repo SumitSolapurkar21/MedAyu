@@ -207,7 +207,6 @@ const BillEditItemForm = ({route}) => {
   // total amount for edit item....
   const _totalamount =
     parseInt(formData.quantity) * parseInt(selectedItemCharge?.amount);
-  //   console.log('selectedItemCharge : ', editArray[0]);
   // bill service array ......
   const servicesArray = [
     {

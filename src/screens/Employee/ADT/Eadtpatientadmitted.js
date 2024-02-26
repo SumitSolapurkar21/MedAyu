@@ -269,7 +269,6 @@ const Eadtpatientadmitted = () => {
               : `${selectedTime?.hours}.${selectedTime?.minutes}`,
         })
         .then(res => {
-          // console.log('update transfer : ', res);
           if (res.data.status === true) {
             setShowIndicator(true);
             hideDialog();

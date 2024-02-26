@@ -157,6 +157,7 @@ const ProcedureServiceType = ({route}) => {
   const handleDateChange = (date, index) => {
     const updatedTemp = [...temp];
     updatedTemp[index].proceduredate = date;
+    updatedTemp[index].activestatus = true;
     setTemp(updatedTemp);
     setShowCalender(false); // Hide the calendar after selecting a date
   };
@@ -332,7 +333,12 @@ const ProcedureServiceType = ({route}) => {
                 <TextInput
                   mode="flat"
                   style={[styles.input2]}
-                  value={res.procedurekit}
+                  //    value={res.procedurekit
+                  //      .map(drug => `${drug.drugname}: ${drug.qty}`)
+                  //      .join(', ')}
+                  value={res.procedurekit
+                    .map(drug => `${drug.drugname}`)
+                    .join(', ')}
                   onChangeText={text => {
                     const updatedTemp = [...temp];
                     updatedTemp[index].procedurekit = text;
@@ -365,7 +371,7 @@ const ProcedureServiceType = ({route}) => {
                   value={res.proceduredays}
                   onChangeText={text => {
                     const updatedTemp = [...temp];
-                    updatedTemp[index].proceduredays = text;
+                    updatedTemp[index].proceduredays = text || '';
                     setTemp(updatedTemp);
                   }}
                   editable={true}
@@ -509,5 +515,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 6,
     gap: 6,
+  },
+  datePickerContainer: {
+    alignItems: 'center',
+    flex: 1,
+    top: 100,
+    zIndex: 10,
+  },
+  datePicker: {
+    width: 300,
+    height: 330,
+    backgroundColor: '#d1e8ff',
+    padding: 10,
+    borderRadius: 15,
+    shadowRadius: 20,
+    shadowColor: '#e6e8eb',
+    shadowOpacity: 0.2,
+    shadowOffset: {width: 10, height: 10},
   },
 });

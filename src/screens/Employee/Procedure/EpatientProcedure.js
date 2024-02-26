@@ -87,7 +87,6 @@ const EpatientProcedure = () => {
             text: searchInput,
           })
           .then(res => {
-            console.log('res : ', res.data.data);
             const _procedurename = res.data.data.map(res => ({
               procedure_id: res.procedure_id,
               procedurename: res.procedurename,

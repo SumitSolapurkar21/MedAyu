@@ -66,7 +66,6 @@ const BillAddItems = ({route}) => {
         );
 
         const data = GetOPDServicesRes.data.servicesArray || [];
-        console.log('data : ', data);
         setOpdServices(data);
       } catch (error) {
         console.error('Error : ', error);

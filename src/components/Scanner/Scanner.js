@@ -81,7 +81,6 @@ export default function Scanner({route}) {
   const handleScannerSuccess = e => {
     if (e) {
       const data = e.data.split(',');
-      console.log('data : ', data);
       uhid = data[0];
       appoint_id = data[1];
 
@@ -108,7 +107,6 @@ export default function Scanner({route}) {
             location: 'Nagpur',
           })
           .then(response => {
-            console.log('res : ', response);
             setMessage(response.data.message);
             return response.data;
           });

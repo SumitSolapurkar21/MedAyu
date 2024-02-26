@@ -5,6 +5,7 @@ import axios from 'axios';
 import api from '../../../../api.json';
 import {Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import procedure from '../../../images/prodedure.png';
 
 const ProcedureContent = () => {
   const navigation = useNavigation();
@@ -26,7 +27,6 @@ const ProcedureContent = () => {
             servicetype_id: procedure_id,
           })
           .then(res => {
-            console.log(res.data.data);
             _setServiceCategoryArray(res.data.data);
           });
       } catch (error) {
@@ -52,6 +52,7 @@ const ProcedureContent = () => {
                 });
                 setSelectedCategory(res.servicecategory);
               }}>
+              <Image source={procedure} alt="procedure" style={styles.img} />
               <Text style={styles.uName}>{res.servicecategory}</Text>
             </TouchableOpacity>
           );
@@ -73,7 +74,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginHorizontal: 16,
     marginTop: 16,
-    gap: 20,
+    gap: 10,
+    justifyContent: 'space-between',
   },
   selectDiv: {
     flexDirection: 'row',
@@ -86,12 +88,17 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 6,
     padding: 10,
-    //     width: '47%',
+    width: '47%',
   },
   uName: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
     color: '#127359',
     flexWrap: 'wrap',
+  },
+  img: {
+    resizeMode: 'contain',
+    width: 35,
+    height: 35,
   },
 });

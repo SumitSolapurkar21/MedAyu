@@ -231,7 +231,6 @@ const EipregistrationProfile = () => {
   //         })
   //         .then(res => {
   //           const dpt_data = res.data.data;
-  //           console.log('depart data : ', dpt_data);
   //           setDepartmentData(dpt_data);
   //         });
   //     } catch (error) {
@@ -242,7 +241,6 @@ const EipregistrationProfile = () => {
   // }, [reception_id]);
 
   // let department_id = formData.depart_id;
-  // console.log('id : ', department_id);
   // useEffect(() => {
   //   const consultDoctorData = async () => {
   //     try {

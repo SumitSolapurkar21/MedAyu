@@ -201,7 +201,6 @@ const BillLayout = () => {
                           navigation.navigate('BillEditItemForm', {
                             bill_id: res.bill_id,
                           });
-                          console.log('bill_id ...', res.bill_id);
                         }}>
                         <View style={styles.billContent}>
                           <Text
