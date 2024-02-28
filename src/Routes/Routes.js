@@ -46,6 +46,9 @@ import EpatientTreatmentPrescriptionEdit from '../screens/Employee/EpatientTreat
 import EpatientProcedure from '../screens/Employee/Procedure/EpatientProcedure';
 import ProcedureContent from '../screens/Employee/Procedure/ProcedureContent';
 import ProcedureServiceType from '../screens/Employee/Procedure/ProcedureServiceType';
+import Procedurehistory from '../screens/Employee/Procedure/Procedurehistory';
+import Preprecedureprescription from '../screens/Employee/Procedure/Preprecedureprescription';
+import Prepostprocedure from '../screens/Employee/Procedure/Prepostprocedure';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -675,6 +678,66 @@ const Routes = () => {
           component={ProcedureServiceType}
           options={({navigation}) => ({
             title: `${selectCategory}`,
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="Procedurehistory"
+          component={Procedurehistory}
+          options={({navigation}) => ({
+            title: `${selectCategory} HISTORY`,
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="Preprecedureprescription"
+          component={Preprecedureprescription}
+          options={({navigation}) => ({
+            title: `${selectCategory} PRESCRIPTION`,
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="Prepostprocedure"
+          component={Prepostprocedure}
+          options={({navigation}) => ({
+            title: `Procedures`,
             headerRight: () => (
               <FontAwesome
                 name="sign-out"

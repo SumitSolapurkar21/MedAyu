@@ -124,6 +124,7 @@ const ProcedureServiceType = ({route}) => {
             }));
             setSelectedProcedureCode(_procedurename);
             setSelectedProcedure(res.data.data);
+            console.log('res.data.data ; ', JSON.stringify(res.data.data));
             setVisibleList(true);
           });
       } catch (error) {
@@ -337,7 +338,7 @@ const ProcedureServiceType = ({route}) => {
                   //      .map(drug => `${drug.drugname}: ${drug.qty}`)
                   //      .join(', ')}
                   value={res.procedurekit
-                    .map(drug => `${drug.drugname}`)
+                    ?.map(drug => `${drug.drugname}`)
                     .join(', ')}
                   onChangeText={text => {
                     const updatedTemp = [...temp];
@@ -404,14 +405,24 @@ const ProcedureServiceType = ({route}) => {
         </Button>
       </ScrollView>
       <View style={styles.btnGrp}>
-        <Button mode="contained" style={[styles.btn]}>
-          History
-        </Button>
         <Button
           mode="contained"
           style={[styles.btn]}
           onPress={() => addpanchakarmaprocedure()}>
-          Update
+          Save
+        </Button>
+        <Button
+          mode="contained"
+          style={[styles.btn]}
+          onPress={() => navigation.navigate('Procedurehistory')}>
+          History
+        </Button>
+
+        <Button
+          mode="contained"
+          style={[styles.btn]}
+          onPress={() => navigation.navigate('Preprecedureprescription')}>
+          Prescription
         </Button>
       </View>
     </View>

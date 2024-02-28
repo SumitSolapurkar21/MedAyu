@@ -125,7 +125,7 @@ const Eipdoptions = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => navigation.navigate('ProcedureContent')}>
+          onPress={() => navigation.navigate('Prepostprocedure')}>
           <Image source={diagnosis} alt="diagnosis" style={styles.img} />
           <Text style={styles.uName}>Procedure</Text>
         </TouchableOpacity>
