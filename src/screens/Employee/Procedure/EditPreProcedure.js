@@ -1,21 +1,13 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  Button,
-  Dialog,
-  IconButton,
-  List,
-  Portal,
-  Text,
-  TextInput,
-} from 'react-native-paper';
+import {Button, Text, TextInput} from 'react-native-paper';
 import api from '../../../../api.json';
 import axios from 'axios';
 // import DateTimePicker from 'react-native-ui-datepicker';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../components/Context/Context';
 
-const Editprocedure = ({route}) => {
+const EditPreprocedure = ({route}) => {
   const navigation = useNavigation();
   const {patientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id} = patientsData;
@@ -108,7 +100,7 @@ const Editprocedure = ({route}) => {
                 />
               </View>
               <View style={styles.cardContent}>
-                <Text style={styles.label}>Instruction : </Text>
+                <Text style={styles.label}>Pre Instruction : </Text>
                 <TextInput
                   mode="flat"
                   //    multiline
@@ -152,7 +144,7 @@ const Editprocedure = ({route}) => {
                   }
                 />
               </View>
-              <View style={styles.cardContent}>
+              <View style={[styles.cardContent, {display: 'none'}]}>
                 <Text style={styles.label}>Post Instruction : </Text>
                 <TextInput
                   mode="flat"
@@ -166,7 +158,7 @@ const Editprocedure = ({route}) => {
                   editable={true}
                 />
               </View>
-              <View style={styles.cardContent}>
+              <View style={[styles.cardContent, {display: 'none'}]}>
                 <Text style={styles.label}>Advice : </Text>
                 <TextInput
                   mode="flat"
@@ -219,7 +211,7 @@ const Editprocedure = ({route}) => {
   );
 };
 
-export default Editprocedure;
+export default EditPreprocedure;
 
 const styles = StyleSheet.create({
   container: {

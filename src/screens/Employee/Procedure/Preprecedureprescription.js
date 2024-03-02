@@ -24,9 +24,8 @@ const Preprecedureprescription = ({route}) => {
   const {hospital_id, patient_id, reception_id} = patientsData;
   const [procedureHistory, setProcedureHistory] = useState([]);
   const navigation = useNavigation();
-  const [value, setValue] = useState('Pending');
-  const {_preprocedurevalue} = route.params;
-  // console.log('_preprocedurevalue : ', _preprocedurevalue);
+  const [value, setValue] = useState('Schedule');
+  const {_preprocedurevalue, procedureType} = route.params;
 
   //get patient treatment history ......
   useEffect(() => {
@@ -67,8 +66,12 @@ const Preprecedureprescription = ({route}) => {
           reception_id: reception_id,
         },
       );
-      const {panchakarmaprocedurearray, complaintarray, ..._prescriptiondata} =
-        generatePreprocedurenotes.data;
+      const {
+        panchakarmaprocedurearray,
+        complaintArray,
+        medicineprescriptionarray,
+        ..._prescriptiondata
+      } = generatePreprocedurenotes.data;
 
       const _complainttableRows = panchakarmaprocedurearray
         ?.map((res, i) => {
@@ -82,285 +85,1071 @@ const Preprecedureprescription = ({route}) => {
                    `;
         })
         .join('');
+      const _complainttableRows2 = complaintArray
+        ?.map((res, i) => {
+          return `
+                     <tr key=${i}>
+                       <td>${res.symptoms}</td>
+                       <td>${res.duration}</td>
+                       <td>${res.frequency}</td>
+                     </tr>
+                   `;
+        })
+        .join('');
 
-      const html = `
-      <!DOCTYPE html>
-<html>
+      const _complainttableRows3 = medicineprescriptionarray
+        ?.map((res, i) => {
+          return `
+                     <tr key=${i}>
+                       <td>${res.drugname}</td>
+                       <td>${res.dose}</td>
+                       <td>${res.route}</td>
+                       <td>${res.schedule}</td>
+                       <td>${res.duration}</td>
+                     </tr>
+                   `;
+        })
+        .join('');
 
-<head>
-     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-     <style>
-          .head {
-               display: flex;
-               justify-content: space-between;
-               align-items: center;
-               padding: 0 12px;
-               border-bottom: 2px solid blue;
-          }
-
-          .head-content {
-               line-height: 0.5;
-          }
-
-          .head-content2-part2 p {
-               text-align: right;
-          }
-
-          table {
-               width: 94%;
-               margin-left: 20px;
-               margin-right: 20px;
-               margin-bottom: 2%;
-
-          }
-
-          /* thead {
-               background-color: green;
-          } */
-
-          table tr th {
-               padding: 6px;
-               border: 1px solid black
-          }
-
-          table tr td {
-               padding: 6px;
-               border: 1px solid black;
-               text-align: center;
-          }
-
-          .main-part1,
-          .main-part2,
-          .main2 {
-               width: 50%;
-          }
-
-          .main,
-          .main3 {
-               display: flex;
-          }
-
-          .main2,
-          .main-part3,
-          .main-part4,
-          .main-part5 {
-               border: 1px solid black
-          }
-
-          .main2,
-          .main-part3 p {
-               text-align: center;
-               margin-top: 0;
-               margin-bottom: 0;
-               padding: 6px;
-          }
-
-          .main2 p:nth-child(odd) {
-               background-color: green;
-               color: white;
-               font-weight: 600;
-          }
-
-          .main-part3 p:nth-child(odd) {
-               background-color: green;
-               color: white;
-               font-weight: 600;
-          }
-
-          .main-part3-p p {
-               text-align: left;
-          }
-
-          .main4 p {
-               text-align: right;
-               margin-left: 20px;
-               margin-right: 20px;
-          }
-
-          .head-content3 {
-               padding: 10px;
-               border: 1px solid black;
-               border-radius: 6px;
-               margin-left: 20px;
-               margin-right: 20px;
-          }
-
-          .head-content2-part1 h3 {
-               color: black;
-               text-align: center;
-          }
-
-          .head-content3-part1,
-          .head-content3-part2,
-          .head-content3-part3 {
-               display: flex;
-               justify-content: space-between;
-          }
-
-          .head-content3-part1 h3,
-          .head-content3-part2 h3,
-          .head-content3-part3 h3 {
-               width: 33%;
-          }
-
-          .head-content h1,
-          p {
-               text-align: center;
-          }
-          .main5{
-               display: flex;
-               justify-content: space-between;
-               margin-left: 20px;
-               margin-right: 20px;
-               border-top: 2px solid green;
-          }
-          span{
-               color: green;
-          }
-          td.vLabel{
-            font-weight: bold;
-          }
-          body{
-            border: 1px solid black;
-            height : calc(100vh - 20px);
-          }
-     </style>
-</head>
-
-<body>
-     <div class="head">
-          <div>
-          <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
-          </div>
-          <div class="head-content">
-               <h1>SAMADHAN HOSPITAL</h1>
-               <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
-               <p>50, GANESH NAGAR, NAGPUE.440024</p>
-               <p>Registration No :  542</p>
-          </div>
-          <div class="head-content"></div>
-     </div>
-     <div class="head-content2">
+      const _complainttableRows4 = panchakarmaprocedurearray
+        ?.map((res, i) => {
+          return `
+          <div key=${i} style="line-height: 10px">
+          <div class="head-content2">
           <div class="head-content2-part1">
-               <h3 style="margin: 0;
-                    padding: 8px;">PROCEDURE NOTE </h3>
+                <h3 style="margin: 0;
+                        padding: 10px 20px;text-align: left;">Procedure Name : ${res.postinstruction}   </h3>
           </div>
-
-     </div>
-     <div class="head-content3">
-     <div class="head-content3-part1">
-     <h3 style="margin: 0;
-          padding: 8px;">UHID : <span>${_prescriptiondata?.uhid}</span> </h3>
-     <h3 style="margin: 0;
-          padding: 8px;">OP/IP : <span>${
-            _prescriptiondata?.ip_no || _prescriptiondata?.op_no
-          }</span> </h3>
-     <h3 style="margin: 0;
-          padding: 8px;">DATE/TIME : <span>${_prescriptiondata?.app_date} / ${
-        _prescriptiondata?.app_time
-      }</span> </h3>
-</div>
-<div class="head-content3-part2">
-     <h3 style="margin: 0;
-          padding: 8px;">NAME : <span>${
-            _prescriptiondata?.firstname
-          }</span> </h3>
-     <h3 style="margin: 0;
-          padding: 8px;">AGE : <span>${
-            _prescriptiondata?.patientage
-          }</span></h3>
-     <h3 style="margin: 0;
-          padding: 8px;">GENDER : <span>${
-            _prescriptiondata?.patientgender
-          }</span> </h3>
-</div>
-<div class="head-content3-part3">
-     <h3 style="margin: 0;
-          padding: 8px; width: 106%;">DOCTOR NAME : <span>${
-            _prescriptiondata?.doctor_name
-          }</span> </h3>
-     
-     <h3 style="margin: 0;width: 50%;
-          padding: 8px;">CONSULTANT NAME : <span>${
-            _prescriptiondata?.consultant_name
-          }</span></h3>
-</div>
-
-     </div>
-     <div class="head-content2">
-          <div class="head-content2-part1">
-               <h3 style="margin: 0;
-                        padding: 30px 20px;text-align: left;">Diagnosis : ${
-                          _prescriptiondata?.diagnosisname
-                        }  </h3>
-          </div>
-
-     </div>
     
-     <div class="head-content2">
-          <div class="head-content2-part1">
-               <h3 style="margin: 0;
-                        padding: 2px 20px;text-align: left;">VITALS</h3>
           </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 10px 20px;text-align: left;">Post Procedure Instruction : ${res.postinstruction}   </h3>
+              </div>
+    
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 10px 20px;text-align: left;">Follow Up Advice : ${res.advice}  </h3>
+              </div>
+    
+         </div></div><br>
+                   `;
+        })
+        .join('');
 
-     </div>
+      const _complainttableRows5 = panchakarmaprocedurearray
+        ?.map((res, i) => {
+          return `
+                     <tr key=${i}>
+                       <td>${res.procedurename}</td>
+                       <td>${res.proceduredays}</td>
+                       <td>${res.procedureinstruction}</td>
+                     </tr>
+                   `;
+        })
+        .join('');
 
-     <div class="main-part12">
-          <table style="border-collapse: collapse;">
-              
-               <tbody>
-                    <tr>
-                         <td class="vLabel">GC</td>
-                         <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
-        _prescriptiondata?.verbalResponse
-      } / M : ${_prescriptiondata?.motorResponse}</td>
-                         <td class="vLabel">TEMP</td>
-                          <td>${_prescriptiondata?.p_temp}</td>
-                         <td class="vLabel">PULSE</td>
-                          <td>${_prescriptiondata?.p_pulse}</td>
-                    </tr>
-                    <tr>
-                         <td class="vLabel">BP</td>
-                         <td>${_prescriptiondata?.p_systolicbp} / ${
-        _prescriptiondata?.p_diastolicbp
-      }</td>
-                         <td class="vLabel">RR</td>
-                          <td>${_prescriptiondata?.p_rsprate}</td>
-                         <td class="vLabel">SPO2</td>
-                          <td>${_prescriptiondata?.p_spo2}</td>
-                    </tr>
-               </tbody>
-          </table>
-     </div>
-     <div class="head-content2" style="margin-top: 60px;">
-     ${_complainttableRows}
+      let html;
+      let html2;
+      let html3;
+      let combinedHtml;
 
+      if (procedureType !== 'Pre') {
+        html = `
+          <!DOCTYPE html>
+    <html>
+    
+    <head>
+         <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+         <style>
+              .head {
+                   display: flex;
+                   justify-content: space-between;
+                   align-items: center;
+                   padding: 0 12px;
+                   border-bottom: 2px solid blue;
+              }
+    
+              .head-content {
+                   line-height: 0.5;
+              }
+    
+              .head-content2-part2 p {
+                   text-align: right;
+              }
+    
+              table {
+                   width: 94%;
+                   margin-left: 20px;
+                   margin-right: 20px;
+                   margin-bottom: 2%;
+    
+              }
+    
+            
+    
+              table tr th {
+                   padding: 6px;
+                   border: 1px solid black
+              }
+    
+              table tr td {
+                   padding: 6px;
+                   border: 1px solid black;
+                   text-align: center;
+              }
+    
+              .main-part1,
+              .main-part2,
+              .main2 {
+                   width: 50%;
+              }
+    
+              .main,
+              .main3 {
+                   display: flex;
+              }
+    
+              .main2,
+              .main-part3,
+              .main-part4,
+              .main-part5 {
+                   border: 1px solid black
+              }
+    
+              .main2,
+              .main-part3 p {
+                   text-align: center;
+                   margin-top: 0;
+                   margin-bottom: 0;
+                   padding: 6px;
+              }
+    
+              .main2 p:nth-child(odd) {
+                   background-color: green;
+                   color: white;
+                   font-weight: 600;
+              }
+    
+              .main-part3 p:nth-child(odd) {
+                   background-color: green;
+                   color: white;
+                   font-weight: 600;
+              }
+    
+              .main-part3-p p {
+                   text-align: left;
+              }
+    
+              .main4 p {
+                   text-align: right;
+                   margin-left: 20px;
+                   margin-right: 20px;
+              }
+    
+              .head-content3 {
+                   padding: 10px;
+                   border: 1px solid black;
+                   border-radius: 6px;
+                   margin-left: 20px;
+                   margin-right: 20px;
+              }
+    
+              .head-content2-part1 h3 {
+                   color: black;
+                   text-align: center;
+              }
+    
+              .head-content3-part1,
+              .head-content3-part2,
+              .head-content3-part3 {
+                   display: flex;
+                   justify-content: space-between;
+              }
+    
+              .head-content3-part1 h3,
+              .head-content3-part2 h3,
+              .head-content3-part3 h3 {
+                   width: 33%;
+              }
+    
+              .head-content h1,
+              p {
+                   text-align: center;
+              }
+              .main5{
+                   display: flex;
+                   justify-content: space-between;
+                   margin-left: 20px;
+                   margin-right: 20px;
+                   border-top: 2px solid green;
+              }
+              span{
+                   color: green;
+              }
+              td.vLabel{
+                font-weight: bold;
+              }
+              body{
+                border: 1px solid black;
+                height : calc(100vh - 20px);
+              }
+         </style>
+    </head>
+    
+    <body>
+         <div class="head">
+              <div>
+              <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
+              </div>
+              <div class="head-content">
+                   <h1>SAMADHAN HOSPITAL</h1>
+                   <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
+                   <p>50, GANESH NAGAR, NAGPUE.440024</p>
+                   <p>Registration No :  542</p>
+              </div>
+              <div class="head-content"></div>
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                        padding: 8px;">PROCEDURE NOTE </h3>
+              </div>
+    
+         </div>
+         <div class="head-content3">
+         <div class="head-content3-part1">
+         <h3 style="margin: 0;
+              padding: 8px;">UHID : <span>${
+                _prescriptiondata?.uhid
+              }</span> </h3>
+         <h3 style="margin: 0;
+              padding: 8px;">OP/IP : <span>${
+                _prescriptiondata?.ip_no || _prescriptiondata?.op_no
+              }</span> </h3>
+         <h3 style="margin: 0;
+              padding: 8px;">DATE/TIME : <span>${
+                _prescriptiondata?.app_date
+              } / ${_prescriptiondata?.app_time}</span> </h3>
+    </div>
+    <div class="head-content3-part2">
+         <h3 style="margin: 0;
+              padding: 8px;">NAME : <span>${
+                _prescriptiondata?.firstname
+              }</span> </h3>
+         <h3 style="margin: 0;
+              padding: 8px;">AGE : <span>${
+                _prescriptiondata?.patientage
+              }</span></h3>
+         <h3 style="margin: 0;
+              padding: 8px;">GENDER : <span>${
+                _prescriptiondata?.patientgender
+              }</span> </h3>
+    </div>
+    <div class="head-content3-part3">
+         <h3 style="margin: 0;
+              padding: 8px; width: 106%;">DOCTOR NAME : <span>${
+                _prescriptiondata?.doctor_name
+              }</span> </h3>
+         
+         <h3 style="margin: 0;width: 50%;
+              padding: 8px;">CONSULTANT NAME : <span>${
+                _prescriptiondata?.consultant_name
+              }</span></h3>
+    </div>
+    
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 30px 20px;text-align: left;">Diagnosis : ${
+                              _prescriptiondata?.diagnosisname
+                            }  </h3>
+              </div>
+    
+         </div>
+        
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 2px 20px;text-align: left;">VITALS</h3>
+              </div>
+    
+         </div>
+    
+         <div class="main-part12">
+              <table style="border-collapse: collapse;">
+                  
+                   <tbody>
+                        <tr>
+                             <td class="vLabel">GC</td>
+                             <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
+          _prescriptiondata?.verbalResponse
+        } / M : ${_prescriptiondata?.motorResponse}</td>
+                             <td class="vLabel">TEMP</td>
+                              <td>${_prescriptiondata?.p_temp}</td>
+                             <td class="vLabel">PULSE</td>
+                              <td>${_prescriptiondata?.p_pulse}</td>
+                        </tr>
+                        <tr>
+                             <td class="vLabel">BP</td>
+                             <td>${_prescriptiondata?.p_systolicbp} / ${
+          _prescriptiondata?.p_diastolicbp
+        }</td>
+                             <td class="vLabel">RR</td>
+                              <td>${_prescriptiondata?.p_rsprate}</td>
+                             <td class="vLabel">SPO2</td>
+                              <td>${_prescriptiondata?.p_spo2}</td>
+                        </tr>
+                   </tbody>
+              </table>
+         </div>
+         <div class="head-content2" style="margin-top: 60px;">
+         ${_complainttableRows}
+    
+          </div>
+          <div class="head-content4">
+                   <p style="padding: 10px 20px;text-align: left;">PROCEDURE DONE BY : </p>
+    
+         </div>
+         <div class="head-content5" style="margin-top: 5%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+              <div class="head-content5-part1" style="padding: 2px 20px;">
+                   <p style="text-align: left;margin: 0;padding: 4px;">${
+                     _prescriptiondata.consultant_name
+                   }</p>
+                   <p style="text-align: left;margin: 0;padding: 4px;">${
+                     _prescriptiondata.designation
+                   }</p>
+                   <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. ${
+                     _prescriptiondata.reg_no
+                   }</p>
+              </div>
+              <div class="head-content5-part2" style="padding: 2px 20px;">
+                   <p style="text-align: left;margin: 0;padding: 4px;">${
+                     _prescriptiondata.rmo_name
+                   }</p>
+                   <p style="text-align: left;margin: 0;padding: 4px;">${
+                     _prescriptiondata.rmo_designation
+                   }</p>
+                   <p style="text-align: left;margin: 0;padding: 4px;">REG NO.${
+                     _prescriptiondata.reg_no
+                   }</p>
+              </div>
+    
+         </div>
+        
+         
+    </body>
+    
+    </html>`;
+        html2 = `
+    <!DOCTYPE html>
+    <html>
+    
+    <head>
+         <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+         <style>
+              .head {
+                   display: flex;
+                   justify-content: space-between;
+                   align-items: center;
+                   padding: 0 12px;
+                   border-bottom: 2px solid blue;
+              }
+    
+              .head-content {
+                   line-height: 0.5;
+              }
+    
+              .head-content2-part2 p {
+                   text-align: right;
+              }
+    
+              table {
+                   width: 94%;
+                   margin-left: 20px;
+                   margin-right: 20px;
+                   margin-bottom: 2%;
+    
+              }
+    
+              /* thead {
+                   background-color: green;
+              } */
+    
+              table tr th {
+                   padding: 6px;
+                   border: 1px solid black
+              }
+    
+              table tr td {
+                   padding: 6px;
+                   border: 1px solid black;
+                   text-align: center;
+              }
+    
+              .main-part1,
+              .main-part2,
+              .main2 {
+                   width: 50%;
+              }
+    
+              .main,
+              .main3 {
+                   display: flex;
+              }
+    
+              .main2,
+              .main-part3,
+              .main-part4,
+              .main-part5 {
+                   border: 1px solid black
+              }
+    
+              .main2,
+              .main-part3 p {
+                   text-align: center;
+                   margin-top: 0;
+                   margin-bottom: 0;
+                   padding: 6px;
+              }
+    
+              .main2 p:nth-child(odd) {
+                   background-color: green;
+                   color: white;
+                   font-weight: 600;
+              }
+    
+              .main-part3 p:nth-child(odd) {
+                   background-color: green;
+                   color: white;
+                   font-weight: 600;
+              }
+    
+              .main-part3-p p {
+                   text-align: left;
+              }
+    
+              .main4 p {
+                   text-align: right;
+                   margin-left: 20px;
+                   margin-right: 20px;
+              }
+    
+              .head-content3 {
+                   padding: 10px;
+                   border: 1px solid black;
+                   border-radius: 6px;
+                   margin-left: 20px;
+                   margin-right: 20px;
+              }
+    
+              .head-content2-part1 h3 {
+                   color: black;
+                   text-align: center;
+              }
+    
+              .head-content3-part1,
+              .head-content3-part2,
+              .head-content3-part3 {
+                   display: flex;
+                   justify-content: space-between;
+              }
+    
+              .head-content3-part1 h3,
+              .head-content3-part2 h3,
+              .head-content3-part3 h3 {
+                   width: 33%;
+              }
+    
+              .head-content h1,
+              p {
+                   text-align: center;
+              }
+              .main5{
+                   display: flex;
+                   justify-content: space-between;
+                   margin-left: 20px;
+                   margin-right: 20px;
+                 
+              }
+              span{
+                   color: green;
+              }
+              body{
+                border: 1px solid black;
+                height : calc(100vh - 20px);
+              }
+         </style>
+    </head>
+    
+    <body>
+    <div style="page-break-before: always;"></div>
+         <div class="head">
+              <div>
+              <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
+              </div>
+              <div class="head-content">
+                   <h1>SAMADHAN HOSPITAL</h1>
+                   <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
+                   <p>50, GANESH NAGAR, NAGPUE.440024</p>
+                   <p>Registration No :  542</p>
+              </div>
+              <div class="head-content"></div>
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                        padding: 8px;">POST PROCEDURE NOTE </h3>
+              </div>
+    
+         </div>
+         <div class="head-content3">
+         <div class="head-content3-part1">
+         <h3 style="margin: 0;
+              padding: 8px;">UHID : <span>${
+                _prescriptiondata?.uhid
+              }</span> </h3>
+         <h3 style="margin: 0;
+              padding: 8px;">OP/IP : <span>${
+                _prescriptiondata?.ip_no || _prescriptiondata?.op_no
+              }</span> </h3>
+         <h3 style="margin: 0;
+              padding: 8px;">DATE/TIME : <span>${
+                _prescriptiondata?.app_date
+              } / ${_prescriptiondata?.app_time}</span> </h3>
+    </div>
+    <div class="head-content3-part2">
+         <h3 style="margin: 0;
+              padding: 8px;">NAME : <span>${
+                _prescriptiondata?.firstname
+              }</span> </h3>
+         <h3 style="margin: 0;
+              padding: 8px;">AGE : <span>${
+                _prescriptiondata?.patientage
+              }</span></h3>
+         <h3 style="margin: 0;
+              padding: 8px;">GENDER : <span>${
+                _prescriptiondata?.patientgender
+              }</span> </h3>
+    </div>
+    <div class="head-content3-part3">
+         <h3 style="margin: 0;
+              padding: 8px; width: 106%;">DOCTOR NAME : <span>${
+                _prescriptiondata?.doctor_name
+              }</span> </h3>
+         
+         <h3 style="margin: 0;width: 50%;
+              padding: 8px;">CONSULTANT NAME : <span>${
+                _prescriptiondata?.consultant_name
+              }</span></h3>
+    </div>
+    
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+              <h3 style="margin: 0;
+              padding: 30px 20px;text-align: left;">Diagnosis : ${
+                _prescriptiondata?.diagnosisname
+              }  </h3>
+              </div>
+    
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 2px 20px;text-align: left;">COMPLAINTS</h3>
+              </div>
+    
+         </div>
+    
+         <div class="main-part12">
+              <table style="border-collapse: collapse;">
+                   <thead>
+                        <th>COMPLAINTS</th>
+                        <th>DURATION</th>
+                        <th>FREQUENCY</th>
+                   </thead>
+                   <tbody>
+                   ${_complainttableRows2}
+                   </tbody>
+              </table>
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 2px 20px;text-align: left;">VITALS</h3>
+              </div>
+    
+         </div>
+    
+         <div class="main-part12">
+              <table style="border-collapse: collapse;">
+                  
+              <tbody>
+              <tr>
+                   <td class="vLabel">GC</td>
+                   <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
+          _prescriptiondata?.verbalResponse
+        } / M : ${_prescriptiondata?.motorResponse}</td>
+                   <td class="vLabel">TEMP</td>
+                    <td>${_prescriptiondata?.p_temp}</td>
+                   <td class="vLabel">PULSE</td>
+                    <td>${_prescriptiondata?.p_pulse}</td>
+              </tr>
+              <tr>
+                   <td class="vLabel">BP</td>
+                   <td>${_prescriptiondata?.p_systolicbp} / ${
+          _prescriptiondata?.p_diastolicbp
+        }</td>
+                   <td class="vLabel">RR</td>
+                    <td>${_prescriptiondata?.p_rsprate}</td>
+                   <td class="vLabel">SPO2</td>
+                    <td>${_prescriptiondata?.p_spo2}</td>
+              </tr>
+         </tbody>
+              </table>
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 2px 20px;text-align: left;">Investigation: </h3>
+              </div>
+    
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 20px 20px;text-align: left;">POST PROCEDURE INVESTIGATION    </h3>
+              </div>
+    
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 20px 20px;text-align: left;">R<sub>x</sub></h3>
+              </div>
+    
+         </div>
+         <div class="main-part12">
+              <table style="border-collapse: collapse;">
+                   <thead>
+                        <th>MEDICINE NAME</th>
+                        <th>DOSE</th>
+                        <th>DOSAGE</th>
+                        <th>ROUTE</th>
+                        <th>DURATION</th>
+                   </thead>
+                   <tbody>
+                       ${_complainttableRows3}
+                       
+                   </tbody>
+              </table>
+         </div>
+    
+         <br />
+         <div>
+              ${_complainttableRows4}
+         </div>
+         <div class="head-content5" style="margin-top: 5%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+              <div class="head-content5-part1" style="padding: 2px 20px;">
+                   <p style="text-align: left;margin: 0;padding: 4px;">${
+                     _prescriptiondata.consultant_name
+                   }</p>
+                   <p style="text-align: left;margin: 0;padding: 4px;">${
+                     _prescriptiondata.designation
+                   }</p>
+                   <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. ${
+                     _prescriptiondata.reg_no
+                   }</p>
+              </div>
+              <div class="head-content5-part2" style="padding: 2px 20px;">
+                   <p style="text-align: left;margin: 0;padding: 4px;">${
+                     _prescriptiondata.rmo_name
+                   }</p>
+                   <p style="text-align: left;margin: 0;padding: 4px;">${
+                     _prescriptiondata.rmo_designation
+                   }</p>
+                   <p style="text-align: left;margin: 0;padding: 4px;">REG NO.${
+                     _prescriptiondata.reg_no
+                   }</p>
+              </div>
+    
+         </div>
+         <div class="main5">
+         <p>+91-7774017732</p>
+         <p>www.medayu.in </p>
+         <p>medayuhealthcare@gmail.com </p>
+         
+    </body>
+    
+    </html>
+    `;
+        combinedHtml = `${html}${html2}`;
+      } else {
+        html3 = `
+  <!DOCTYPE html>
+  <html>
+  
+  <head>
+  <meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <style>
+      .head {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 0 12px;
+           border-bottom: 2px solid blue;
+      }
+  
+      .head-content {
+           line-height: 0.5;
+      }
+  
+      .head-content2-part2 p {
+           text-align: right;
+      }
+  
+      table {
+           width: 94%;
+           margin-left: 20px;
+           margin-right: 20px;
+           margin-bottom: 2%;
+  
+      }
+  
+      table tr th {
+           padding: 6px;
+           border: 1px solid black
+      }
+  
+      table tr td {
+           padding: 6px;
+           border: 1px solid black;
+           text-align: center;
+      }
+  
+      .main-part1,
+      .main-part2,
+      .main2 {
+           width: 50%;
+      }
+  
+      .main,
+      .main3 {
+           display: flex;
+      }
+  
+      .main2,
+      .main-part3,
+      .main-part4,
+      .main-part5 {
+           border: 1px solid black
+      }
+  
+      .main2,
+      .main-part3 p {
+           text-align: center;
+           margin-top: 0;
+           margin-bottom: 0;
+           padding: 6px;
+      }
+  
+      .main2 p:nth-child(odd) {
+           background-color: green;
+           color: white;
+           font-weight: 600;
+      }
+  
+      .main-part3 p:nth-child(odd) {
+           background-color: green;
+           color: white;
+           font-weight: 600;
+      }
+  
+      .main-part3-p p {
+           text-align: left;
+      }
+  
+      .main4 p {
+           text-align: right;
+           margin-left: 20px;
+           margin-right: 20px;
+      }
+  
+      .head-content3 {
+           padding: 10px;
+           border: 1px solid black;
+           border-radius: 6px;
+           margin-left: 20px;
+           margin-right: 20px;
+      }
+  
+      .head-content2-part1 h3 {
+           color: black;
+           text-align: center;
+      }
+  
+      .head-content3-part1,
+      .head-content3-part2,
+      .head-content3-part3 {
+           display: flex;
+           justify-content: space-between;
+      }
+  
+      .head-content3-part1 h3,
+      .head-content3-part2 h3,
+      .head-content3-part3 h3 {
+           width: 33%;
+      }
+  
+      .head-content h1,
+      p {
+           text-align: center;
+      }
+      .main5{
+           display: flex;
+           justify-content: space-between;
+           margin-left: 20px;
+           margin-right: 20px;
+        
+      }
+      span{
+           color: green;
+      }
+      body{
+        border: 1px solid black;
+        height : calc(100vh - 20px);
+      }
+  </style>
+  </head>
+  
+  <body>
+  <div style="page-break-before: always;"></div>
+  <div class="head">
+      <div>
+      <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
       </div>
-      <div class="head-content4">
-               <p style="padding: 10px 20px;text-align: left;">PROCEDURE DONE BY : </p>
+      <div class="head-content">
+           <h1>SAMADHAN HOSPITAL</h1>
+           <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
+           <p>50, GANESH NAGAR, NAGPUE.440024</p>
+           <p>Registration No :  542</p>
+      </div>
+      <div class="head-content"></div>
+  </div>
+  <div class="head-content2">
+      <div class="head-content2-part1">
+           <h3 style="margin: 0;
+                padding: 8px;">DOCTOR NOTES </h3>
+      </div>
+  
+  </div>
+  <div class="head-content3">
+  <div class="head-content3-part1">
+  <h3 style="margin: 0;
+      padding: 8px;">UHID : <span>${_prescriptiondata?.uhid}</span> </h3>
+  <h3 style="margin: 0;
+      padding: 8px;">OP/IP : <span>${
+        _prescriptiondata?.ip_no || _prescriptiondata?.op_no
+      }</span> </h3>
+  <h3 style="margin: 0;
+      padding: 8px;">DATE/TIME : <span>${_prescriptiondata?.app_date} / ${
+          _prescriptiondata?.app_time
+        }</span> </h3>
+  </div>
+  <div class="head-content3-part2">
+  <h3 style="margin: 0;
+      padding: 8px;">NAME : <span>${_prescriptiondata?.firstname}</span> </h3>
+  <h3 style="margin: 0;
+      padding: 8px;">AGE : <span>${_prescriptiondata?.patientage}</span></h3>
+  <h3 style="margin: 0;
+      padding: 8px;">GENDER : <span>${
+        _prescriptiondata?.patientgender
+      }</span> </h3>
+  </div>
+  <div class="head-content3-part3">
+  <h3 style="margin: 0;
+      padding: 8px; width: 106%;">DOCTOR NAME : <span>${
+        _prescriptiondata?.doctor_name
+      }</span> </h3>
+  
+  <h3 style="margin: 0;width: 50%;
+      padding: 8px;">CONSULTANT NAME : <span>${
+        _prescriptiondata?.consultant_name
+      }</span></h3>
+  </div>
+  
+  </div>
+  <div class="head-content2">
+      <div class="head-content2-part1">
+      <h3 style="margin: 0;
+      padding: 30px 20px;text-align: left;">Diagnosis : ${
+        _prescriptiondata?.diagnosisname
+      }  </h3>
+      </div>
+  
+  </div>
+  <div class="head-content2">
+      <div class="head-content2-part1">
+           <h3 style="margin: 0;
+                    padding: 2px 20px;text-align: left;">COMPLAINTS</h3>
+      </div>
+  
+  </div>
+  
+  <div class="main-part12">
+      <table style="border-collapse: collapse;">
+           <thead>
+                <th>COMPLAINTS</th>
+                <th>DURATION</th>
+                <th>FREQUENCY</th>
+           </thead>
+           <tbody>
+           ${_complainttableRows2}
+           </tbody>
+      </table>
+  </div>
+  <div class="head-content2">
+      <div class="head-content2-part1">
+           <h3 style="margin: 0;
+                    padding: 2px 20px;text-align: left;">VITALS</h3>
+      </div>
+  
+  </div>
+  
+  <div class="main-part12">
+      <table style="border-collapse: collapse;">
+          
+      <tbody>
+      <tr>
+           <td class="vLabel">GC</td>
+           <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
+          _prescriptiondata?.verbalResponse
+        } / M : ${_prescriptiondata?.motorResponse}</td>
+           <td class="vLabel">TEMP</td>
+            <td>${_prescriptiondata?.p_temp}</td>
+           <td class="vLabel">PULSE</td>
+            <td>${_prescriptiondata?.p_pulse}</td>
+      </tr>
+      <tr>
+           <td class="vLabel">BP</td>
+           <td>${_prescriptiondata?.p_systolicbp} / ${
+          _prescriptiondata?.p_diastolicbp
+        }</td>
+           <td class="vLabel">RR</td>
+            <td>${_prescriptiondata?.p_rsprate}</td>
+           <td class="vLabel">SPO2</td>
+            <td>${_prescriptiondata?.p_spo2}</td>
+      </tr>
+  </tbody>
+      </table>
+  </div>
+  <div class="head-content2">
+    <div class="head-content2-part1">
+        <h3 style="margin: 0;
+                  padding: 2px 20px;text-align: left;">PROCEDURES</h3>
+    </div>
 
-     </div>
-     <div class="head-content5" style="margin-top: 30%;display: flex;justify-content: space-between;margin-bottom: 10px;">
-          <div class="head-content5-part1" style="padding: 2px 20px;">
-               <p style="text-align: left;margin: 0;padding: 4px;">Dr. VEDPRAKASH GAHUKAR</p>
-               <p style="text-align: left;margin: 0;padding: 4px;">CONSULTANT</p>
-               <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. 2008/10/3546</p>
-          </div>
-          <div class="head-content5-part2" style="padding: 2px 20px;">
-               <p style="text-align: left;margin: 0;padding: 4px;">DR. YOGENDRA RAJAWAT</p>
-               <p style="text-align: left;margin: 0;padding: 4px;">RMO</p>
-               <p style="text-align: left;margin: 0;padding: 4px;">REG NO.2008/10/3546</p>
-          </div>
+  </div>
+  <div class="main-part12">
+  <table style="border-collapse: collapse;">
+       <thead>
+            <th>PROCEDURE NAME</th>
+            <th>DURATION</th>
+            <th>INSTRUCTION</th>
+       </thead>
+       <tbody>
+       ${_complainttableRows5}
+       </tbody>
+  </table>
+</div>
+  <div class="head-content2">
+      <div class="head-content2-part1">
+           <h3 style="margin: 0;
+                    padding: 2px 20px;text-align: left;">Investigation: </h3>
+      </div>
+  
+  </div>
+  <div class="head-content2">
+      <div class="head-content2-part1">
+           <h3 style="margin: 0;
+                    padding: 20px 20px;text-align: left;">CBC, KFT, LFT </h3>
+      </div>
+  
+  </div>
+  <div class="head-content2">
+      <div class="head-content2-part1">
+           <h3 style="margin: 0;
+                    padding: 20px 20px;text-align: left;">R<sub>x</sub></h3>
+      </div>
+  
+  </div>
+  <div class="main-part12">
+      <table style="border-collapse: collapse;">
+           <thead>
+                <th>MEDICINE NAME</th>
+                <th>DOSE</th>
+                <th>DOSAGE</th>
+                <th>ROUTE</th>
+                <th>DURATION</th>
+           </thead>
+           <tbody>
+               ${_complainttableRows3}
+               
+           </tbody>
+      </table>
+  </div>
+  
+  <br />
+  
+  <div class="head-content5" style="margin-top: 5%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+      <div class="head-content5-part1" style="padding: 2px 20px;">
+           <p style="text-align: left;margin: 0;padding: 4px;">${
+             _prescriptiondata.consultant_name
+           }</p>
+           <p style="text-align: left;margin: 0;padding: 4px;">${
+             _prescriptiondata.designation
+           }</p>
+           <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. ${
+             _prescriptiondata.reg_no
+           }</p>
+      </div>
+      <div class="head-content5-part2" style="padding: 2px 20px;">
+           <p style="text-align: left;margin: 0;padding: 4px;">${
+             _prescriptiondata.rmo_name
+           }</p>
+           <p style="text-align: left;margin: 0;padding: 4px;">${
+             _prescriptiondata.rmo_designation
+           }</p>
+           <p style="text-align: left;margin: 0;padding: 4px;">REG NO.${
+             _prescriptiondata.reg_no
+           }</p>
+      </div>
+  
+  </div>
+  <br><br>
+  <div class="main5">
+    <p>+91-7774017732</p>
+    <p>www.medayu.in </p>
+    <p>medayuhealthcare@gmail.com </p>
+  </div>
+  
+  </body>
+  
+  </html>
+  `;
+        combinedHtml = `${html3}`;
+      }
 
-     </div>
-    
-     
-</body>
-
-</html>`;
       await RNPrint.print({
-        html,
+        html: combinedHtml,
       });
     } catch (error) {
       console.error(error);
@@ -379,8 +1168,12 @@ const Preprecedureprescription = ({route}) => {
           reception_id: reception_id,
         },
       );
-      const {panchakarmaprocedurearray, complaintarray, ..._prescriptiondata} =
-        generatePreprocedurenotes.data;
+      const {
+        panchakarmaprocedurearray,
+        complaintArray,
+        medicineprescriptionarray,
+        ..._prescriptiondata
+      } = generatePreprocedurenotes.data;
 
       const _complainttableRows = panchakarmaprocedurearray
         ?.map((res, i) => {
@@ -394,288 +1187,1078 @@ const Preprecedureprescription = ({route}) => {
                    `;
         })
         .join('');
+      const _complainttableRows2 = complaintArray
+        ?.map((res, i) => {
+          return `
+                     <tr key=${i}>
+                       <td>${res.symptoms}</td>
+                       <td>${res.duration}</td>
+                       <td>${res.frequency}</td>
+                     </tr>
+                   `;
+        })
+        .join('');
 
-      const html = `
-      <!DOCTYPE html>
-<html>
+      const _complainttableRows3 = medicineprescriptionarray
+        ?.map((res, i) => {
+          return `
+                     <tr key=${i}>
+                       <td>${res.drugname}</td>
+                       <td>${res.dose}</td>
+                       <td>${res.route}</td>
+                       <td>${res.schedule}</td>
+                       <td>${res.duration}</td>
+                     </tr>
+                   `;
+        })
+        .join('');
 
-<head>
-     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-     <style>
-          .head {
-               display: flex;
-               justify-content: space-between;
-               align-items: center;
-               padding: 0 12px;
-               border-bottom: 2px solid blue;
-          }
-
-          .head-content {
-               line-height: 0.5;
-          }
-
-          .head-content2-part2 p {
-               text-align: right;
-          }
-
-          table {
-               width: 94%;
-               margin-left: 20px;
-               margin-right: 20px;
-               margin-bottom: 2%;
-
-          }
-
-          /* thead {
-               background-color: green;
-          } */
-
-          table tr th {
-               padding: 6px;
-               border: 1px solid black
-          }
-
-          table tr td {
-               padding: 6px;
-               border: 1px solid black;
-               text-align: center;
-          }
-
-          .main-part1,
-          .main-part2,
-          .main2 {
-               width: 50%;
-          }
-
-          .main,
-          .main3 {
-               display: flex;
-          }
-
-          .main2,
-          .main-part3,
-          .main-part4,
-          .main-part5 {
-               border: 1px solid black
-          }
-
-          .main2,
-          .main-part3 p {
-               text-align: center;
-               margin-top: 0;
-               margin-bottom: 0;
-               padding: 6px;
-          }
-
-          .main2 p:nth-child(odd) {
-               background-color: green;
-               color: white;
-               font-weight: 600;
-          }
-
-          .main-part3 p:nth-child(odd) {
-               background-color: green;
-               color: white;
-               font-weight: 600;
-          }
-
-          .main-part3-p p {
-               text-align: left;
-          }
-
-          .main4 p {
-               text-align: right;
-               margin-left: 20px;
-               margin-right: 20px;
-          }
-
-          .head-content3 {
-               padding: 10px;
-               border: 1px solid black;
-               border-radius: 6px;
-               margin-left: 20px;
-               margin-right: 20px;
-          }
-
-          .head-content2-part1 h3 {
-               color: black;
-               text-align: center;
-          }
-
-          .head-content3-part1,
-          .head-content3-part2,
-          .head-content3-part3 {
-               display: flex;
-               justify-content: space-between;
-          }
-
-          .head-content3-part1 h3,
-          .head-content3-part2 h3,
-          .head-content3-part3 h3 {
-               width: 33%;
-          }
-
-          .head-content h1,
-          p {
-               text-align: center;
-          }
-          .main5{
-               display: flex;
-               justify-content: space-between;
-               margin-left: 20px;
-               margin-right: 20px;
-               border-top: 2px solid green;
-          }
-          span{
-               color: green;
-          }
-          td.vLabel{
-            font-weight: bold;
-          }
-          body{
-            border: 1px solid black;
-            height : calc(100vh - 8px);
-          }
-     </style>
-</head>
-
-<body>
-     <div class="head">
-          <div>
-          <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
-          </div>
-          <div class="head-content">
-               <h1>SAMADHAN HOSPITAL</h1>
-               <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
-               <p>50, GANESH NAGAR, NAGPUE.440024</p>
-               <p>Registration No :  542</p>
-          </div>
-          <div class="head-content"></div>
-     </div>
-     <div class="head-content2">
+      const _complainttableRows4 = panchakarmaprocedurearray
+        ?.map((res, i) => {
+          return `
+          <div key=${i} style="line-height: 10px">
+          <div class="head-content2">
           <div class="head-content2-part1">
-               <h3 style="margin: 0;
-                    padding: 8px;">PROCEDURE NOTE </h3>
+                <h3 style="margin: 0;
+                        padding: 10px 20px;text-align: left;">Procedure Name : ${res.postinstruction}   </h3>
           </div>
-
-     </div>
-     <div class="head-content3">
-     <div class="head-content3-part1">
-     <h3 style="margin: 0;
-          padding: 8px;">UHID : <span>${_prescriptiondata?.uhid}</span> </h3>
-     <h3 style="margin: 0;
-          padding: 8px;">OP/IP : <span>${
-            _prescriptiondata?.ip_no || _prescriptiondata?.op_no
-          }</span> </h3>
-     <h3 style="margin: 0;
-          padding: 8px;">DATE/TIME : <span>${_prescriptiondata?.app_date} / ${
-        _prescriptiondata?.app_time
-      }</span> </h3>
-</div>
-<div class="head-content3-part2">
-     <h3 style="margin: 0;
-          padding: 8px;">NAME : <span>${
-            _prescriptiondata?.firstname
-          }</span> </h3>
-     <h3 style="margin: 0;
-          padding: 8px;">AGE : <span>${
-            _prescriptiondata?.patientage
-          }</span></h3>
-     <h3 style="margin: 0;
-          padding: 8px;">GENDER : <span>${
-            _prescriptiondata?.patientgender
-          }</span> </h3>
-</div>
-<div class="head-content3-part3">
-     <h3 style="margin: 0;
-          padding: 8px; width: 106%;">DOCTOR NAME : <span>${
-            _prescriptiondata?.doctor_name
-          }</span> </h3>
-     
-     <h3 style="margin: 0;width: 50%;
-          padding: 8px;">CONSULTANT NAME : <span>${
-            _prescriptiondata?.consultant_name
-          }</span></h3>
-</div>
-
-     </div>
-     <div class="head-content2">
-          <div class="head-content2-part1">
-               <h3 style="margin: 0;
-                        padding: 30px 20px;text-align: left;">Diagnosis : ${
-                          _prescriptiondata?.diagnosisname
-                        }  </h3>
-          </div>
-
-     </div>
     
-     <div class="head-content2">
-          <div class="head-content2-part1">
-               <h3 style="margin: 0;
-                        padding: 2px 20px;text-align: left;">VITALS</h3>
           </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 10px 20px;text-align: left;">Post Procedure Instruction : ${res.postinstruction}   </h3>
+              </div>
+    
+         </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 10px 20px;text-align: left;">Follow Up Advice : ${res.advice}  </h3>
+              </div>
+    
+         </div></div><br>
+                   `;
+        })
+        .join('');
 
-     </div>
+      const _complainttableRows5 = panchakarmaprocedurearray
+        ?.map((res, i) => {
+          return `
+                     <tr key=${i}>
+                       <td>${res.procedurename}</td>
+                       <td>${res.proceduredays}</td>
+                       <td>${res.procedureinstruction}</td>
+                     </tr>
+                   `;
+        })
+        .join('');
 
-     <div class="main-part12">
-          <table style="border-collapse: collapse;">
+      let html;
+      let html2;
+      let html3;
+      let combinedHtml;
+
+      if (procedureType !== 'Pre') {
+        html = `
+            <!DOCTYPE html>
+      <html>
+      
+      <head>
+           <meta name="viewport"
+                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+           <style>
+                .head {
+                     display: flex;
+                     justify-content: space-between;
+                     align-items: center;
+                     padding: 0 12px;
+                     border-bottom: 2px solid blue;
+                }
+      
+                .head-content {
+                     line-height: 0.5;
+                }
+      
+                .head-content2-part2 p {
+                     text-align: right;
+                }
+      
+                table {
+                     width: 94%;
+                     margin-left: 20px;
+                     margin-right: 20px;
+                     margin-bottom: 2%;
+      
+                }
+      
               
-               <tbody>
-                    <tr>
-                         <td class="vLabel">GC</td>
-                         <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
-        _prescriptiondata?.verbalResponse
-      } / M : ${_prescriptiondata?.motorResponse}</td>
-                         <td class="vLabel">TEMP</td>
-                          <td>${_prescriptiondata?.p_temp}</td>
-                         <td class="vLabel">PULSE</td>
-                          <td>${_prescriptiondata?.p_pulse}</td>
-                    </tr>
-                    <tr>
-                         <td class="vLabel">BP</td>
-                         <td>${_prescriptiondata?.p_systolicbp} / ${
-        _prescriptiondata?.p_diastolicbp
-      }</td>
-                         <td class="vLabel">RR</td>
-                          <td>${_prescriptiondata?.p_rsprate}</td>
-                         <td class="vLabel">SPO2</td>
-                          <td>${_prescriptiondata?.p_spo2}</td>
-                    </tr>
-               </tbody>
-          </table>
-     </div>
-     <div class="head-content2" style="margin-top: 60px;">
-     ${_complainttableRows}
-
+      
+                table tr th {
+                     padding: 6px;
+                     border: 1px solid black
+                }
+      
+                table tr td {
+                     padding: 6px;
+                     border: 1px solid black;
+                     text-align: center;
+                }
+      
+                .main-part1,
+                .main-part2,
+                .main2 {
+                     width: 50%;
+                }
+      
+                .main,
+                .main3 {
+                     display: flex;
+                }
+      
+                .main2,
+                .main-part3,
+                .main-part4,
+                .main-part5 {
+                     border: 1px solid black
+                }
+      
+                .main2,
+                .main-part3 p {
+                     text-align: center;
+                     margin-top: 0;
+                     margin-bottom: 0;
+                     padding: 6px;
+                }
+      
+                .main2 p:nth-child(odd) {
+                     background-color: green;
+                     color: white;
+                     font-weight: 600;
+                }
+      
+                .main-part3 p:nth-child(odd) {
+                     background-color: green;
+                     color: white;
+                     font-weight: 600;
+                }
+      
+                .main-part3-p p {
+                     text-align: left;
+                }
+      
+                .main4 p {
+                     text-align: right;
+                     margin-left: 20px;
+                     margin-right: 20px;
+                }
+      
+                .head-content3 {
+                     padding: 10px;
+                     border: 1px solid black;
+                     border-radius: 6px;
+                     margin-left: 20px;
+                     margin-right: 20px;
+                }
+      
+                .head-content2-part1 h3 {
+                     color: black;
+                     text-align: center;
+                }
+      
+                .head-content3-part1,
+                .head-content3-part2,
+                .head-content3-part3 {
+                     display: flex;
+                     justify-content: space-between;
+                }
+      
+                .head-content3-part1 h3,
+                .head-content3-part2 h3,
+                .head-content3-part3 h3 {
+                     width: 33%;
+                }
+      
+                .head-content h1,
+                p {
+                     text-align: center;
+                }
+                .main5{
+                     display: flex;
+                     justify-content: space-between;
+                     margin-left: 20px;
+                     margin-right: 20px;
+                }
+                span{
+                     color: green;
+                }
+                td.vLabel{
+                  font-weight: bold;
+                }
+                body{
+                  border: 1px solid black;
+                  height : calc(100vh - 20px);
+                }
+           </style>
+      </head>
+      
+      <body>
+           <div class="head">
+                <div>
+                <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
+                </div>
+                <div class="head-content">
+                     <h1>SAMADHAN HOSPITAL</h1>
+                     <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
+                     <p>50, GANESH NAGAR, NAGPUE.440024</p>
+                     <p>Registration No :  542</p>
+                </div>
+                <div class="head-content"></div>
+           </div>
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                     <h3 style="margin: 0;
+                          padding: 8px;">PROCEDURE NOTE </h3>
+                </div>
+      
+           </div>
+           <div class="head-content3">
+           <div class="head-content3-part1">
+           <h3 style="margin: 0;
+                padding: 8px;">UHID : <span>${
+                  _prescriptiondata?.uhid
+                }</span> </h3>
+           <h3 style="margin: 0;
+                padding: 8px;">OP/IP : <span>${
+                  _prescriptiondata?.ip_no || _prescriptiondata?.op_no
+                }</span> </h3>
+           <h3 style="margin: 0;
+                padding: 8px;">DATE/TIME : <span>${
+                  _prescriptiondata?.app_date
+                } / ${_prescriptiondata?.app_time}</span> </h3>
       </div>
-      <div class="head-content4">
-               <p style="padding: 10px 20px;text-align: left;">PROCEDURE DONE BY : </p>
-
-     </div>
-     <div class="head-content5" style="margin-top: 30%;display: flex;justify-content: space-between;">
-          <div class="head-content5-part1" style="padding: 2px 20px;">
-               <p style="text-align: left;margin: 0;padding: 4px;">Dr. VEDPRAKASH GAHUKAR</p>
-               <p style="text-align: left;margin: 0;padding: 4px;">CONSULTANT</p>
-               <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. 2008/10/3546</p>
+      <div class="head-content3-part2">
+           <h3 style="margin: 0;
+                padding: 8px;">NAME : <span>${
+                  _prescriptiondata?.firstname
+                }</span> </h3>
+           <h3 style="margin: 0;
+                padding: 8px;">AGE : <span>${
+                  _prescriptiondata?.patientage
+                }</span></h3>
+           <h3 style="margin: 0;
+                padding: 8px;">GENDER : <span>${
+                  _prescriptiondata?.patientgender
+                }</span> </h3>
+      </div>
+      <div class="head-content3-part3">
+           <h3 style="margin: 0;
+                padding: 8px; width: 106%;">DOCTOR NAME : <span>${
+                  _prescriptiondata?.doctor_name
+                }</span> </h3>
+           
+           <h3 style="margin: 0;width: 50%;
+                padding: 8px;">CONSULTANT NAME : <span>${
+                  _prescriptiondata?.consultant_name
+                }</span></h3>
+      </div>
+      
+           </div>
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                     <h3 style="margin: 0;
+                              padding: 30px 20px;text-align: left;">Diagnosis : ${
+                                _prescriptiondata?.diagnosisname
+                              }  </h3>
+                </div>
+      
+           </div>
+          
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                     <h3 style="margin: 0;
+                              padding: 2px 20px;text-align: left;">VITALS</h3>
+                </div>
+      
+           </div>
+      
+           <div class="main-part12">
+                <table style="border-collapse: collapse;">
+                    
+                     <tbody>
+                          <tr>
+                               <td class="vLabel">GC</td>
+                               <td>E : ${
+                                 _prescriptiondata?.eyeopening
+                               } / V :  ${
+          _prescriptiondata?.verbalResponse
+        } / M : ${_prescriptiondata?.motorResponse}</td>
+                               <td class="vLabel">TEMP</td>
+                                <td>${_prescriptiondata?.p_temp}</td>
+                               <td class="vLabel">PULSE</td>
+                                <td>${_prescriptiondata?.p_pulse}</td>
+                          </tr>
+                          <tr>
+                               <td class="vLabel">BP</td>
+                               <td>${_prescriptiondata?.p_systolicbp} / ${
+          _prescriptiondata?.p_diastolicbp
+        }</td>
+                               <td class="vLabel">RR</td>
+                                <td>${_prescriptiondata?.p_rsprate}</td>
+                               <td class="vLabel">SPO2</td>
+                                <td>${_prescriptiondata?.p_spo2}</td>
+                          </tr>
+                     </tbody>
+                </table>
+           </div>
+           <div class="head-content2" style="margin-top: 60px;">
+           ${_complainttableRows}
+      
+            </div>
+            <div class="head-content4">
+                     <p style="padding: 10px 20px;text-align: left;">PROCEDURE DONE BY : </p>
+      
+           </div>
+           <div class="head-content5" style="margin-top: 5%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+                <div class="head-content5-part1" style="padding: 2px 20px;">
+                     <p style="text-align: left;margin: 0;padding: 4px;">${
+                       _prescriptiondata.consultant_name
+                     }</p>
+                     <p style="text-align: left;margin: 0;padding: 4px;">${
+                       _prescriptiondata.designation
+                     }</p>
+                     <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. ${
+                       _prescriptiondata.reg_no
+                     }</p>
+                </div>
+                <div class="head-content5-part2" style="padding: 2px 20px;">
+                     <p style="text-align: left;margin: 0;padding: 4px;">${
+                       _prescriptiondata.rmo_name
+                     }</p>
+                     <p style="text-align: left;margin: 0;padding: 4px;">${
+                       _prescriptiondata.rmo_designation
+                     }</p>
+                     <p style="text-align: left;margin: 0;padding: 4px;">REG NO.${
+                       _prescriptiondata.reg_no
+                     }</p>
+                </div>
+      
+           </div>
+          
+           
+      </body>
+      
+      </html>`;
+        html2 = `
+      <!DOCTYPE html>
+      <html>
+      
+      <head>
+           <meta name="viewport"
+                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+           <style>
+                .head {
+                     display: flex;
+                     justify-content: space-between;
+                     align-items: center;
+                     padding: 0 12px;
+                     border-bottom: 2px solid blue;
+                }
+      
+                .head-content {
+                     line-height: 0.5;
+                }
+      
+                .head-content2-part2 p {
+                     text-align: right;
+                }
+      
+                table {
+                     width: 94%;
+                     margin-left: 20px;
+                     margin-right: 20px;
+                     margin-bottom: 2%;
+      
+                }
+      
+                /* thead {
+                     background-color: green;
+                } */
+      
+                table tr th {
+                     padding: 6px;
+                     border: 1px solid black
+                }
+      
+                table tr td {
+                     padding: 6px;
+                     border: 1px solid black;
+                     text-align: center;
+                }
+      
+                .main-part1,
+                .main-part2,
+                .main2 {
+                     width: 50%;
+                }
+      
+                .main,
+                .main3 {
+                     display: flex;
+                }
+      
+                .main2,
+                .main-part3,
+                .main-part4,
+                .main-part5 {
+                     border: 1px solid black
+                }
+      
+                .main2,
+                .main-part3 p {
+                     text-align: center;
+                     margin-top: 0;
+                     margin-bottom: 0;
+                     padding: 6px;
+                }
+      
+                .main2 p:nth-child(odd) {
+                     background-color: green;
+                     color: white;
+                     font-weight: 600;
+                }
+      
+                .main-part3 p:nth-child(odd) {
+                     background-color: green;
+                     color: white;
+                     font-weight: 600;
+                }
+      
+                .main-part3-p p {
+                     text-align: left;
+                }
+      
+                .main4 p {
+                     text-align: right;
+                     margin-left: 20px;
+                     margin-right: 20px;
+                }
+      
+                .head-content3 {
+                     padding: 10px;
+                     border: 1px solid black;
+                     border-radius: 6px;
+                     margin-left: 20px;
+                     margin-right: 20px;
+                }
+      
+                .head-content2-part1 h3 {
+                     color: black;
+                     text-align: center;
+                }
+      
+                .head-content3-part1,
+                .head-content3-part2,
+                .head-content3-part3 {
+                     display: flex;
+                     justify-content: space-between;
+                }
+      
+                .head-content3-part1 h3,
+                .head-content3-part2 h3,
+                .head-content3-part3 h3 {
+                     width: 33%;
+                }
+      
+                .head-content h1,
+                p {
+                     text-align: center;
+                }
+                .main5{
+                     display: flex;
+                     justify-content: space-between;
+                     margin-left: 20px;
+                     margin-right: 20px;
+                     
+                }
+                span{
+                     color: green;
+                }
+                body{
+                  border: 1px solid black;
+                  height : calc(100vh - 20px);
+                }
+           </style>
+      </head>
+      
+      <body>
+      <div style="page-break-before: always;"></div>
+           <div class="head">
+                <div>
+                <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
+                </div>
+                <div class="head-content">
+                     <h1>SAMADHAN HOSPITAL</h1>
+                     <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
+                     <p>50, GANESH NAGAR, NAGPUE.440024</p>
+                     <p>Registration No :  542</p>
+                </div>
+                <div class="head-content"></div>
+           </div>
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                     <h3 style="margin: 0;
+                          padding: 8px;">POST PROCEDURE NOTE </h3>
+                </div>
+      
+           </div>
+           <div class="head-content3">
+           <div class="head-content3-part1">
+           <h3 style="margin: 0;
+                padding: 8px;">UHID : <span>${
+                  _prescriptiondata?.uhid
+                }</span> </h3>
+           <h3 style="margin: 0;
+                padding: 8px;">OP/IP : <span>${
+                  _prescriptiondata?.ip_no || _prescriptiondata?.op_no
+                }</span> </h3>
+           <h3 style="margin: 0;
+                padding: 8px;">DATE/TIME : <span>${
+                  _prescriptiondata?.app_date
+                } / ${_prescriptiondata?.app_time}</span> </h3>
+      </div>
+      <div class="head-content3-part2">
+           <h3 style="margin: 0;
+                padding: 8px;">NAME : <span>${
+                  _prescriptiondata?.firstname
+                }</span> </h3>
+           <h3 style="margin: 0;
+                padding: 8px;">AGE : <span>${
+                  _prescriptiondata?.patientage
+                }</span></h3>
+           <h3 style="margin: 0;
+                padding: 8px;">GENDER : <span>${
+                  _prescriptiondata?.patientgender
+                }</span> </h3>
+      </div>
+      <div class="head-content3-part3">
+           <h3 style="margin: 0;
+                padding: 8px; width: 106%;">DOCTOR NAME : <span>${
+                  _prescriptiondata?.doctor_name
+                }</span> </h3>
+           
+           <h3 style="margin: 0;width: 50%;
+                padding: 8px;">CONSULTANT NAME : <span>${
+                  _prescriptiondata?.consultant_name
+                }</span></h3>
+      </div>
+      
+           </div>
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                <h3 style="margin: 0;
+                padding: 30px 20px;text-align: left;">Diagnosis : ${
+                  _prescriptiondata?.diagnosisname
+                }  </h3>
+                </div>
+      
+           </div>
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                     <h3 style="margin: 0;
+                              padding: 2px 20px;text-align: left;">COMPLAINTS</h3>
+                </div>
+      
+           </div>
+      
+           <div class="main-part12">
+                <table style="border-collapse: collapse;">
+                     <thead>
+                          <th>COMPLAINTS</th>
+                          <th>DURATION</th>
+                          <th>FREQUENCY</th>
+                     </thead>
+                     <tbody>
+                     ${_complainttableRows2}
+                     </tbody>
+                </table>
+           </div>
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                     <h3 style="margin: 0;
+                              padding: 2px 20px;text-align: left;">VITALS</h3>
+                </div>
+      
+           </div>
+      
+           <div class="main-part12">
+                <table style="border-collapse: collapse;">
+                    
+                <tbody>
+                <tr>
+                     <td class="vLabel">GC</td>
+                     <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
+          _prescriptiondata?.verbalResponse
+        } / M : ${_prescriptiondata?.motorResponse}</td>
+                     <td class="vLabel">TEMP</td>
+                      <td>${_prescriptiondata?.p_temp}</td>
+                     <td class="vLabel">PULSE</td>
+                      <td>${_prescriptiondata?.p_pulse}</td>
+                </tr>
+                <tr>
+                     <td class="vLabel">BP</td>
+                     <td>${_prescriptiondata?.p_systolicbp} / ${
+          _prescriptiondata?.p_diastolicbp
+        }</td>
+                     <td class="vLabel">RR</td>
+                      <td>${_prescriptiondata?.p_rsprate}</td>
+                     <td class="vLabel">SPO2</td>
+                      <td>${_prescriptiondata?.p_spo2}</td>
+                </tr>
+           </tbody>
+                </table>
+           </div>
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                     <h3 style="margin: 0;
+                              padding: 2px 20px;text-align: left;">Investigation: </h3>
+                </div>
+      
+           </div>
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                     <h3 style="margin: 0;
+                              padding: 20px 20px;text-align: left;">POST PROCEDURE INVESTIGATION    </h3>
+                </div>
+      
+           </div>
+           <div class="head-content2">
+                <div class="head-content2-part1">
+                     <h3 style="margin: 0;
+                              padding: 20px 20px;text-align: left;">R<sub>x</sub></h3>
+                </div>
+      
+           </div>
+           <div class="main-part12">
+                <table style="border-collapse: collapse;">
+                     <thead>
+                          <th>MEDICINE NAME</th>
+                          <th>DOSE</th>
+                          <th>DOSAGE</th>
+                          <th>ROUTE</th>
+                          <th>DURATION</th>
+                     </thead>
+                     <tbody>
+                         ${_complainttableRows3}
+                         
+                     </tbody>
+                </table>
+           </div>
+      
+           <br />
+           <div>
+                ${_complainttableRows4}
+           </div>
+           <div class="head-content5" style="margin-top: 5%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+                <div class="head-content5-part1" style="padding: 2px 20px;">
+                     <p style="text-align: left;margin: 0;padding: 4px;">${
+                       _prescriptiondata.consultant_name
+                     }</p>
+                     <p style="text-align: left;margin: 0;padding: 4px;">${
+                       _prescriptiondata.designation
+                     }</p>
+                     <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. ${
+                       _prescriptiondata.reg_no
+                     }</p>
+                </div>
+                <div class="head-content5-part2" style="padding: 2px 20px;">
+                     <p style="text-align: left;margin: 0;padding: 4px;">${
+                       _prescriptiondata.rmo_name
+                     }</p>
+                     <p style="text-align: left;margin: 0;padding: 4px;">${
+                       _prescriptiondata.rmo_designation
+                     }</p>
+                     <p style="text-align: left;margin: 0;padding: 4px;">REG NO.${
+                       _prescriptiondata.reg_no
+                     }</p>
+                </div>
+      
+           </div>
+           <div class="main5">
+           <p>+91-7774017732</p>
+           <p>www.medayu.in </p>
+           <p>medayuhealthcare@gmail.com </p>
+      </div>
+           
+      </body>
+      
+      </html>
+      `;
+        combinedHtml = `${html}${html2}`;
+      } else {
+        html3 = `
+        <!DOCTYPE html>
+        <html>
+        
+        <head>
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+        <style>
+            .head {
+                 display: flex;
+                 justify-content: space-between;
+                 align-items: center;
+                 padding: 0 12px;
+                 border-bottom: 2px solid blue;
+            }
+        
+            .head-content {
+                 line-height: 0.5;
+            }
+        
+            .head-content2-part2 p {
+                 text-align: right;
+            }
+        
+            table {
+                 width: 94%;
+                 margin-left: 20px;
+                 margin-right: 20px;
+                 margin-bottom: 2%;
+        
+            }
+        
+            table tr th {
+                 padding: 6px;
+                 border: 1px solid black
+            }
+        
+            table tr td {
+                 padding: 6px;
+                 border: 1px solid black;
+                 text-align: center;
+            }
+        
+            .main-part1,
+            .main-part2,
+            .main2 {
+                 width: 50%;
+            }
+        
+            .main,
+            .main3 {
+                 display: flex;
+            }
+        
+            .main2,
+            .main-part3,
+            .main-part4,
+            .main-part5 {
+                 border: 1px solid black
+            }
+        
+            .main2,
+            .main-part3 p {
+                 text-align: center;
+                 margin-top: 0;
+                 margin-bottom: 0;
+                 padding: 6px;
+            }
+        
+            .main2 p:nth-child(odd) {
+                 background-color: green;
+                 color: white;
+                 font-weight: 600;
+            }
+        
+            .main-part3 p:nth-child(odd) {
+                 background-color: green;
+                 color: white;
+                 font-weight: 600;
+            }
+        
+            .main-part3-p p {
+                 text-align: left;
+            }
+        
+            .main4 p {
+                 text-align: right;
+                 margin-left: 20px;
+                 margin-right: 20px;
+            }
+        
+            .head-content3 {
+                 padding: 10px;
+                 border: 1px solid black;
+                 border-radius: 6px;
+                 margin-left: 20px;
+                 margin-right: 20px;
+            }
+        
+            .head-content2-part1 h3 {
+                 color: black;
+                 text-align: center;
+            }
+        
+            .head-content3-part1,
+            .head-content3-part2,
+            .head-content3-part3 {
+                 display: flex;
+                 justify-content: space-between;
+            }
+        
+            .head-content3-part1 h3,
+            .head-content3-part2 h3,
+            .head-content3-part3 h3 {
+                 width: 33%;
+            }
+        
+            .head-content h1,
+            p {
+                 text-align: center;
+            }
+            .main5{
+                 display: flex;
+                 justify-content: space-between;
+                 margin-left: 20px;
+                 margin-right: 20px;
+              
+            }
+            span{
+                 color: green;
+            }
+            body{
+              border: 1px solid black;
+              height : calc(100vh - 20px);
+            }
+        </style>
+        </head>
+        
+        <body>
+        <div style="page-break-before: always;"></div>
+        <div class="head">
+            <div>
+            <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
+            </div>
+            <div class="head-content">
+                 <h1>SAMADHAN HOSPITAL</h1>
+                 <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
+                 <p>50, GANESH NAGAR, NAGPUE.440024</p>
+                 <p>Registration No :  542</p>
+            </div>
+            <div class="head-content"></div>
+        </div>
+        <div class="head-content2">
+            <div class="head-content2-part1">
+                 <h3 style="margin: 0;
+                      padding: 8px;">DOCTOR NOTES </h3>
+            </div>
+        
+        </div>
+        <div class="head-content3">
+        <div class="head-content3-part1">
+        <h3 style="margin: 0;
+            padding: 8px;">UHID : <span>${_prescriptiondata?.uhid}</span> </h3>
+        <h3 style="margin: 0;
+            padding: 8px;">OP/IP : <span>${
+              _prescriptiondata?.ip_no || _prescriptiondata?.op_no
+            }</span> </h3>
+        <h3 style="margin: 0;
+            padding: 8px;">DATE/TIME : <span>${_prescriptiondata?.app_date} / ${
+          _prescriptiondata?.app_time
+        }</span> </h3>
+        </div>
+        <div class="head-content3-part2">
+        <h3 style="margin: 0;
+            padding: 8px;">NAME : <span>${
+              _prescriptiondata?.firstname
+            }</span> </h3>
+        <h3 style="margin: 0;
+            padding: 8px;">AGE : <span>${
+              _prescriptiondata?.patientage
+            }</span></h3>
+        <h3 style="margin: 0;
+            padding: 8px;">GENDER : <span>${
+              _prescriptiondata?.patientgender
+            }</span> </h3>
+        </div>
+        <div class="head-content3-part3">
+        <h3 style="margin: 0;
+            padding: 8px; width: 106%;">DOCTOR NAME : <span>${
+              _prescriptiondata?.doctor_name
+            }</span> </h3>
+        
+        <h3 style="margin: 0;width: 50%;
+            padding: 8px;">CONSULTANT NAME : <span>${
+              _prescriptiondata?.consultant_name
+            }</span></h3>
+        </div>
+        
+        </div>
+        <div class="head-content2">
+            <div class="head-content2-part1">
+            <h3 style="margin: 0;
+            padding: 30px 20px;text-align: left;">Diagnosis : ${
+              _prescriptiondata?.diagnosisname
+            }  </h3>
+            </div>
+        
+        </div>
+        <div class="head-content2">
+            <div class="head-content2-part1">
+                 <h3 style="margin: 0;
+                          padding: 2px 20px;text-align: left;">COMPLAINTS</h3>
+            </div>
+        
+        </div>
+        
+        <div class="main-part12">
+            <table style="border-collapse: collapse;">
+                 <thead>
+                      <th>COMPLAINTS</th>
+                      <th>DURATION</th>
+                      <th>FREQUENCY</th>
+                 </thead>
+                 <tbody>
+                 ${_complainttableRows2}
+                 </tbody>
+            </table>
+        </div>
+        <div class="head-content2">
+            <div class="head-content2-part1">
+                 <h3 style="margin: 0;
+                          padding: 2px 20px;text-align: left;">VITALS</h3>
+            </div>
+        
+        </div>
+        
+        <div class="main-part12">
+            <table style="border-collapse: collapse;">
+                
+            <tbody>
+            <tr>
+                 <td class="vLabel">GC</td>
+                 <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
+          _prescriptiondata?.verbalResponse
+        } / M : ${_prescriptiondata?.motorResponse}</td>
+                 <td class="vLabel">TEMP</td>
+                  <td>${_prescriptiondata?.p_temp}</td>
+                 <td class="vLabel">PULSE</td>
+                  <td>${_prescriptiondata?.p_pulse}</td>
+            </tr>
+            <tr>
+                 <td class="vLabel">BP</td>
+                 <td>${_prescriptiondata?.p_systolicbp} / ${
+          _prescriptiondata?.p_diastolicbp
+        }</td>
+                 <td class="vLabel">RR</td>
+                  <td>${_prescriptiondata?.p_rsprate}</td>
+                 <td class="vLabel">SPO2</td>
+                  <td>${_prescriptiondata?.p_spo2}</td>
+            </tr>
+        </tbody>
+            </table>
+        </div>
+        <div class="head-content2">
+          <div class="head-content2-part1">
+              <h3 style="margin: 0;
+                        padding: 2px 20px;text-align: left;">PROCEDURES</h3>
           </div>
-          <div class="head-content5-part2" style="padding: 2px 20px;">
-               <p style="text-align: left;margin: 0;padding: 4px;">DR. YOGENDRA RAJAWAT</p>
-               <p style="text-align: left;margin: 0;padding: 4px;">RMO</p>
-               <p style="text-align: left;margin: 0;padding: 4px;">REG NO.2008/10/3546</p>
-          </div>
-
-     </div>
-    
-     
-</body>
-
-</html>`;
-
+      
+        </div>
+        <div class="main-part12">
+        <table style="border-collapse: collapse;">
+             <thead>
+                  <th>PROCEDURE NAME</th>
+                  <th>DURATION</th>
+                  <th>INSTRUCTION</th>
+             </thead>
+             <tbody>
+             ${_complainttableRows5}
+             </tbody>
+        </table>
+      </div>
+        <div class="head-content2">
+            <div class="head-content2-part1">
+                 <h3 style="margin: 0;
+                          padding: 2px 20px;text-align: left;">Investigation: </h3>
+            </div>
+        
+        </div>
+        <div class="head-content2">
+            <div class="head-content2-part1">
+                 <h3 style="margin: 0;
+                          padding: 20px 20px;text-align: left;">CBC, KFT, LFT </h3>
+            </div>
+        
+        </div>
+        <div class="head-content2">
+            <div class="head-content2-part1">
+                 <h3 style="margin: 0;
+                          padding: 20px 20px;text-align: left;">R<sub>x</sub></h3>
+            </div>
+        
+        </div>
+        <div class="main-part12">
+            <table style="border-collapse: collapse;">
+                 <thead>
+                      <th>MEDICINE NAME</th>
+                      <th>DOSE</th>
+                      <th>DOSAGE</th>
+                      <th>ROUTE</th>
+                      <th>DURATION</th>
+                 </thead>
+                 <tbody>
+                     ${_complainttableRows3}
+                     
+                 </tbody>
+            </table>
+        </div>
+        
+        <br />
+        
+        <div class="head-content5" style="margin-top: 5%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+            <div class="head-content5-part1" style="padding: 2px 20px;">
+                 <p style="text-align: left;margin: 0;padding: 4px;">${
+                   _prescriptiondata.consultant_name
+                 }</p>
+                 <p style="text-align: left;margin: 0;padding: 4px;">${
+                   _prescriptiondata.designation
+                 }</p>
+                 <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. ${
+                   _prescriptiondata.reg_no
+                 }</p>
+            </div>
+            <div class="head-content5-part2" style="padding: 2px 20px;">
+                 <p style="text-align: left;margin: 0;padding: 4px;">${
+                   _prescriptiondata.rmo_name
+                 }</p>
+                 <p style="text-align: left;margin: 0;padding: 4px;">${
+                   _prescriptiondata.rmo_designation
+                 }</p>
+                 <p style="text-align: left;margin: 0;padding: 4px;">REG NO.${
+                   _prescriptiondata.reg_no
+                 }</p>
+            </div>
+        
+        </div>
+        <br><br>
+        <div class="main5">
+          <p>+91-7774017732</p>
+          <p>www.medayu.in </p>
+          <p>medayuhealthcare@gmail.com </p>
+        </div>
+        
+        </body>
+        
+        </html>
+        `;
+        combinedHtml = `${html3}`;
+      }
       const {fs} = RNFetchBlob;
       const path = fs.dirs.DocumentDir + '/Prescription.pdf';
       const options = {
-        html: html,
+        html: combinedHtml,
         fileName: 'Prescription',
         directory: '',
       };
@@ -718,8 +2301,8 @@ const Preprecedureprescription = ({route}) => {
           onValueChange={setValue}
           buttons={[
             {
-              value: 'Pending',
-              label: 'Pending',
+              value: 'Schedule',
+              label: 'Schedule',
             },
             {
               value: 'Completed',
@@ -810,15 +2393,27 @@ const Preprecedureprescription = ({route}) => {
               </View>
               <View style={styles.cardFooter2}>
                 <View style={styles.grpShare}>
-                  <TouchableOpacity
-                    style={{borderWidth: 1, padding: 4, borderRadius: 4}}
-                    onPress={() =>
-                      navigation.navigate('Editprocedure', {
-                        preprocedure_id: res.preprocedure_id,
-                      })
-                    }>
-                    <FontAwesome6 name="eye" color="#1669f0" size={18} />
-                  </TouchableOpacity>
+                  {procedureType === 'Pre' ? (
+                    <TouchableOpacity
+                      style={{borderWidth: 1, padding: 4, borderRadius: 4}}
+                      onPress={() =>
+                        navigation.navigate('EditPreprocedure', {
+                          preprocedure_id: res.preprocedure_id,
+                        })
+                      }>
+                      <FontAwesome6 name="eye" color="#1669f0" size={18} />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={{borderWidth: 1, padding: 4, borderRadius: 4}}
+                      onPress={() =>
+                        navigation.navigate('Editprocedure', {
+                          preprocedure_id: res.preprocedure_id,
+                        })
+                      }>
+                      <FontAwesome6 name="eye" color="#1669f0" size={18} />
+                    </TouchableOpacity>
+                  )}
                   <TouchableOpacity
                     style={{borderWidth: 1, padding: 4, borderRadius: 4}}
                     onPress={() => {

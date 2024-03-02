@@ -21,7 +21,8 @@ import {
 import {Button} from 'react-native-paper';
 
 const ProcedureServiceType = ({route}) => {
-  const {servicetype_id, categoryname, category_id} = route.params;
+  const {servicetype_id, categoryname, category_id, procedureType} =
+    route.params;
   const [_serviceItemArray, _setServiceItemArray] = useState([]);
   const [selectionValue, setSelectionValue] = useState('Single');
   const {patientsData} = useContext(UserContext);
@@ -417,6 +418,7 @@ const ProcedureServiceType = ({route}) => {
           onPress={() =>
             navigation.navigate('Preprecedureprescription', {
               _preprocedurevalue: `${categoryname} Procedure`,
+              procedureType: 'Pre',
             })
           }>
           Prescription

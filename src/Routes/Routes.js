@@ -50,6 +50,7 @@ import Procedurehistory from '../screens/Employee/Procedure/Procedurehistory';
 import Preprecedureprescription from '../screens/Employee/Procedure/Preprecedureprescription';
 import Prepostprocedure from '../screens/Employee/Procedure/Prepostprocedure';
 import Editprocedure from '../screens/Employee/Procedure/Editprocedure';
+import EditPreprocedure from '../screens/Employee/Procedure/EditPreProcedure';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -758,7 +759,27 @@ const Routes = () => {
           name="Editprocedure"
           component={Editprocedure}
           options={({navigation}) => ({
-            title: `Edit Procedure`,
+            title: `Edit Post-Procedure`,
+            headerRight: () => (
+              <FontAwesome
+                name="sign-out"
+                size={22}
+                color="#127359"
+                style={{marginLeft: 20}}
+                onPress={() => {
+                  navigation.navigate('LoginPage'), logoutHandler();
+                }}
+              />
+            ),
+
+            headerTitleStyle: {fontSize: 16},
+          })}
+        />
+        <Stack.Screen
+          name="EditPreprocedure"
+          component={EditPreprocedure}
+          options={({navigation}) => ({
+            title: `Edit Pre-Procedure`,
             headerRight: () => (
               <FontAwesome
                 name="sign-out"

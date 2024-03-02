@@ -49,7 +49,6 @@ const Procedurehistory = () => {
       const {status, message, data} = res.data;
       if (status === true) {
         setProcedureHistory(data);
-        console.log('data : ', JSON.stringify(data));
         // Initialize switch states for each item
         const initialSwitchStates = {};
         data.forEach(item => {
