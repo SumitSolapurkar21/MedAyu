@@ -5,12 +5,9 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  ToastAndroid,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {BackHandler} from 'react-native';
-import axios from 'axios';
 import admission from '../../../images/admission.png';
 
 const Prepostprocedure = () => {
@@ -27,7 +24,11 @@ const Prepostprocedure = () => {
 
         <TouchableOpacity
           style={styles.selectDiv}
-          onPress={() => console.warn('Comming Soon')}>
+          onPress={() =>
+            navigation.navigate('Preprecedureprescription', {
+              _preprocedurevalue: 'Schedule Procedure',
+            })
+          }>
           <Image source={admission} alt="vital" style={styles.img} />
           <Text style={[styles.uName, {marginLeft: 10}]}>
             Schedule Procedure

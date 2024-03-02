@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Icon, Switch} from 'react-native-paper';
 import RNPrint from 'react-native-print';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -18,30 +17,34 @@ import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
+import {SegmentedButtons, DefaultTheme} from 'react-native-paper';
 
-const Preprecedureprescription = () => {
+const Preprecedureprescription = ({route}) => {
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id} = patientsData;
   const [procedureHistory, setProcedureHistory] = useState([]);
-  const [switchStates, setSwitchStates] = useState({});
   const navigation = useNavigation();
+  const [value, setValue] = useState('Pending');
+  const {_preprocedurevalue} = route.params;
+  // console.log('_preprocedurevalue : ', _preprocedurevalue);
 
   //get patient treatment history ......
   useEffect(() => {
     _fetchprocedurehistory();
   }, [hospital_id, patient_id, reception_id]);
+
   const _fetchprocedurehistory = async () => {
     try {
       const res = await axios.post(`${api.baseurl}/GetPreprocedureHistory`, {
         hospital_id: hospital_id,
         patient_id: patient_id,
         reception_id: reception_id,
+        procedurestatus: false,
       });
 
       const {status, message, data} = res.data;
       if (status === true) {
         setProcedureHistory(data);
-        console.log('data : ', JSON.stringify(data));
       } else {
         console.error(`${message}`);
       }
@@ -49,8 +52,682 @@ const Preprecedureprescription = () => {
       console.error(error);
     }
   };
+  //get patient treatment history api end ......
+
+  //generate pdf ....
+  // handlePdfIconClick function ....
+  const handlePdfIconClick = async preprocedure_id => {
+    try {
+      const generatePreprocedurenotes = await axios.post(
+        `${api.baseurl}/GeneratePreprocedurenotes`,
+        {
+          preprocedure_id: preprocedure_id,
+          hospital_id: hospital_id,
+          patient_id: patient_id,
+          reception_id: reception_id,
+        },
+      );
+      const {panchakarmaprocedurearray, complaintarray, ..._prescriptiondata} =
+        generatePreprocedurenotes.data;
+
+      const _complainttableRows = panchakarmaprocedurearray
+        ?.map((res, i) => {
+          return `<div class="head-content2-part1" key=${i}>
+                    <h3 style="margin: 0;
+                   padding: 2px 20px;text-align: left;">Procedure Name : ${res?.procedurename}  </h3>
+                   <h3 style="margin: 0;
+                   padding: 2px 20px;text-align: left;">Procedure Notes : ${res?.procedureinstruction}  </h3>
+                  </div><br/>
+                    
+                   `;
+        })
+        .join('');
+
+      const html = `
+      <!DOCTYPE html>
+<html>
+
+<head>
+     <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+     <style>
+          .head {
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+               padding: 0 12px;
+               border-bottom: 2px solid blue;
+          }
+
+          .head-content {
+               line-height: 0.5;
+          }
+
+          .head-content2-part2 p {
+               text-align: right;
+          }
+
+          table {
+               width: 94%;
+               margin-left: 20px;
+               margin-right: 20px;
+               margin-bottom: 2%;
+
+          }
+
+          /* thead {
+               background-color: green;
+          } */
+
+          table tr th {
+               padding: 6px;
+               border: 1px solid black
+          }
+
+          table tr td {
+               padding: 6px;
+               border: 1px solid black;
+               text-align: center;
+          }
+
+          .main-part1,
+          .main-part2,
+          .main2 {
+               width: 50%;
+          }
+
+          .main,
+          .main3 {
+               display: flex;
+          }
+
+          .main2,
+          .main-part3,
+          .main-part4,
+          .main-part5 {
+               border: 1px solid black
+          }
+
+          .main2,
+          .main-part3 p {
+               text-align: center;
+               margin-top: 0;
+               margin-bottom: 0;
+               padding: 6px;
+          }
+
+          .main2 p:nth-child(odd) {
+               background-color: green;
+               color: white;
+               font-weight: 600;
+          }
+
+          .main-part3 p:nth-child(odd) {
+               background-color: green;
+               color: white;
+               font-weight: 600;
+          }
+
+          .main-part3-p p {
+               text-align: left;
+          }
+
+          .main4 p {
+               text-align: right;
+               margin-left: 20px;
+               margin-right: 20px;
+          }
+
+          .head-content3 {
+               padding: 10px;
+               border: 1px solid black;
+               border-radius: 6px;
+               margin-left: 20px;
+               margin-right: 20px;
+          }
+
+          .head-content2-part1 h3 {
+               color: black;
+               text-align: center;
+          }
+
+          .head-content3-part1,
+          .head-content3-part2,
+          .head-content3-part3 {
+               display: flex;
+               justify-content: space-between;
+          }
+
+          .head-content3-part1 h3,
+          .head-content3-part2 h3,
+          .head-content3-part3 h3 {
+               width: 33%;
+          }
+
+          .head-content h1,
+          p {
+               text-align: center;
+          }
+          .main5{
+               display: flex;
+               justify-content: space-between;
+               margin-left: 20px;
+               margin-right: 20px;
+               border-top: 2px solid green;
+          }
+          span{
+               color: green;
+          }
+          td.vLabel{
+            font-weight: bold;
+          }
+          body{
+            border: 1px solid black;
+            height : calc(100vh - 20px);
+          }
+     </style>
+</head>
+
+<body>
+     <div class="head">
+          <div>
+          <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
+          </div>
+          <div class="head-content">
+               <h1>SAMADHAN HOSPITAL</h1>
+               <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
+               <p>50, GANESH NAGAR, NAGPUE.440024</p>
+               <p>Registration No :  542</p>
+          </div>
+          <div class="head-content"></div>
+     </div>
+     <div class="head-content2">
+          <div class="head-content2-part1">
+               <h3 style="margin: 0;
+                    padding: 8px;">PROCEDURE NOTE </h3>
+          </div>
+
+     </div>
+     <div class="head-content3">
+     <div class="head-content3-part1">
+     <h3 style="margin: 0;
+          padding: 8px;">UHID : <span>${_prescriptiondata?.uhid}</span> </h3>
+     <h3 style="margin: 0;
+          padding: 8px;">OP/IP : <span>${
+            _prescriptiondata?.ip_no || _prescriptiondata?.op_no
+          }</span> </h3>
+     <h3 style="margin: 0;
+          padding: 8px;">DATE/TIME : <span>${_prescriptiondata?.app_date} / ${
+        _prescriptiondata?.app_time
+      }</span> </h3>
+</div>
+<div class="head-content3-part2">
+     <h3 style="margin: 0;
+          padding: 8px;">NAME : <span>${
+            _prescriptiondata?.firstname
+          }</span> </h3>
+     <h3 style="margin: 0;
+          padding: 8px;">AGE : <span>${
+            _prescriptiondata?.patientage
+          }</span></h3>
+     <h3 style="margin: 0;
+          padding: 8px;">GENDER : <span>${
+            _prescriptiondata?.patientgender
+          }</span> </h3>
+</div>
+<div class="head-content3-part3">
+     <h3 style="margin: 0;
+          padding: 8px; width: 106%;">DOCTOR NAME : <span>${
+            _prescriptiondata?.doctor_name
+          }</span> </h3>
+     
+     <h3 style="margin: 0;width: 50%;
+          padding: 8px;">CONSULTANT NAME : <span>${
+            _prescriptiondata?.consultant_name
+          }</span></h3>
+</div>
+
+     </div>
+     <div class="head-content2">
+          <div class="head-content2-part1">
+               <h3 style="margin: 0;
+                        padding: 30px 20px;text-align: left;">Diagnosis : ${
+                          _prescriptiondata?.diagnosisname
+                        }  </h3>
+          </div>
+
+     </div>
+    
+     <div class="head-content2">
+          <div class="head-content2-part1">
+               <h3 style="margin: 0;
+                        padding: 2px 20px;text-align: left;">VITALS</h3>
+          </div>
+
+     </div>
+
+     <div class="main-part12">
+          <table style="border-collapse: collapse;">
+              
+               <tbody>
+                    <tr>
+                         <td class="vLabel">GC</td>
+                         <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
+        _prescriptiondata?.verbalResponse
+      } / M : ${_prescriptiondata?.motorResponse}</td>
+                         <td class="vLabel">TEMP</td>
+                          <td>${_prescriptiondata?.p_temp}</td>
+                         <td class="vLabel">PULSE</td>
+                          <td>${_prescriptiondata?.p_pulse}</td>
+                    </tr>
+                    <tr>
+                         <td class="vLabel">BP</td>
+                         <td>${_prescriptiondata?.p_systolicbp} / ${
+        _prescriptiondata?.p_diastolicbp
+      }</td>
+                         <td class="vLabel">RR</td>
+                          <td>${_prescriptiondata?.p_rsprate}</td>
+                         <td class="vLabel">SPO2</td>
+                          <td>${_prescriptiondata?.p_spo2}</td>
+                    </tr>
+               </tbody>
+          </table>
+     </div>
+     <div class="head-content2" style="margin-top: 60px;">
+     ${_complainttableRows}
+
+      </div>
+      <div class="head-content4">
+               <p style="padding: 10px 20px;text-align: left;">PROCEDURE DONE BY : </p>
+
+     </div>
+     <div class="head-content5" style="margin-top: 30%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+          <div class="head-content5-part1" style="padding: 2px 20px;">
+               <p style="text-align: left;margin: 0;padding: 4px;">Dr. VEDPRAKASH GAHUKAR</p>
+               <p style="text-align: left;margin: 0;padding: 4px;">CONSULTANT</p>
+               <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. 2008/10/3546</p>
+          </div>
+          <div class="head-content5-part2" style="padding: 2px 20px;">
+               <p style="text-align: left;margin: 0;padding: 4px;">DR. YOGENDRA RAJAWAT</p>
+               <p style="text-align: left;margin: 0;padding: 4px;">RMO</p>
+               <p style="text-align: left;margin: 0;padding: 4px;">REG NO.2008/10/3546</p>
+          </div>
+
+     </div>
+    
+     
+</body>
+
+</html>`;
+      await RNPrint.print({
+        html,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //handler share pdf ......
+  const sharePdfhandler = async preprocedure_id => {
+    try {
+      const generatePreprocedurenotes = await axios.post(
+        `${api.baseurl}/GeneratePreprocedurenotes`,
+        {
+          preprocedure_id: preprocedure_id,
+          hospital_id: hospital_id,
+          patient_id: patient_id,
+          reception_id: reception_id,
+        },
+      );
+      const {panchakarmaprocedurearray, complaintarray, ..._prescriptiondata} =
+        generatePreprocedurenotes.data;
+
+      const _complainttableRows = panchakarmaprocedurearray
+        ?.map((res, i) => {
+          return `<div class="head-content2-part1" key=${i}>
+                    <h3 style="margin: 0;
+                   padding: 2px 20px;text-align: left;">Procedure Name : ${res?.procedurename}  </h3>
+                   <h3 style="margin: 0;
+                   padding: 2px 20px;text-align: left;">Procedure Notes : ${res?.procedureinstruction}  </h3>
+                  </div><br/>
+                    
+                   `;
+        })
+        .join('');
+
+      const html = `
+      <!DOCTYPE html>
+<html>
+
+<head>
+     <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+     <style>
+          .head {
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+               padding: 0 12px;
+               border-bottom: 2px solid blue;
+          }
+
+          .head-content {
+               line-height: 0.5;
+          }
+
+          .head-content2-part2 p {
+               text-align: right;
+          }
+
+          table {
+               width: 94%;
+               margin-left: 20px;
+               margin-right: 20px;
+               margin-bottom: 2%;
+
+          }
+
+          /* thead {
+               background-color: green;
+          } */
+
+          table tr th {
+               padding: 6px;
+               border: 1px solid black
+          }
+
+          table tr td {
+               padding: 6px;
+               border: 1px solid black;
+               text-align: center;
+          }
+
+          .main-part1,
+          .main-part2,
+          .main2 {
+               width: 50%;
+          }
+
+          .main,
+          .main3 {
+               display: flex;
+          }
+
+          .main2,
+          .main-part3,
+          .main-part4,
+          .main-part5 {
+               border: 1px solid black
+          }
+
+          .main2,
+          .main-part3 p {
+               text-align: center;
+               margin-top: 0;
+               margin-bottom: 0;
+               padding: 6px;
+          }
+
+          .main2 p:nth-child(odd) {
+               background-color: green;
+               color: white;
+               font-weight: 600;
+          }
+
+          .main-part3 p:nth-child(odd) {
+               background-color: green;
+               color: white;
+               font-weight: 600;
+          }
+
+          .main-part3-p p {
+               text-align: left;
+          }
+
+          .main4 p {
+               text-align: right;
+               margin-left: 20px;
+               margin-right: 20px;
+          }
+
+          .head-content3 {
+               padding: 10px;
+               border: 1px solid black;
+               border-radius: 6px;
+               margin-left: 20px;
+               margin-right: 20px;
+          }
+
+          .head-content2-part1 h3 {
+               color: black;
+               text-align: center;
+          }
+
+          .head-content3-part1,
+          .head-content3-part2,
+          .head-content3-part3 {
+               display: flex;
+               justify-content: space-between;
+          }
+
+          .head-content3-part1 h3,
+          .head-content3-part2 h3,
+          .head-content3-part3 h3 {
+               width: 33%;
+          }
+
+          .head-content h1,
+          p {
+               text-align: center;
+          }
+          .main5{
+               display: flex;
+               justify-content: space-between;
+               margin-left: 20px;
+               margin-right: 20px;
+               border-top: 2px solid green;
+          }
+          span{
+               color: green;
+          }
+          td.vLabel{
+            font-weight: bold;
+          }
+          body{
+            border: 1px solid black;
+            height : calc(100vh - 8px);
+          }
+     </style>
+</head>
+
+<body>
+     <div class="head">
+          <div>
+          <img src=${_prescriptiondata?.hosp_logo} style="width: 14vw;" />
+          </div>
+          <div class="head-content">
+               <h1>SAMADHAN HOSPITAL</h1>
+               <p>( OPERATED BY MedAyu HEALTHCARE LLP )</p>
+               <p>50, GANESH NAGAR, NAGPUE.440024</p>
+               <p>Registration No :  542</p>
+          </div>
+          <div class="head-content"></div>
+     </div>
+     <div class="head-content2">
+          <div class="head-content2-part1">
+               <h3 style="margin: 0;
+                    padding: 8px;">PROCEDURE NOTE </h3>
+          </div>
+
+     </div>
+     <div class="head-content3">
+     <div class="head-content3-part1">
+     <h3 style="margin: 0;
+          padding: 8px;">UHID : <span>${_prescriptiondata?.uhid}</span> </h3>
+     <h3 style="margin: 0;
+          padding: 8px;">OP/IP : <span>${
+            _prescriptiondata?.ip_no || _prescriptiondata?.op_no
+          }</span> </h3>
+     <h3 style="margin: 0;
+          padding: 8px;">DATE/TIME : <span>${_prescriptiondata?.app_date} / ${
+        _prescriptiondata?.app_time
+      }</span> </h3>
+</div>
+<div class="head-content3-part2">
+     <h3 style="margin: 0;
+          padding: 8px;">NAME : <span>${
+            _prescriptiondata?.firstname
+          }</span> </h3>
+     <h3 style="margin: 0;
+          padding: 8px;">AGE : <span>${
+            _prescriptiondata?.patientage
+          }</span></h3>
+     <h3 style="margin: 0;
+          padding: 8px;">GENDER : <span>${
+            _prescriptiondata?.patientgender
+          }</span> </h3>
+</div>
+<div class="head-content3-part3">
+     <h3 style="margin: 0;
+          padding: 8px; width: 106%;">DOCTOR NAME : <span>${
+            _prescriptiondata?.doctor_name
+          }</span> </h3>
+     
+     <h3 style="margin: 0;width: 50%;
+          padding: 8px;">CONSULTANT NAME : <span>${
+            _prescriptiondata?.consultant_name
+          }</span></h3>
+</div>
+
+     </div>
+     <div class="head-content2">
+          <div class="head-content2-part1">
+               <h3 style="margin: 0;
+                        padding: 30px 20px;text-align: left;">Diagnosis : ${
+                          _prescriptiondata?.diagnosisname
+                        }  </h3>
+          </div>
+
+     </div>
+    
+     <div class="head-content2">
+          <div class="head-content2-part1">
+               <h3 style="margin: 0;
+                        padding: 2px 20px;text-align: left;">VITALS</h3>
+          </div>
+
+     </div>
+
+     <div class="main-part12">
+          <table style="border-collapse: collapse;">
+              
+               <tbody>
+                    <tr>
+                         <td class="vLabel">GC</td>
+                         <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
+        _prescriptiondata?.verbalResponse
+      } / M : ${_prescriptiondata?.motorResponse}</td>
+                         <td class="vLabel">TEMP</td>
+                          <td>${_prescriptiondata?.p_temp}</td>
+                         <td class="vLabel">PULSE</td>
+                          <td>${_prescriptiondata?.p_pulse}</td>
+                    </tr>
+                    <tr>
+                         <td class="vLabel">BP</td>
+                         <td>${_prescriptiondata?.p_systolicbp} / ${
+        _prescriptiondata?.p_diastolicbp
+      }</td>
+                         <td class="vLabel">RR</td>
+                          <td>${_prescriptiondata?.p_rsprate}</td>
+                         <td class="vLabel">SPO2</td>
+                          <td>${_prescriptiondata?.p_spo2}</td>
+                    </tr>
+               </tbody>
+          </table>
+     </div>
+     <div class="head-content2" style="margin-top: 60px;">
+     ${_complainttableRows}
+
+      </div>
+      <div class="head-content4">
+               <p style="padding: 10px 20px;text-align: left;">PROCEDURE DONE BY : </p>
+
+     </div>
+     <div class="head-content5" style="margin-top: 30%;display: flex;justify-content: space-between;">
+          <div class="head-content5-part1" style="padding: 2px 20px;">
+               <p style="text-align: left;margin: 0;padding: 4px;">Dr. VEDPRAKASH GAHUKAR</p>
+               <p style="text-align: left;margin: 0;padding: 4px;">CONSULTANT</p>
+               <p style="text-align: left;margin: 0;padding: 4px;">REG. NO. 2008/10/3546</p>
+          </div>
+          <div class="head-content5-part2" style="padding: 2px 20px;">
+               <p style="text-align: left;margin: 0;padding: 4px;">DR. YOGENDRA RAJAWAT</p>
+               <p style="text-align: left;margin: 0;padding: 4px;">RMO</p>
+               <p style="text-align: left;margin: 0;padding: 4px;">REG NO.2008/10/3546</p>
+          </div>
+
+     </div>
+    
+     
+</body>
+
+</html>`;
+
+      const {fs} = RNFetchBlob;
+      const path = fs.dirs.DocumentDir + '/Prescription.pdf';
+      const options = {
+        html: html,
+        fileName: 'Prescription',
+        directory: '',
+      };
+
+      const pdf = await RNHTMLtoPDF.convert(options);
+
+      // setPdfPath(pdf.filePath);
+      const sharePdf = async () => {
+        if (pdf.filePath) {
+          const shareOptions = {
+            title: 'Share file',
+            failOnCancel: false,
+            url: `file://${pdf.filePath}`,
+          };
+
+          try {
+            await Share.open(shareOptions);
+          } catch (error) {
+            console.error('Error sharing PDF:', error.message);
+          }
+        }
+      };
+      sharePdf();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const theme = {
+    ...DefaultTheme,
+    roundness: 0, // Set roundness to 0 to remove borderRadius
+  };
   return (
     <View style={styles.container}>
+      {_preprocedurevalue === 'Schedule Procedure' && (
+        <SegmentedButtons
+          style={styles.segmentBtn}
+          theme={theme}
+          value={value}
+          onValueChange={setValue}
+          buttons={[
+            {
+              value: 'Pending',
+              label: 'Pending',
+            },
+            {
+              value: 'Completed',
+              label: 'Completed',
+            },
+          ]}
+        />
+      )}
       {/* Patient Detail... */}
       <View style={styles.card}>
         <View style={styles.main}>
@@ -134,31 +811,27 @@ const Preprecedureprescription = () => {
               <View style={styles.cardFooter2}>
                 <View style={styles.grpShare}>
                   <TouchableOpacity
-                  // onPress={() => {
-                  //   handlePdfIconClick(res._id);
-                  // }}
-                  >
+                    style={{borderWidth: 1, padding: 4, borderRadius: 4}}
+                    onPress={() =>
+                      navigation.navigate('Editprocedure', {
+                        preprocedure_id: res.preprocedure_id,
+                      })
+                    }>
+                    <FontAwesome6 name="eye" color="#1669f0" size={18} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{borderWidth: 1, padding: 4, borderRadius: 4}}
+                    onPress={() => {
+                      handlePdfIconClick(res.preprocedure_id);
+                    }}>
                     <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
                   </TouchableOpacity>
                   <TouchableOpacity
-                  // onPress={() => {
-                  //   sharePdfhandler(res._id);
-                  // }}
-                  >
+                    style={{borderWidth: 1, padding: 4, borderRadius: 4}}
+                    onPress={() => {
+                      sharePdfhandler(res.preprocedure_id);
+                    }}>
                     <FontAwesome6 name="share" color="#1669f0" size={18} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                  // onPress={() =>
-                  //   navigation.navigate('EpatientTreatmentPrescriptionEdit', {
-                  //     prescription_id: res._id,
-                  //   })
-                  // }
-                  >
-                    <FontAwesome6
-                      name="pen-to-square"
-                      color="#1669f0"
-                      size={18}
-                    />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -194,6 +867,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginHorizontal: 16,
     marginVertical: 16,
+    // marginBottom: 18,
   },
   main: {
     borderBottomWidth: 1,
@@ -251,5 +925,8 @@ const styles = StyleSheet.create({
   grpShare: {
     flexDirection: 'row',
     gap: 14,
+  },
+  segmentBtn: {
+    padding: 16,
   },
 });

@@ -10,7 +10,7 @@ import UserContext from '../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../api.json';
 import DateTimePicker from 'react-native-ui-datepicker';
-import {Image} from 'react-native';
+// import {Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
   SegmentedButtons,
@@ -124,7 +124,6 @@ const ProcedureServiceType = ({route}) => {
             }));
             setSelectedProcedureCode(_procedurename);
             setSelectedProcedure(res.data.data);
-            console.log('res.data.data ; ', JSON.stringify(res.data.data));
             setVisibleList(true);
           });
       } catch (error) {
@@ -159,6 +158,8 @@ const ProcedureServiceType = ({route}) => {
     const updatedTemp = [...temp];
     updatedTemp[index].proceduredate = date;
     updatedTemp[index].activestatus = true;
+    updatedTemp[index].postinstruction = '';
+    updatedTemp[index].advice = '';
     setTemp(updatedTemp);
     setShowCalender(false); // Hide the calendar after selecting a date
   };
@@ -176,14 +177,6 @@ const ProcedureServiceType = ({route}) => {
   //submit AddPanchakarmaProcedure ....
   const addpanchakarmaprocedure = async () => {
     try {
-      //  const data = {
-      //    panchakarmaprocedurearray: temp,
-      //    patient_id: patient_id,
-      //    hospital_id: hospital_id,
-      //    reception_id: reception_id,
-      //    dateadd: currentdate,
-      //    timeadd: currenttime,
-      //  };
       await axios
         .post(`${api.baseurl}/AddPanchakarmaProcedure`, {
           panchakarmaprocedurearray: temp,
@@ -421,7 +414,11 @@ const ProcedureServiceType = ({route}) => {
         <Button
           mode="contained"
           style={[styles.btn]}
-          onPress={() => navigation.navigate('Preprecedureprescription')}>
+          onPress={() =>
+            navigation.navigate('Preprecedureprescription', {
+              _preprocedurevalue: `${categoryname} Procedure`,
+            })
+          }>
           Prescription
         </Button>
       </View>
@@ -440,10 +437,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingBottom: 20,
   },
-  segmentBtn: {
-    //     width: 500,
-    //     gap: 2,
-  },
+
   placeholderStyle: {
     fontSize: 16,
   },
