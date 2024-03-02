@@ -44,6 +44,7 @@ const Procedurehistory = () => {
         hospital_id: hospital_id,
         patient_id: patient_id,
         reception_id: reception_id,
+        api_type: 'HISTORY',
       });
 
       const {status, message, data} = res.data;

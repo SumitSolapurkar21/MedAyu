@@ -30,7 +30,7 @@ const Preprecedureprescription = ({route}) => {
   //get patient treatment history ......
   useEffect(() => {
     _fetchprocedurehistory();
-  }, [hospital_id, patient_id, reception_id]);
+  }, [hospital_id, patient_id, reception_id, value]);
 
   const _fetchprocedurehistory = async () => {
     try {
@@ -39,12 +39,14 @@ const Preprecedureprescription = ({route}) => {
         patient_id: patient_id,
         reception_id: reception_id,
         procedurestatus: false,
+        api_type: value === 'Completed' ? 'PRESCRIPTIONDONE' : 'PRESCRIPTION',
       });
 
       const {status, message, data} = res.data;
       if (status === true) {
         setProcedureHistory(data);
       } else {
+        setProcedureHistory([]);
         console.error(`${message}`);
       }
     } catch (error) {
