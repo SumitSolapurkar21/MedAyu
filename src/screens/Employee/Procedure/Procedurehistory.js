@@ -13,8 +13,9 @@ import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 
-const Procedurehistory = () => {
+const Procedurehistory = ({route}) => {
   const {patientsData} = useContext(UserContext);
+  const {servicetype_id, servicecategory_id} = route.params;
   const {hospital_id, patient_id, reception_id} = patientsData;
   const [procedureHistory, setProcedureHistory] = useState([]);
   const [switchStates, setSwitchStates] = useState({});
@@ -23,7 +24,7 @@ const Procedurehistory = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('Eipdoptions');
+      navigation.navigate('ProcedureServiceType');
       return true;
     };
 
@@ -45,6 +46,8 @@ const Procedurehistory = () => {
         patient_id: patient_id,
         reception_id: reception_id,
         api_type: 'HISTORY',
+        servicetype_id: servicetype_id,
+        servicecategory_id: servicecategory_id,
       });
 
       const {status, message, data} = res.data;

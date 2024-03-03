@@ -21,11 +21,10 @@ import {
 import {Button} from 'react-native-paper';
 
 const ProcedureServiceType = ({route}) => {
-  const {servicetype_id, categoryname, category_id, procedureType} =
-    route.params;
   const [_serviceItemArray, _setServiceItemArray] = useState([]);
   const [selectionValue, setSelectionValue] = useState('Single');
-  const {patientsData} = useContext(UserContext);
+  const {patientsData, selectserviceCategory} = useContext(UserContext);
+  const {servicetype_id, categoryname, category_id} = selectserviceCategory;
   const {hospital_id, patient_id, reception_id} = patientsData;
   const [searchInput, setSearchInput] = useState('');
   const [_searchProcedure, _setSearchProcedure] = useState('');
@@ -41,6 +40,7 @@ const ProcedureServiceType = ({route}) => {
   const [datePickerIndex, setDatePickerIndex] = useState([]);
   const navigation = useNavigation();
 
+  console.log('selectserviceCategory : ', selectserviceCategory);
   // fetch service items .....
   useEffect(() => {
     const _fetchserviceitem = async () => {
@@ -186,6 +186,8 @@ const ProcedureServiceType = ({route}) => {
           reception_id: reception_id,
           dateadd: currentdate,
           timeadd: currenttime,
+          servicetype_id: servicetype_id,
+          servicecategory_id: category_id,
         })
         .then(res => {
           const {status, message} = res.data;
@@ -408,7 +410,12 @@ const ProcedureServiceType = ({route}) => {
         <Button
           mode="contained"
           style={[styles.btn]}
-          onPress={() => navigation.navigate('Procedurehistory')}>
+          onPress={() =>
+            navigation.navigate('Procedurehistory', {
+              servicetype_id: servicetype_id,
+              servicecategory_id: category_id,
+            })
+          }>
           History
         </Button>
 
@@ -419,6 +426,9 @@ const ProcedureServiceType = ({route}) => {
             navigation.navigate('Preprecedureprescription', {
               _preprocedurevalue: `${categoryname} Procedure`,
               procedureType: 'Pre',
+              servicetype_id: servicetype_id,
+              servicecategory_id: category_id,
+              categoryname: categoryname,
             })
           }>
           Prescription

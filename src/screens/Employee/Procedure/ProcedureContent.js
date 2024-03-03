@@ -9,7 +9,12 @@ import procedure from '../../../images/prodedure.png';
 
 const ProcedureContent = () => {
   const navigation = useNavigation();
-  const {opdServices, setSelectedCategory} = useContext(UserContext);
+  const {
+    opdServices,
+    setSelectedCategory,
+    selectserviceCategory,
+    setSelectedServiceCategory,
+  } = useContext(UserContext);
   const [_serviceCategoryArray, _setServiceCategoryArray] = useState([]);
 
   const _filterData = opdServices.filter(
@@ -28,6 +33,7 @@ const ProcedureContent = () => {
           })
           .then(res => {
             _setServiceCategoryArray(res.data.data);
+            console.log('data ; ', res.data.data);
           });
       } catch (error) {
         console.error(error);
@@ -45,12 +51,13 @@ const ProcedureContent = () => {
               style={styles.selectDiv}
               key={res._id}
               onPress={() => {
-                navigation.navigate('ProcedureServiceType', {
+                navigation.navigate('ProcedureServiceType');
+                setSelectedCategory(res.servicecategory);
+                setSelectedServiceCategory({
                   category_id: res._id,
                   categoryname: res.servicecategory,
                   servicetype_id: res.servicetype_id,
                 });
-                setSelectedCategory(res.servicecategory);
               }}>
               <Image source={procedure} alt="procedure" style={styles.img} />
               <Text style={styles.uName}>{res.servicecategory}</Text>

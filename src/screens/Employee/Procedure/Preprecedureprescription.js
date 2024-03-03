@@ -25,8 +25,15 @@ const Preprecedureprescription = ({route}) => {
   const [procedureHistory, setProcedureHistory] = useState([]);
   const navigation = useNavigation();
   const [value, setValue] = useState('Schedule');
-  const {_preprocedurevalue, procedureType} = route.params;
+  const {
+    _preprocedurevalue,
+    procedureType,
+    servicecategory_id,
+    servicetype_id,
+    categoryname,
+  } = route.params;
 
+  console.log(procedureType);
   //get patient treatment history ......
   useEffect(() => {
     _fetchprocedurehistory();
@@ -34,15 +41,28 @@ const Preprecedureprescription = ({route}) => {
 
   const _fetchprocedurehistory = async () => {
     try {
+      let servicestatus;
+      if (procedureType === 'Pre') {
+        servicestatus = 'PRESCRIPTION';
+      } else {
+        if (value === 'Schedule') {
+          servicestatus = 'PRESCRIPTIONPENDING';
+        } else {
+          servicestatus = 'PRESCRIPTIONDONE';
+        }
+      }
       const res = await axios.post(`${api.baseurl}/GetPreprocedureHistory`, {
         hospital_id: hospital_id,
         patient_id: patient_id,
         reception_id: reception_id,
         procedurestatus: false,
-        api_type: value === 'Completed' ? 'PRESCRIPTIONDONE' : 'PRESCRIPTION',
+        api_type: servicestatus,
+        servicetype_id: servicetype_id,
+        servicecategory_id: servicecategory_id,
       });
 
       const {status, message, data} = res.data;
+      console.log('res.data : ', res.data.data);
       if (status === true) {
         setProcedureHistory(data);
       } else {
@@ -66,6 +86,8 @@ const Preprecedureprescription = ({route}) => {
           hospital_id: hospital_id,
           patient_id: patient_id,
           reception_id: reception_id,
+          // servicetype_id: servicetype_id,
+          // servicecategory_id: servicecategory_id,
         },
       );
       const {
@@ -2357,7 +2379,9 @@ const Preprecedureprescription = ({route}) => {
       <ScrollView vertical style={styles.treatmentpresciptionDiv}>
         {procedureHistory?.map((res, i) => {
           return (
-            <View style={[styles.card, {marginVertical: 6}]} key={res.uniqueid}>
+            <View
+              style={[styles.card, {marginVertical: 6}]}
+              key={res.preprocedure_id}>
               <View>
                 <Text
                   style={[
@@ -2374,8 +2398,8 @@ const Preprecedureprescription = ({route}) => {
                     <Text style={{color: 'green'}}>{res.procedurename}</Text>
                   </Text>
                   <Text style={styles.pData}>
-                    Duration : &nbsp;{' '}
-                    <Text style={{color: 'green'}}>{res.proceduretime}</Text>
+                    No. of Procedure : &nbsp;{' '}
+                    <Text style={{color: 'green'}}>{res.noofprocedure}</Text>
                   </Text>
                   {/* <View
                     style={{
@@ -2383,12 +2407,12 @@ const Preprecedureprescription = ({route}) => {
                       gap: 100,
                     }}> */}
                   <Text style={styles.pData}>
-                    Start Date : &nbsp;{' '}
-                    <Text style={{color: 'green'}}>{res.proceduredate}</Text>
+                    Date : &nbsp;{' '}
+                    <Text style={{color: 'green'}}>{res.dateadd}</Text>
                   </Text>
                   <Text style={styles.pData}>
-                    Days : &nbsp;{' '}
-                    <Text style={{color: 'green'}}>{res.proceduredays}</Text>
+                    Time : &nbsp;{' '}
+                    <Text style={{color: 'green'}}>{res.timeadd}</Text>
                   </Text>
                   {/* </View> */}
                 </View>
