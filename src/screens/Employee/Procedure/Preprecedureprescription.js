@@ -97,6 +97,24 @@ const Preprecedureprescription = ({route}) => {
         ..._prescriptiondata
       } = generatePreprocedurenotes.data;
 
+      const _complainttableRows6 = panchakarmaprocedurearray
+        .map(outerRes => {
+          return outerRes.procedurekit
+            .map((innerRes, i) => {
+              console.log('data res : ', innerRes);
+              return `
+        <tr key=${i}>
+          <td>${innerRes.drugname}</td>
+          <td>${innerRes.dose}</td>
+          <td>${innerRes.route}</td>
+          <td>${innerRes.schedule}</td>
+        </tr>
+      `;
+            })
+            .join('');
+        })
+        .join('');
+
       const _complainttableRows = panchakarmaprocedurearray
         ?.map((res, i) => {
           return `<div class="head-content2-part1" key=${i}>
@@ -432,6 +450,27 @@ const Preprecedureprescription = ({route}) => {
                    </tbody>
               </table>
          </div>
+         <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 2px 20px;text-align: left;">KIT</h3>
+              </div>
+    
+         </div>
+    
+         <div class="main-part12">
+              <table style="border-collapse: collapse;">
+                   <thead>
+                        <th>KIT NAME</th>
+                        <th>DOSE</th>
+                        <th>ROUTE</th>
+                        <th>SCHEDULE</th>
+                   </thead>
+                   <tbody>
+                   ${_complainttableRows6}
+                   </tbody>
+              </table>
+         </div>
          <div class="head-content2" style="margin-top: 60px;">
          ${_complainttableRows}
     
@@ -742,9 +781,23 @@ const Preprecedureprescription = ({route}) => {
          <div class="head-content2">
               <div class="head-content2-part1">
                    <h3 style="margin: 0;
-                            padding: 2px 20px;text-align: left;">Investigation: </h3>
+                            padding: 2px 20px;text-align: left;">KIT</h3>
               </div>
     
+         </div>
+    
+         <div class="main-part12">
+              <table style="border-collapse: collapse;">
+                   <thead>
+                        <th>KIT NAME</th>
+                        <th>DOSE</th>
+                        <th>ROUTE</th>
+                        <th>SCHEDULE</th>
+                   </thead>
+                   <tbody>
+                   ${_complainttableRows6}
+                   </tbody>
+              </table>
          </div>
          <div class="head-content2">
               <div class="head-content2-part1">
@@ -1094,20 +1147,29 @@ const Preprecedureprescription = ({route}) => {
        </tbody>
   </table>
 </div>
-  <div class="head-content2">
-      <div class="head-content2-part1">
-           <h3 style="margin: 0;
-                    padding: 2px 20px;text-align: left;">Investigation: </h3>
-      </div>
-  
-  </div>
-  <div class="head-content2">
-      <div class="head-content2-part1">
-           <h3 style="margin: 0;
-                    padding: 20px 20px;text-align: left;">CBC, KFT, LFT </h3>
-      </div>
-  
-  </div>
+<div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 2px 20px;text-align: left;">KIT</h3>
+              </div>
+    
+         </div>
+    
+         <div class="main-part12">
+              <table style="border-collapse: collapse;">
+                   <thead>
+                        <th>KIT NAME</th>
+                        <th>DOSE</th>
+                        <th>ROUTE</th>
+                        <th>SCHEDULE</th>
+                   </thead>
+                   <tbody>
+                   ${_complainttableRows6}
+                   </tbody>
+              </table>
+         </div>
+ 
+ 
   <div class="head-content2">
       <div class="head-content2-part1">
            <h3 style="margin: 0;
@@ -1275,6 +1337,23 @@ const Preprecedureprescription = ({route}) => {
                        <td>${res.procedureinstruction}</td>
                      </tr>
                    `;
+        })
+        .join('');
+      const _complainttableRows6 = panchakarmaprocedurearray
+        .map(outerRes => {
+          return outerRes.procedurekit
+            .map((innerRes, i) => {
+              console.log('data res : ', innerRes);
+              return `
+        <tr key=${i}>
+          <td>${innerRes.drugname}</td>
+          <td>${innerRes.dose}</td>
+          <td>${innerRes.route}</td>
+          <td>${innerRes.schedule}</td>
+        </tr>
+      `;
+            })
+            .join('');
         })
         .join('');
 
@@ -1535,6 +1614,27 @@ const Preprecedureprescription = ({route}) => {
                      </tbody>
                 </table>
            </div>
+           <div class="head-content2">
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 2px 20px;text-align: left;">KIT</h3>
+              </div>
+    
+         </div>
+    
+         <div class="main-part12">
+              <table style="border-collapse: collapse;">
+                   <thead>
+                        <th>KIT NAME</th>
+                        <th>DOSE</th>
+                        <th>ROUTE</th>
+                        <th>SCHEDULE</th>
+                   </thead>
+                   <tbody>
+                   ${_complainttableRows6}
+                   </tbody>
+              </table>
+         </div>
            <div class="head-content2" style="margin-top: 60px;">
            ${_complainttableRows}
       
@@ -1843,12 +1943,26 @@ const Preprecedureprescription = ({route}) => {
                 </table>
            </div>
            <div class="head-content2">
-                <div class="head-content2-part1">
-                     <h3 style="margin: 0;
-                              padding: 2px 20px;text-align: left;">Investigation: </h3>
-                </div>
-      
-           </div>
+              <div class="head-content2-part1">
+                   <h3 style="margin: 0;
+                            padding: 2px 20px;text-align: left;">KIT</h3>
+              </div>
+    
+         </div>
+    
+         <div class="main-part12">
+              <table style="border-collapse: collapse;">
+                   <thead>
+                        <th>KIT NAME</th>
+                        <th>DOSE</th>
+                        <th>ROUTE</th>
+                        <th>SCHEDULE</th>
+                   </thead>
+                   <tbody>
+                   ${_complainttableRows6}
+                   </tbody>
+              </table>
+         </div>
            <div class="head-content2">
                 <div class="head-content2-part1">
                      <h3 style="margin: 0;
@@ -2202,20 +2316,27 @@ const Preprecedureprescription = ({route}) => {
              </tbody>
         </table>
       </div>
-        <div class="head-content2">
-            <div class="head-content2-part1">
-                 <h3 style="margin: 0;
-                          padding: 2px 20px;text-align: left;">Investigation: </h3>
-            </div>
-        
-        </div>
-        <div class="head-content2">
-            <div class="head-content2-part1">
-                 <h3 style="margin: 0;
-                          padding: 20px 20px;text-align: left;">CBC, KFT, LFT </h3>
-            </div>
-        
-        </div>
+      <div class="head-content2">
+      <div class="head-content2-part1">
+           <h3 style="margin: 0;
+                    padding: 2px 20px;text-align: left;">KIT</h3>
+      </div>
+
+ </div>
+
+ <div class="main-part12">
+      <table style="border-collapse: collapse;">
+           <thead>
+                <th>KIT NAME</th>
+                <th>DOSE</th>
+                <th>ROUTE</th>
+                <th>SCHEDULE</th>
+           </thead>
+           <tbody>
+           ${_complainttableRows6}
+           </tbody>
+      </table>
+ </div>
         <div class="head-content2">
             <div class="head-content2-part1">
                  <h3 style="margin: 0;
