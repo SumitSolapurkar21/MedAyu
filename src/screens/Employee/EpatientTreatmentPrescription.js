@@ -82,6 +82,11 @@ const EpatientTreatmentPrescription = () => {
       const {medicineprescriptionarray, complaintarray, ..._prescriptiondata} =
         patientTreatmentPrescriptionDataRes.data;
 
+      console.log(
+        ' patientTreatmentPrescriptionDataRes.data : ',
+        patientTreatmentPrescriptionDataRes.data,
+      );
+
       const _complainttableRows = complaintarray
         ?.map((res, i) => {
           return `
@@ -317,6 +322,42 @@ const EpatientTreatmentPrescription = () => {
                 </div>
       
            </div>
+           <br/>
+           <div class="head-content2">
+            <div class="head-content2-part1">
+                <h3 style="margin: 0;
+                         padding: 2px 20px;text-align: left;">VITALS</h3>
+            </div>
+ 
+            </div>
+ 
+      <div class="main-part12">
+           <table style="border-collapse: collapse;">
+               
+                <tbody>
+                     <tr>
+                          <td class="vLabel">GC</td>
+                          <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
+        _prescriptiondata?.verbalResponse
+      } / M : ${_prescriptiondata?.motorResponse}</td>
+                          <td class="vLabel">TEMP</td>
+                           <td>${_prescriptiondata?.p_temp}</td>
+                          <td class="vLabel">PULSE</td>
+                           <td>${_prescriptiondata?.p_pulse}</td>
+                     </tr>
+                     <tr>
+                          <td class="vLabel">BP</td>
+                          <td>${_prescriptiondata?.p_systolicbp} / ${
+        _prescriptiondata?.p_diastolicbp
+      }</td>
+                          <td class="vLabel">RR</td>
+                           <td>${_prescriptiondata?.p_rsprate}</td>
+                          <td class="vLabel">SPO2</td>
+                           <td>${_prescriptiondata?.p_spo2}</td>
+                     </tr>
+                </tbody>
+           </table>
+      </div>
            <div class="head-content2">
                 <div class="head-content2-part1">
                      <h3 style="margin: 0;
@@ -637,6 +678,42 @@ const EpatientTreatmentPrescription = () => {
                   </div>
         
              </div>
+             <br/>
+             <div class="head-content2">
+              <div class="head-content2-part1">
+                  <h3 style="margin: 0;
+                           padding: 2px 20px;text-align: left;">VITALS</h3>
+              </div>
+   
+              </div>
+   
+        <div class="main-part12">
+             <table style="border-collapse: collapse;">
+                 
+                  <tbody>
+                       <tr>
+                            <td class="vLabel">GC</td>
+                            <td>E : ${_prescriptiondata?.eyeopening} / V :  ${
+        _prescriptiondata?.verbalResponse
+      } / M : ${_prescriptiondata?.motorResponse}</td>
+                            <td class="vLabel">TEMP</td>
+                             <td>${_prescriptiondata?.p_temp}</td>
+                            <td class="vLabel">PULSE</td>
+                             <td>${_prescriptiondata?.p_pulse}</td>
+                       </tr>
+                       <tr>
+                            <td class="vLabel">BP</td>
+                            <td>${_prescriptiondata?.p_systolicbp} / ${
+        _prescriptiondata?.p_diastolicbp
+      }</td>
+                            <td class="vLabel">RR</td>
+                             <td>${_prescriptiondata?.p_rsprate}</td>
+                            <td class="vLabel">SPO2</td>
+                             <td>${_prescriptiondata?.p_spo2}</td>
+                       </tr>
+                  </tbody>
+             </table>
+        </div>
              <div class="head-content2">
                   <div class="head-content2-part1">
                        <h3 style="margin: 0;

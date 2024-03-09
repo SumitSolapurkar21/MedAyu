@@ -35,12 +35,16 @@ const ProcedureServiceType = ({route}) => {
   const [selectedProcedureDataCode, setSelectedProcedureDataCode] =
     useState('');
   const [_category, _setCategory] = useState(null);
-  const [showCalender, setShowCalender] = useState(false);
-  const [dateValues, setDateValues] = useState([]);
-  const [datePickerIndex, setDatePickerIndex] = useState([]);
   const navigation = useNavigation();
 
-  console.log('selectserviceCategory : ', selectserviceCategory);
+  //date states .....
+  const [showCalender, setShowCalender] = useState(false);
+  const [dateValues, setDateValues] = useState([]);
+  const [dateValues2, setDateValues2] = useState([]);
+  const [datePickerIndex, setDatePickerIndex] = useState([]);
+  const [showToCalender, setShowToCalender] = useState(false);
+  const [toDatePickerIndex, setToDatePickerIndex] = useState([]);
+
   // fetch service items .....
   useEffect(() => {
     const _fetchserviceitem = async () => {
@@ -155,15 +159,102 @@ const ProcedureServiceType = ({route}) => {
     setDatePickerIndex(index); // Set the index of the date field for which the calendar is being opened
   };
 
-  const handleDateChange = (date, index) => {
+  const ToDateCalenderHandler = index => {
+    setShowToCalender(true);
+    setToDatePickerIndex(index); // Set the index of the date field for which the calendar is being opened
+  };
+
+  const handleProcedureDaysChange = (days, index) => {
+    // const [_dateformat] = date.split(' ');
     const updatedTemp = [...temp];
-    updatedTemp[index].proceduredate = date;
+
+    // Ensure the days input is a valid number
+    const numberOfDays = parseInt(days, 10);
+    if (!isNaN(numberOfDays)) {
+      // Get the existing "From Date"
+      const fromDate = new Date(updatedTemp[index].proceduredate);
+
+      // Calculate the new "To Date"
+      const toDate = new Date(fromDate);
+      toDate.setDate(toDate.getDate() + numberOfDays);
+
+      // Set time components to zero to remove time
+      toDate.setHours(0, 0, 0, 0);
+
+      // Update the "To Date" and the "Procedure Days"
+      updatedTemp[index].proceduretodate = `${toDate.getFullYear()}-${(
+        toDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, '0')}-${toDate.getDate().toString().padStart(2, '0')}`;
+
+      updatedTemp[index].proceduredays = days;
+    }
+
+    setTemp(updatedTemp);
+  };
+
+  const handleDateChange = (date, index) => {
+    // Split the string into date and time parts
+    const [_dateformat] = date.split(' ');
+
+    const updatedTemp = [...temp];
+    updatedTemp[index].proceduredate = _dateformat;
     updatedTemp[index].activestatus = true;
     updatedTemp[index].postinstruction = '';
     updatedTemp[index].advice = '';
+    // Get the number of days from the procedure
+    const numberOfDays = parseInt(updatedTemp[index].proceduredays, 10);
+
+    // If the number of days is valid, calculate the "To Date"
+    if (!isNaN(numberOfDays)) {
+      const toDate = new Date(_dateformat);
+      // Set time components to zero to remove time
+      toDate.setHours(0, 0, 0, 0);
+      toDate.setDate(toDate.getDate() + numberOfDays);
+
+      // Update the "To Date" and calculate the difference in days
+      updatedTemp[index].proceduretodate = `${toDate.getFullYear()}-${(
+        toDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, '0')}-${toDate.getDate().toString().padStart(2, '0')}`;
+
+      // Calculate the difference in days between "From Date" and "To Date"
+      const differenceInTime =
+        toDate.getTime() - new Date(_dateformat).getTime();
+      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+      const _differenceInDays = Math.round(differenceInDays);
+
+      // Update the number of days in the procedure state
+      updatedTemp[index].proceduredays = _differenceInDays.toString();
+    }
+
     setTemp(updatedTemp);
     setShowCalender(false); // Hide the calendar after selecting a date
   };
+
+  const handleToDateChange = (date, index) => {
+    // Split the string into date and time parts
+    const [_dateformat] = date.split(' ');
+
+    const updatedTemp = [...temp];
+    updatedTemp[index].proceduretodate = _dateformat;
+
+    // Calculate the difference in days between From Date and To Date
+    const fromDate = new Date(updatedTemp[index].proceduredate);
+    const toDate = new Date(_dateformat);
+    const differenceInTime = toDate.getTime() - fromDate.getTime();
+    const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+    const _differenceInDays = Math.round(differenceInDays);
+
+    // Update the number of days in the procedure state
+    updatedTemp[index].proceduredays = _differenceInDays.toString();
+
+    setTemp(updatedTemp);
+    setShowToCalender(false); // Hide the calendar after selecting a date
+  };
+
   //currrent date  .....
   const today = new Date();
   const year = today.getFullYear();
@@ -218,6 +309,25 @@ const ProcedureServiceType = ({route}) => {
               }}
               value={dateValues[datePickerIndex] || new Date()} // Use separate state variable for each date field
               onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
+            />
+          </View>
+        </View>
+      )}
+      {showToCalender && (
+        <View style={styles.datePickerContainer}>
+          <View style={styles.datePicker}>
+            <DateTimePicker
+              mode="date"
+              headerButtonColor={Themes[0]?.mainColor}
+              selectedItemColor={Themes[0]?.mainColor}
+              selectedTextStyle={{
+                fontWeight: 'bold',
+                color: Themes[0]?.activeTextColor,
+              }}
+              value={dateValues2[toDatePickerIndex] || new Date()} // Use separate state variable for each date field
+              onValueChange={date =>
+                handleToDateChange(date, toDatePickerIndex)
+              } // Pass the index to identify which date field is being modified
             />
           </View>
         </View>
@@ -370,6 +480,7 @@ const ProcedureServiceType = ({route}) => {
                     const updatedTemp = [...temp];
                     updatedTemp[index].proceduredays = text || '';
                     setTemp(updatedTemp);
+                    handleProcedureDaysChange(text, index);
                   }}
                   editable={true}
                 />
@@ -385,6 +496,21 @@ const ProcedureServiceType = ({route}) => {
                     <TextInput.Icon
                       icon="calendar"
                       onPress={() => calenderHandler(index)}
+                    />
+                  }
+                />
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>To Date : </Text>
+                <TextInput
+                  mode="flat"
+                  style={[styles.input2]}
+                  value={temp[index].proceduretodate}
+                  editable={false}
+                  right={
+                    <TextInput.Icon
+                      icon="calendar"
+                      onPress={() => ToDateCalenderHandler(index)}
                     />
                   }
                 />

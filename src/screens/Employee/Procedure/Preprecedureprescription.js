@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {
   BackHandler,
-  FlatList,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,7 +16,7 @@ import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
-import {SegmentedButtons, DefaultTheme} from 'react-native-paper';
+import {SegmentedButtons, DefaultTheme, Appbar} from 'react-native-paper';
 
 const Preprecedureprescription = ({route}) => {
   const {patientsData, scannedPatientsData} = useContext(UserContext);
@@ -32,13 +31,26 @@ const Preprecedureprescription = ({route}) => {
     servicetype_id,
     categoryname,
   } = route.params;
-
-  console.log(procedureType);
   //get patient treatment history ......
   useEffect(() => {
+    console.log('value : ', value);
     _fetchprocedurehistory();
   }, [hospital_id, patient_id, reception_id, value]);
 
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.navigate('Prepostprocedure');
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const _fetchprocedurehistory = async () => {
     try {
       let servicestatus;
@@ -62,7 +74,6 @@ const Preprecedureprescription = ({route}) => {
       });
 
       const {status, message, data} = res.data;
-      console.log('res.data : ', res.data.data);
       if (status === true) {
         setProcedureHistory(data);
       } else {
@@ -2437,151 +2448,166 @@ const Preprecedureprescription = ({route}) => {
     roundness: 0, // Set roundness to 0 to remove borderRadius
   };
   return (
-    <View style={styles.container}>
-      {_preprocedurevalue === 'Schedule Procedure' && (
-        <SegmentedButtons
-          style={styles.segmentBtn}
-          theme={theme}
-          value={value}
-          onValueChange={setValue}
-          buttons={[
-            {
-              value: 'Schedule',
-              label: 'Schedule',
-            },
-            {
-              value: 'Completed',
-              label: 'Completed',
-            },
-          ]}
+    <>
+      <Appbar.Header style={{backgroundColor: '#ffffff'}}>
+        <Appbar.BackAction
+          onPress={() => {
+            navigation.navigate('Prepostprocedure');
+          }}
         />
-      )}
-      {/* Patient Detail... */}
-      <View style={styles.card}>
-        <View style={styles.main}>
-          <View style={styles.pDetail}>
-            <Text style={styles.pData}>{scannedPatientsData?.firstname}</Text>
-          </View>
+        <Appbar.Content
+          title="PRESCRIPTION"
+          titleStyle={{fontSize: 18, fontWeight: 'bold'}}
+        />
+      </Appbar.Header>
+      <View style={styles.container}>
+        {_preprocedurevalue === 'Schedule Procedure' && (
+          <SegmentedButtons
+            style={styles.segmentBtn}
+            theme={theme}
+            value={value}
+            onValueChange={setValue}
+            buttons={[
+              {
+                value: 'Schedule',
+                label: 'Schedule',
+              },
+              {
+                value: 'Completed',
+                label: 'Completed',
+              },
+            ]}
+          />
+        )}
+        {/* Patient Detail... */}
+        <View style={styles.card}>
+          <View style={styles.main}>
+            <View style={styles.pDetail}>
+              <Text style={styles.pData}>{scannedPatientsData?.firstname}</Text>
+            </View>
 
-          <View style={styles.pDetail}>
-            <Text
-              style={[
-                styles.pData,
-                {fontWeight: 'normal', textAlign: 'right'},
-              ]}>
-              <FontAwesome6 name="phone" color="#1669f0" size={11} />
-              &nbsp;
-              {scannedPatientsData?.mobilenumber}
-            </Text>
+            <View style={styles.pDetail}>
+              <Text
+                style={[
+                  styles.pData,
+                  {fontWeight: 'normal', textAlign: 'right'},
+                ]}>
+                <FontAwesome6 name="phone" color="#1669f0" size={11} />
+                &nbsp;
+                {scannedPatientsData?.mobilenumber}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.cardFooter}>
+            <TouchableOpacity
+              style={styles.cardGrpBtn}
+              onPress={() =>
+                ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
+              }>
+              <FontAwesome6 name="bell" color="#1669f0" size={16} />
+              <Text style={styles.cardGrpTxt}>Send Reminder</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cardGrpBtn}
+              onPress={() =>
+                ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
+              }>
+              <FontAwesome6 name="list-alt" color="#1669f0" size={16} />
+              <Text style={styles.cardGrpTxt}>Send Statement</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.cardFooter}>
-          <TouchableOpacity
-            style={styles.cardGrpBtn}
-            onPress={() =>
-              ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
-            }>
-            <FontAwesome6 name="bell" color="#1669f0" size={16} />
-            <Text style={styles.cardGrpTxt}>Send Reminder</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.cardGrpBtn}
-            onPress={() =>
-              ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
-            }>
-            <FontAwesome6 name="list-alt" color="#1669f0" size={16} />
-            <Text style={styles.cardGrpTxt}>Send Statement</Text>
-          </TouchableOpacity>
+        <View style={styles.header}>
+          <Text style={styles.headerTxt}>Procedure Prescription</Text>
         </View>
-      </View>
-      <View style={styles.header}>
-        <Text style={styles.headerTxt}>Procedure Prescription</Text>
-      </View>
-      <ScrollView vertical style={styles.treatmentpresciptionDiv}>
-        {procedureHistory?.map((res, i) => {
-          return (
-            <View
-              style={[styles.card, {marginVertical: 6}]}
-              key={res.preprocedure_id}>
-              <View>
-                <Text
-                  style={[
-                    styles.pData,
-                    {fontSize: 16, padding: 8, color: '#1669f0'},
-                  ]}>
-                  Prescription
-                </Text>
-              </View>
-              <View style={styles.cardBody}>
+        <ScrollView vertical style={styles.treatmentpresciptionDiv}>
+          {procedureHistory?.map((res, i) => {
+            return (
+              <View
+                style={[styles.card, {marginVertical: 6}]}
+                key={res.preprocedure_id}>
                 <View>
-                  <Text style={styles.pData}>
-                    Procedure Name : &nbsp;{' '}
-                    <Text style={{color: 'green'}}>{res.procedurename}</Text>
+                  <Text
+                    style={[
+                      styles.pData,
+                      {fontSize: 16, padding: 8, color: '#1669f0'},
+                    ]}>
+                    Prescription
                   </Text>
-                  <Text style={styles.pData}>
-                    No. of Procedure : &nbsp;{' '}
-                    <Text style={{color: 'green'}}>{res.noofprocedure}</Text>
-                  </Text>
-                  {/* <View
+                </View>
+                <View style={styles.cardBody}>
+                  <View>
+                    <Text style={styles.pData}>
+                      Procedure Name : &nbsp;{' '}
+                      <Text style={{color: 'green'}}>{res.procedurename}</Text>
+                    </Text>
+                    <Text style={styles.pData}>
+                      No. of Procedure : &nbsp;{' '}
+                      <Text style={{color: 'green'}}>{res.noofprocedure}</Text>
+                    </Text>
+                    {/* <View
                     style={{
                       flexDirection: 'row',
                       gap: 100,
                     }}> */}
-                  <Text style={styles.pData}>
-                    Date : &nbsp;{' '}
-                    <Text style={{color: 'green'}}>{res.dateadd}</Text>
-                  </Text>
-                  <Text style={styles.pData}>
-                    Time : &nbsp;{' '}
-                    <Text style={{color: 'green'}}>{res.timeadd}</Text>
-                  </Text>
-                  {/* </View> */}
+                    <Text style={styles.pData}>
+                      Date : &nbsp;{' '}
+                      <Text style={{color: 'green'}}>{res.dateadd}</Text>
+                    </Text>
+                    <Text style={styles.pData}>
+                      Time : &nbsp;{' '}
+                      <Text style={{color: 'green'}}>{res.timeadd}</Text>
+                    </Text>
+                    {/* </View> */}
+                  </View>
                 </View>
-              </View>
-              <View style={styles.cardFooter2}>
-                <View style={styles.grpShare}>
-                  {procedureType === 'Pre' ? (
+                <View style={styles.cardFooter2}>
+                  <View style={styles.grpShare}>
+                    {procedureType === 'Pre' ? (
+                      <TouchableOpacity
+                        style={{borderWidth: 1, padding: 4, borderRadius: 4}}
+                        onPress={() =>
+                          navigation.navigate('EditPreprocedure', {
+                            preprocedure_id: res.preprocedure_id,
+                            procedureType: 'Pre',
+                          })
+                        }>
+                        <FontAwesome6 name="eye" color="#1669f0" size={18} />
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity
+                        style={{borderWidth: 1, padding: 4, borderRadius: 4}}
+                        onPress={() =>
+                          navigation.navigate('Editprocedure', {
+                            preprocedure_id: res.preprocedure_id,
+                            procedureType: 'Post',
+                          })
+                        }>
+                        <FontAwesome6 name="eye" color="#1669f0" size={18} />
+                      </TouchableOpacity>
+                    )}
                     <TouchableOpacity
                       style={{borderWidth: 1, padding: 4, borderRadius: 4}}
-                      onPress={() =>
-                        navigation.navigate('EditPreprocedure', {
-                          preprocedure_id: res.preprocedure_id,
-                        })
-                      }>
-                      <FontAwesome6 name="eye" color="#1669f0" size={18} />
+                      onPress={() => {
+                        handlePdfIconClick(res.preprocedure_id);
+                      }}>
+                      <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
                     </TouchableOpacity>
-                  ) : (
                     <TouchableOpacity
                       style={{borderWidth: 1, padding: 4, borderRadius: 4}}
-                      onPress={() =>
-                        navigation.navigate('Editprocedure', {
-                          preprocedure_id: res.preprocedure_id,
-                        })
-                      }>
-                      <FontAwesome6 name="eye" color="#1669f0" size={18} />
+                      onPress={() => {
+                        sharePdfhandler(res.preprocedure_id);
+                      }}>
+                      <FontAwesome6 name="share" color="#1669f0" size={18} />
                     </TouchableOpacity>
-                  )}
-                  <TouchableOpacity
-                    style={{borderWidth: 1, padding: 4, borderRadius: 4}}
-                    onPress={() => {
-                      handlePdfIconClick(res.preprocedure_id);
-                    }}>
-                    <FontAwesome6 name="file-pdf" color="#1669f0" size={18} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{borderWidth: 1, padding: 4, borderRadius: 4}}
-                    onPress={() => {
-                      sharePdfhandler(res.preprocedure_id);
-                    }}>
-                    <FontAwesome6 name="share" color="#1669f0" size={18} />
-                  </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-          );
-        })}
-      </ScrollView>
-    </View>
+            );
+          })}
+        </ScrollView>
+      </View>
+    </>
   );
 };
 
