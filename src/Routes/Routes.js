@@ -718,22 +718,23 @@ const Routes = () => {
         <Stack.Screen
           name="Preprecedureprescription"
           component={Preprecedureprescription}
-          options={({navigation}) => ({
-            title: `PRESCRIPTION`,
-            headerRight: () => (
-              <FontAwesome
-                name="sign-out"
-                size={22}
-                color="#127359"
-                style={{marginLeft: 20}}
-                onPress={() => {
-                  navigation.navigate('LoginPage'), logoutHandler();
-                }}
-              />
-            ),
+          // options={({navigation}) => ({
+          //   title: `PRESCRIPTION`,
+          //   headerRight: () => (
+          //     <FontAwesome
+          //       name="sign-out"
+          //       size={22}
+          //       color="#127359"
+          //       style={{marginLeft: 20}}
+          //       onPress={() => {
+          //         navigation.navigate('LoginPage'), logoutHandler();
+          //       }}
+          //     />
+          //   ),
 
-            headerTitleStyle: {fontSize: 16},
-          })}
+          //   headerTitleStyle: {fontSize: 16},
+          // })}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Prepostprocedure"
