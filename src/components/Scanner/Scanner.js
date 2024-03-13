@@ -26,8 +26,9 @@ LogBox.ignoreLogs([
 export default function Scanner({route}) {
   const navigation = useNavigation();
 
-  const {userData, setScannedPatientsData} = useContext(UserContext);
-  const {value} = route.params;
+  const {userData, setScannedPatientsData, patientSelectedValue} =
+    useContext(UserContext);
+  // const {value} = route.params;
 
   const [msgPopup, setMsgPopup] = useState(false);
   const [backdropOpacity, setBackdropOpacity] = useState(0);
@@ -96,7 +97,7 @@ export default function Scanner({route}) {
   };
 
   const handleNavigation = async () => {
-    if (value != '1') {
+    if (patientSelectedValue != '1' || patientSelectedValue != '3') {
       try {
         await axios
           .post(`${api.baseurl}/AddMobileAttendence`, {
@@ -162,7 +163,9 @@ export default function Scanner({route}) {
           .then(res => {
             setScannedPatientsData(res.data);
             if (res.data.status === true) {
-              navigation.navigate('EpatientDetails');
+              navigation.navigate('EpatientDetails', {
+                value: '3',
+              });
               setSearchInput('');
             } else {
               console.warn(`Data Not Available`);
@@ -174,7 +177,6 @@ export default function Scanner({route}) {
       console.error(error);
     }
   };
-
   return (
     <>
       {!refreshing && (
@@ -183,15 +185,15 @@ export default function Scanner({route}) {
             onRead={handleScannerSuccess}
             flashMode={RNCamera.Constants.FlashMode.off}
             showMarker={true}
-            topContent={
-              <Text style={styles.centerText}>
-                <Text style={styles.textBold}>QR Code Scanner</Text>
-              </Text>
-            }
-            topViewStyle={{marginVertical: 30}}
+            // topContent={
+            //   <Text style={styles.centerText}>
+            //     <Text style={styles.textBold}>QR Code Scanner</Text>
+            //   </Text>
+            // }
+            // topViewStyle={{marginVertical: 30}}
             bottomViewStyle={{marginVertical: 20}}
           />
-          {value == 1 && (
+          {(patientSelectedValue === '1' || patientSelectedValue === '3') && (
             <View style={styles.bottomContent}>
               <Text style={styles.bottomTxt}>- OR -</Text>
               <TextInput
@@ -210,7 +212,6 @@ export default function Scanner({route}) {
               </TouchableOpacity>
             </View>
           )}
-
           {msgPopup && (
             <View style={styles.modalContainer}>
               <View style={styles.modal}>

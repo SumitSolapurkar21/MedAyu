@@ -18,9 +18,11 @@ import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome';
 import HomeButton from '../../components/HomeButton/HomeButton';
+import PatientDischargeSelection from './Discharge/PatientDischargeSelection';
 
-const EpatientDetails = () => {
+const EpatientDetails = ({route}) => {
   const navigation = useNavigation();
+
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -35,7 +37,7 @@ const EpatientDetails = () => {
 
     return () => backHandler.remove();
   }, []);
-  const {setPatientsData, scannedPatientsData, userData} =
+  const {setPatientsData, scannedPatientsData, userData, patientSelectedValue} =
     useContext(UserContext);
 
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
@@ -74,58 +76,73 @@ const EpatientDetails = () => {
         </View>
       </View>
 
-      <View style={styles.cardSelection}>
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() => navigation.navigate('Edepartment')}>
-          <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
-          <Text style={styles.uName}>Appointment</Text>
-        </TouchableOpacity>
+      {/* // when selected value is search patients  */}
+      {patientSelectedValue !== '3' && (
+        <>
+          <View style={styles.cardSelection}>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() => navigation.navigate('Edepartment')}>
+              <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
+              <Text style={styles.uName}>Appointment</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() => navigation.navigate('Eipdoptions')}>
-          <Image source={ipd} alt="IPD" style={styles.img} />
-          <Text style={[styles.uName, {marginLeft: 10}]}>IPD</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.cardSelection}>
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() => ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)}>
-          <Image source={panchakarma} alt="DoctorImg" style={styles.img} />
-          <Text style={styles.uName}>Panchakarma</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() => navigation.navigate('Eipdoptions')}>
+              <Image source={ipd} alt="IPD" style={styles.img} />
+              <Text style={[styles.uName, {marginLeft: 10}]}>IPD</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cardSelection}>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() =>
+                ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
+              }>
+              <Image source={panchakarma} alt="DoctorImg" style={styles.img} />
+              <Text style={styles.uName}>Panchakarma</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() =>
-            navigation.replace('BillLayout', {
-              uhid: uhid,
-              patient_id: patient_id,
-              reception_id: _id,
-              hospital_id: hospital_id,
-            })
-          }>
-          <Image source={invoice} alt="IPD" style={styles.img} />
-          <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.cardSelection}>
-        <TouchableOpacity
-          style={styles.selectDiv}
-          onPress={() =>
-            navigation.navigate('BillHistory', {
-              uhid: uhid,
-              patient_id: patient_id,
-              reception_id: _id,
-              hospital_id: hospital_id,
-            })
-          }>
-          <Image source={billHistory} alt="billHistory" style={styles.img} />
-          <Text style={styles.uName}>History</Text>
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() =>
+                navigation.replace('BillLayout', {
+                  uhid: uhid,
+                  patient_id: patient_id,
+                  reception_id: _id,
+                  hospital_id: hospital_id,
+                })
+              }>
+              <Image source={invoice} alt="IPD" style={styles.img} />
+              <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cardSelection}>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() =>
+                navigation.navigate('BillHistory', {
+                  uhid: uhid,
+                  patient_id: patient_id,
+                  reception_id: _id,
+                  hospital_id: hospital_id,
+                })
+              }>
+              <Image
+                source={billHistory}
+                alt="billHistory"
+                style={styles.img}
+              />
+              <Text style={styles.uName}>History</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
+
+      {/* patientSelection value is discharge or 3 */}
+      <PatientDischargeSelection />
+
       <HomeButton />
     </SafeAreaView>
   );

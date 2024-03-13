@@ -6,7 +6,7 @@ import {
   View,
   TextInput,
   SafeAreaView,
-  ToastAndroid,
+  // ToastAndroid,
   BackHandler,
   Alert,
 } from 'react-native';
@@ -27,7 +27,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Ehome = () => {
   const navigation = useNavigation();
 
-  const {userData, setIsLoggedIn} = useContext(UserContext);
+  const {userData, setIsLoggedIn, setPatientSelectedValue} =
+    useContext(UserContext);
 
   const logoutHandler = async () => {
     // Clear user token from AsyncStorage
@@ -63,8 +64,7 @@ const Ehome = () => {
     return () => backHandler.remove();
   }, []);
 
-
-  
+  // qrscan
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.outerHeader}>
@@ -110,7 +110,9 @@ const Ehome = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.contentItem}
-          onPress={() => navigation.navigate('QRScanner', {value: '1'})}>
+          onPress={() => {
+            navigation.navigate('QRScanner'), setPatientSelectedValue('1');
+          }}>
           <Image source={ss} style={styles.img} />
           <Text style={styles.contentText}>Search Patient</Text>
         </TouchableOpacity>
@@ -118,9 +120,19 @@ const Ehome = () => {
       <View style={styles.contentDiv}>
         <TouchableOpacity
           style={styles.contentItem}
-          onPress={() => navigation.navigate('QRScanner', {value: '2'})}>
+          onPress={() => {
+            navigation.navigate('QRScanner'), setPatientSelectedValue('2');
+          }}>
           <Image source={attendence} style={styles.img} />
           <Text style={styles.contentText}>Attendence</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.contentItem}
+          onPress={() => {
+            navigation.navigate('QRScanner'), setPatientSelectedValue('3');
+          }}>
+          <Image source={attendence} style={styles.img} />
+          <Text style={styles.contentText}>Discharge</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
