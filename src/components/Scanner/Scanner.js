@@ -79,6 +79,8 @@ export default function Scanner({route}) {
   useEffect(() => {
     if (uhid != '') handleScannerSuccess();
   }, [uhid]);
+
+  
   const handleScannerSuccess = e => {
     if (e) {
       const data = e.data.split(',');
@@ -135,7 +137,11 @@ export default function Scanner({route}) {
         .then(res => {
           setScannedPatientsData(res.data);
           if (res.data.status === true) {
-            navigation.navigate('EpatientDetails');
+            if (patientSelectedValue === '3') {
+              navigation.navigate('DischargeInitiation');
+            } else {
+              navigation.navigate('EpatientDetails');
+            }
             uhid = '';
             appoint_id = '';
           } else {
@@ -163,9 +169,11 @@ export default function Scanner({route}) {
           .then(res => {
             setScannedPatientsData(res.data);
             if (res.data.status === true) {
-              navigation.navigate('EpatientDetails', {
-                value: '3',
-              });
+              if (patientSelectedValue === '3') {
+                navigation.navigate('DischargeInitiation');
+              } else {
+                navigation.navigate('EpatientDetails');
+              }
               setSearchInput('');
             } else {
               console.warn(`Data Not Available`);

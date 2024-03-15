@@ -34,11 +34,11 @@ const DischargeInitiation = () => {
     },
     {
       label: 'DAMA Discharge against Medical Advice',
-      value: 'DAMA Discharge against Medical Advice',
+      value: 'Dama',
     },
     {
       label: 'LAMA Leave against Medical Advice',
-      value: 'LAMA Leave against Medical Advice',
+      value: 'Lama',
     },
     {
       label: 'Absconded',
@@ -60,7 +60,7 @@ const DischargeInitiation = () => {
         .then(res => {
           const {status, message} = res.data;
           status === true
-            ? navigation.navigate('EpatientDetails')
+            ? navigation.navigate('Ehome')
             : console.warn(message);
         });
     } catch (error) {
@@ -95,7 +95,7 @@ const DischargeInitiation = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('EpatientDetails');
+            navigation.navigate('QRScanner');
           }}
         />
         <Appbar.Content

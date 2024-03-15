@@ -53,6 +53,7 @@ import Editprocedure from '../screens/Employee/Procedure/Editprocedure';
 import EditPreprocedure from '../screens/Employee/Procedure/EditPreProcedure';
 import DischargeInitiation from '../screens/Employee/Discharge/DischargeInitiation';
 import PatientDischargeSummary from '../screens/Employee/Discharge/PatientDischargeSummary';
+import PatientDischargeHistory from '../screens/Employee/Discharge/PatientDischargeHistory';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -807,6 +808,11 @@ const Routes = () => {
         <Stack.Screen
           name="PatientDischargeSummary"
           component={PatientDischargeSummary}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PatientDischargeHistory"
+          component={PatientDischargeHistory}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

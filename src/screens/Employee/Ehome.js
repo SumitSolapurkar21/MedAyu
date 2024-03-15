@@ -132,7 +132,17 @@ const Ehome = () => {
             navigation.navigate('QRScanner'), setPatientSelectedValue('3');
           }}>
           <Image source={attendence} style={styles.img} />
-          <Text style={styles.contentText}>Discharge</Text>
+          <Text style={styles.contentText}>Discharge Initiate</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.contentDiv}>
+        <TouchableOpacity
+          style={styles.contentItem}
+          onPress={() => {
+            navigation.navigate('PatientDischargeSummary');
+          }}>
+          <Image source={attendence} style={styles.img} />
+          <Text style={styles.contentText}>Discharge Summary</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -169,8 +179,8 @@ const styles = StyleSheet.create({
   },
   img: {
     resizeMode: 'contain',
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
   },
   searchDiv: {
     marginHorizontal: 12,
@@ -191,7 +201,8 @@ const styles = StyleSheet.create({
   contentDiv: {
     flexDirection: 'row',
     marginHorizontal: 12,
-    marginVertical: 14,
+    // marginVertical: 14,
+    marginTop: 12,
     justifyContent: 'space-between',
   },
   contentItem: {
