@@ -138,10 +138,7 @@ const EditPreprocedure = ({route}) => {
           .then(res => {
             //   setTemp(res.data);
             const {panchakarmaprocedurearray} = res.data;
-            console.log(
-              'panchakarmaprocedurearray : ',
-              panchakarmaprocedurearray,
-            );
+
             setPanchakarmaprocedurearray(panchakarmaprocedurearray);
           });
       } catch (error) {

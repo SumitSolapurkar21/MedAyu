@@ -32,7 +32,6 @@ const PatientDischargeHistory = ({route}) => {
             })
             .then(res => {
               const _data = res.data;
-
               if (res.data.status === true) {
                 setPatientDetails(_data);
               } else {
@@ -88,7 +87,11 @@ const PatientDischargeHistory = ({route}) => {
         <View style={styles.contentDiv}>
           <TouchableOpacity
             style={styles.contentItem}
-            onPress={() => _toggleNotification('View Diagnosis Comming Soon')}>
+            onPress={() =>
+              navigation.navigate('PatientDischargeDiagnosis', {
+                patient_id: patientDetails?.patient_id,
+              })
+            }>
             <Image source={dischargepatient} style={styles.img} />
             <Text style={styles.contentText}>View Diagnosis</Text>
           </TouchableOpacity>

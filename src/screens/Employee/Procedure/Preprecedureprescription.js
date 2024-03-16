@@ -33,7 +33,6 @@ const Preprecedureprescription = ({route}) => {
   } = route.params;
   //get patient treatment history ......
   useEffect(() => {
-    console.log('value : ', value);
     _fetchprocedurehistory();
   }, [hospital_id, patient_id, reception_id, value]);
 
@@ -112,7 +111,6 @@ const Preprecedureprescription = ({route}) => {
         .map(outerRes => {
           return outerRes.procedurekit
             .map((innerRes, i) => {
-              console.log('data res : ', innerRes);
               return `
         <tr key=${i}>
           <td>${innerRes.drugname}</td>
@@ -1354,7 +1352,6 @@ const Preprecedureprescription = ({route}) => {
         .map(outerRes => {
           return outerRes.procedurekit
             .map((innerRes, i) => {
-              console.log('data res : ', innerRes);
               return `
         <tr key=${i}>
           <td>${innerRes.drugname}</td>

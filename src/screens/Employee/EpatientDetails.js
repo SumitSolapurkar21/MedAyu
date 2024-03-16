@@ -141,7 +141,7 @@ const EpatientDetails = ({route}) => {
       )}
 
       {/* patientSelection value is discharge or 3 */}
-      <PatientDischargeSelection />
+      {/* <PatientDischargeSelection /> */}
 
       <HomeButton />
     </SafeAreaView>

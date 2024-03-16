@@ -82,11 +82,6 @@ const EpatientTreatmentPrescription = () => {
       const {medicineprescriptionarray, complaintarray, ..._prescriptiondata} =
         patientTreatmentPrescriptionDataRes.data;
 
-      console.log(
-        ' patientTreatmentPrescriptionDataRes.data : ',
-        patientTreatmentPrescriptionDataRes.data,
-      );
-
       const _complainttableRows = complaintarray
         ?.map((res, i) => {
           return `

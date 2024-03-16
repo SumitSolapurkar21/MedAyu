@@ -33,7 +33,6 @@ const ProcedureContent = () => {
           })
           .then(res => {
             _setServiceCategoryArray(res.data.data);
-            console.log('data ; ', res.data.data);
           });
       } catch (error) {
         console.error(error);
