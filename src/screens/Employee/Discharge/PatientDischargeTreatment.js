@@ -205,6 +205,7 @@ const PatientDischargeTreatment = ({route}) => {
       console.error(error);
     }
   };
+
   const _treatmentForm = () => {
     return (
       <>
@@ -373,7 +374,7 @@ const PatientDischargeTreatment = ({route}) => {
                     <TextInput
                       mode="flat"
                       style={[styles.input2]}
-                      value={temp[index].dateValues || `${currentdate}`}
+                      value={temp[index].dateValues}
                       editable={false}
                       right={
                         <TextInput.Icon
@@ -477,6 +478,7 @@ const PatientDischargeTreatment = ({route}) => {
       </>
     );
   };
+
   //submit handler ....
   const submitTreatmenthandler = async () => {
     try {
@@ -506,14 +508,11 @@ const PatientDischargeTreatment = ({route}) => {
   const _treatmentFormPopup = () => {
     return (
       <>
-        <Portal>
+        <Portal style={styles.portal}>
           <Dialog visible={visible} onDismiss={hideDialog} style={styles.top}>
             <Dialog.Content>
-              <>
-                {/* Calender */}
-                {_calender()}
-                {_treatmentForm()}
-              </>
+              {_calender()}
+              {_treatmentForm()}
             </Dialog.Content>
             <Dialog.Actions>
               <Button

@@ -107,10 +107,28 @@ const PatientDischargeHistory = () => {
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() =>
-              _toggleNotification('View Investigation History Comming Soon')
+              navigation.navigate('PatientDischargeInvestigation', {
+                patient_id: patientDetails?.patient_id,
+              })
             }>
             <Image source={summary} style={styles.img} />
             <Text style={styles.contentText}>View Investigation History</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() =>
+              _toggleNotification('View Investigation History Comming Soon')
+            }>
+            <Image source={summary} style={styles.img} />
+            <Text style={styles.contentText}>Condition at Admission</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() =>
+              _toggleNotification('View Investigation History Comming Soon')
+            }>
+            <Image source={summary} style={styles.img} />
+            <Text style={styles.contentText}>Condition at Discharge</Text>
           </TouchableOpacity>
         </View>
       </>
