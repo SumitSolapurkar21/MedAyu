@@ -21,10 +21,9 @@ const EpatientTreatment = () => {
   const [selectedDrugCode, setSelectedDrugCode] = useState('');
   const [visibleList, setVisibleList] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
-  const [temp, setTemp] = useState([]); // State to store filtered data
-  const [value, setValue] = useState();
+  const [temp, setTemp] = useState([]);
   const [showCalender, setShowCalender] = useState(false);
-  const [dateValues, setDateValues] = useState([]); // State to store date values for each field
+  const [dateValues, setDateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
 
   const [visibleMsg, setVisibleMsg] = useState(false);

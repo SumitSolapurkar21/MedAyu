@@ -16,7 +16,7 @@ import {Table, Row, Rows} from 'react-native-table-component';
 
 const PatientDischargeSummary = () => {
   const navigation = useNavigation();
-  const {userData} = useContext(UserContext);
+  const {userData, setSelectedPatientMobileNumber} = useContext(UserContext);
   const {_id, hospital_id} = userData.data[0];
   //
 
@@ -42,9 +42,8 @@ const PatientDischargeSummary = () => {
   }, []);
 
   const _patientNameSelectionHandler = e => {
-    navigation.navigate('PatientDischargeHistory', {
-      selectedPatientMobileNumber: e,
-    });
+    setSelectedPatientMobileNumber(e);
+    navigation.navigate('PatientDischargeHistory');
   };
   useEffect(() => {
     const _SeeDischargeSummaryList = async () => {

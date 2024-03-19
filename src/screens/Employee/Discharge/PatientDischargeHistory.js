@@ -10,9 +10,8 @@ import summary from '../../../images/summary.png';
 import {Image} from 'react-native';
 import {ToastNotification} from '../../../components/ToastNotification/ToastNotification';
 
-const PatientDischargeHistory = ({route}) => {
-  const _selectPatient = route?.params?.selectedPatientMobileNumber;
-  const {userData} = useContext(UserContext);
+const PatientDischargeHistory = () => {
+  const {userData, selectedPatientMobileNumber} = useContext(UserContext);
   const {_id, hospital_id} = userData.data[0];
   const [patientDetails, setPatientDetails] = useState(null);
   const navigation = useNavigation();
@@ -22,10 +21,10 @@ const PatientDischargeHistory = ({route}) => {
   useEffect(() => {
     const patientDetailBySearchInput = async () => {
       try {
-        if (_selectPatient !== '')
+        if (selectedPatientMobileNumber !== '')
           await axios
             .post(`${api.baseurl}/ScanQrForMobile`, {
-              inputvalue: _selectPatient,
+              inputvalue: selectedPatientMobileNumber,
               reception_id: _id,
               hospital_id: hospital_id,
               type: 'SEARCH',
@@ -45,7 +44,7 @@ const PatientDischargeHistory = ({route}) => {
       }
     };
     patientDetailBySearchInput();
-  }, [_selectPatient]);
+  }, [selectedPatientMobileNumber]);
 
   // patient details .......
   const _patientDetails = () => {
@@ -79,8 +78,8 @@ const PatientDischargeHistory = ({route}) => {
     setVisible(!visible);
     return ToastNotification(visible, setVisible, subtitle);
   };
-  //selection box ...
 
+  //selection box ...
   const _selectionBox = () => {
     return (
       <>
@@ -98,7 +97,9 @@ const PatientDischargeHistory = ({route}) => {
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() =>
-              _toggleNotification('View Treatment History Comming Soon')
+              navigation.navigate('PatientDischargeTreatment', {
+                patient_id: patientDetails?.patient_id,
+              })
             }>
             <Image source={summary} style={styles.img} />
             <Text style={styles.contentText}>View Treatment History</Text>
@@ -132,6 +133,7 @@ const PatientDischargeHistory = ({route}) => {
       </Appbar.Header>
       <View style={styles.container}>
         {ToastNotification(visible, setVisible)}
+
         {/* section 1 */}
         {_patientDetails()}
         {_selectionBox()}
@@ -171,6 +173,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#127359',
+    flexWrap: 'wrap',
+    width: 200,
   },
   contentDiv: {
     flexDirection: 'row',
@@ -195,7 +199,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingVertical: 12,
   },
-
   contentText: {
     flexWrap: 'wrap',
     width: 100,

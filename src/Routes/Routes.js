@@ -55,6 +55,8 @@ import DischargeInitiation from '../screens/Employee/Discharge/DischargeInitiati
 import PatientDischargeSummary from '../screens/Employee/Discharge/PatientDischargeSummary';
 import PatientDischargeHistory from '../screens/Employee/Discharge/PatientDischargeHistory';
 import PatientDischargeDiagnosis from '../screens/Employee/Discharge/PatientDischargeDiagnosis';
+import PatientDischargeTreatment from '../screens/Employee/Discharge/PatientDischargeTreatment';
+import PatientDischargeInvestigation from '../screens/Employee/Discharge/PatientDischargeInvestigation';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -819,6 +821,16 @@ const Routes = () => {
         <Stack.Screen
           name="PatientDischargeDiagnosis"
           component={PatientDischargeDiagnosis}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PatientDischargeTreatment"
+          component={PatientDischargeTreatment}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PatientDischargeInvestigation"
+          component={PatientDischargeInvestigation}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
