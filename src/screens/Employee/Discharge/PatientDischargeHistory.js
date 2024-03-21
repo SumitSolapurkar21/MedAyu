@@ -32,6 +32,7 @@ const PatientDischargeHistory = () => {
             .then(res => {
               const _data = res.data;
               if (res.data.status === true) {
+                console.log(_data);
                 setPatientDetails(_data);
               } else {
                 console.warn(`Data Not Available`);
@@ -117,7 +118,10 @@ const PatientDischargeHistory = () => {
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() =>
-              _toggleNotification('View Investigation History Comming Soon')
+              navigation.navigate('ConditionAtAdmission', {
+                patient_id: patientDetails?.patient_id,
+                ip_no: patientDetails?.ipno,
+              })
             }>
             <Image source={summary} style={styles.img} />
             <Text style={styles.contentText}>Condition at Admission</Text>
@@ -125,7 +129,10 @@ const PatientDischargeHistory = () => {
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() =>
-              _toggleNotification('View Investigation History Comming Soon')
+              navigation.navigate('ConditionAtDischarge', {
+                patient_id: patientDetails?.patient_id,
+                ip_no: patientDetails?.ipno,
+              })
             }>
             <Image source={summary} style={styles.img} />
             <Text style={styles.contentText}>Condition at Discharge</Text>
