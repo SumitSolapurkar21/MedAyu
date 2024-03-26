@@ -37,6 +37,7 @@ const EpatientDetails = ({route}) => {
 
     return () => backHandler.remove();
   }, []);
+
   const {setPatientsData, scannedPatientsData, userData, patientSelectedValue} =
     useContext(UserContext);
 
@@ -89,12 +90,18 @@ const EpatientDetails = ({route}) => {
 
             <TouchableOpacity
               style={styles.selectDiv}
+              onPress={() => navigation.navigate('OpdHomePage')}>
+              <Image source={ipd} alt="OPD" style={styles.img} />
+              <Text style={[styles.uName, {marginLeft: 10}]}>OPD</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.selectDiv}
               onPress={() => navigation.navigate('Eipdoptions')}>
               <Image source={ipd} alt="IPD" style={styles.img} />
               <Text style={[styles.uName, {marginLeft: 10}]}>IPD</Text>
             </TouchableOpacity>
-          </View>
-          <View style={styles.cardSelection}>
+
             <TouchableOpacity
               style={styles.selectDiv}
               onPress={() =>
@@ -117,8 +124,7 @@ const EpatientDetails = ({route}) => {
               <Image source={invoice} alt="IPD" style={styles.img} />
               <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
             </TouchableOpacity>
-          </View>
-          <View style={styles.cardSelection}>
+
             <TouchableOpacity
               style={styles.selectDiv}
               onPress={() =>
@@ -166,7 +172,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
   },
   uName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#127359',
     flexWrap: 'wrap',
@@ -213,7 +219,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 16,
     marginVertical: 6,
-    gap: 20,
+    gap: 10,
+    flexWrap: 'wrap',
   },
   selectDiv: {
     flexDirection: 'row',

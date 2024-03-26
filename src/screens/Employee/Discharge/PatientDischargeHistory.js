@@ -32,7 +32,6 @@ const PatientDischargeHistory = () => {
             .then(res => {
               const _data = res.data;
               if (res.data.status === true) {
-                console.log(_data);
                 setPatientDetails(_data);
               } else {
                 console.warn(`Data Not Available`);

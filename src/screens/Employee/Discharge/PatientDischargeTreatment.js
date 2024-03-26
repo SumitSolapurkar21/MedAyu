@@ -1,11 +1,4 @@
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import UserContext from '../../../components/Context/Context';
 import axios from 'axios';
@@ -19,10 +12,7 @@ import {
   TextInput,
 } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
-import dischargepatient from '../../../images/dischargepatient.png';
-import summary from '../../../images/summary.png';
-import {Image} from 'react-native';
-import {ToastNotification} from '../../../components/ToastNotification/ToastNotification';
+
 import {Table, Row, Rows} from 'react-native-table-component';
 import DateTimePicker from 'react-native-ui-datepicker';
 
@@ -152,8 +142,8 @@ const PatientDischargeTreatment = ({route}) => {
                   fontWeight: 'bold',
                   color: Themes[0]?.activeTextColor,
                 }}
-                value={dateValues[datePickerIndex]} // Use separate state variable for each date field
-                onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
+                value={dateValues[datePickerIndex]}
+                onValueChange={date => handleDateChange(date, datePickerIndex)}
               />
             </View>
           </View>

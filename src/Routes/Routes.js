@@ -59,6 +59,17 @@ import PatientDischargeTreatment from '../screens/Employee/Discharge/PatientDisc
 import PatientDischargeInvestigation from '../screens/Employee/Discharge/PatientDischargeInvestigation';
 import ConditionAtAdmission from '../screens/Employee/Discharge/ConditionAtAdmission';
 import ConditionAtDischarge from '../screens/Employee/Discharge/ConditionAtDischarge';
+import OpdHomePage from '../screens/Employee/OPD/OpdHomePage';
+import OpdComplaints from '../screens/Employee/OPD/Assessment/OpdComplaints';
+import OpdPastHistory from '../screens/Employee/OPD/Assessment/OpdPastHistory';
+import FamilyHistory from '../screens/Employee/OPD/Assessment/FamilyHistory';
+import MedicineHistory from '../screens/Employee/OPD/Assessment/MedicineHistory';
+import PersonalHistory from '../screens/Employee/OPD/Assessment/PersonalHistory';
+import ObstetricsHistory from '../screens/Employee/OPD/Assessment/ObstetricsHistory';
+import MenstrualHistory from '../screens/Employee/OPD/Assessment/MenstrualHistory';
+import OpdVitals from '../screens/Employee/OPD/Assessment/OpdVitals';
+import GeneralExamination from '../screens/Employee/OPD/Assessment/GeneralExamination';
+import SystemicExamination from '../screens/Employee/OPD/Assessment/SystemicExamination';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -843,6 +854,61 @@ const Routes = () => {
         <Stack.Screen
           name="ConditionAtDischarge"
           component={ConditionAtDischarge}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdHomePage"
+          component={OpdHomePage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdComplaints"
+          component={OpdComplaints}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdPastHistory"
+          component={OpdPastHistory}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="FamilyHistory"
+          component={FamilyHistory}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="MedicineHistory"
+          component={MedicineHistory}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PersonalHistory"
+          component={PersonalHistory}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ObstetricsHistory"
+          component={ObstetricsHistory}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="MenstrualHistory"
+          component={MenstrualHistory}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdVitals"
+          component={OpdVitals}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="GeneralExamination"
+          component={GeneralExamination}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SystemicExamination"
+          component={SystemicExamination}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
