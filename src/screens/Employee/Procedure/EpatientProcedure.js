@@ -320,7 +320,6 @@ export default EpatientProcedure;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
   },
   categoryTabs: {
     padding: 10,

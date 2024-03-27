@@ -73,6 +73,8 @@ import SystemicExamination from '../screens/Employee/OPD/Assessment/SystemicExam
 import OpdDiagnosis from '../screens/Employee/OPD/Assessment/OpdDiagnosis';
 import OpdInvestigation from '../screens/Employee/OPD/Assessment/OpdInvestigation';
 import OpdPlanOfCare from '../screens/Employee/OPD/Assessment/OpdPlanOfCare';
+import OpdTreatment from '../screens/Employee/OPD/Assessment/OpdTreatment';
+import OpdProcedure from '../screens/Employee/OPD/Assessment/OpdProcedure';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -927,6 +929,16 @@ const Routes = () => {
         <Stack.Screen
           name="OpdPlanOfCare"
           component={OpdPlanOfCare}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdTreatment"
+          component={OpdTreatment}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdProcedure"
+          component={OpdProcedure}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

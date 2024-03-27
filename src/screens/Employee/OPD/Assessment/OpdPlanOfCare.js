@@ -233,13 +233,13 @@ const OpdPlanOfCare = () => {
           </Button>
           <Button
             mode="contained"
-            onPress={() => navigation.navigate('OpdPlanOfCare')}>
+            onPress={() => navigation.navigate('OpdTreatment')}>
             Save & Next
           </Button>
 
           <Button
             mode="contained"
-            onPress={() => navigation.navigate('OpdPlanOfCare')}>
+            onPress={() => navigation.navigate('OpdTreatment')}>
             Skip
           </Button>
         </View>
