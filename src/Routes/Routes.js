@@ -70,6 +70,9 @@ import MenstrualHistory from '../screens/Employee/OPD/Assessment/MenstrualHistor
 import OpdVitals from '../screens/Employee/OPD/Assessment/OpdVitals';
 import GeneralExamination from '../screens/Employee/OPD/Assessment/GeneralExamination';
 import SystemicExamination from '../screens/Employee/OPD/Assessment/SystemicExamination';
+import OpdDiagnosis from '../screens/Employee/OPD/Assessment/OpdDiagnosis';
+import OpdInvestigation from '../screens/Employee/OPD/Assessment/OpdInvestigation';
+import OpdPlanOfCare from '../screens/Employee/OPD/Assessment/OpdPlanOfCare';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -909,6 +912,21 @@ const Routes = () => {
         <Stack.Screen
           name="SystemicExamination"
           component={SystemicExamination}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdDiagnosis"
+          component={OpdDiagnosis}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdInvestigation"
+          component={OpdInvestigation}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdPlanOfCare"
+          component={OpdPlanOfCare}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -1,7 +1,13 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Table, Row, Rows} from 'react-native-table-component';
-import {Appbar, Button, RadioButton, TextInput} from 'react-native-paper';
+import {
+  Appbar,
+  Button,
+  RadioButton,
+  TextInput,
+  Checkbox,
+} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {BackHandler} from 'react-native';
 const SystemicExamination = () => {
@@ -22,6 +28,7 @@ const SystemicExamination = () => {
 
   const navigation = useNavigation();
   const [checked, setChecked] = useState('');
+  const [checked1, setChecked1] = useState(false);
   //
   const tableHead1 = ['EENT'];
   const tableData = [
@@ -1056,6 +1063,556 @@ const SystemicExamination = () => {
       ),
     },
   ];
+  //
+  const tableHead7 = ['Neurological Examination'];
+  const tableData7 = [
+    {
+      id: 1,
+      label: 'GCS',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <Text style={styles.radioText}>E</Text>
+              <View style={{padding: 10}}>
+                <TextInput
+                  mode="flat"
+                  value={ecgText}
+                  multiline
+                  onChangeText={ecgText => setEcgText(ecgText)}
+                />
+              </View>
+            </View>
+            <View style={styles.radioBtn}>
+              <Text style={styles.radioText}>V</Text>
+              <View style={{padding: 10}}>
+                <TextInput
+                  mode="flat"
+                  value={ecgText}
+                  multiline
+                  onChangeText={ecgText => setEcgText(ecgText)}
+                />
+              </View>
+            </View>
+            <View style={styles.radioBtn}>
+              <Text style={styles.radioText}>V</Text>
+              <View style={{padding: 10}}>
+                <TextInput
+                  mode="flat"
+                  value={ecgText}
+                  multiline
+                  onChangeText={ecgText => setEcgText(ecgText)}
+                />
+              </View>
+            </View>
+            <View style={styles.radioBtn}>
+              <Text style={styles.radioText}>Score</Text>
+              <View style={{padding: 10}}>
+                <TextInput
+                  mode="flat"
+                  value={ecgText}
+                  multiline
+                  onChangeText={ecgText => setEcgText(ecgText)}
+                />
+              </View>
+            </View>
+          </View>
+        </>
+      ),
+    },
+    {
+      id: 2,
+      label: 'Vision',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Normal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Normal')}
+              />
+              <Text>Normal</Text>
+            </View>
+            <View>
+              <View style={styles.radioBtn}>
+                <RadioButton
+                  value="None"
+                  status={checked === 'Abnormal' ? 'checked' : 'unchecked'}
+                  onPress={() => setChecked('Abnormal')}
+                />
+                <Text>Impaired</Text>
+              </View>
+              <View style={styles.radioBtn}>
+                <Checkbox
+                  status={checked ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked(!checked);
+                  }}
+                />
+                <Text>Right</Text>
+              </View>
+              <View style={styles.radioBtn}>
+                <Checkbox
+                  status={checked ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked(!checked);
+                  }}
+                />
+                <Text>Right</Text>
+              </View>
+            </View>
+          </View>
+        </>
+      ),
+    },
+    {
+      id: 3,
+      label: 'Hearing',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Normal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Normal')}
+              />
+              <Text>Normal</Text>
+            </View>
+            <View>
+              <View style={styles.radioBtn}>
+                <RadioButton
+                  value="None"
+                  status={checked === 'Abnormal' ? 'checked' : 'unchecked'}
+                  onPress={() => setChecked('Abnormal')}
+                />
+                <Text>Impaired</Text>
+              </View>
+              <View style={styles.radioBtn}>
+                <Checkbox
+                  status={checked ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked(!checked);
+                  }}
+                />
+                <Text>Right</Text>
+              </View>
+              <View style={styles.radioBtn}>
+                <Checkbox
+                  status={checked ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked(!checked);
+                  }}
+                />
+                <Text>Right</Text>
+              </View>
+            </View>
+          </View>
+        </>
+      ),
+    },
+    {
+      id: 4,
+      label: 'Speech',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Normal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Normal')}
+              />
+              <Text>Normal</Text>
+            </View>
+            <View>
+              <View style={styles.radioBtn}>
+                <RadioButton
+                  value="None"
+                  status={checked === 'Abnormal' ? 'checked' : 'unchecked'}
+                  onPress={() => setChecked('Abnormal')}
+                />
+                <Text>Impaired</Text>
+              </View>
+              <View style={styles.radioBtn}>
+                <Checkbox
+                  status={checked ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked(!checked);
+                  }}
+                />
+                <Text>Right</Text>
+              </View>
+              <View style={styles.radioBtn}>
+                <Checkbox
+                  status={checked ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked(!checked);
+                  }}
+                />
+                <Text>Right</Text>
+              </View>
+            </View>
+          </View>
+        </>
+      ),
+    },
+    {
+      id: 5,
+      label: 'Sensations',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Normal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Normal')}
+              />
+              <Text>Normal</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Abnormal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Abnormal')}
+              />
+              <Text>Abnormal</Text>
+            </View>
+          </View>
+        </>
+      ),
+    },
+    {
+      id: 6,
+      label: 'Reflexes',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Normal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Normal')}
+              />
+              <Text>Normal</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Abnormal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Abnormal')}
+              />
+              <Text>Abnormal</Text>
+            </View>
+          </View>
+        </>
+      ),
+    },
+    {
+      id: 7,
+      label: 'Memory',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Normal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Normal')}
+              />
+              <Text>Normal</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Loss' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Loss')}
+              />
+              <Text>Loss</Text>
+            </View>
+          </View>
+        </>
+      ),
+    },
+  ];
+
+  //
+  const tableHead8 = ['Skin Examination'];
+  const tableData8 = [
+    {
+      id: 1,
+      label: 'Dermal Assessment',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Normal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Normal')}
+              />
+              <Text>Normal</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Abrasion' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Abrasion')}
+              />
+              <Text>Abrasion</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Burn' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Burn')}
+              />
+              <Text>Burn</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Contusion' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Contusion')}
+              />
+              <Text>Contusion</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Dermatitis' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Dermatitis')}
+              />
+              <Text>Dermatitis</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Ecchymosis' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Ecchymosis')}
+              />
+              <Text>Ecchymosis</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Hematoma' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Hematoma')}
+              />
+              <Text>Hematoma</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Laceration' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Laceration')}
+              />
+              <Text>Laceration</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Mass' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Mass')}
+              />
+              <Text>Mass</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Petechiae' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Petechiae')}
+              />
+              <Text>Petechiae</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Rash' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Rash')}
+              />
+              <Text>Rash</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Suture' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Suture')}
+              />
+              <Text>Suture</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Other' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Other')}
+              />
+              <Text>Other</Text>
+            </View>
+          </View>
+        </>
+      ),
+    },
+    {
+      id: 2,
+      label: 'Color',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Normal' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Normal')}
+              />
+              <Text>Normal</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Pale' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Pale')}
+              />
+              <Text>Pale</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Jaundice' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Jaundice')}
+              />
+              <Text>Jaundice</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Cyanosis' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Cyanosis')}
+              />
+              <Text>Cyanosis</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Pink' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Pink')}
+              />
+              <Text>Pink</Text>
+            </View>
+          </View>
+        </>
+      ),
+    },
+    {
+      id: 3,
+      label: 'Turgor',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Good' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Good')}
+              />
+              <Text>Good</Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'Poor' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Poor')}
+              />
+              <Text>Poor</Text>
+            </View>
+          </View>
+        </>
+      ),
+    },
+    {
+      id: 4,
+      label: 'Pressure Ulcer',
+      radio1: (
+        <>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <RadioButton
+                value="None"
+                status={checked === 'No' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('No')}
+              />
+              <Text style={styles.radioText}>No</Text>
+            </View>
+          </View>
+          <View style={styles.radioBtn}>
+            <View style={styles.radioBtn}>
+              <Checkbox
+                value="None"
+                status={checked === 'Non Palpable' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Non Palpable')}
+              />
+              <Text style={styles.checkBoxText}>
+                Stage 1: intact skin with non-blanch able redness of location
+              </Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <Checkbox
+                value="None"
+                status={checked === 'Non Palpable' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Non Palpable')}
+              />
+              <Text style={styles.checkBoxText}>
+                Stage 2: skin loss: abrasion, blister or shallow crater
+              </Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <Checkbox
+                value="None"
+                status={checked === 'Non Palpable' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Non Palpable')}
+              />
+              <Text style={styles.checkBoxText}>
+                Stage 3: Shallow/deep crater: not extend down through underlying
+                fascia
+              </Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <Checkbox
+                value="None"
+                status={checked === 'Non Palpable' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Non Palpable')}
+              />
+              <Text style={styles.checkBoxText}>
+                Stage 4: Deep crater: exposed bone, tendon or muscle
+              </Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <Checkbox
+                value="None"
+                status={checked === 'Non Palpable' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Non Palpable')}
+              />
+              <Text style={styles.checkBoxText}>
+                Unstageble: Slough (yellow, gray, green or brown) or eschar
+                wound bed
+              </Text>
+            </View>
+            <View style={styles.radioBtn}>
+              <Checkbox
+                value="None"
+                status={checked === 'Non Palpable' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Non Palpable')}
+              />
+              <Text style={styles.checkBoxText}>Deep tissue injury</Text>
+            </View>
+          </View>
+        </>
+      ),
+    },
+  ];
+
   const _tableData = tableData?.map(item => {
     return [item.label, item.radio1];
   });
@@ -1077,6 +1634,12 @@ const SystemicExamination = () => {
   const _tableData6 = tableData6?.map(item => {
     return [item.label, item.radio1];
   });
+  const _tableData7 = tableData7?.map(item => {
+    return [item.label, item.radio1];
+  });
+  const _tableData8 = tableData8?.map(item => {
+    return [item.label, item.radio1];
+  });
   const [widthArr, setWidthArr] = useState([]);
   const [headwidthArr, setheadWidthArr] = useState([]);
 
@@ -1090,6 +1653,8 @@ const SystemicExamination = () => {
         tableHead4.length - 1,
         tableHead5.length - 1,
         tableHead6.length - 1,
+        tableHead7.length - 1,
+        tableHead8.length - 1,
       ).fill(0),
     ]);
     setWidthArr([
@@ -1102,6 +1667,8 @@ const SystemicExamination = () => {
         _tableData4.length - 1,
         _tableData5.length - 1,
         _tableData6.length - 1,
+        _tableData7.length - 1,
+        _tableData8.length - 1,
       ).fill(0),
     ]);
   }, []);
@@ -1254,6 +1821,48 @@ const SystemicExamination = () => {
               </Table>
             </ScrollView>
           </View>
+          {/*  */}
+          <View style={styles.tableDiv}>
+            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Row
+                data={tableHead7}
+                widthArr={headwidthArr}
+                style={styles.head}
+                textStyle={styles.headtext}
+              />
+            </Table>
+            <ScrollView style={styles.dataWrapper}>
+              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                <Rows
+                  data={_tableData7}
+                  widthArr={widthArr}
+                  style={[styles.row]}
+                  textStyle={styles.text}
+                />
+              </Table>
+            </ScrollView>
+          </View>
+          {/*  */}
+          <View style={styles.tableDiv}>
+            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Row
+                data={tableHead8}
+                widthArr={headwidthArr}
+                style={styles.head}
+                textStyle={styles.headtext}
+              />
+            </Table>
+            <ScrollView style={styles.dataWrapper}>
+              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                <Rows
+                  data={_tableData8}
+                  widthArr={widthArr}
+                  style={[styles.row]}
+                  textStyle={styles.text}
+                />
+              </Table>
+            </ScrollView>
+          </View>
         </ScrollView>
         <View style={styles.submitbutton}>
           <Button
@@ -1265,14 +1874,14 @@ const SystemicExamination = () => {
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('FamilyHistory')}>
+            onPress={() => navigation.navigate('OpdDiagnosis')}>
             Save & Next
           </Button>
 
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('ObstetricsHistory')}>
+            onPress={() => navigation.navigate('OpdDiagnosis')}>
             Skip
           </Button>
         </View>
@@ -1318,5 +1927,12 @@ const styles = StyleSheet.create({
   },
   tableDiv: {
     marginBottom: 10,
+  },
+  radioText: {
+    marginLeft: 8,
+  },
+  checkBoxText: {
+    flexWrap: 'wrap',
+    width: 200,
   },
 });
