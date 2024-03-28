@@ -32,6 +32,7 @@ const OpdComplaints = () => {
   const navigation = useNavigation();
   const [p_category, setP_category] = useState('');
   const [selectedCategoryData, setSelectedCategoryData] = useState('');
+  const [selectedRow, setSelectedRow] = useState([]);
   //table content ....
   const [widthArr, setWidthArr] = useState([]);
 
@@ -42,7 +43,7 @@ const OpdComplaints = () => {
   const [visible, setVisible] = useState(false);
   const hideDialog = () => setVisible(false);
 
-  const keys = ['Symptoms', 'Duration', 'Time', 'Frequency'];
+  const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Action'];
   let data = [
     {
       label: 'Often',
@@ -113,7 +114,7 @@ const OpdComplaints = () => {
   }, []);
   // to set width of table ......
   useEffect(() => {
-    setWidthArr([120, 80, 120, 150, ...Array(keys.length).fill(2)]);
+    setWidthArr([120, 80, 120, 150, 150, ...Array(keys.length).fill(2)]);
   }, []);
 
   const category = [
@@ -200,8 +201,8 @@ const OpdComplaints = () => {
   useEffect(() => {
     if (selectionValue) {
       FetchMobileComplaintsCategory();
-      setRowData([]);
-      setSelectedCategoryData([]);
+      // setRowData([]);
+      // setSelectedCategoryData([]);
       setP_category('');
     }
   }, [selectionValue]);
@@ -321,13 +322,31 @@ const OpdComplaints = () => {
     ...DefaultTheme,
     roundness: 0, // Set roundness to 0 to remove borderRadius
   };
+
+  // Add selected data handler
+  const _addSelectedDataHandler = (_selectedData, _id) => {
+    console.log('selected data : ', _selectedData);
+    // const uniqueIds = {};
+    // // Filter out unique data based on the condition frequency !== "" and unique id
+    // const uniqueData = _selectedData.filter(item => {
+    //   if (item.frequency !== '' && !uniqueIds[item.id]) {
+    //     uniqueIds[item.id] = true;
+    //     return true;
+    //   }
+    //   return false;
+    // });
+    // Filter out data with the specified id
+    const uniqueData = _selectedData.filter(item => item.id === _id);
+    setSelectedRow(prev => [...prev, ...uniqueData]);
+  };
+  console.log('selected data : ', selectedRow);
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('EpatientDetails');
+            navigation.navigate('OpdHomePage');
           }}
         />
         <Appbar.Content title="OPD Complaints" />
@@ -492,6 +511,15 @@ const OpdComplaints = () => {
                             );
                           }}
                         />,
+                        <Button
+                          key={row.id}
+                          style={{width: 'auto', marginHorizontal: 30}}
+                          mode="contained"
+                          onPress={() =>
+                            _addSelectedDataHandler([...rowData], row.id)
+                          }>
+                          Add
+                        </Button>,
                       ])}
                       widthArr={widthArr}
                       style={styles.row}
