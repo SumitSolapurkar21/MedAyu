@@ -1,22 +1,39 @@
-import {BackHandler, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {Table, Row, Rows} from 'react-native-table-component';
 import {
   Appbar,
-  Divider,
-  TextInput,
-  RadioButton,
   Button,
+  RadioButton,
+  TextInput,
+  Divider,
   Checkbox,
 } from 'react-native-paper';
-import {SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {BackHandler} from 'react-native';
+import api from '../../../../../api.json';
+import UserContext from '../../../../components/Context/Context';
+import axios from 'axios';
 
 const ObstetricsHistory = () => {
-  const [value, setValue] = useState('');
-  const [checked, setChecked] = useState(false);
-  const [text, setText] = useState('');
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
+
   const navigation = useNavigation();
   const [temp, setTemp] = useState([]);
+
+  // radio states ...
+  const [pregnant, setPregnant] = useState('');
+  const [breastFeeding, setBreastFeeding] = useState('');
+  const [conception, setConception] = useState('');
+  const [contraception, setContraception] = useState('');
+
+  // checkbox states ...
+  const [pillsChecked, setpillsChecked] = useState(false);
+  const [injuctionChecked, setInjuctionChecked] = useState(false);
+  const [otherChecked, setOtherChecked] = useState(false);
+
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -31,6 +48,61 @@ const ObstetricsHistory = () => {
 
     return () => backHandler.remove();
   }, []);
+
+  const _formObject = [
+    {
+      g: temp?.G ?? '',
+      p: temp?.P ?? '',
+      l: temp?.L ?? '',
+      a: temp?.A ?? '',
+      d: temp?.D ?? '',
+      pregnant: pregnant,
+      breastFeeding: breastFeeding,
+      conception: conception,
+      contraception: contraception,
+      pillsChecked: pillsChecked,
+      injuctionChecked: injuctionChecked,
+      otherChecked: otherChecked,
+    },
+  ];
+  //  submit handler ....
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-OBSTETRICS-HISTORY',
+      opdobstetricshistoryarray: _formObject,
+    };
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            navigation.navigate('MenstrualHistory');
+            _resetHandler();
+          } else {
+            console.error(`${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const _resetHandler = () => {
+    setTemp([]);
+    setPregnant('');
+    setBreastFeeding('');
+    setConception('');
+    setContraception('');
+    setpillsChecked(false);
+    setInjuctionChecked(false);
+    setOtherChecked(false);
+  };
   return (
     <>
       {/* Appbar header */}
@@ -50,12 +122,15 @@ const ObstetricsHistory = () => {
               <TextInput
                 mode="flat"
                 style={[styles.input2]}
-                value={'1'}
+                value={temp.G}
                 onChangeText={text => {
-                  const updatedTemp = [...temp];
-                  setTemp(updatedTemp);
+                  setTemp(prevState => ({
+                    ...prevState,
+                    G: text,
+                  }));
                 }}
                 editable={true}
+                keyboardType="numeric"
               />
             </View>
             <View style={styles.cardContent}>
@@ -63,12 +138,15 @@ const ObstetricsHistory = () => {
               <TextInput
                 mode="flat"
                 style={[styles.input2]}
-                value={'1'}
+                value={temp.P}
                 onChangeText={text => {
-                  const updatedTemp = [...temp];
-                  setTemp(updatedTemp);
+                  setTemp(prevState => ({
+                    ...prevState,
+                    P: text,
+                  }));
                 }}
                 editable={true}
+                keyboardType="numeric"
               />
             </View>
             <View style={styles.cardContent}>
@@ -76,12 +154,15 @@ const ObstetricsHistory = () => {
               <TextInput
                 mode="flat"
                 style={[styles.input2]}
-                value={'1'}
+                value={temp.L}
                 onChangeText={text => {
-                  const updatedTemp = [...temp];
-                  setTemp(updatedTemp);
+                  setTemp(prevState => ({
+                    ...prevState,
+                    L: text,
+                  }));
                 }}
                 editable={true}
+                keyboardType="numeric"
               />
             </View>
             <View style={styles.cardContent}>
@@ -89,12 +170,15 @@ const ObstetricsHistory = () => {
               <TextInput
                 mode="flat"
                 style={[styles.input2]}
-                value={'1'}
+                value={temp.A}
                 onChangeText={text => {
-                  const updatedTemp = [...temp];
-                  setTemp(updatedTemp);
+                  setTemp(prevState => ({
+                    ...prevState,
+                    A: text,
+                  }));
                 }}
                 editable={true}
+                keyboardType="numeric"
               />
             </View>
             <View style={styles.cardContent}>
@@ -102,19 +186,22 @@ const ObstetricsHistory = () => {
               <TextInput
                 mode="flat"
                 style={[styles.input2]}
-                value={'1'}
+                value={temp.D}
                 onChangeText={text => {
-                  const updatedTemp = [...temp];
-                  setTemp(updatedTemp);
+                  setTemp(prevState => ({
+                    ...prevState,
+                    D: text,
+                  }));
                 }}
                 editable={true}
+                keyboardType="numeric"
               />
             </View>
           </View>
           <Divider />
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => setPregnant(newValue)}
+            value={pregnant}>
             <View
               style={{
                 flexDirection: 'row',
@@ -135,17 +222,15 @@ const ObstetricsHistory = () => {
             </View>
           </RadioButton.Group>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => setBreastFeeding(newValue)}
+            value={breastFeeding}>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={[styles.label, {width: 200}]}>
-                Breast Feeding :{' '}
-              </Text>
+              <Text style={[styles.label, {width: 200}]}>Breast Feeding :</Text>
               <View style={styles.radioBtn}>
                 <View style={styles.radioBtn}>
                   <Text>Yes</Text>
@@ -159,8 +244,8 @@ const ObstetricsHistory = () => {
             </View>
           </RadioButton.Group>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => setConception(newValue)}
+            value={conception}>
             <View
               style={{
                 flexDirection: 'row',
@@ -168,7 +253,7 @@ const ObstetricsHistory = () => {
                 alignItems: 'center',
               }}>
               <Text style={[styles.label, {width: 200}]}>
-                Planing to Conceive :{' '}
+                Planing to Conceive :
               </Text>
               <View style={styles.radioBtn}>
                 <View style={styles.radioBtn}>
@@ -184,8 +269,8 @@ const ObstetricsHistory = () => {
           </RadioButton.Group>
           <Divider />
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => setContraception(newValue)}
+            value={contraception}>
             <View
               style={{
                 flexDirection: 'row',
@@ -212,9 +297,9 @@ const ObstetricsHistory = () => {
                   width: 60,
                 }}>
                 <Checkbox
-                  status={checked ? 'checked' : 'unchecked'}
+                  status={pillsChecked ? 'checked' : 'unchecked'}
                   onPress={() => {
-                    setChecked(!checked);
+                    setpillsChecked(!pillsChecked);
                   }}
                 />
                 <Text style={styles.label}>Pill</Text>
@@ -226,9 +311,9 @@ const ObstetricsHistory = () => {
                   width: 90,
                 }}>
                 <Checkbox
-                  status={checked ? 'checked' : 'unchecked'}
+                  status={injuctionChecked ? 'checked' : 'unchecked'}
                   onPress={() => {
-                    setChecked(!checked);
+                    setInjuctionChecked(!injuctionChecked);
                   }}
                 />
                 <Text style={styles.label}>Injuction</Text>
@@ -240,17 +325,12 @@ const ObstetricsHistory = () => {
                   width: 90,
                 }}>
                 <Checkbox
-                  status={checked ? 'checked' : 'unchecked'}
+                  status={otherChecked ? 'checked' : 'unchecked'}
                   onPress={() => {
-                    setChecked(!checked);
+                    setOtherChecked(!otherChecked);
                   }}
                 />
                 <Text style={styles.label}>Other</Text>
-                {/* <TextInput
-                value={text}
-                placeholder="other ...."
-                onChangeText={text => setText(text)}
-              /> */}
               </View>
             </View>
           </RadioButton.Group>
@@ -265,7 +345,7 @@ const ObstetricsHistory = () => {
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('MenstrualHistory')}>
+            onPress={submitTreatmenthandler}>
             Save & Next
           </Button>
 

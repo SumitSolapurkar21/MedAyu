@@ -1,18 +1,40 @@
-import {BackHandler, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {Table, Row, Rows} from 'react-native-table-component';
 import {
   Appbar,
-  Divider,
-  TextInput,
-  RadioButton,
   Button,
+  RadioButton,
+  TextInput,
+  Divider,
   Checkbox,
 } from 'react-native-paper';
-import {SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Table, Row, Rows} from 'react-native-table-component';
+import {BackHandler} from 'react-native';
+import api from '../../../../../api.json';
+import UserContext from '../../../../components/Context/Context';
+import axios from 'axios';
 
 const MenstrualHistory = () => {
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
+  const [temp, setTemp] = useState([]);
+  const navigation = useNavigation();
+  const [widthArr, setWidthArr] = useState([]);
+  // radio states ...
+  const [radioValues, setRadioValues] = useState({
+    periods: '',
+    qualityofbloodflow: '',
+    painduringcycle: '',
+  });
+
+  const handleRadioChange = (name, value) => {
+    setRadioValues(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   const tableHead1 = [
     {
       key: 1,
@@ -30,12 +52,15 @@ const MenstrualHistory = () => {
             <TextInput
               mode="flat"
               style={[styles.input2]}
-              value={'1'}
+              value={temp['menarche_age'] ?? ''}
               onChangeText={text => {
-                const updatedTemp = [...temp];
-                setTemp(updatedTemp);
+                setTemp(prevState => ({
+                  ...prevState,
+                  menarche_age: text,
+                }));
               }}
               editable={true}
+              keyboardType="numeric"
             />
           </View>
         </>
@@ -56,10 +81,12 @@ const MenstrualHistory = () => {
             <TextInput
               mode="flat"
               style={[styles.input2, {width: '100%'}]}
-              value={'1'}
+              value={temp['lmp'] ?? ''}
               onChangeText={text => {
-                const updatedTemp = [...temp];
-                setTemp(updatedTemp);
+                setTemp(prevState => ({
+                  ...prevState,
+                  lmp: text,
+                }));
               }}
               editable={true}
             />
@@ -75,8 +102,8 @@ const MenstrualHistory = () => {
       content: (
         <>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => handleRadioChange('periods', newValue)}
+            value={radioValues.periods}>
             <View
               style={[
                 styles.radioBtn,
@@ -110,12 +137,15 @@ const MenstrualHistory = () => {
             <TextInput
               mode="flat"
               style={[styles.input2, {width: '100%'}]}
-              value={'1'}
+              value={temp['durations'] ?? ''}
               onChangeText={text => {
-                const updatedTemp = [...temp];
-                setTemp(updatedTemp);
+                setTemp(prevState => ({
+                  ...prevState,
+                  durations: text,
+                }));
               }}
               editable={true}
+              keyboardType="numeric"
             />
           </View>
         </>
@@ -129,8 +159,10 @@ const MenstrualHistory = () => {
       content: (
         <>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue =>
+              handleRadioChange('qualityofbloodflow', newValue)
+            }
+            value={radioValues.qualityofbloodflow}>
             <View
               style={[
                 styles.radioBtn,
@@ -157,12 +189,14 @@ const MenstrualHistory = () => {
   const tableHead6 = [
     {
       key: 6,
-      label: ' Pain during cycle',
+      label: 'Pain during cycle',
       content: (
         <>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue =>
+              handleRadioChange('painduringcycle', newValue)
+            }
+            value={radioValues.painduringcycle}>
             <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="yes" />
@@ -195,24 +229,21 @@ const MenstrualHistory = () => {
             <TextInput
               mode="flat"
               style={[styles.input2]}
-              value={'1'}
+              value={temp['menopause'] ?? ''}
               onChangeText={text => {
-                const updatedTemp = [...temp];
-                setTemp(updatedTemp);
+                setTemp(prevState => ({
+                  ...prevState,
+                  menopause: text,
+                }));
               }}
               editable={true}
+              keyboardType="numeric"
             />
           </View>
         </>
       ),
     },
   ];
-  const [value, setValue] = useState('');
-  const [checked, setChecked] = useState(false);
-  const [text, setText] = useState('');
-  const navigation = useNavigation();
-  const [temp, setTemp] = useState([]);
-  const [widthArr, setWidthArr] = useState([]);
 
   //backHandler ...
   useEffect(() => {
@@ -232,6 +263,44 @@ const MenstrualHistory = () => {
   useEffect(() => {
     setWidthArr([166, 166, ...Array(tableHead1.length - 1).fill(0)]);
   }, []);
+
+  useEffect(() => {
+    // Push radio button values to temp state array
+    setTemp(prev => ({
+      ...prev,
+      ...radioValues,
+    }));
+  }, [radioValues]);
+
+  //  submit handler ....
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-MENSTRUAL-HISTORY',
+      opdmenstrualhistoryarray: [temp],
+    };
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            navigation.navigate('OpdVitals');
+            setTemp([]);
+            setRadioValues({});
+          } else {
+            console.error(`${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       {/* Appbar header */}
@@ -243,6 +312,8 @@ const MenstrualHistory = () => {
         />
         <Appbar.Content title="Menstrual History" />
       </Appbar.Header>
+
+      {/*  */}
       <SafeAreaView style={styles.container}>
         <ScrollView vertical={true}>
           <View>
@@ -322,7 +393,7 @@ const MenstrualHistory = () => {
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('MenstrualHistory')}>
+            onPress={submitTreatmenthandler}>
             Save & Next
           </Button>
 

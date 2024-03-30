@@ -46,11 +46,16 @@ const OpdVitals = () => {
   const [p_systolicbp, setP_SystolicBP] = useState('');
   const [p_diastolicbp, setP_DiastolicBP] = useState('');
   const [p_rsprate, setP_Rsprate] = useState('');
-  const [visible, setVisible] = useState(false);
-  const hideDialog = () => setVisible(false);
-  const {scannedPatientsData, userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData?.data[0];
-  const {patient_id} = scannedPatientsData;
+  const [eyeopening, seteyeopening] = useState('');
+  const [verbalResponse, setverbalResponse] = useState('');
+  const [motorResponse, setmotorResponse] = useState('');
+  const [mildColor, setmildColor] = useState('');
+  const [moderateColor, setmoderateColor] = useState('');
+  const [severeColor, setsevereColor] = useState('');
+
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
   const [validationErrors, setValidationErrors] = React.useState({
     p_temp: '',
     p_pulse: '',
@@ -119,21 +124,28 @@ const OpdVitals = () => {
     }
 
     if (isValidInput) {
+      console.log('valid');
+      const _body = {
+        p_rsprate: p_rsprate,
+        p_diastolicbp: p_diastolicbp,
+        p_systolicbp: p_systolicbp,
+        p_spo2: p_spo2,
+        p_pulse: p_pulse,
+        p_temp: p_temp,
+        eyeopening: eyeopening,
+        motorResponse: motorResponse,
+        verbalResponse: verbalResponse,
+      };
       try {
         await axios
-          .post(`${api.baseurl}/AddMobileVitals`, {
-            reception_id: _id,
+          .post(`${api.baseurl}/AddMobileOpdAssessment  `, {
+            reception_id: reception_id,
             hospital_id: hospital_id,
             patient_id: patient_id,
-            p_rsprate: p_rsprate,
-            p_diastolicbp: p_diastolicbp,
-            p_systolicbp: p_systolicbp,
-            p_spo2: p_spo2,
-            p_pulse: p_pulse,
-            p_temp: p_temp,
-            eyeopening: eyeopening,
-            motorResponse: motorResponse,
-            verbalResponse: verbalResponse,
+            appoint_id: appoint_id,
+            uhid: uhid,
+            api_type: 'OPD-VITALS',
+            opdvitalshistoryarray: [_body],
           })
           .then(res => {
             if (res.data.status === false) {
@@ -151,7 +163,20 @@ const OpdVitals = () => {
                 p_diastolicbp: '',
                 p_rsprate: '',
               });
-              setVisible(true);
+              setP_Temp('');
+              setP_Pulse('');
+              setP_SPO2('');
+              setP_SystolicBP('');
+              setP_DiastolicBP('');
+              setP_Rsprate('');
+              seteyeopening('');
+              setverbalResponse('');
+              setmotorResponse('');
+              setmildColor('');
+              setmoderateColor('');
+              setsevereColor('');
+
+              navigation.navigate('GeneralExamination');
             }
           });
       } catch (error) {
@@ -239,12 +264,6 @@ const OpdVitals = () => {
       value: '1',
     },
   ];
-  const [eyeopening, seteyeopening] = useState('');
-  const [verbalResponse, setverbalResponse] = useState('');
-  const [motorResponse, setmotorResponse] = useState('');
-  const [mildColor, setmildColor] = useState('');
-  const [moderateColor, setmoderateColor] = useState('');
-  const [severeColor, setsevereColor] = useState('');
 
   useEffect(() => {
     const scalecount =
@@ -268,26 +287,6 @@ const OpdVitals = () => {
   }, [eyeopening, verbalResponse, motorResponse]);
   return (
     <>
-      <Portal>
-        <Dialog visible={visible}>
-          <Dialog.Icon icon="check-all" style={{color: 'green'}} />
-          <Dialog.Title style={styles.title}>Success!</Dialog.Title>
-          <Dialog.Content>
-            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
-              Vital Data Add Successfully!
-            </Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => hideDialog()}>Cancel</Button>
-            <Button
-              onPress={() => {
-                navigation.navigate('Epatientvitalhistory'), hideDialog();
-              }}>
-              Ok
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
@@ -295,7 +294,7 @@ const OpdVitals = () => {
             navigation.navigate('MenstrualHistory');
           }}
         />
-        <Appbar.Content title="Menstrual History" />
+        <Appbar.Content title="OPD Vitals" />
       </Appbar.Header>
       <SafeAreaView style={styles.container}>
         <ScrollView vertical>
@@ -622,7 +621,7 @@ const OpdVitals = () => {
             <Button
               mode="contained"
               style={styles.btn}
-              onPress={() => navigation.navigate('OpdVitals')}>
+              onPress={() => addVitalsData()}>
               Save & Next
             </Button>
 
