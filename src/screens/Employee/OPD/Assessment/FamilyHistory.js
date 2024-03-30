@@ -38,13 +38,6 @@ const FamilyHistory = () => {
 
   const [p_category, setP_category] = useState('');
 
-  const [visibleMsg, setVisibleMsg] = useState(false);
-
-  const hideDialog = () => {
-    setVisibleMsg(false);
-    navigation.navigate('EpatientTreatmentHistory');
-  };
-
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id} = scannedPatientsData;
@@ -63,6 +56,7 @@ const FamilyHistory = () => {
 
     return () => backHandler.remove();
   }, []);
+
   useEffect(() => {
     if (searchInput !== '') searchInputHandler();
   }, [searchInput]);
@@ -185,6 +179,8 @@ const FamilyHistory = () => {
       console.error(error);
     }
   };
+
+  // relation data...
   let data = [
     {label: '--Select--', value: ''},
     {label: 'Mother', value: 'Mother'},

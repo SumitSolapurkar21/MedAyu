@@ -6,7 +6,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {
@@ -32,13 +31,8 @@ const MedicineHistory = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [temp, setTemp] = useState([]);
   const [showCalender, setShowCalender] = useState(false);
-  const [dateValues, setDateValues] = useState([]);
+  const [dateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
-
-  const [isFocus, setIsFocus] = useState(false);
-  const [isFocus2, setIsFocus2] = useState(false);
-
-  const [p_category, setP_category] = useState('');
 
   const [visibleMsg, setVisibleMsg] = useState(false);
 
@@ -47,8 +41,9 @@ const MedicineHistory = () => {
     navigation.navigate('EpatientTreatmentHistory');
   };
 
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id} = patientsData;
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -64,6 +59,7 @@ const MedicineHistory = () => {
 
     return () => backHandler.remove();
   }, []);
+
   useEffect(() => {
     if (searchInput !== '') searchInputHandler();
   }, [searchInput]);
@@ -117,41 +113,66 @@ const MedicineHistory = () => {
   };
 
   const handleDateChange = (date, index) => {
+    const [_dateformat] = date.split(' ');
     const updatedTemp = [...temp];
-    updatedTemp[index].dateValues = date; // Update the dateValues property in the temp array
+    updatedTemp[index].dateValues = _dateformat;
     updatedTemp[index].activestatus = true;
+
+    // Convert selectedDate to Date object
+    const selectedDate = new Date(_dateformat);
+    const currentDate = new Date();
+    const yearDifference =
+      currentDate.getFullYear() - selectedDate.getFullYear();
+    const monthDifference =
+      currentDate.getMonth() - selectedDate.getMonth() + yearDifference * 12;
+
+    // Calculate day difference considering only the current month
+    const firstDayOfCurrentMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1,
+    );
+    const lastDayOfCurrentMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0,
+    );
+    const firstDayDifference =
+      Math.floor((lastDayOfCurrentMonth - selectedDate) / (1000 * 3600 * 24)) +
+      1;
+    const lastDayDifference = Math.floor(
+      (currentDate - firstDayOfCurrentMonth) / (1000 * 3600 * 24),
+    );
+
+    const dayDifference = Math.min(lastDayDifference, firstDayDifference);
+
+    updatedTemp[index].days = dayDifference.toString();
+    updatedTemp[index].months = monthDifference.toString();
+    updatedTemp[index].years = yearDifference.toString();
+
     setTemp(updatedTemp);
     setShowCalender(false); // Hide the calendar after selecting a date
   };
 
-  //currrent date  .....
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const currentdate = `${year}-${month}-${day}`;
-
-  // current time .....
-  const hours = String(today.getHours()).padStart(2, '0');
-  const minutes = String(today.getMinutes()).padStart(2, '0');
-  const currenttime = `${hours}:${minutes}`;
   //submit handler ....
   const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-MEDICINE-HISTORY',
+      opdmedicinehistoryarray: temp,
+    };
     try {
       await axios
-        .post(`${api.baseurl}/AddMobileTreatment`, {
-          hospital_id: hospital_id,
-          patient_id: patient_id,
-          reception_id: reception_id,
-          dateadd: currentdate,
-          timeadd: currenttime,
-          medicineprescriptionarray: temp,
-        })
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
-            navigation.navigate('FamilyHistory');
-            setVisibleMsg(true);
+            navigation.navigate('PersonalHistory');
+            //         setVisibleMsg(true);
             setTemp([]);
           } else {
             console.error(`${message}`);
@@ -161,16 +182,8 @@ const MedicineHistory = () => {
       console.error(error);
     }
   };
-  let data = [
-    {
-      label: 'Often',
-      value: 'Often',
-    },
-    {
-      label: 'Once',
-      value: 'Once',
-    },
-  ];
+
+  console.log('drugCode : ', drugCode);
   return (
     <>
       {/* Appbar header */}
@@ -183,21 +196,6 @@ const MedicineHistory = () => {
         <Appbar.Content title="Medicine History" />
       </Appbar.Header>
       <SafeAreaView style={styles.container}>
-        {/* success popup ... */}
-        <Portal>
-          <Dialog visible={visibleMsg}>
-            <Dialog.Title>Success</Dialog.Title>
-            <Dialog.Content>
-              <Text variant="bodyMedium">
-                Treatment Is Added Successfully !
-              </Text>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideDialog}>Done</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-        {/* success popup end .... */}
         {showCalender && (
           <View style={styles.datePickerContainer}>
             <View style={styles.datePicker}>
@@ -240,11 +238,11 @@ const MedicineHistory = () => {
           vertical={true}>
           {visibleList && (
             <View>
-              {drugCode?.map(res => (
+              {drugCode?.map((res, index) => (
                 <List.Item
                   style={styles.listView}
                   title={res?.drugname}
-                  key={res?.drugcode}
+                  key={index + 1}
                   onPress={() => {
                     setSelectedDrugCode({
                       drugcode: res.drugcode,
@@ -268,10 +266,10 @@ const MedicineHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.dose}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].dose = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -282,10 +280,10 @@ const MedicineHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.route}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].route = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -296,10 +294,10 @@ const MedicineHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.schedule}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].schedule = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -325,10 +323,10 @@ const MedicineHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.years}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].years = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -339,10 +337,10 @@ const MedicineHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.months}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].months = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -353,10 +351,10 @@ const MedicineHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.days}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].days = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
