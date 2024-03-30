@@ -1,11 +1,17 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Table, Row, Rows} from 'react-native-table-component';
 import {Appbar, Button, RadioButton} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {BackHandler} from 'react-native';
+import api from '../../../../../api.json';
+import UserContext from '../../../../components/Context/Context';
+import axios from 'axios';
 
 const PersonalHistory = () => {
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -21,329 +27,194 @@ const PersonalHistory = () => {
     return () => backHandler.remove();
   }, []);
   const navigation = useNavigation();
-  const [checked, setChecked] = useState('');
   const tableHead = ['SrNo.', 'Habit', 'None', 'Light', 'Moderate', 'Heavy'];
-  const tableData = [
+
+  const [tableData, setTableData] = useState([
     {
       id: 1,
       label: 'Tea',
-      radio1: (
-        <RadioButton
-          value="None"
-          status={checked === 'first' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('first')}
-        />
-      ),
-      radio2: (
-        <RadioButton
-          value="Light"
-          status={checked === 'Light' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Light')}
-        />
-      ),
-      radio3: (
-        <RadioButton
-          value="Moderate"
-          status={checked === 'Moderate' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Moderate')}
-        />
-      ),
-      radio4: (
-        <RadioButton
-          value="Heavy"
-          status={checked === 'Heavy' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Heavy')}
-        />
-      ),
+      options: [
+        {value: 'tea_none', label: 'None'},
+        {value: 'tea_light', label: 'Light'},
+        {value: 'tea_moderate', label: 'Moderate'},
+        {value: 'tea_heavy', label: 'Heavy'},
+      ],
+      checked: 'tea_none',
     },
     {
       id: 2,
       label: 'Coffee',
-      radio1: (
-        <RadioButton
-          value="None"
-          status={checked === 'first' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('first')}
-        />
-      ),
-      radio2: (
-        <RadioButton
-          value="Light"
-          status={checked === 'Light' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Light')}
-        />
-      ),
-      radio3: (
-        <RadioButton
-          value="Moderate"
-          status={checked === 'Moderate' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Moderate')}
-        />
-      ),
-      radio4: (
-        <RadioButton
-          value="Heavy"
-          status={checked === 'Heavy' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Heavy')}
-        />
-      ),
+      options: [
+        {value: 'coffee_none', label: 'None'},
+        {value: 'coffee_light', label: 'Light'},
+        {value: 'coffee_moderate', label: 'Moderate'},
+        {value: 'coffee_heavy', label: 'Heavy'},
+      ],
+      checked: 'coffee_none',
     },
     {
       id: 3,
-      label: 'Tobacco / Kharra',
-      radio1: (
-        <RadioButton
-          value="None"
-          status={checked === 'first' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('first')}
-        />
-      ),
-      radio2: (
-        <RadioButton
-          value="Light"
-          status={checked === 'Light' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Light')}
-        />
-      ),
-      radio3: (
-        <RadioButton
-          value="Moderate"
-          status={checked === 'Moderate' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Moderate')}
-        />
-      ),
-      radio4: (
-        <RadioButton
-          value="Heavy"
-          status={checked === 'Heavy' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Heavy')}
-        />
-      ),
+      label: 'Tobacco /Kharra',
+      options: [
+        {value: 'tobaco_none', label: 'None'},
+        {value: 'tobaco_light', label: 'Light'},
+        {value: 'tobaco_moderate', label: 'Moderate'},
+        {value: 'tobaco_heavy', label: 'Heavy'},
+      ],
+      checked: 'tobaco_none',
     },
     {
       id: 4,
       label: 'Smoking',
-      radio1: (
-        <RadioButton
-          value="None"
-          status={checked === 'first' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('first')}
-        />
-      ),
-      radio2: (
-        <RadioButton
-          value="Light"
-          status={checked === 'Light' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Light')}
-        />
-      ),
-      radio3: (
-        <RadioButton
-          value="Moderate"
-          status={checked === 'Moderate' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Moderate')}
-        />
-      ),
-      radio4: (
-        <RadioButton
-          value="Heavy"
-          status={checked === 'Heavy' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Heavy')}
-        />
-      ),
+      options: [
+        {value: 'smoking_none', label: 'None'},
+        {value: 'smoking_light', label: 'Light'},
+        {value: 'smoking_moderate', label: 'Moderate'},
+        {value: 'smoking_heavy', label: 'Heavy'},
+      ],
+      checked: 'smoking_none',
     },
     {
       id: 5,
       label: 'Alcohol',
-      radio1: (
-        <RadioButton
-          value="None"
-          status={checked === 'first' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('first')}
-        />
-      ),
-      radio2: (
-        <RadioButton
-          value="Light"
-          status={checked === 'Light' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Light')}
-        />
-      ),
-      radio3: (
-        <RadioButton
-          value="Moderate"
-          status={checked === 'Moderate' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Moderate')}
-        />
-      ),
-      radio4: (
-        <RadioButton
-          value="Heavy"
-          status={checked === 'Heavy' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Heavy')}
-        />
-      ),
+      options: [
+        {value: 'alcohol_none', label: 'None'},
+        {value: 'alcohol_light', label: 'Light'},
+        {value: 'alcohol_moderate', label: 'Moderate'},
+        {value: 'alcohol_heavy', label: 'Heavy'},
+      ],
+      checked: 'alcohol_none',
     },
     {
       id: 6,
       label: 'Drugs',
-      radio1: (
-        <RadioButton
-          value="None"
-          status={checked === 'first' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('first')}
-        />
-      ),
-      radio2: (
-        <RadioButton
-          value="Light"
-          status={checked === 'Light' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Light')}
-        />
-      ),
-      radio3: (
-        <RadioButton
-          value="Moderate"
-          status={checked === 'Moderate' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Moderate')}
-        />
-      ),
-      radio4: (
-        <RadioButton
-          value="Heavy"
-          status={checked === 'Heavy' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Heavy')}
-        />
-      ),
+      options: [
+        {value: 'drugs_none', label: 'None'},
+        {value: 'drugs_light', label: 'Light'},
+        {value: 'drugs_moderate', label: 'Moderate'},
+        {value: 'drugs_heavy', label: 'Heavy'},
+      ],
+      checked: 'drugs_none',
     },
     {
       id: 7,
       label: 'Exercise',
-      radio1: (
-        <RadioButton
-          value="None"
-          status={checked === 'first' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('first')}
-        />
-      ),
-      radio2: (
-        <RadioButton
-          value="Light"
-          status={checked === 'Light' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Light')}
-        />
-      ),
-      radio3: (
-        <RadioButton
-          value="Moderate"
-          status={checked === 'Moderate' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Moderate')}
-        />
-      ),
-      radio4: (
-        <RadioButton
-          value="Heavy"
-          status={checked === 'Heavy' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Heavy')}
-        />
-      ),
+      options: [
+        {value: 'excercise_none', label: 'None'},
+        {value: 'excercise_light', label: 'Light'},
+        {value: 'excercise_moderate', label: 'Moderate'},
+        {value: 'excercise_heavy', label: 'Heavy'},
+      ],
+      checked: 'excercise_none',
     },
     {
       id: 8,
-      label: 'Soft Drinks',
-      radio1: (
-        <RadioButton
-          value="None"
-          status={checked === 'first' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('first')}
-        />
-      ),
-      radio2: (
-        <RadioButton
-          value="Light"
-          status={checked === 'Light' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Light')}
-        />
-      ),
-      radio3: (
-        <RadioButton
-          value="Moderate"
-          status={checked === 'Moderate' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Moderate')}
-        />
-      ),
-      radio4: (
-        <RadioButton
-          value="Heavy"
-          status={checked === 'Heavy' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Heavy')}
-        />
-      ),
+      label: 'Soft Drink',
+      options: [
+        {value: 'soft_none', label: 'None'},
+        {value: 'soft_light', label: 'Light'},
+        {value: 'soft_moderate', label: 'Moderate'},
+        {value: 'soft_heavy', label: 'Heavy'},
+      ],
+      checked: 'soft_none',
     },
     {
       id: 9,
-      label: 'Salty Food',
-      radio1: (
-        <RadioButton
-          value="None"
-          status={checked === 'first' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('first')}
-        />
-      ),
-      radio2: (
-        <RadioButton
-          value="Light"
-          status={checked === 'Light' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Light')}
-        />
-      ),
-      radio3: (
-        <RadioButton
-          value="Moderate"
-          status={checked === 'Moderate' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Moderate')}
-        />
-      ),
-      radio4: (
-        <RadioButton
-          value="Heavy"
-          status={checked === 'Heavy' ? 'checked' : 'unchecked'}
-          onPress={() => setChecked('Heavy')}
-        />
-      ),
+      label: 'Salty food',
+      options: [
+        {value: 'salty_none', label: 'None'},
+        {value: 'salty_light', label: 'Light'},
+        {value: 'salty_moderate', label: 'Moderate'},
+        {value: 'salty_heavy', label: 'Heavy'},
+      ],
+      checked: 'salty_none',
     },
-  ];
+  ]);
+
+  const handleRadioChange = (itemId, value) => {
+    const updatedTableData = tableData.map(item => {
+      if (item.id === itemId) {
+        return {...item, checked: value};
+      }
+      return item;
+    });
+    setTableData(updatedTableData);
+  };
+
+  const personalHistory_data = JSON.stringify(tableData);
+  const parsedData = JSON.parse(personalHistory_data);
+
+  const _filterData = parsedData.map(item => {
+    return {
+      id: item.id,
+      label: item.label,
+      checked: item.checked,
+    };
+  });
 
   const _tableData = tableData?.map(item => {
-    return [
-      item.id,
-      item.label,
-      item.radio1,
-      item.radio2,
-      item.radio3,
-      item.radio4,
-    ];
+    const rowData = [item.id, item.label];
+    item.options.forEach(option => {
+      rowData.push(
+        <RadioButton
+          key={option.value}
+          value={option.value}
+          status={item.checked === option.value ? 'checked' : 'unchecked'}
+          onPress={() => handleRadioChange(item.id, option.value)}
+        />,
+      );
+    });
+    return rowData;
   });
+
   const [widthArr, setWidthArr] = useState([]);
 
   useEffect(() => {
     setWidthArr([
       25,
-      100,
+      90,
       53,
       53,
-      53,
+      63,
       53,
       ...Array(tableHead.length - 1).fill(0),
     ]);
   }, []);
+
+  //  submit handler ....
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-PERSONAL-HISTORY',
+      opdpersonalhistoryarray: _filterData,
+    };
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            navigation.navigate('ObstetricsHistory');
+          } else {
+            console.error(`${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('Ehome');
+            navigation.navigate('MedicineHistory');
           }}
         />
         <Appbar.Content title="Personal History " style={styles.appbar_title} />
@@ -382,7 +253,7 @@ const PersonalHistory = () => {
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('FamilyHistory')}>
+            onPress={() => submitTreatmenthandler()}>
             Save & Next
           </Button>
 
@@ -421,5 +292,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 10,
   },
-  
 });
