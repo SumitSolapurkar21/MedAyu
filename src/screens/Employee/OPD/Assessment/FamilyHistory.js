@@ -6,7 +6,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {
@@ -26,16 +25,15 @@ import {Dropdown} from 'react-native-element-dropdown';
 const FamilyHistory = () => {
   const navigation = useNavigation();
   const [searchInput, setSearchInput] = useState('');
-  const [drugCode, setDrugCode] = useState('');
-  const [selectedDrugCode, setSelectedDrugCode] = useState('');
+  const [illnessCode, setIllnessCode] = useState('');
+  const [selectedIllnessCode, setSelectedIllnessCode] = useState('');
   const [visibleList, setVisibleList] = useState(false);
-  const [selectedData, setSelectedData] = useState([]);
+  const [illnessSelectedData, setIllnessSelectedData] = useState([]);
   const [temp, setTemp] = useState([]);
   const [showCalender, setShowCalender] = useState(false);
-  const [dateValues, setDateValues] = useState([]);
+  const [dateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
 
-  const [isFocus, setIsFocus] = useState(false);
   const [isFocus2, setIsFocus2] = useState(false);
 
   const [p_category, setP_category] = useState('');
@@ -47,8 +45,9 @@ const FamilyHistory = () => {
     navigation.navigate('EpatientTreatmentHistory');
   };
 
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id} = patientsData;
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -69,19 +68,19 @@ const FamilyHistory = () => {
   }, [searchInput]);
 
   useEffect(() => {
-    // Update temp array when selectedDrugCode changes
-    if (selectedDrugCode !== '') {
-      const filteredData = selectedData.filter(
-        res => res.drugcode === selectedDrugCode.drugcode,
+    // Update temp array when selectedIllnessCode changes
+    if (selectedIllnessCode !== '') {
+      const filteredData = illnessSelectedData.filter(
+        res => res.illness_id === selectedIllnessCode.illness_id,
       );
       setTemp(prevData => [...prevData, ...filteredData]);
     }
-  }, [selectedDrugCode, selectedData]);
+  }, [selectedIllnessCode, illnessSelectedData]);
 
   const searchInputHandler = async () => {
     try {
       const response = await axios.post(
-        `${api.baseurl}/search_prescription_data`,
+        `${api.baseurl}/search_opd_past_history`,
         {
           hospital_id: hospital_id,
           patient_id: patient_id,
@@ -89,14 +88,13 @@ const FamilyHistory = () => {
           text: searchInput,
         },
       );
-
-      const _drugCode = response.data.data.map(res => ({
-        drugcode: res.drugcode,
-        drugname: res.drugname,
+      const _illnessCode = response.data.data.map(res => ({
+        illness_id: res.illness_id,
+        illnessname: res.illnessname,
       }));
 
-      setDrugCode(_drugCode);
-      setSelectedData(response.data.data);
+      setIllnessCode(_illnessCode);
+      setIllnessSelectedData(response.data.data);
       setVisibleList(true);
     } catch (error) {
       console.error(error);
@@ -105,7 +103,7 @@ const FamilyHistory = () => {
 
   const resetHandler = () => {
     setSearchInput('');
-    setSelectedDrugCode('');
+    setSelectedIllnessCode('');
     //     setTemp([]);
     //     setVisibleList(false);
   };
@@ -117,41 +115,67 @@ const FamilyHistory = () => {
   };
 
   const handleDateChange = (date, index) => {
+    const [_dateformat] = date.split(' ');
     const updatedTemp = [...temp];
-    updatedTemp[index].dateValues = date; // Update the dateValues property in the temp array
+    updatedTemp[index].dateValues = _dateformat;
     updatedTemp[index].activestatus = true;
+
+    // Convert selectedDate to Date object
+    const selectedDate = new Date(_dateformat);
+    const currentDate = new Date();
+    const yearDifference =
+      currentDate.getFullYear() - selectedDate.getFullYear();
+    const monthDifference =
+      currentDate.getMonth() - selectedDate.getMonth() + yearDifference * 12;
+
+    // Calculate day difference considering only the current month
+    const firstDayOfCurrentMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1,
+    );
+    const lastDayOfCurrentMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0,
+    );
+    const firstDayDifference =
+      Math.floor((lastDayOfCurrentMonth - selectedDate) / (1000 * 3600 * 24)) +
+      1;
+    const lastDayDifference = Math.floor(
+      (currentDate - firstDayOfCurrentMonth) / (1000 * 3600 * 24),
+    );
+
+    const dayDifference = Math.min(lastDayDifference, firstDayDifference);
+
+    updatedTemp[index].days = dayDifference.toString();
+    updatedTemp[index].months = monthDifference.toString();
+    updatedTemp[index].years = yearDifference.toString();
+    updatedTemp[index].treatment_status = p_category;
+
     setTemp(updatedTemp);
     setShowCalender(false); // Hide the calendar after selecting a date
   };
 
-  //currrent date  .....
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const currentdate = `${year}-${month}-${day}`;
-
-  // current time .....
-  const hours = String(today.getHours()).padStart(2, '0');
-  const minutes = String(today.getMinutes()).padStart(2, '0');
-  const currenttime = `${hours}:${minutes}`;
   //submit handler ....
   const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-FAMILY-HISTORY',
+      opdfamilyhistoryarray: temp,
+    };
     try {
       await axios
-        .post(`${api.baseurl}/AddMobileTreatment`, {
-          hospital_id: hospital_id,
-          patient_id: patient_id,
-          reception_id: reception_id,
-          dateadd: currentdate,
-          timeadd: currenttime,
-          medicineprescriptionarray: temp,
-        })
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
-            navigation.navigate('FamilyHistory');
-            setVisibleMsg(true);
+            navigation.navigate('MedicineHistory');
+            //         setVisibleMsg(true);
             setTemp([]);
           } else {
             console.error(`${message}`);
@@ -162,42 +186,202 @@ const FamilyHistory = () => {
     }
   };
   let data = [
+    {label: '--Select--', value: ''},
+    {label: 'Mother', value: 'Mother'},
+    {label: 'Father', value: 'Father'},
+    {label: 'Brother', value: 'Brother'},
+    {label: 'Niece', value: 'Niece'},
+    {label: 'Nephew', value: 'Nephew'},
+    {label: 'Sister', value: 'Sister'},
+    {label: 'Spouse', value: 'Spouse'},
+    {label: 'Elder Brother', value: 'Elder Brother'},
+    {label: 'Elder Sister', value: 'Elder Sister'},
+    {label: 'Younger Brother', value: 'Younger Brother'},
+    {label: 'Younger Sister', value: 'Younger Sister'},
+    {label: 'Son', value: 'Son'},
+    {label: 'Daughter', value: 'Daughter'},
+    {label: 'Husband', value: 'Husband'},
+    {label: 'Wife', value: 'Wife'},
+    {label: 'Fiancé Or Fiancée', value: 'Fiancé Or Fiancée'},
+    {label: 'Aunt', value: 'Aunt'},
+    {label: 'Uncle', value: 'Uncle'},
+    {label: 'Guest', value: 'Guest'},
+    {label: 'Teacher', value: 'Teacher'},
+    {label: 'Step Brother', value: 'Step Brother'},
+    {label: 'Customer', value: 'Customer'},
+    {label: 'Landlord', value: 'Landlord'},
+    {label: 'Friend', value: 'Friend'},
+    {label: 'Lover', value: 'Lover'},
+    {label: 'Girlfriend', value: 'Girlfriend'},
+    {label: 'Boyfriend', value: 'Boyfriend'},
+    {label: 'Client', value: 'Client'},
+    {label: 'Patient', value: 'Patient'},
+    {label: 'Step Sister', value: 'Step Sister'},
+    {label: 'Step Mother', value: 'Step Mother'},
+    {label: 'Step Father', value: 'Step Father'},
+    {label: 'Step Son', value: 'Step Son'},
+    {label: 'Step Daughter', value: 'Step Daughter'},
     {
-      label: 'Often',
-      value: 'Often',
+      label: 'Grandfather (Father Of Mother)',
+      value: 'Grandfather (Father Of Mother)',
     },
     {
-      label: 'Once',
-      value: 'Once',
+      label: 'Grandmother (Mother Of Mother)',
+      value: 'Grandmother (Mother Of Mother)',
     },
+    {label: 'Relative', value: 'Relative'},
+    {label: 'Own', value: 'Own'},
+    {label: 'Maternal-Grandfather', value: 'Maternal-Grandfather'},
+    {label: 'Maternal-Grandmother', value: 'Maternal-Grandmother'},
+    {
+      label: 'Grandfather (Father Of Father)',
+      value: 'Grandfather (Father Of Father)',
+    },
+    {
+      label: 'Grandmother (Mother Of Father)',
+      value: 'Grandmother (Mother Of Father)',
+    },
+    {label: 'Adopted Daughter', value: 'Adopted Daughter'},
+    {label: 'Adopted Son', value: 'Adopted Son'},
+    {
+      label: 'Son’s Wife (Daughter In Law)',
+      value: 'Son’s Wife (Daughter In Law)',
+    },
+    {
+      label: 'Daughter’s Husband (Son In Law)',
+      value: 'Daughter’s Husband (Son In Law)',
+    },
+    {label: 'Son’s Son (Grandson)', value: 'Son’s Son (Grandson)'},
+    {
+      label: 'Son’s Daughter (Grand Daughter)',
+      value: 'Son’s Daughter (Grand Daughter)',
+    },
+    {label: 'Daughter’s Son', value: 'Daughter’s Son'},
+    {label: 'Daughter’s Daughter', value: 'Daughter’s Daughter'},
+    {
+      label: 'Husband Sister (sister In Law)',
+      value: 'Husband Sister (sister In Law)',
+    },
+    {label: 'Father’s Sister', value: 'Father’s Sister'},
+    {label: 'Elder Sister Husband', value: 'Elder Sister Husband'},
+    {label: 'Younger Sister Husband', value: 'Younger Sister Husband'},
+    {
+      label: 'Husband Elder Brother (Brother In Law)',
+      value: 'Husband Elder Brother (Brother In Law)',
+    },
+    {label: 'Husband Younger Brother', value: 'Husband Younger Brother'},
+    {label: 'Elder Brother’s Wife', value: 'Elder Brother’s Wife'},
+    {label: 'Younger Brothers Wife', value: 'Younger Brothers Wife'},
+    {
+      label: 'Wife’s Sister (Sister in Law)',
+      value: 'Wife’s Sister (Sister in Law)',
+    },
+    {label: 'Wife’s Elder Brother', value: 'Wife’s Elder Brother'},
+    {label: 'Wife’s Younger Brother', value: 'Wife’s Younger Brother'},
+    {label: 'Younger Sister Husband', value: 'Younger Sister Husband'},
+    {
+      label: 'Husband’s Elder Brother (Brother In Law)',
+      value: 'Husband’s Elder Brother (Brother In Law)',
+    },
+    {label: 'Wife’s Brother Wife', value: 'Wife’s Brother Wife'},
+    {label: 'Husband Younger Brother', value: 'Husband Younger Brother'},
+    {label: 'Husband’s Sister’s Husband', value: 'Husband’s Sister’s Husband'},
+    {label: 'Wife’s Sister’s Husband', value: 'Wife’s Sister’s Husband'},
+    {
+      label: 'Husband’s Elder Brother’s Wife',
+      value: 'Husband’s Elder Brother’s Wife',
+    },
+    {
+      label: 'Husband’s Younger Brother’s Wife',
+      value: 'Husband’s Younger Brother’s Wife',
+    },
+    {
+      label: 'Father’s Brother’s Son (Cousin)',
+      value: 'Father’s Brother’s Son (Cousin)',
+    },
+    {
+      label: 'Fathers Brother’s Daughter (Cousin)',
+      value: 'Fathers Brother’s Daughter (Cousin)',
+    },
+    {
+      label: 'Father’s Sister’s Son (Cousin)',
+      value: 'Father’s Sister’s Son (Cousin)',
+    },
+    {
+      label: 'Father’s Sister’s Daughter (Cousin)',
+      value: 'Father’s Sister’s Daughter (Cousin)',
+    },
+    {
+      label: 'Mother’s Brother’s Son (Cousin)',
+      value: 'Mother’s Brother’s Son (Cousin)',
+    },
+    {
+      label: 'Mother’s Brother’s Daughter (Cousin)',
+      value: 'Mother’s Brother’s Daughter (Cousin)',
+    },
+    {
+      label: 'Mother’s Sister’s Son (Cousin)',
+      value: 'Mother’s Sister’s Son (Cousin)',
+    },
+    {
+      label: 'Mother’s Sister’s Daughter (Cousin)',
+      value: 'Mother’s Sister’s Daughter (Cousin)',
+    },
+    {
+      label: 'Spouse’s Mother (Mother In Law)',
+      value: 'Spouse’s Mother (Mother In Law)',
+    },
+    {
+      label: 'Spouse’s Father (Father In Law)',
+      value: 'Spouse’s Father (Father In Law)',
+    },
+    {
+      label: 'Father’s Younger Brother (Uncle)',
+      value: 'Father’s Younger Brother (Uncle)',
+    },
+    {
+      label: 'Father’s Elder Brother (Uncle)',
+      value: 'Father’s Elder Brother (Uncle)',
+    },
+    {
+      label: 'Father’s Younger Brother’s Wife (Aunt)',
+      value: 'Father’s Younger Brother’s Wife (Aunt)',
+    },
+    {label: 'Mother’s Brother', value: 'Mother’s Brother'},
+    {label: 'Mother’s Younger Sister', value: 'Mother’s Younger Sister'},
+    {
+      label: 'Mother’s Younger Sister’s Husband',
+      value: 'Mother’s Younger Sister’s Husband',
+    },
+    {
+      label: 'Mother’s Elder Sister’s Husband (Uncle)',
+      value: 'Mother’s Elder Sister’s Husband (Uncle)',
+    },
+    {
+      label: 'Mother’s Elder Sister (Aunt)',
+      value: 'Mother’s Elder Sister (Aunt)',
+    },
+    {label: 'Mother’s Brother Wife', value: 'Mother’s Brother Wife'},
+    {label: 'Mistress', value: 'Mistress'},
+    {label: 'Concubine / Keep Mistress', value: 'Concubine / Keep Mistress'},
+    {label: 'Pupil', value: 'Pupil'},
+    {label: 'Disciple', value: 'Disciple'},
+    {label: 'Preceptor', value: 'Preceptor'},
+    {label: 'Tenant', value: 'Tenant'},
   ];
+
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('OpdComplaints');
+            navigation.navigate('OpdPastHistory');
           }}
         />
         <Appbar.Content title="OPD Family History" />
       </Appbar.Header>
       <SafeAreaView style={styles.container}>
-        {/* success popup ... */}
-        <Portal>
-          <Dialog visible={visibleMsg}>
-            <Dialog.Title>Success</Dialog.Title>
-            <Dialog.Content>
-              <Text variant="bodyMedium">
-                Treatment Is Added Successfully !
-              </Text>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideDialog}>Done</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-        {/* success popup end .... */}
         {showCalender && (
           <View style={styles.datePickerContainer}>
             <View style={styles.datePicker}>
@@ -209,12 +393,13 @@ const FamilyHistory = () => {
                   fontWeight: 'bold',
                   color: Themes[0]?.activeTextColor,
                 }}
-                value={dateValues[datePickerIndex]} // Use separate state variable for each date field
-                onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
+                value={dateValues[datePickerIndex]}
+                onValueChange={date => handleDateChange(date, datePickerIndex)}
               />
             </View>
           </View>
         )}
+
         <Text style={styles.heading}>Family History</Text>
         <TextInput
           mode="outlined"
@@ -222,12 +407,12 @@ const FamilyHistory = () => {
           placeholder="Search Diseases ..."
           style={[styles.input, {marginHorizontal: 14}]}
           value={
-            selectedDrugCode?.drugcode
-              ? selectedDrugCode?.drugcode
+            selectedIllnessCode?.illnessname
+              ? selectedIllnessCode?.illnessname
               : searchInput
           }
           onChangeText={text => {
-            setSearchInput(text), setSelectedDrugCode('');
+            setSearchInput(text), setSelectedIllnessCode('');
           }}
           right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
         />
@@ -235,20 +420,20 @@ const FamilyHistory = () => {
           style={{
             zIndex: 1,
             marginHorizontal: 14,
-            maxHeight: drugCode.length > 0 && visibleList ? 200 : 0,
+            maxHeight: illnessCode.length > 0 && visibleList ? 200 : 0,
           }} // Set a higher zIndex for the ScrollView
           vertical={true}>
           {visibleList && (
             <View>
-              {drugCode?.map(res => (
+              {illnessCode?.map(res => (
                 <List.Item
                   style={styles.listView}
-                  title={res?.drugname}
-                  key={res?.drugcode}
+                  title={res?.illnessname}
+                  key={res?.illness_id}
                   onPress={() => {
-                    setSelectedDrugCode({
-                      drugcode: res.drugcode,
-                      drugname: res.drugname,
+                    setSelectedIllnessCode({
+                      illness_id: res.illness_id,
+                      illnessname: res.illnessname,
                     });
                     setVisibleList(false);
                   }}
@@ -283,10 +468,10 @@ const FamilyHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.years}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].years = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -297,10 +482,10 @@ const FamilyHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.months}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].months = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -311,10 +496,10 @@ const FamilyHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.days}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].days = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -325,10 +510,7 @@ const FamilyHistory = () => {
                   <View>
                     <Dropdown
                       mode={'outlined'}
-                      style={[
-                        styles.dropdown,
-                        isFocus && {borderColor: 'blue'},
-                      ]}
+                      style={[styles.dropdown, {borderColor: 'blue'}]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       inputSearchStyle={styles.inputSearchStyle}
@@ -343,13 +525,16 @@ const FamilyHistory = () => {
                       valueField="value"
                       placeholder={!isFocus2 ? 'Select' : '...'}
                       //   searchPlaceholder="Search..."
-                      value={p_category}
+                      value={res.treatment_status}
                       onFocus={() => setIsFocus2(true)}
                       onBlur={() => setIsFocus2(false)}
                       onChange={item => {
                         setP_category(item.value);
                         //     updateSelectedCategoryData(item.value);
                         setIsFocus2(false);
+                        const updatedTemp = [...temp];
+                        updatedTemp[index].treatment_status = item.value;
+                        setTemp(updatedTemp);
                       }}
                     />
                   </View>
@@ -365,6 +550,8 @@ const FamilyHistory = () => {
             Add More
           </Button>
         </ScrollView>
+
+        {/* submit handlers */}
         <View style={styles.submitbutton}>
           <Button
             mode="contained"

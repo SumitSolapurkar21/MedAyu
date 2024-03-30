@@ -157,18 +157,6 @@ const OpdPastHistory = () => {
     setShowCalender(false); // Hide the calendar after selecting a date
   };
 
-  // //currrent date  .....
-  // const today = new Date();
-  // const year = today.getFullYear();
-  // const month = String(today.getMonth() + 1).padStart(2, '0');
-  // const day = String(today.getDate()).padStart(2, '0');
-  // const currentdate = `${year}-${month}-${day}`;
-
-  // // current time .....
-  // const hours = String(today.getHours()).padStart(2, '0');
-  // const minutes = String(today.getMinutes()).padStart(2, '0');
-  // const currenttime = `${hours}:${minutes}`;
-
   //submit handler ....
   const submitTreatmenthandler = async () => {
     const _body = {
