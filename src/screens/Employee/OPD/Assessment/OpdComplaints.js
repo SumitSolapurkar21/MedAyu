@@ -1,8 +1,6 @@
 import {
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,7 +13,6 @@ import {
   Button,
   Dialog,
   Portal,
-  Snackbar,
   TextInput,
   SegmentedButtons,
   DefaultTheme,
@@ -35,15 +32,18 @@ const OpdComplaints = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   //table content ....
   const [widthArr, setWidthArr] = useState([]);
+  const [widthArr1, setWidthArr1] = useState([]);
 
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id} = patientsData;
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
 
   //popup msg....
   const [visible, setVisible] = useState(false);
   const hideDialog = () => setVisible(false);
 
   const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Action'];
+  const keys2 = ['Category', 'Symptoms', 'Duration', 'Time', 'Frequency'];
   let data = [
     {
       label: 'Often',
@@ -112,65 +112,12 @@ const OpdComplaints = () => {
       keyboardDidHideListener.remove();
     };
   }, []);
+
   // to set width of table ......
   useEffect(() => {
     setWidthArr([120, 80, 120, 150, 150, ...Array(keys.length).fill(2)]);
+    setWidthArr1([120, 120, 80, 120, 110, ...Array(keys2.length).fill(2)]);
   }, []);
-
-  const category = [
-    {
-      value: 'GENERAL',
-      label: 'GENERAL',
-    },
-    {
-      value: 'CARDIO-VASCULAR',
-      label: 'CARDIO-VASCULAR',
-    },
-    {
-      value: 'RESPIRATORY',
-      label: 'RESPIRATORY',
-    },
-    {
-      value: 'Gastro-Intestinal',
-      label: 'GASTRO-INTESTINAL',
-    },
-    {
-      value: 'EYE',
-      label: 'EYE',
-    },
-    {
-      value: 'ENT',
-      label: 'ENT',
-    },
-    {
-      value: 'NEUROLOGICAL',
-      label: 'NEUROLOGICAL',
-    },
-    {
-      value: 'MUSCULO-SKELETAL',
-      label: 'MUSCULO-SKELETAL',
-    },
-    {
-      value: 'GenitoUrinary',
-      label: 'GENITOURINARY',
-    },
-    {
-      value: 'Endocrine',
-      label: 'ENDOCRINE',
-    },
-    {
-      value: 'SKIN',
-      label: 'SKIN',
-    },
-    {
-      value: 'PSYCHITRIC',
-      label: 'PSYCHITRIC',
-    },
-    {
-      value: 'OTHER',
-      label: 'OTHER',
-    },
-  ];
 
   const updateSelectedCategoryData = selectedValue => {
     setSelectedCategoryData(selectedValue);
@@ -185,16 +132,11 @@ const OpdComplaints = () => {
   const [rowData, setRowData] = useState([]);
 
   const inputChangeHandler = (rowIndex, field, text) => {
-    // Copy the existing array
     const newData = [...rowData];
-
-    // Update the specific row and field
     newData[rowIndex] = {
       ...newData[rowIndex],
       [field]: text,
     };
-
-    // Update the state with the new data
     setRowData(newData);
   };
 
@@ -203,9 +145,10 @@ const OpdComplaints = () => {
       FetchMobileComplaintsCategory();
       // setRowData([]);
       // setSelectedCategoryData([]);
-      setP_category('');
+      // setP_category('');
     }
   }, [selectionValue]);
+
   //FetchMobileComplaintsCategory .....
   const FetchMobileComplaintsCategory = async () => {
     await axios
@@ -241,6 +184,7 @@ const OpdComplaints = () => {
         })
         .then(res => {
           const _data = res.data.data.map(res => ({
+            category: res.category,
             symptoms: res.illnessname,
             duration: '',
             time: '',
@@ -260,7 +204,7 @@ const OpdComplaints = () => {
     if (selectedCategoryData !== '') {
       FetchSysmptomsAccCategory();
     }
-    setDropdownValues([]); // Clear the value when category changes
+    setDropdownValues([]);
   }, [selectedCategoryData]);
 
   const _buttonHandler = event => {
@@ -270,30 +214,43 @@ const OpdComplaints = () => {
       navigation.navigate('OpdPastHistory');
     }
   };
+
+  const theme = {
+    ...DefaultTheme,
+    roundness: 0, // Set roundness to 0 to remove borderRadius
+  };
+
+  // Add selected data handler
+  const _addSelectedDataHandler = (_selectedData, _id) => {
+    // Filter out data with the specified id
+    const uniqueData = _selectedData.filter(item => item.id === _id);
+    setSelectedRow(prev => [...prev, ...uniqueData]);
+  };
+
   const submitHandler = async () => {
-    // Filter out the rows where all fields are filled
-    const filledRows = rowData.filter(
-      row =>
-        row.symptoms !== '' &&
-        row.frequency !== '' &&
-        row.duration !== '' &&
-        row.time !== '',
-    );
-
-    // Do something with the filtered rows, for example, send them to the server
-
+    const _body = {
+      hospital_id: hospital_id,
+      reception_id: reception_id,
+      patient_id: patient_id,
+      appoint_id: appoint_id,
+      complaintArray: selectedRow,
+      api_type: 'OPD-COMPLAINTS',
+      uhid: uhid,
+    };
     try {
       await axios
-        .post(`${api.baseurl}/AddMobileComplaints`, {
-          hospital_id: hospital_id,
-          reception_id: reception_id,
-          patient_id: patient_id,
-          category: selectedCategoryData,
-          complaintArray: filledRows,
-        })
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
+            setRowData([]);
+            setSelectedCategoryData([]);
+            setDropdownValues([]);
+            setDropdownValues2([]);
+            setP_category('');
+            setSelectedRow([]);
+            // setVisible(true);
+            // onToggleSnackBar();
             navigation.navigate('OpdPastHistory');
           } else {
             ToastAndroid.show(
@@ -306,40 +263,8 @@ const OpdComplaints = () => {
     } catch (error) {
       console.error(error);
     }
-
-    // Clear the form data
-    setRowData([]);
-    setSelectedCategoryData([]);
-    setDropdownValues([]);
-    setDropdownValues2([]);
-    setP_category('');
-    setVisible(true);
-    // onToggleSnackBar();
-
-    // navigation.navigate('Eipdoptions');
-  };
-  const theme = {
-    ...DefaultTheme,
-    roundness: 0, // Set roundness to 0 to remove borderRadius
   };
 
-  // Add selected data handler
-  const _addSelectedDataHandler = (_selectedData, _id) => {
-    console.log('selected data : ', _selectedData);
-    // const uniqueIds = {};
-    // // Filter out unique data based on the condition frequency !== "" and unique id
-    // const uniqueData = _selectedData.filter(item => {
-    //   if (item.frequency !== '' && !uniqueIds[item.id]) {
-    //     uniqueIds[item.id] = true;
-    //     return true;
-    //   }
-    //   return false;
-    // });
-    // Filter out data with the specified id
-    const uniqueData = _selectedData.filter(item => item.id === _id);
-    setSelectedRow(prev => [...prev, ...uniqueData]);
-  };
-  console.log('selected data : ', selectedRow);
   return (
     <>
       {/* Appbar header */}
@@ -351,25 +276,25 @@ const OpdComplaints = () => {
         />
         <Appbar.Content title="OPD Complaints" />
       </Appbar.Header>
+      <Portal>
+        <Dialog visible={visible}>
+          <Dialog.Icon icon="check-all" style={{color: 'green'}} />
+          <Dialog.Title style={styles.title}>Success!</Dialog.Title>
+          <Dialog.Content>
+            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
+              Complaint Added Successfully!
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => hideDialog()}>Cancel</Button>
+            <Button onPress={() => navigation.navigate('Eipdoptions')}>
+              Ok
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
       <View style={styles.container}>
         {/* after submit Msg... */}
-        <Portal>
-          <Dialog visible={visible}>
-            <Dialog.Icon icon="check-all" style={{color: 'green'}} />
-            <Dialog.Title style={styles.title}>Success!</Dialog.Title>
-            <Dialog.Content>
-              <Text variant="bodyMedium" style={{textAlign: 'center'}}>
-                Complaint Added Successfully!
-              </Text>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={() => hideDialog()}>Cancel</Button>
-              <Button onPress={() => navigation.navigate('Eipdoptions')}>
-                Ok
-              </Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
 
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -416,6 +341,7 @@ const OpdComplaints = () => {
                 onChange={item => {
                   setP_category(item.value);
                   updateSelectedCategoryData(item.value);
+
                   setIsFocus2(false);
                 }}
               />
@@ -426,7 +352,7 @@ const OpdComplaints = () => {
             <Text style={styles.tableWrapper3TXT}>Category Details</Text>
 
             <ScrollView horizontal={true} style={{padding: 10}}>
-              <View style={{height: '90%', minHeight: 300}}>
+              <View style={{height: 'auto', maxHeight: 400}}>
                 <Table
                   borderStyle={{
                     borderWidth: 1,
@@ -516,7 +442,11 @@ const OpdComplaints = () => {
                           style={{width: 'auto', marginHorizontal: 30}}
                           mode="contained"
                           onPress={() =>
-                            _addSelectedDataHandler([...rowData], row.id)
+                            _addSelectedDataHandler(
+                              [...rowData],
+                              row.id,
+                              row.category,
+                            )
                           }>
                           Add
                         </Button>,
@@ -530,6 +460,47 @@ const OpdComplaints = () => {
               </View>
             </ScrollView>
           </View>
+          {selectedRow?.length > 0 && (
+            <View
+              style={[
+                styles.categorySelection,
+                {marginBottom: keyboardHeight},
+              ]}>
+              <ScrollView horizontal={true} style={{padding: 10}}>
+                <View style={{height: 'auto', maxHeight: 400}}>
+                  <Table
+                    borderStyle={{
+                      borderWidth: 1,
+                      borderColor: 'gray',
+                    }}>
+                    <Row
+                      data={keys2}
+                      widthArr={widthArr1}
+                      style={styles.head}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                  <ScrollView vertical={true} style={styles.dataWrapper}>
+                    <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                      <Rows
+                        // data={tableData}
+                        data={selectedRow.map(row => [
+                          row.category,
+                          row.symptoms,
+                          row.duration,
+                          row.time,
+                          row.frequency,
+                        ])}
+                        widthArr={widthArr1}
+                        style={styles.row}
+                        textStyle={styles.text}
+                      />
+                    </Table>
+                  </ScrollView>
+                </View>
+              </ScrollView>
+            </View>
+          )}
         </KeyboardAvoidingView>
         <View style={styles.btn}>
           <Button

@@ -6,7 +6,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {
@@ -26,16 +25,15 @@ import {Dropdown} from 'react-native-element-dropdown';
 const OpdPastHistory = () => {
   const navigation = useNavigation();
   const [searchInput, setSearchInput] = useState('');
-  const [drugCode, setDrugCode] = useState('');
-  const [selectedDrugCode, setSelectedDrugCode] = useState('');
+  const [illnessCode, setIllnessCode] = useState('');
+  const [selectedIllnessCode, setSelectedIllnessCode] = useState('');
   const [visibleList, setVisibleList] = useState(false);
-  const [selectedData, setSelectedData] = useState([]);
+  const [illnessSelectedData, setIllnessSelectedData] = useState([]);
   const [temp, setTemp] = useState([]);
   const [showCalender, setShowCalender] = useState(false);
-  const [dateValues, setDateValues] = useState([]);
+  const [dateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
 
-  const [isFocus, setIsFocus] = useState(false);
   const [isFocus2, setIsFocus2] = useState(false);
 
   const [p_category, setP_category] = useState('');
@@ -47,8 +45,9 @@ const OpdPastHistory = () => {
     navigation.navigate('EpatientTreatmentHistory');
   };
 
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id} = patientsData;
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -69,19 +68,19 @@ const OpdPastHistory = () => {
   }, [searchInput]);
 
   useEffect(() => {
-    // Update temp array when selectedDrugCode changes
-    if (selectedDrugCode !== '') {
-      const filteredData = selectedData.filter(
-        res => res.drugcode === selectedDrugCode.drugcode,
+    // Update temp array when selectedIllnessCode changes
+    if (selectedIllnessCode !== '') {
+      const filteredData = illnessSelectedData.filter(
+        res => res.illness_id === selectedIllnessCode.illness_id,
       );
       setTemp(prevData => [...prevData, ...filteredData]);
     }
-  }, [selectedDrugCode, selectedData]);
+  }, [selectedIllnessCode, illnessSelectedData]);
 
   const searchInputHandler = async () => {
     try {
       const response = await axios.post(
-        `${api.baseurl}/search_prescription_data`,
+        `${api.baseurl}/search_opd_past_history`,
         {
           hospital_id: hospital_id,
           patient_id: patient_id,
@@ -89,14 +88,13 @@ const OpdPastHistory = () => {
           text: searchInput,
         },
       );
-
-      const _drugCode = response.data.data.map(res => ({
-        drugcode: res.drugcode,
-        drugname: res.drugname,
+      const _illnessCode = response.data.data.map(res => ({
+        illness_id: res.illness_id,
+        illnessname: res.illnessname,
       }));
 
-      setDrugCode(_drugCode);
-      setSelectedData(response.data.data);
+      setIllnessCode(_illnessCode);
+      setIllnessSelectedData(response.data.data);
       setVisibleList(true);
     } catch (error) {
       console.error(error);
@@ -105,7 +103,7 @@ const OpdPastHistory = () => {
 
   const resetHandler = () => {
     setSearchInput('');
-    setSelectedDrugCode('');
+    setSelectedIllnessCode('');
     //     setTemp([]);
     //     setVisibleList(false);
   };
@@ -117,41 +115,79 @@ const OpdPastHistory = () => {
   };
 
   const handleDateChange = (date, index) => {
+    const [_dateformat] = date.split(' ');
     const updatedTemp = [...temp];
-    updatedTemp[index].dateValues = date; // Update the dateValues property in the temp array
+    updatedTemp[index].dateValues = _dateformat;
     updatedTemp[index].activestatus = true;
+
+    // Convert selectedDate to Date object
+    const selectedDate = new Date(_dateformat);
+    const currentDate = new Date();
+    const yearDifference =
+      currentDate.getFullYear() - selectedDate.getFullYear();
+    const monthDifference =
+      currentDate.getMonth() - selectedDate.getMonth() + yearDifference * 12;
+
+    // Calculate day difference considering only the current month
+    const firstDayOfCurrentMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1,
+    );
+    const lastDayOfCurrentMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0,
+    );
+    const firstDayDifference =
+      Math.floor((lastDayOfCurrentMonth - selectedDate) / (1000 * 3600 * 24)) +
+      1;
+    const lastDayDifference = Math.floor(
+      (currentDate - firstDayOfCurrentMonth) / (1000 * 3600 * 24),
+    );
+
+    const dayDifference = Math.min(lastDayDifference, firstDayDifference);
+
+    updatedTemp[index].days = dayDifference.toString();
+    updatedTemp[index].months = monthDifference.toString();
+    updatedTemp[index].years = yearDifference.toString();
+    updatedTemp[index].treatment_status = p_category;
+
     setTemp(updatedTemp);
     setShowCalender(false); // Hide the calendar after selecting a date
   };
 
-  //currrent date  .....
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const currentdate = `${year}-${month}-${day}`;
+  // //currrent date  .....
+  // const today = new Date();
+  // const year = today.getFullYear();
+  // const month = String(today.getMonth() + 1).padStart(2, '0');
+  // const day = String(today.getDate()).padStart(2, '0');
+  // const currentdate = `${year}-${month}-${day}`;
 
-  // current time .....
-  const hours = String(today.getHours()).padStart(2, '0');
-  const minutes = String(today.getMinutes()).padStart(2, '0');
-  const currenttime = `${hours}:${minutes}`;
+  // // current time .....
+  // const hours = String(today.getHours()).padStart(2, '0');
+  // const minutes = String(today.getMinutes()).padStart(2, '0');
+  // const currenttime = `${hours}:${minutes}`;
+
   //submit handler ....
   const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-PAST-HISTORY',
+      opdpasthistoryarray: temp,
+    };
     try {
       await axios
-        .post(`${api.baseurl}/AddMobileTreatment`, {
-          hospital_id: hospital_id,
-          patient_id: patient_id,
-          reception_id: reception_id,
-          dateadd: currentdate,
-          timeadd: currenttime,
-          medicineprescriptionarray: temp,
-        })
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
             navigation.navigate('FamilyHistory');
-            setVisibleMsg(true);
+            //         setVisibleMsg(true);
             setTemp([]);
           } else {
             console.error(`${message}`);
@@ -163,14 +199,15 @@ const OpdPastHistory = () => {
   };
   let data = [
     {
-      label: 'Often',
-      value: 'Often',
+      label: 'Treated',
+      value: 'Treated',
     },
     {
-      label: 'Once',
-      value: 'Once',
+      label: 'On Treatment',
+      value: 'Treatment',
     },
   ];
+
   return (
     <>
       {/* Appbar header */}
@@ -209,12 +246,13 @@ const OpdPastHistory = () => {
                   fontWeight: 'bold',
                   color: Themes[0]?.activeTextColor,
                 }}
-                value={dateValues[datePickerIndex]} // Use separate state variable for each date field
-                onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
+                value={dateValues[datePickerIndex]}
+                onValueChange={date => handleDateChange(date, datePickerIndex)}
               />
             </View>
           </View>
         )}
+
         <Text style={styles.heading}>Past History</Text>
         <TextInput
           mode="outlined"
@@ -222,12 +260,12 @@ const OpdPastHistory = () => {
           placeholder="Search Diseases ..."
           style={[styles.input, {marginHorizontal: 14}]}
           value={
-            selectedDrugCode?.drugcode
-              ? selectedDrugCode?.drugcode
+            selectedIllnessCode?.illnessname
+              ? selectedIllnessCode?.illnessname
               : searchInput
           }
           onChangeText={text => {
-            setSearchInput(text), setSelectedDrugCode('');
+            setSearchInput(text), setSelectedIllnessCode('');
           }}
           right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
         />
@@ -235,20 +273,20 @@ const OpdPastHistory = () => {
           style={{
             zIndex: 1,
             marginHorizontal: 14,
-            maxHeight: drugCode.length > 0 && visibleList ? 200 : 0,
+            maxHeight: illnessCode.length > 0 && visibleList ? 200 : 0,
           }} // Set a higher zIndex for the ScrollView
           vertical={true}>
           {visibleList && (
             <View>
-              {drugCode?.map(res => (
+              {illnessCode?.map(res => (
                 <List.Item
                   style={styles.listView}
-                  title={res?.drugname}
-                  key={res?.drugcode}
+                  title={res?.illnessname}
+                  key={res?.illness_id}
                   onPress={() => {
-                    setSelectedDrugCode({
-                      drugcode: res.drugcode,
-                      drugname: res.drugname,
+                    setSelectedIllnessCode({
+                      illness_id: res.illness_id,
+                      illnessname: res.illnessname,
                     });
                     setVisibleList(false);
                   }}
@@ -283,10 +321,10 @@ const OpdPastHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.years}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].years = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -297,10 +335,10 @@ const OpdPastHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.months}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].months = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -311,10 +349,10 @@ const OpdPastHistory = () => {
                   <TextInput
                     mode="flat"
                     style={[styles.input2]}
-                    value={res.duration}
+                    value={res.days}
                     onChangeText={text => {
                       const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
+                      updatedTemp[index].days = text;
                       setTemp(updatedTemp);
                     }}
                     editable={true}
@@ -327,10 +365,7 @@ const OpdPastHistory = () => {
                   <View>
                     <Dropdown
                       mode={'outlined'}
-                      style={[
-                        styles.dropdown,
-                        isFocus && {borderColor: 'blue'},
-                      ]}
+                      style={[styles.dropdown, {borderColor: 'blue'}]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       inputSearchStyle={styles.inputSearchStyle}
@@ -345,13 +380,16 @@ const OpdPastHistory = () => {
                       valueField="value"
                       placeholder={!isFocus2 ? 'Select' : '...'}
                       //   searchPlaceholder="Search..."
-                      value={p_category}
+                      value={res.treatment_status}
                       onFocus={() => setIsFocus2(true)}
                       onBlur={() => setIsFocus2(false)}
                       onChange={item => {
                         setP_category(item.value);
                         //     updateSelectedCategoryData(item.value);
                         setIsFocus2(false);
+                        const updatedTemp = [...temp];
+                        updatedTemp[index].treatment_status = item.value;
+                        setTemp(updatedTemp);
                       }}
                     />
                   </View>
@@ -367,6 +405,8 @@ const OpdPastHistory = () => {
             Add More
           </Button>
         </ScrollView>
+
+        {/* submit handlers */}
         <View style={styles.submitbutton}>
           <Button
             mode="contained"
