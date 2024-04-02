@@ -33,10 +33,11 @@ const OpdComplaints = () => {
   //table content ....
   const [widthArr, setWidthArr] = useState([]);
   const [widthArr1, setWidthArr1] = useState([]);
+  const [widthArr2, setWidthArr2] = useState([]);
 
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id} = scannedPatientsData;
+  const {appoint_id, mobilenumber} = scannedPatientsData;
 
   //popup msg....
   const [visible, setVisible] = useState(false);
@@ -44,6 +45,14 @@ const OpdComplaints = () => {
 
   const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Action'];
   const keys2 = ['Category', 'Symptoms', 'Duration', 'Time', 'Frequency'];
+  const keys3 = [
+    'Category',
+    'Symptoms',
+    'Duration',
+    'Time',
+    'Frequency',
+    'Date / Time',
+  ];
   let data = [
     {
       label: 'Often',
@@ -117,6 +126,7 @@ const OpdComplaints = () => {
   useEffect(() => {
     setWidthArr([120, 80, 120, 150, 150, ...Array(keys.length).fill(2)]);
     setWidthArr1([120, 120, 80, 120, 110, ...Array(keys2.length).fill(2)]);
+    setWidthArr2([120, 120, 80, 120, 110, 110, ...Array(keys3.length).fill(2)]);
   }, []);
 
   const updateSelectedCategoryData = selectedValue => {
@@ -130,6 +140,7 @@ const OpdComplaints = () => {
   const [selectionCategory, setSelectionCategory] = useState([]);
 
   const [rowData, setRowData] = useState([]);
+  const [opdAssessment, setOpdAssessment] = useState([]);
 
   const inputChangeHandler = (rowIndex, field, text) => {
     const newData = [...rowData];
@@ -193,6 +204,32 @@ const OpdComplaints = () => {
           }));
 
           setRowData(_data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    FetchMobileOpdAssessment();
+    return () => {};
+  }, [hospital_id, patient_id, reception_id]);
+
+  //list of FetchMobileOpdAssessment....
+  const FetchMobileOpdAssessment = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
+          hospital_id: hospital_id,
+          reception_id: reception_id,
+          patient_id: patient_id,
+          appoint_id: appoint_id,
+          api_type: 'OPD-COMPLAINTS',
+          uhid: uhid,
+          mobilenumber: mobilenumber,
+        })
+        .then(res => {
+          setOpdAssessment(res.data.data);
         });
     } catch (error) {
       console.error(error);
@@ -516,6 +553,45 @@ const OpdComplaints = () => {
             Skip
           </Button>
         </View>
+        {opdAssessment?.length > 0 && (
+          <View
+            style={[styles.categorySelection, {marginBottom: keyboardHeight}]}>
+            <ScrollView horizontal={true} style={{padding: 10}}>
+              <View style={{height: 'auto', maxHeight: 400}}>
+                <Table
+                  borderStyle={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                  }}>
+                  <Row
+                    data={keys3}
+                    widthArr={widthArr2}
+                    style={styles.head}
+                    textStyle={styles.text}
+                  />
+                </Table>
+                <ScrollView vertical={true} style={styles.dataWrapper}>
+                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                    <Rows
+                      // data={tableData}
+                      data={opdAssessment.map(row => [
+                        row.category,
+                        row.symptoms,
+                        row.duration,
+                        row.time,
+                        row.frequency,
+                        `${row.opd_date} / ${row.opd_time}`,
+                      ])}
+                      widthArr={widthArr2}
+                      style={styles.row}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                </ScrollView>
+              </View>
+            </ScrollView>
+          </View>
+        )}
       </View>
     </>
   );

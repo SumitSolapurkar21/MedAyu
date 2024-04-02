@@ -15,9 +15,11 @@ import {Appbar, Checkbox, Button} from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
 
 const OpdPlanOfCare = () => {
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
   const navigation = useNavigation();
-  const [value, setValue] = useState('');
-  const [checked, setChecked] = useState('');
+  const [checkedValues, setCheckedValues] = useState({});
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -32,6 +34,15 @@ const OpdPlanOfCare = () => {
 
     return () => backHandler.remove();
   }, []);
+  // checkbox handler .....
+
+  // Function to handle checkbox toggle
+  const handleCheckboxToggle = key => {
+    setCheckedValues(prevState => ({
+      ...prevState,
+      [key]: !prevState[key], // Toggle the checkbox value
+    }));
+  };
 
   //
   const tableHead8 = ['Plan of Care'];
@@ -44,49 +55,51 @@ const OpdPlanOfCare = () => {
           <View style={styles.radioBtn}>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'PREVENTIVE' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('PREVENTIVE')}
+                value="preventive"
+                status={checkedValues['preventive'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('preventive')}
               />
               <Text>PREVENTIVE</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'CURATIVE' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('CURATIVE')}
+                value="curative"
+                status={checkedValues['curative'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('curative')}
               />
               <Text>CURATIVE</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'SUPPORTIVE' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('SUPPORTIVE')}
+                value="supportive"
+                status={checkedValues['supportive'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('supportive')}
               />
               <Text>SUPPORTIVE</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'REHABILITATIVE' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('REHABILITATIVE')}
+                value="rehabilitative"
+                status={
+                  checkedValues['rehabilitative'] ? 'checked' : 'unchecked'
+                }
+                onPress={() => handleCheckboxToggle('rehabilitative')}
               />
               <Text>REHABILITATIVE</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'PALLATIVE' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('PALLATIVE')}
+                value="pallative"
+                status={checkedValues['pallative'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('pallative')}
               />
               <Text>PALLATIVE</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'EOL CARE' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('EOL CARE')}
+                value="eolcare"
+                status={checkedValues['eolcare'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('eolcare')}
               />
               <Text>EOL CARE</Text>
             </View>
@@ -103,77 +116,79 @@ const OpdPlanOfCare = () => {
             <View style={styles.radioBtn}>
               <Text>THERPAY PLAN : </Text>
               <Checkbox
-                value="None"
-                status={checked === 'MEDICNE' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('MEDICNE')}
+                value="medicine"
+                status={checkedValues['medicine'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('medicine')}
               />
               <Text>MEDICNE</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'SURGERY' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('SURGERY')}
+                value="surgery"
+                status={checkedValues['surgery'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('surgery')}
               />
               <Text>SURGERY</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'PROCEDURE' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('PROCEDURE')}
+                value="procedure"
+                status={checkedValues['procedure'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('procedure')}
               />
               <Text>PROCEDURE</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'PHYSIOTHERAPY' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('PHYSIOTHERAPY')}
+                value="physiotherapy"
+                status={
+                  checkedValues['physiotherapy'] ? 'checked' : 'unchecked'
+                }
+                onPress={() => handleCheckboxToggle('physiotherapy')}
               />
               <Text>PHYSIOTHERAPY</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'DIET THERAPY' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('DIET THERAPY')}
+                value="diettherapy"
+                status={checkedValues['diettherapy'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('diettherapy')}
               />
               <Text>DIET THERAPY</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
+                value="occupationaltherapy"
                 status={
-                  checked === 'OCCUPATIONAL THERAPY' ? 'checked' : 'unchecked'
+                  checkedValues['occupationaltherapy'] ? 'checked' : 'unchecked'
                 }
-                onPress={() => setChecked('OCCUPATIONAL THERAPY')}
+                onPress={() => handleCheckboxToggle('occupationaltherapy')}
               />
               <Text>OCCUPATIONAL THERAPY</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'COUNSELLING' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('COUNSELLING')}
+                value="counselling"
+                status={checkedValues['counselling'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('counselling')}
               />
               <Text>COUNSELLING</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
+                value="physical therapy"
                 status={
-                  checked === 'PHYSICAL THERAPY' ? 'checked' : 'unchecked'
+                  checkedValues['physicaltherapy'] ? 'checked' : 'unchecked'
                 }
-                onPress={() => setChecked('PHYSICAL THERAPY')}
+                onPress={() => handleCheckboxToggle('physicaltherapy')}
               />
               <Text>PHYSICAL THERAPY</Text>
             </View>
             <View style={styles.radioBtn}>
               <Checkbox
-                value="None"
-                status={checked === 'OTHER' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('OTHER')}
+                value="other"
+                status={checkedValues['other'] ? 'checked' : 'unchecked'}
+                onPress={() => handleCheckboxToggle('other')}
               />
               <Text>OTHER</Text>
             </View>
@@ -191,6 +206,35 @@ const OpdPlanOfCare = () => {
     setheadWidthArr([340, ...Array(tableHead8.length - 1).fill(0)]);
     setWidthArr([338, ...Array(_tableData8.length - 1).fill(0)]);
   }, []);
+
+  //  submit handler ....
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-PLAN-OF-CARE',
+      opdplanofcarehistoryarray: [checkedValues],
+    };
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            navigation.navigate('OpdTreatment');
+            setCheckedValues({});
+          } else {
+            console.error(`${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       {/* Appbar header */}
@@ -231,9 +275,7 @@ const OpdPlanOfCare = () => {
             onPress={() => navigation.navigate('OpdDiagnosis')}>
             Previous
           </Button>
-          <Button
-            mode="contained"
-            onPress={() => navigation.navigate('OpdTreatment')}>
+          <Button mode="contained" onPress={() => submitTreatmenthandler()}>
             Save & Next
           </Button>
 

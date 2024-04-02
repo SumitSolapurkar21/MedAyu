@@ -1,15 +1,11 @@
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  Searchbar,
   RadioButton,
   List,
   TextInput,
   Button,
   Snackbar,
-  DataTable,
-  Portal,
-  Dialog,
   Appbar,
 } from 'react-native-paper';
 import axios from 'axios';
@@ -25,17 +21,16 @@ const OpdDiagnosis = () => {
   const [checked, setChecked] = useState('');
   const [visible, setVisible] = useState(false);
   const [searchDiagnosisData, setSearchDiagnosisData] = useState([]);
-  const [diagnosisList, setDiagnosisList] = useState([]);
   const [visibleList, setVisibleList] = useState(false);
-  //table content ....
-  const [tableData, setTableData] = useState([]);
+
   const [widthArr, setWidthArr] = useState([]);
+  const [diagnosisArray, setDiagnosisArray] = useState([]);
 
   const keys = [
     'Sr.No',
     'Diagnosis',
     'Diagnosis Type',
-    'Entry By',
+    // 'Entry By',
     'Date/Time',
   ];
 
@@ -45,31 +40,14 @@ const OpdDiagnosis = () => {
     setWidthArr([60, ...Array(keys.length - 1).fill(170)]);
   }, []);
 
-  const onDismissSnackBar = () => setVisible(false);
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id} = patientsData;
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
 
   useEffect(() => {
     if (searchQuery != '') search_Diagnosis_data();
   }, [searchQuery]);
 
-  // snakebar ....
-  const snakebar = message => {
-    return (
-      <Snackbar
-        visible={visible}
-        onDismiss={onDismissSnackBar}
-        action={{
-          label: 'Close',
-          onPress: () => {
-            // Do something
-          },
-        }}>
-        <Text>{message}</Text>
-        {/* Data Not Available */}
-      </Snackbar>
-    );
-  };
   //   search_Mobile_Diagnosis_data ......
   const search_Diagnosis_data = async () => {
     try {
@@ -80,9 +58,6 @@ const OpdDiagnosis = () => {
         })
         .then(res => {
           if (res.data.status === false) {
-            setVisible(true);
-            const message = res.data.message;
-            snakebar(message);
           } else {
             const data = res.data.data;
             setSearchDiagnosisData(data);
@@ -100,8 +75,7 @@ const OpdDiagnosis = () => {
   let ILLNESSID = selectedDiagnosis?.illness_id;
 
   const [visible1, setVisible1] = useState(false);
-  const [visibleMsg, setVisibleMsg] = useState(false);
-  const hideDialog = () => setVisibleMsg(false);
+
   //add mobile diagnosis ....
   const AddMobileDiagnosis = async () => {
     try {
@@ -110,23 +84,28 @@ const OpdDiagnosis = () => {
         setVisible1(true);
         return;
       }
+
+      const opddiagnosishistoryarray = {
+        reception_id: reception_id,
+        hospital_id: hospital_id,
+        patient_id: patient_id,
+        api_type: 'OPD-DIAGNOSIS',
+        appoint_id: appoint_id,
+        opddiagnosishistoryarray: diagnosisArray,
+      };
       await axios
-        .post(`${api.baseurl}/AddMobileDiagnosis`, {
-          reception_id: reception_id,
-          hospital_id: hospital_id,
-          patient_id: patient_id,
-          illnessname: ILLNESSNAME,
-          illness_id: ILLNESSID,
-          diagnosis_type: checked,
-        })
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, opddiagnosishistoryarray)
         .then(res => {
           if (res.data.status === false) {
-            setVisible(true);
             const message = res.data;
-            snakebar(message);
+            console.error(message);
           } else {
-            setVisibleMsg(true);
-            FetchMobileDiagnosis();
+            setSearchQuery('');
+            setSelectedDiagnosis({});
+            setChecked('');
+            setDiagnosisArray([]);
+            navigation.navigate('OpdInvestigation');
+            // FetchMobileDiagnosis();
           }
         });
     } catch (error) {
@@ -134,47 +113,38 @@ const OpdDiagnosis = () => {
     }
   };
 
-  useEffect(() => {
-    FetchMobileDiagnosis();
-  }, [patient_id]);
-  //add mobile diagnosis ....
-  const FetchMobileDiagnosis = async () => {
-    try {
-      await axios
-        .post(`${api.baseurl}/FetchMobileDiagnosis`, {
-          reception_id: reception_id,
-          hospital_id: hospital_id,
-          patient_id: patient_id,
-        })
-        .then(res => {
-          if (res.data.status === false) {
-            setVisible(true);
-            const message = res.data;
-            snakebar(message);
-          } else {
-            const data = res.data.data;
-            setDiagnosisList(data);
-            const dataArray = data.map((res, index) => [
-              index + 1,
-              res.illnessname,
-              res.diagnosis_type,
-              res.name,
-              `${res.diagnosis_date} / ${res.diagnosis_time}`,
-            ]);
-            setTableData(dataArray);
-          }
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const currentdate = `${year}-${month}-${day}`;
+
+  // current time .....
+  const hours = String(today.getHours()).padStart(2, '0');
+  const minutes = String(today.getMinutes()).padStart(2, '0');
+  const currenttime = `${hours}:${minutes}`;
 
   const submithandler = () => {
-    AddMobileDiagnosis();
-    setSearchQuery('');
-    setSelectedDiagnosis({});
-    setChecked('');
+    const _data = [
+      {
+        illnessname: ILLNESSNAME,
+        illness_id: ILLNESSID,
+        diagnosis_type: checked,
+        adddate: currentdate,
+        addtime: currenttime,
+        api_type: 'OPD-DIAGNOSIS',
+        uhid: uhid,
+        appoint_id: appoint_id,
+      },
+    ];
+    setDiagnosisArray(prev => [...prev, ..._data]);
+
+    // AddMobileDiagnosis();
+    // setSearchQuery('');
+    // setSelectedDiagnosis({});
+    // setChecked('');
   };
+
   return (
     <>
       {/* Appbar header */}
@@ -187,21 +157,6 @@ const OpdDiagnosis = () => {
         <Appbar.Content title="OPD Diagnosis" style={styles.appbar_title} />
       </Appbar.Header>
       <View style={styles.container}>
-        {visible && snakebar()}
-        {visibleMsg && (
-          <Portal>
-            <Dialog visible={visibleMsg}>
-              <Dialog.Title>Success</Dialog.Title>
-              <Dialog.Content>
-                <Text variant="bodyMedium">Diagnosis Data Inserted </Text>
-              </Dialog.Content>
-              <Dialog.Actions>
-                <Button onPress={() => setVisibleMsg(false)}>Done</Button>
-              </Dialog.Actions>
-            </Dialog>
-          </Portal>
-        )}
-
         <View style={styles.card}>
           <View style={styles.search}>
             <Text style={styles.searchTxt}>Diagnosis</Text>
@@ -272,7 +227,7 @@ const OpdDiagnosis = () => {
           </View>
           <View style={styles.btn}>
             <Button mode="contained" onPress={() => submithandler()}>
-              Save
+              Add
             </Button>
           </View>
           <ScrollView horizontal={true} style={{padding: 10}}>
@@ -295,7 +250,15 @@ const OpdDiagnosis = () => {
                 nestedScrollEnabled={true}>
                 <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
                   <Rows
-                    data={tableData}
+                    // data={tableData}
+                    data={diagnosisArray?.map((row, index) => [
+                      index + 1,
+                      row.illnessname,
+                      row.diagnosis_type,
+                      `${row.adddate} / ${row.addtime}`,
+                      // row.time,
+                      // row.frequency,
+                    ])}
                     widthArr={widthArr}
                     style={styles.row}
                     textStyle={styles.text}
@@ -311,9 +274,7 @@ const OpdDiagnosis = () => {
             onPress={() => navigation.navigate('SystemicExamination')}>
             Previous
           </Button>
-          <Button
-            mode="contained"
-            onPress={() => navigation.navigate('OpdInvestigation')}>
+          <Button mode="contained" onPress={() => AddMobileDiagnosis()}>
             Save & Next
           </Button>
 

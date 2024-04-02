@@ -22,6 +22,7 @@ const MenstrualHistory = () => {
   const [temp, setTemp] = useState([]);
   const navigation = useNavigation();
   const [widthArr, setWidthArr] = useState([]);
+
   // radio states ...
   const [radioValues, setRadioValues] = useState({
     periods: '',

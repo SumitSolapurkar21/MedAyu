@@ -15,7 +15,9 @@ import {Appbar, RadioButton, Button} from 'react-native-paper';
 
 const GeneralExamination = () => {
   const navigation = useNavigation();
-  const [value, setValue] = useState('');
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -31,6 +33,21 @@ const GeneralExamination = () => {
     return () => backHandler.remove();
   }, []);
 
+  // radio states ...
+  const [radioValues, setRadioValues] = useState({
+    pallor: '',
+    cyanosis: '',
+    icterus: '',
+    ln: '',
+    odema: '',
+  });
+
+  const handleRadioChange = (name, value) => {
+    setRadioValues(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   const _data = [
     {
       id: 1,
@@ -38,8 +55,8 @@ const GeneralExamination = () => {
       content: (
         <>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => handleRadioChange('pallor', newValue)}
+            value={radioValues.pallor}>
             <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
@@ -60,8 +77,8 @@ const GeneralExamination = () => {
       content: (
         <>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => handleRadioChange('cyanosis', newValue)}
+            value={radioValues.cyanosis}>
             <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
@@ -82,8 +99,8 @@ const GeneralExamination = () => {
       content: (
         <>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => handleRadioChange('icterus', newValue)}
+            value={radioValues.icterus}>
             <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
@@ -104,8 +121,8 @@ const GeneralExamination = () => {
       content: (
         <>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => handleRadioChange('ln', newValue)}
+            value={radioValues.ln}>
             <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
@@ -126,8 +143,8 @@ const GeneralExamination = () => {
       content: (
         <>
           <RadioButton.Group
-            onValueChange={newValue => setValue(newValue)}
-            value={value}>
+            onValueChange={newValue => handleRadioChange('odema', newValue)}
+            value={radioValues.odema}>
             <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
@@ -172,6 +189,34 @@ const GeneralExamination = () => {
       </View>
     </ScrollView>
   );
+
+  //  submit handler ....
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-GENERAL-EXAMINATION',
+      opdgeneralexaminationhistoryarray: [radioValues],
+    };
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            setRadioValues({});
+            navigation.navigate('SystemicExamination');
+          } else {
+            console.error(`${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       {/* Appbar header */}
@@ -204,7 +249,7 @@ const GeneralExamination = () => {
         <Button
           mode="contained"
           style={styles.btn}
-          onPress={() => navigation.navigate('SystemicExamination')}>
+          onPress={() => submitTreatmenthandler()}>
           Save & Next
         </Button>
 

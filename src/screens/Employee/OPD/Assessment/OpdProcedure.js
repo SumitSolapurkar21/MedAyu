@@ -40,6 +40,7 @@ const OpdProcedure = () => {
 
     return () => backHandler.remove();
   }, []);
+
   const navigation = useNavigation();
   const {patientsData} = useContext(UserContext);
   const {hospital_id} = patientsData;

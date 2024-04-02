@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   BackHandler,
 } from 'react-native';
@@ -23,6 +22,10 @@ import DateTimePicker from 'react-native-ui-datepicker';
 import {useNavigation} from '@react-navigation/native';
 
 const OpdTreatment = () => {
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id} = scannedPatientsData;
+
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -37,6 +40,7 @@ const OpdTreatment = () => {
 
     return () => backHandler.remove();
   }, []);
+
   const navigation = useNavigation();
   const [searchInput, setSearchInput] = useState('');
   const [drugCode, setDrugCode] = useState('');
@@ -45,18 +49,8 @@ const OpdTreatment = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [temp, setTemp] = useState([]);
   const [showCalender, setShowCalender] = useState(false);
-  const [dateValues, setDateValues] = useState([]);
+  const [dateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
-
-  const [visibleMsg, setVisibleMsg] = useState(false);
-
-  const hideDialog = () => {
-    setVisibleMsg(false);
-    navigation.navigate('EpatientTreatmentHistory');
-  };
-
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id} = patientsData;
 
   useEffect(() => {
     if (searchInput !== '') searchInputHandler();
@@ -111,41 +105,33 @@ const OpdTreatment = () => {
   };
 
   const handleDateChange = (date, index) => {
+    const [_dateformat] = date.split(' ');
     const updatedTemp = [...temp];
-    updatedTemp[index].dateValues = date; // Update the dateValues property in the temp array
+    updatedTemp[index].dateValues = _dateformat; // Update the dateValues property in the temp array
     updatedTemp[index].activestatus = true;
     setTemp(updatedTemp);
     setShowCalender(false); // Hide the calendar after selecting a date
   };
 
-  //currrent date  .....
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const currentdate = `${year}-${month}-${day}`;
-
-  // current time .....
-  const hours = String(today.getHours()).padStart(2, '0');
-  const minutes = String(today.getMinutes()).padStart(2, '0');
-  const currenttime = `${hours}:${minutes}`;
   //submit handler ....
   const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-TREATMENT',
+      opdtreatmenthistoryarray: temp,
+    };
     try {
       await axios
-        .post(`${api.baseurl}/AddMobileTreatment`, {
-          hospital_id: hospital_id,
-          patient_id: patient_id,
-          reception_id: reception_id,
-          dateadd: currentdate,
-          timeadd: currenttime,
-          medicineprescriptionarray: temp,
-        })
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
-            setVisibleMsg(true);
             setTemp([]);
+            navigation.navigate('OpdProcedure');
           } else {
             console.error(`${message}`);
           }
@@ -160,27 +146,12 @@ const OpdTreatment = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('OpdInvestigation');
+            navigation.navigate('OpdPlanOfCare');
           }}
         />
         <Appbar.Content title="OPD Treatment" style={styles.appbar_title} />
       </Appbar.Header>
       <SafeAreaView style={styles.container}>
-        {/* success popup ... */}
-        <Portal>
-          <Dialog visible={visibleMsg}>
-            <Dialog.Title>Success</Dialog.Title>
-            <Dialog.Content>
-              <Text variant="bodyMedium">
-                Treatment Is Added Successfully !
-              </Text>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideDialog}>Done</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-        {/* success popup end .... */}
         {showCalender && (
           <View style={styles.datePickerContainer}>
             <View style={styles.datePicker}>
@@ -223,11 +194,11 @@ const OpdTreatment = () => {
           vertical={true}>
           {visibleList && (
             <View>
-              {drugCode?.map(res => (
+              {drugCode?.map((res, index) => (
                 <List.Item
                   style={styles.listView}
                   title={res?.drugname}
-                  key={res?.drugcode}
+                  key={index + 1}
                   onPress={() => {
                     setSelectedDrugCode({
                       drugcode: res.drugcode,
@@ -245,7 +216,7 @@ const OpdTreatment = () => {
           style={styles.inputGroup}>
           {temp.map((res, index) => {
             return (
-              <View style={styles.card} key={index}>
+              <View style={styles.card} key={index + 1}>
                 <View style={styles.cardContent}>
                   <Text style={styles.label}>Drug Code : </Text>
                   <TextInput
@@ -395,7 +366,7 @@ const OpdTreatment = () => {
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('OpdProcedure')}>
+            onPress={() => submitTreatmenthandler()}>
             Save & Next
           </Button>
           <Button
@@ -433,9 +404,9 @@ const styles = StyleSheet.create({
     //     backgroundColor: '#ffffff',
     paddingTop: 0,
     paddingLeft: 0,
-    height: 35,
-    width: 210,
-    maxWidth: 220,
+    height: 45,
+    width: '100%',
+    // maxWidth: 220,
   },
   addButton: {
     marginVertical: 10,
@@ -459,8 +430,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   cardContent: {
-    flexDirection: 'row',
-    padding: 5,
+    flexDirection: 'column',
+    padding: 12,
   },
   label: {
     fontWeight: '600',
