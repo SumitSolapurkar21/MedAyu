@@ -1,10 +1,24 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {BackHandler, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Appbar, Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
 const OpdInvestigation = () => {
   const navigation = useNavigation();
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.replace('OpdDiagnosis');
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   return (
     <>
       {/* Appbar header */}

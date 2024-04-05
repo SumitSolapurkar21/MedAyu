@@ -7,6 +7,8 @@ import {
   View,
   Keyboard,
   ToastAndroid,
+  SafeAreaView,
+  BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {
@@ -97,6 +99,22 @@ const OpdComplaints = () => {
       value: 'Year',
     },
   ];
+
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.replace('OpdHomePage');
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -330,64 +348,167 @@ const OpdComplaints = () => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-      <View style={styles.container}>
-        {/* after submit Msg... */}
+      {/* after submit Msg... */}
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}>
-          <SegmentedButtons
-            theme={theme}
-            style={styles.segmentBtn}
-            value={selectionValue}
-            onValueChange={setSelectionValue}
-            buttons={[
-              {
-                value: 'Medical',
-                label: 'Medical',
-              },
-              {
-                value: 'Ayurvedic',
-                label: 'Ayurvedic',
-              },
-            ]}
-          />
-          <View style={styles.formGroup}>
-            <Text style={styles.tableWrapper3TXT}>Category</Text>
-            <View style={{width: '70%'}}>
-              <Dropdown
-                mode={'outlined'}
-                style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={selectionCategory?.map(res => ({
-                  label: res.categoryname,
-                  value: res.categoryvalue,
-                }))}
-                search
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus2 ? 'Select' : '...'}
-                searchPlaceholder="Search..."
-                value={p_category}
-                onFocus={() => setIsFocus2(true)}
-                onBlur={() => setIsFocus2(false)}
-                onChange={item => {
-                  setP_category(item.value);
-                  updateSelectedCategoryData(item.value);
+      <ScrollView vertical style={styles.container}>
+        <SegmentedButtons
+          theme={theme}
+          style={styles.segmentBtn}
+          value={selectionValue}
+          onValueChange={setSelectionValue}
+          buttons={[
+            {
+              value: 'Medical',
+              label: 'Medical',
+            },
+            {
+              value: 'Ayurvedic',
+              label: 'Ayurvedic',
+            },
+          ]}
+        />
+        <View style={styles.formGroup}>
+          <Text style={styles.tableWrapper3TXT}>Category</Text>
+          <View style={{width: '70%'}}>
+            <Dropdown
+              mode={'outlined'}
+              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={selectionCategory?.map(res => ({
+                label: res.categoryname,
+                value: res.categoryvalue,
+              }))}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus2 ? 'Select' : '...'}
+              searchPlaceholder="Search..."
+              value={p_category}
+              onFocus={() => setIsFocus2(true)}
+              onBlur={() => setIsFocus2(false)}
+              onChange={item => {
+                setP_category(item.value);
+                updateSelectedCategoryData(item.value);
 
-                  setIsFocus2(false);
-                }}
-              />
-            </View>
+                setIsFocus2(false);
+              }}
+            />
           </View>
-          <View
-            style={[styles.categorySelection, {marginBottom: keyboardHeight}]}>
-            <Text style={styles.tableWrapper3TXT}>Category Details</Text>
+        </View>
+        <View style={[styles.categorySelection]}>
+          <Text style={styles.tableWrapper3TXT}>Category Details</Text>
 
+          <ScrollView horizontal={true} style={{padding: 10}}>
+            <View style={{height: 'auto', maxHeight: 400}}>
+              <Table
+                borderStyle={{
+                  borderWidth: 1,
+                  borderColor: 'gray',
+                }}>
+                <Row
+                  data={keys}
+                  widthArr={widthArr}
+                  style={styles.head}
+                  textStyle={styles.text}
+                />
+              </Table>
+              <ScrollView vertical={true} style={styles.dataWrapper}>
+                <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                  <Rows
+                    // data={tableData}
+                    data={rowData.map((row, rowIndex) => [
+                      row.symptoms,
+                      <TextInput
+                        key={row.id}
+                        style={styles.tableInput}
+                        keyboardType="numeric"
+                        onChangeText={text =>
+                          inputChangeHandler(rowIndex, 'duration', text)
+                        }
+                      />,
+                      <Dropdown
+                        key={row.id}
+                        style={[
+                          styles.dropdown,
+                          isFocus && {borderColor: 'blue'},
+                        ]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data2}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={!isFocus2 ? 'Select' : '...'}
+                        value={dropdownValues2[row.id] || ''}
+                        onFocus={() => setIsFocus2(true)}
+                        onBlur={() => setIsFocus2(false)}
+                        onChange={item => {
+                          setDropdownValues2(prevValues => ({
+                            ...prevValues,
+                            [row.id]: item.value,
+                          }));
+                          setIsFocus2(false);
+                          inputChangeHandler(rowIndex, 'time', item.value);
+                        }}
+                      />,
+                      <Dropdown
+                        key={row.id}
+                        style={[
+                          styles.dropdown,
+                          isFocus && {borderColor: 'blue'},
+                        ]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={!isFocus ? 'Select' : '...'}
+                        value={dropdownValues[row.id] || ''}
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+                        onChange={item => {
+                          setDropdownValues(prevValues => ({
+                            ...prevValues,
+                            [row.id]: item.value,
+                          }));
+                          setIsFocus(false);
+                          inputChangeHandler(rowIndex, 'frequency', item.value);
+                        }}
+                      />,
+                      <Button
+                        key={row.id}
+                        style={{width: 'auto', marginHorizontal: 30}}
+                        mode="contained"
+                        onPress={() =>
+                          _addSelectedDataHandler(
+                            [...rowData],
+                            row.id,
+                            row.category,
+                          )
+                        }>
+                        Add
+                      </Button>,
+                    ])}
+                    widthArr={widthArr}
+                    style={styles.row}
+                    textStyle={styles.text}
+                  />
+                </Table>
+              </ScrollView>
+            </View>
+          </ScrollView>
+        </View>
+        {selectedRow?.length > 0 && (
+          <View style={[styles.categorySelection]}>
             <ScrollView horizontal={true} style={{padding: 10}}>
               <View style={{height: 'auto', maxHeight: 400}}>
                 <Table
@@ -396,8 +517,8 @@ const OpdComplaints = () => {
                     borderColor: 'gray',
                   }}>
                   <Row
-                    data={keys}
-                    widthArr={widthArr}
+                    data={keys2}
+                    widthArr={widthArr1}
                     style={styles.head}
                     textStyle={styles.text}
                   />
@@ -406,89 +527,14 @@ const OpdComplaints = () => {
                   <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
                     <Rows
                       // data={tableData}
-                      data={rowData.map((row, rowIndex) => [
+                      data={selectedRow.map(row => [
+                        row.category,
                         row.symptoms,
-                        <TextInput
-                          key={row.id}
-                          style={styles.tableInput}
-                          keyboardType="numeric"
-                          onChangeText={text =>
-                            inputChangeHandler(rowIndex, 'duration', text)
-                          }
-                        />,
-                        <Dropdown
-                          key={row.id}
-                          style={[
-                            styles.dropdown,
-                            isFocus && {borderColor: 'blue'},
-                          ]}
-                          placeholderStyle={styles.placeholderStyle}
-                          selectedTextStyle={styles.selectedTextStyle}
-                          inputSearchStyle={styles.inputSearchStyle}
-                          iconStyle={styles.iconStyle}
-                          data={data2}
-                          maxHeight={300}
-                          labelField="label"
-                          valueField="value"
-                          placeholder={!isFocus2 ? 'Select' : '...'}
-                          value={dropdownValues2[row.id] || ''}
-                          onFocus={() => setIsFocus2(true)}
-                          onBlur={() => setIsFocus2(false)}
-                          onChange={item => {
-                            setDropdownValues2(prevValues => ({
-                              ...prevValues,
-                              [row.id]: item.value,
-                            }));
-                            setIsFocus2(false);
-                            inputChangeHandler(rowIndex, 'time', item.value);
-                          }}
-                        />,
-                        <Dropdown
-                          key={row.id}
-                          style={[
-                            styles.dropdown,
-                            isFocus && {borderColor: 'blue'},
-                          ]}
-                          placeholderStyle={styles.placeholderStyle}
-                          selectedTextStyle={styles.selectedTextStyle}
-                          inputSearchStyle={styles.inputSearchStyle}
-                          iconStyle={styles.iconStyle}
-                          data={data}
-                          maxHeight={300}
-                          labelField="label"
-                          valueField="value"
-                          placeholder={!isFocus ? 'Select' : '...'}
-                          value={dropdownValues[row.id] || ''}
-                          onFocus={() => setIsFocus(true)}
-                          onBlur={() => setIsFocus(false)}
-                          onChange={item => {
-                            setDropdownValues(prevValues => ({
-                              ...prevValues,
-                              [row.id]: item.value,
-                            }));
-                            setIsFocus(false);
-                            inputChangeHandler(
-                              rowIndex,
-                              'frequency',
-                              item.value,
-                            );
-                          }}
-                        />,
-                        <Button
-                          key={row.id}
-                          style={{width: 'auto', marginHorizontal: 30}}
-                          mode="contained"
-                          onPress={() =>
-                            _addSelectedDataHandler(
-                              [...rowData],
-                              row.id,
-                              row.category,
-                            )
-                          }>
-                          Add
-                        </Button>,
+                        row.duration,
+                        row.time,
+                        row.frequency,
                       ])}
-                      widthArr={widthArr}
+                      widthArr={widthArr1}
                       style={styles.row}
                       textStyle={styles.text}
                     />
@@ -497,48 +543,7 @@ const OpdComplaints = () => {
               </View>
             </ScrollView>
           </View>
-          {selectedRow?.length > 0 && (
-            <View
-              style={[
-                styles.categorySelection,
-                {marginBottom: keyboardHeight},
-              ]}>
-              <ScrollView horizontal={true} style={{padding: 10}}>
-                <View style={{height: 'auto', maxHeight: 400}}>
-                  <Table
-                    borderStyle={{
-                      borderWidth: 1,
-                      borderColor: 'gray',
-                    }}>
-                    <Row
-                      data={keys2}
-                      widthArr={widthArr1}
-                      style={styles.head}
-                      textStyle={styles.text}
-                    />
-                  </Table>
-                  <ScrollView vertical={true} style={styles.dataWrapper}>
-                    <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                      <Rows
-                        // data={tableData}
-                        data={selectedRow.map(row => [
-                          row.category,
-                          row.symptoms,
-                          row.duration,
-                          row.time,
-                          row.frequency,
-                        ])}
-                        widthArr={widthArr1}
-                        style={styles.row}
-                        textStyle={styles.text}
-                      />
-                    </Table>
-                  </ScrollView>
-                </View>
-              </ScrollView>
-            </View>
-          )}
-        </KeyboardAvoidingView>
+        )}
         <View style={styles.btn}>
           <Button
             style={styles.submitBtn}
@@ -592,7 +597,7 @@ const OpdComplaints = () => {
             </ScrollView>
           </View>
         )}
-      </View>
+      </ScrollView>
     </>
   );
 };

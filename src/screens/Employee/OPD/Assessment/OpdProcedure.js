@@ -29,7 +29,7 @@ const OpdProcedure = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('OpdTreatment');
+      navigation.replace('OpdTreatment');
       return true;
     };
 
@@ -150,7 +150,7 @@ const OpdProcedure = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('OpdTreatment');
+            navigation.replace('OpdTreatment');
           }}
         />
         <Appbar.Content title="OPD Procedure" style={styles.appbar_title} />

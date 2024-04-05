@@ -1,12 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  BackHandler,
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {BackHandler, ScrollView, StyleSheet, Text, View} from 'react-native';
 import axios from 'axios';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
@@ -17,13 +10,14 @@ import {Table, Row, Rows} from 'react-native-table-component';
 const OpdPlanOfCare = () => {
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id} = scannedPatientsData;
+  const {appoint_id, mobilenumber} = scannedPatientsData;
+
   const navigation = useNavigation();
   const [checkedValues, setCheckedValues] = useState({});
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('OpdInvestigation');
+      navigation.replace('OpdInvestigation');
       return true;
     };
 
@@ -234,19 +228,57 @@ const OpdPlanOfCare = () => {
       console.error(error);
     }
   };
-
+  const [opdAssessment, setOpdAssessment] = useState([]);
+  const keys3 = [
+    'Preventive',
+    'Medicine',
+    'Physiotherapy',
+    'Physicaltherapy',
+    'Date / Time',
+  ];
+  const [widthArr2, setWidthArr2] = useState([]);
+  useEffect(() => {
+    setWidthArr2([120, 120, 150, 120, 120, ...Array(keys3.length).fill(2)]);
+  }, []);
+  useEffect(() => {
+    FetchMobileOpdAssessment();
+    return () => {};
+  }, [hospital_id, patient_id, reception_id]);
+  //list of FetchMobileOpdAssessment....
+  const FetchMobileOpdAssessment = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
+          hospital_id: hospital_id,
+          reception_id: reception_id,
+          patient_id: patient_id,
+          appoint_id: appoint_id,
+          api_type: 'OPD-PLAN-OF-CARE',
+          uhid: uhid,
+          mobilenumber: mobilenumber,
+        })
+        .then(res => {
+          setOpdAssessment(res.data.data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('OpdInvestigation');
+            navigation.replace('OpdInvestigation');
           }}
         />
         <Appbar.Content title="OPD Plan oF Care" style={styles.appbar_title} />
       </Appbar.Header>
-      <View style={styles.container}>
+      <ScrollView
+        vertical
+        showsVerticalScrollIndicator={false}
+        style={styles.container}>
         {/*  */}
         <View style={styles.tableDiv}>
           <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
@@ -272,7 +304,7 @@ const OpdPlanOfCare = () => {
         <View style={styles.submitbutton}>
           <Button
             mode="contained"
-            onPress={() => navigation.navigate('OpdDiagnosis')}>
+            onPress={() => navigation.replace('OpdInvestigation')}>
             Previous
           </Button>
           <Button mode="contained" onPress={() => submitTreatmenthandler()}>
@@ -285,7 +317,47 @@ const OpdPlanOfCare = () => {
             Skip
           </Button>
         </View>
-      </View>
+        {opdAssessment?.length > 0 && (
+          <View style={[styles.categorySelection]}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={{padding: 10}}>
+              <View style={{height: 'auto', maxHeight: 400}}>
+                <Table
+                  borderStyle={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                  }}>
+                  <Row
+                    data={keys3}
+                    widthArr={widthArr2}
+                    style={styles.head}
+                    textStyle={styles.text}
+                  />
+                </Table>
+                <ScrollView vertical={true} style={styles.dataWrapper}>
+                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                    <Rows
+                      // data={tableData}
+                      data={opdAssessment.map(row => [
+                        row.preventive ? 'Yes' : 'No', // Example, modify based on your data structure
+                        row.medicine ? 'Yes' : 'No',
+                        row.physiotherapy ? 'Yes' : 'No',
+                        row.physicaltherapy ? 'Yes' : 'No',
+                        `${row.opd_date} / ${row.opd_time}`,
+                      ])}
+                      widthArr={widthArr2}
+                      style={styles.row}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                </ScrollView>
+              </View>
+            </ScrollView>
+          </View>
+        )}
+      </ScrollView>
     </>
   );
 };
@@ -296,9 +368,9 @@ const styles = StyleSheet.create({
   submitbutton: {
     flexDirection: 'row',
     gap: 10,
-    bottom: 10,
-    position: 'absolute',
-    textAlign: 'center',
+    // bottom: 10,
+    // position: 'absolute',
+    // textAlign: 'center',
     alignSelf: 'center',
   },
   container: {

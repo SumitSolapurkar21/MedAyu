@@ -12,16 +12,17 @@ import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import {Appbar, RadioButton, Button} from 'react-native-paper';
+import {Table, Row, Rows} from 'react-native-table-component';
 
 const GeneralExamination = () => {
   const navigation = useNavigation();
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id} = scannedPatientsData;
+  const {appoint_id, mobilenumber} = scannedPatientsData;
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('OpdVitals');
+      navigation.replace('OpdVitals');
       return true;
     };
 
@@ -217,49 +218,128 @@ const GeneralExamination = () => {
       console.error(error);
     }
   };
+
+  const [opdAssessment, setOpdAssessment] = useState([]);
+  const keys3 = ['Pallor', 'Cyanosis', 'Icterus', 'LN', 'Odema', 'Date / Time'];
+  const [widthArr2, setWidthArr2] = useState([]);
+  useEffect(() => {
+    setWidthArr2([
+      100,
+      100,
+      100,
+      100,
+      100,
+      120,
+      ...Array(keys3.length).fill(2),
+    ]);
+  }, []);
+  useEffect(() => {
+    FetchMobileOpdAssessment();
+    return () => {};
+  }, [hospital_id, patient_id, reception_id]);
+  //list of FetchMobileOpdAssessment....
+  const FetchMobileOpdAssessment = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
+          hospital_id: hospital_id,
+          reception_id: reception_id,
+          patient_id: patient_id,
+          appoint_id: appoint_id,
+          api_type: 'OPD-GENERAL-EXAMINATION',
+          uhid: uhid,
+          mobilenumber: mobilenumber,
+        })
+        .then(res => {
+          setOpdAssessment(res.data.data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('OpdVitals');
+            navigation.replace('OpdVitals');
           }}
         />
         <Appbar.Content title="General Examination" />
       </Appbar.Header>
-      <ScrollView horizontal>
-        <View style={{padding: 10}}>
-          <FlatList
-            data={_data}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-          />
+      <ScrollView vertical>
+        <ScrollView horizontal>
+          <View style={{padding: 10}}>
+            <FlatList
+              data={_data}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+            />
+          </View>
+        </ScrollView>
+        {/* Group Buttons .....  */}
+        <View style={styles.submitbutton}>
+          <Button
+            mode="contained"
+            style={styles.btn}
+            onPress={() => navigation.navigate('OpdVitals')}>
+            Previous
+          </Button>
+
+          <Button
+            mode="contained"
+            style={styles.btn}
+            onPress={() => submitTreatmenthandler()}>
+            Save & Next
+          </Button>
+
+          <Button
+            mode="contained"
+            style={styles.btn}
+            onPress={() => navigation.navigate('SystemicExamination')}>
+            Skip
+          </Button>
         </View>
+        {opdAssessment?.length > 0 && (
+          <View style={[styles.categorySelection]}>
+            <ScrollView horizontal={true} style={{padding: 10}}>
+              <View style={{height: 'auto', maxHeight: 400}}>
+                <Table
+                  borderStyle={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                  }}>
+                  <Row
+                    data={keys3}
+                    widthArr={widthArr2}
+                    style={styles.head}
+                    textStyle={styles.text}
+                  />
+                </Table>
+                <ScrollView vertical={true} style={styles.dataWrapper}>
+                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                    <Rows
+                      // data={tableData}
+                      data={opdAssessment.map(row => [
+                        row.pallor,
+                        row.cyanosis,
+                        row.icterus,
+                        row.ln,
+                        row.odema,
+                        `${row.opd_date} / ${row.opd_time}`,
+                      ])}
+                      widthArr={widthArr2}
+                      style={styles.row}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                </ScrollView>
+              </View>
+            </ScrollView>
+          </View>
+        )}
       </ScrollView>
-      {/* Group Buttons .....  */}
-      <View style={styles.submitbutton}>
-        <Button
-          mode="contained"
-          style={styles.btn}
-          onPress={() => navigation.navigate('OpdVitals')}>
-          Previous
-        </Button>
-
-        <Button
-          mode="contained"
-          style={styles.btn}
-          onPress={() => submitTreatmenthandler()}>
-          Save & Next
-        </Button>
-
-        <Button
-          mode="contained"
-          style={styles.btn}
-          onPress={() => navigation.navigate('SystemicExamination')}>
-          Skip
-        </Button>
-      </View>
     </>
   );
 };
@@ -290,4 +370,7 @@ const styles = StyleSheet.create({
     gap: 10,
     marginVertical: 10,
   },
+  head: {height: 40, backgroundColor: '#80aaff'},
+  text: {textAlign: 'center', color: 'black', padding: 2},
+  row: {height: 'auto'},
 });

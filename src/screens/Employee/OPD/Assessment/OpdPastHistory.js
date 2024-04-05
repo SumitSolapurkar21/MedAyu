@@ -41,11 +41,6 @@ const OpdPastHistory = () => {
 
   const [visibleMsg, setVisibleMsg] = useState(false);
 
-  const hideDialog = () => {
-    setVisibleMsg(false);
-    navigation.navigate('EpatientTreatmentHistory');
-  };
-
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -53,7 +48,7 @@ const OpdPastHistory = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('OpdComplaints');
+      navigation.replace('OpdComplaints');
       return true;
     };
 
@@ -241,27 +236,12 @@ const OpdPastHistory = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('OpdComplaints');
+            navigation.replace('OpdComplaints');
           }}
         />
         <Appbar.Content title="OPD Past History" />
       </Appbar.Header>
-      <SafeAreaView style={styles.container}>
-        {/* success popup ... */}
-        <Portal>
-          <Dialog visible={visibleMsg}>
-            <Dialog.Title>Success</Dialog.Title>
-            <Dialog.Content>
-              <Text variant="bodyMedium">
-                Treatment Is Added Successfully !
-              </Text>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideDialog}>Done</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-        {/* success popup end .... */}
+      <ScrollView vertical style={styles.container}>
         {showCalender && (
           <View style={styles.datePickerContainer}>
             <View style={styles.datePicker}>
@@ -438,7 +418,7 @@ const OpdPastHistory = () => {
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('OpdComplaints')}>
+            onPress={() => navigation.replace('OpdComplaints')}>
             Previous
           </Button>
           <Button
@@ -492,7 +472,7 @@ const OpdPastHistory = () => {
             </ScrollView>
           </View>
         )}
-      </SafeAreaView>
+      </ScrollView>
     </>
   );
 };

@@ -20,16 +20,17 @@ import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {useNavigation} from '@react-navigation/native';
+import {Table, Row, Rows} from 'react-native-table-component';
 
 const OpdTreatment = () => {
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id} = scannedPatientsData;
+  const {appoint_id, mobilenumber} = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('OpdPlanOfCare');
+      navigation.replace('OpdPlanOfCare');
       return true;
     };
 
@@ -140,18 +141,70 @@ const OpdTreatment = () => {
       console.error(error);
     }
   };
+
+  const [opdAssessment, setOpdAssessment] = useState([]);
+  const keys3 = [
+    'Drug Code',
+    'Drug Name',
+    'Brand Name',
+    'Dose',
+    'Instruction',
+    'Route',
+    'Days',
+    'From Date',
+    'Date / Time',
+  ];
+  const [widthArr2, setWidthArr2] = useState([]);
+  useEffect(() => {
+    setWidthArr2([
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      ...Array(keys3.length).fill(2),
+    ]);
+  }, []);
+  useEffect(() => {
+    FetchMobileOpdAssessment();
+    return () => {};
+  }, [hospital_id, patient_id, reception_id]);
+  //list of FetchMobileOpdAssessment....
+  const FetchMobileOpdAssessment = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
+          hospital_id: hospital_id,
+          reception_id: reception_id,
+          patient_id: patient_id,
+          appoint_id: appoint_id,
+          api_type: 'OPD-TREATMENT',
+          uhid: uhid,
+          mobilenumber: mobilenumber,
+        })
+        .then(res => {
+          setOpdAssessment(res.data.data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('OpdPlanOfCare');
+            navigation.replace('OpdPlanOfCare');
           }}
         />
         <Appbar.Content title="OPD Treatment" style={styles.appbar_title} />
       </Appbar.Header>
-      <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container}>
         {showCalender && (
           <View style={styles.datePickerContainer}>
             <View style={styles.datePicker}>
@@ -360,7 +413,7 @@ const OpdTreatment = () => {
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('OpdPlanOfCare')}>
+            onPress={() => navigation.replace('OpdPlanOfCare')}>
             Previous
           </Button>
           <Button
@@ -376,7 +429,54 @@ const OpdTreatment = () => {
             Skip
           </Button>
         </View>
-      </SafeAreaView>
+        {opdAssessment?.length > 0 && (
+          <View style={[styles.categorySelection]}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={{padding: 10}}>
+              <View style={{height: 'auto', maxHeight: 400}}>
+                <Table
+                  borderStyle={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                  }}>
+                  <Row
+                    data={keys3}
+                    widthArr={widthArr2}
+                    style={styles.head}
+                    textStyle={styles.text}
+                  />
+                </Table>
+                <ScrollView
+                  vertical={true}
+                  showsVerticalScrollIndicator={false}
+                  style={styles.dataWrapper}>
+                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                    <Rows
+                      // data={tableData}
+                      data={opdAssessment.map(row => [
+                        row.drugcode,
+                        row.drugname,
+                        row.brandname,
+                        row.dose,
+                        row.anupan,
+                        row.route,
+                        row.schedule,
+                        row.dateValues,
+                        `${row.opd_date} / ${row.opd_time}`,
+                      ])}
+                      widthArr={widthArr2}
+                      style={styles.row}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                </ScrollView>
+              </View>
+            </ScrollView>
+          </View>
+        )}
+      </ScrollView>
     </>
   );
 };
@@ -466,4 +566,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 10,
   },
+  head: {height: 40, backgroundColor: '#80aaff'},
+  text: {textAlign: 'center', color: 'black', padding: 2},
+  row: {height: 'auto'},
 });

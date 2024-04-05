@@ -75,6 +75,11 @@ import OpdInvestigation from '../screens/Employee/OPD/Assessment/OpdInvestigatio
 import OpdPlanOfCare from '../screens/Employee/OPD/Assessment/OpdPlanOfCare';
 import OpdTreatment from '../screens/Employee/OPD/Assessment/OpdTreatment';
 import OpdProcedure from '../screens/Employee/OPD/Assessment/OpdProcedure';
+import Home from '../screens/Patients/Home';
+import Consult from '../screens/Patients/Consult';
+import Medicines from '../screens/Patients/Medicines';
+import Tests from '../screens/Patients/Tests';
+import HealthRecords from '../screens/Patients/HealthRecords';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

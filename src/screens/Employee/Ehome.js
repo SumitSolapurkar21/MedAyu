@@ -20,11 +20,13 @@ import UserContext from '../../components/Context/Context';
 import pr from '../../images/pr.png';
 import ss from '../../images/sss.png';
 import attendence from '../../images/calendar.png';
-import axios from 'axios';
-import api from '../../../api.json';
+// import axios from 'axios';
+// import api from '../../../api.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Ehome = () => {
+  
+  // ........ //
   const navigation = useNavigation();
 
   const {userData, setIsLoggedIn, setPatientSelectedValue} =
@@ -70,7 +72,7 @@ const Ehome = () => {
       <View style={styles.outerHeader}>
         <View style={styles.hlcontent}>
           <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>Hi {userData.username} </Text>
+          <Text style={styles.uName}>Hi {userData?.username} </Text>
         </View>
         <View style={styles.hrcontent}>
           <TouchableOpacity

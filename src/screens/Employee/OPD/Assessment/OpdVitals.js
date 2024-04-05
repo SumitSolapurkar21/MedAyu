@@ -23,12 +23,13 @@ import sysbp from '../../../../images/sysbp.png';
 import diabp from '../../../../images/diabp.png';
 import DropDown from 'react-native-paper-dropdown';
 import {BackHandler} from 'react-native';
+import {Table, Row, Rows} from 'react-native-table-component';
 
 const OpdVitals = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('MenstrualHistory');
+      navigation.replace('MenstrualHistory');
       return true;
     };
 
@@ -55,7 +56,8 @@ const OpdVitals = () => {
 
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id} = scannedPatientsData;
+  const {appoint_id, mobilenumber} = scannedPatientsData;
+
   const [validationErrors, setValidationErrors] = React.useState({
     p_temp: '',
     p_pulse: '',
@@ -285,329 +287,377 @@ const OpdVitals = () => {
       null;
     }
   }, [eyeopening, verbalResponse, motorResponse]);
+
+  const [opdAssessment, setOpdAssessment] = useState([]);
+  const keys3 = [
+    'Temp',
+    'Pulse',
+    'SPO2',
+    'Systolic BP',
+    'Diastolic BP',
+    'RESP.Rate',
+    'Eye Opening',
+    'Verbal Resp.',
+    'Motor Resp.',
+    'Date / Time',
+  ];
+  const [widthArr2, setWidthArr2] = useState([]);
+  useEffect(() => {
+    setWidthArr2([
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      ...Array(keys3.length).fill(2),
+    ]);
+  }, []);
+  useEffect(() => {
+    FetchMobileOpdAssessment();
+    return () => {};
+  }, [hospital_id, patient_id, reception_id]);
+  //list of FetchMobileOpdAssessment....
+  const FetchMobileOpdAssessment = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
+          hospital_id: hospital_id,
+          reception_id: reception_id,
+          patient_id: patient_id,
+          appoint_id: appoint_id,
+          api_type: 'OPD-VITALS',
+          uhid: uhid,
+          mobilenumber: mobilenumber,
+        })
+        .then(res => {
+          setOpdAssessment(res.data.data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('MenstrualHistory');
+            navigation.replace('MenstrualHistory');
           }}
         />
         <Appbar.Content title="OPD Vitals" />
       </Appbar.Header>
-      <SafeAreaView style={styles.container}>
-        <ScrollView vertical>
-          <View style={styles.tableWrapper}>
-            <View style={styles.grpInput}>
-              <View style={styles.grpImgTxt}>
-                <Image source={temperature} alt="Temp" style={styles.img} />
-                <Text style={styles.label}>TEMP</Text>
-              </View>
-              <TextInput
-                value={p_temp}
-                style={[
-                  styles.input,
-                  validationErrors.p_temp && styles.errorInput,
-                ]}
-                onChangeText={text => setP_Temp(text)}
-                keyboardType="numeric"
-                error={!!validationErrors.p_temp}
-                right={
-                  <TextInput.Affix textStyle={{fontSize: 13}} text=" °F" />
-                }
-                backgroundColor={'white'}
-              />
+      <ScrollView vertical style={styles.container}>
+        <View style={styles.tableWrapper}>
+          <View style={styles.grpInput}>
+            <View style={styles.grpImgTxt}>
+              <Image source={temperature} alt="Temp" style={styles.img} />
+              <Text style={styles.label}>TEMP</Text>
             </View>
-            {validationErrors.p_temp && (
-              <Text style={styles.errorText}>{validationErrors.p_temp}</Text>
-            )}
-            <View style={styles.grpInput}>
-              <View style={styles.grpImgTxt}>
-                <Image source={pulse} alt="Temp" style={styles.img} />
-                <Text style={styles.label}>PULSE</Text>
-              </View>
-              <TextInput
-                value={p_pulse}
-                style={[
-                  styles.input,
-                  validationErrors.p_pulse && styles.errorInput,
-                ]}
-                keyboardType="numeric"
-                onChangeText={text => setP_Pulse(text)}
-                error={!!validationErrors.p_pulse}
-                right={
-                  <TextInput.Affix textStyle={{fontSize: 13}} text=" /min" />
-                }
-                backgroundColor={'white'}
-              />
+            <TextInput
+              value={p_temp}
+              style={[
+                styles.input,
+                validationErrors.p_temp && styles.errorInput,
+              ]}
+              onChangeText={text => setP_Temp(text)}
+              keyboardType="numeric"
+              error={!!validationErrors.p_temp}
+              right={<TextInput.Affix textStyle={{fontSize: 13}} text=" °F" />}
+              backgroundColor={'white'}
+            />
+          </View>
+          {validationErrors.p_temp && (
+            <Text style={styles.errorText}>{validationErrors.p_temp}</Text>
+          )}
+          <View style={styles.grpInput}>
+            <View style={styles.grpImgTxt}>
+              <Image source={pulse} alt="Temp" style={styles.img} />
+              <Text style={styles.label}>PULSE</Text>
             </View>
-            {validationErrors.p_pulse && (
-              <Text style={styles.errorText}>{validationErrors.p_pulse}</Text>
-            )}
-            <View style={styles.grpInput}>
-              <View style={styles.grpImgTxt}>
-                <Image source={spo2} alt="SPO2" style={styles.img} />
-                <Text style={styles.label}>SPO2</Text>
-              </View>
-              <TextInput
-                value={p_spo2}
-                style={[
-                  styles.input,
-                  validationErrors.p_spo2 && styles.errorInput,
-                ]}
-                keyboardType="numeric"
-                error={!!validationErrors.p_spo2}
-                onChangeText={text => setP_SPO2(text)}
-                right={
-                  <TextInput.Affix textStyle={{fontSize: 13}} text="  %" />
-                }
-                backgroundColor={'white'}
-              />
+            <TextInput
+              value={p_pulse}
+              style={[
+                styles.input,
+                validationErrors.p_pulse && styles.errorInput,
+              ]}
+              keyboardType="numeric"
+              onChangeText={text => setP_Pulse(text)}
+              error={!!validationErrors.p_pulse}
+              right={
+                <TextInput.Affix textStyle={{fontSize: 13}} text=" /min" />
+              }
+              backgroundColor={'white'}
+            />
+          </View>
+          {validationErrors.p_pulse && (
+            <Text style={styles.errorText}>{validationErrors.p_pulse}</Text>
+          )}
+          <View style={styles.grpInput}>
+            <View style={styles.grpImgTxt}>
+              <Image source={spo2} alt="SPO2" style={styles.img} />
+              <Text style={styles.label}>SPO2</Text>
             </View>
-            {validationErrors.p_spo2 && (
-              <Text style={styles.errorText}>{validationErrors.p_spo2}</Text>
-            )}
-            <View style={styles.grpInput}>
-              <View style={styles.grpImgTxt}>
-                <Image source={sysbp} alt="SYS_BP" style={styles.img} />
-                <Text style={styles.label}>SYSTOLIC BP</Text>
-              </View>
-              <TextInput
-                value={p_systolicbp}
-                style={[
-                  styles.input,
-                  validationErrors.p_systolicbp && styles.errorInput,
-                ]}
-                keyboardType="numeric"
-                error={!!validationErrors.p_systolicbp}
-                onChangeText={text => setP_SystolicBP(text)}
-                right={
-                  <TextInput.Affix textStyle={{fontSize: 13}} text="  mmHg" />
-                }
-                backgroundColor={'white'}
-              />
+            <TextInput
+              value={p_spo2}
+              style={[
+                styles.input,
+                validationErrors.p_spo2 && styles.errorInput,
+              ]}
+              keyboardType="numeric"
+              error={!!validationErrors.p_spo2}
+              onChangeText={text => setP_SPO2(text)}
+              right={<TextInput.Affix textStyle={{fontSize: 13}} text="  %" />}
+              backgroundColor={'white'}
+            />
+          </View>
+          {validationErrors.p_spo2 && (
+            <Text style={styles.errorText}>{validationErrors.p_spo2}</Text>
+          )}
+          <View style={styles.grpInput}>
+            <View style={styles.grpImgTxt}>
+              <Image source={sysbp} alt="SYS_BP" style={styles.img} />
+              <Text style={styles.label}>SYSTOLIC BP</Text>
             </View>
-            {validationErrors.p_systolicbp && (
+            <TextInput
+              value={p_systolicbp}
+              style={[
+                styles.input,
+                validationErrors.p_systolicbp && styles.errorInput,
+              ]}
+              keyboardType="numeric"
+              error={!!validationErrors.p_systolicbp}
+              onChangeText={text => setP_SystolicBP(text)}
+              right={
+                <TextInput.Affix textStyle={{fontSize: 13}} text="  mmHg" />
+              }
+              backgroundColor={'white'}
+            />
+          </View>
+          {validationErrors.p_systolicbp && (
+            <Text style={styles.errorText}>
+              {validationErrors.p_systolicbp}
+            </Text>
+          )}
+          <View style={styles.grpInput}>
+            <View style={styles.grpImgTxt}>
+              <Image source={diabp} alt="DIA_BP" style={styles.img} />
+              <Text style={styles.label}>DIASTOLIC BP</Text>
+            </View>
+            <TextInput
+              value={p_diastolicbp}
+              style={[
+                styles.input,
+                validationErrors.p_diastolicbp && styles.errorInput,
+              ]}
+              keyboardType="numeric"
+              error={!!validationErrors.p_diastolicbp}
+              onChangeText={text => setP_DiastolicBP(text)}
+              right={
+                <TextInput.Affix textStyle={{fontSize: 13}} text="  mmHg" />
+              }
+              backgroundColor={'white'}
+            />
+          </View>
+          {validationErrors.p_diastolicbp && (
+            <Text style={styles.errorText}>
+              {validationErrors.p_diastolicbp}
+            </Text>
+          )}
+          <View style={styles.grpInput}>
+            <View style={styles.grpImgTxt}>
+              <Image source={rr} alt="RR" style={styles.img} />
+              <Text style={styles.label}>RESP. Rate</Text>
+            </View>
+            <TextInput
+              value={p_rsprate}
+              style={[
+                styles.input,
+                validationErrors.p_rsprate && styles.errorInput,
+              ]}
+              keyboardType="numeric"
+              error={!!validationErrors.p_rsprate}
+              onChangeText={text => setP_Rsprate(text)}
+              right={
+                <TextInput.Affix textStyle={{fontSize: 13}} text="  /min" />
+              }
+              backgroundColor={'white'}
+            />
+          </View>
+          {validationErrors.p_rsprate && (
+            <Text style={styles.errorText}>{validationErrors.p_rsprate}</Text>
+          )}
+        </View>
+        <Text style={styles.tableWrapper2TXT}>Glasgow Coma Scale</Text>
+        <View style={styles.tableWrapper2}>
+          <View style={styles.txtInput}>
+            <Text style={styles.tableWrapperTXT}>Eye Opening</Text>
+            <TextInput
+              style={styles.textinput}
+              value={eyeopening}
+              keyboardType="numeric"
+              onChangeText={text => {
+                seteyeopening(text);
+                setValidationErrors(prevState => ({
+                  ...prevState,
+                  eyeopening: validateInputRange(text, 1, 4)
+                    ? ''
+                    : 'Eye Opening range 1-4',
+                }));
+              }}
+              error={!!validationErrors.eyeopening}
+            />
+            {validationErrors.eyeopening && (
               <Text style={styles.errorText}>
-                {validationErrors.p_systolicbp}
+                {validationErrors.eyeopening}
               </Text>
-            )}
-            <View style={styles.grpInput}>
-              <View style={styles.grpImgTxt}>
-                <Image source={diabp} alt="DIA_BP" style={styles.img} />
-                <Text style={styles.label}>DIASTOLIC BP</Text>
-              </View>
-              <TextInput
-                value={p_diastolicbp}
-                style={[
-                  styles.input,
-                  validationErrors.p_diastolicbp && styles.errorInput,
-                ]}
-                keyboardType="numeric"
-                error={!!validationErrors.p_diastolicbp}
-                onChangeText={text => setP_DiastolicBP(text)}
-                right={
-                  <TextInput.Affix textStyle={{fontSize: 13}} text="  mmHg" />
-                }
-                backgroundColor={'white'}
-              />
-            </View>
-            {validationErrors.p_diastolicbp && (
-              <Text style={styles.errorText}>
-                {validationErrors.p_diastolicbp}
-              </Text>
-            )}
-            <View style={styles.grpInput}>
-              <View style={styles.grpImgTxt}>
-                <Image source={rr} alt="RR" style={styles.img} />
-                <Text style={styles.label}>RESP. Rate</Text>
-              </View>
-              <TextInput
-                value={p_rsprate}
-                style={[
-                  styles.input,
-                  validationErrors.p_rsprate && styles.errorInput,
-                ]}
-                keyboardType="numeric"
-                error={!!validationErrors.p_rsprate}
-                onChangeText={text => setP_Rsprate(text)}
-                right={
-                  <TextInput.Affix textStyle={{fontSize: 13}} text="  /min" />
-                }
-                backgroundColor={'white'}
-              />
-            </View>
-            {validationErrors.p_rsprate && (
-              <Text style={styles.errorText}>{validationErrors.p_rsprate}</Text>
             )}
           </View>
-          <Text style={styles.tableWrapper2TXT}>Glasgow Coma Scale</Text>
-          <View style={styles.tableWrapper2}>
-            <View style={styles.txtInput}>
-              <Text style={styles.tableWrapperTXT}>Eye Opening</Text>
-              <TextInput
-                style={styles.textinput}
+          <View style={styles.txtInput}>
+            <Text style={styles.tableWrapperTXT}>Verbal Resp.</Text>
+            <TextInput
+              style={styles.textinput}
+              value={verbalResponse}
+              keyboardType="numeric"
+              onChangeText={text => {
+                setverbalResponse(text);
+                setValidationErrors(prevState => ({
+                  ...prevState,
+                  verbalResponse: validateInputRange(text, 1, 5)
+                    ? ''
+                    : 'Verbal range 1-5',
+                }));
+              }}
+              error={!!validationErrors.verbalResponse}
+            />
+            {validationErrors.verbalResponse && (
+              <Text style={styles.errorText}>
+                {validationErrors.verbalResponse}
+              </Text>
+            )}
+          </View>
+          <View style={styles.txtInput}>
+            <Text style={styles.tableWrapperTXT}>Motor Resp.</Text>
+            <TextInput
+              style={styles.textinput}
+              value={motorResponse}
+              keyboardType="numeric"
+              onChangeText={text => {
+                setmotorResponse(text);
+                setValidationErrors(prevState => ({
+                  ...prevState,
+                  motorResponse: validateInputRange(text, 1, 6)
+                    ? ''
+                    : 'Motor range 1-6',
+                }));
+              }}
+              error={!!validationErrors.motorResponse}
+            />
+            {validationErrors.motorResponse && (
+              <Text style={styles.errorText}>
+                {validationErrors.motorResponse}
+              </Text>
+            )}
+          </View>
+        </View>
+        <View style={styles.tableWrapper3}>
+          <View style={styles.formGroup}>
+            <Text style={styles.tableWrapper3TXT}>Eye Opening</Text>
+            <View style={{width: '60%'}}>
+              <DropDown
+                mode={'outlined'}
+                dropDownStyle={{backgroundColor: 'white'}}
+                visible={showEyeopening}
+                showDropDown={() => setshowEyeopening(true)}
+                onDismiss={() => setshowEyeopening(false)}
                 value={eyeopening}
-                keyboardType="numeric"
-                onChangeText={text => {
-                  seteyeopening(text);
-                  setValidationErrors(prevState => ({
-                    ...prevState,
-                    eyeopening: validateInputRange(text, 1, 4)
-                      ? ''
-                      : 'Eye Opening range 1-4',
-                  }));
-                }}
-                error={!!validationErrors.eyeopening}
+                setValue={seteyeopening}
+                list={relation?.map(res => ({
+                  label: res.label,
+                  value: res.value,
+                }))}
               />
-              {validationErrors.eyeopening && (
-                <Text style={styles.errorText}>
-                  {validationErrors.eyeopening}
-                </Text>
-              )}
             </View>
-            <View style={styles.txtInput}>
-              <Text style={styles.tableWrapperTXT}>Verbal Resp.</Text>
-              <TextInput
-                style={styles.textinput}
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.tableWrapper3TXT}>Verbal Response</Text>
+            <View style={{width: '60%'}}>
+              <DropDown
+                mode={'outlined'}
+                visible={showverbalReaponse}
+                style={styles.dropdown}
+                showDropDown={() => setshowverbalReaponse(true)}
+                onDismiss={() => setshowverbalReaponse(false)}
                 value={verbalResponse}
-                keyboardType="numeric"
-                onChangeText={text => {
-                  setverbalResponse(text);
-                  setValidationErrors(prevState => ({
-                    ...prevState,
-                    verbalResponse: validateInputRange(text, 1, 5)
-                      ? ''
-                      : 'Verbal range 1-5',
-                  }));
-                }}
-                error={!!validationErrors.verbalResponse}
+                setValue={setverbalResponse}
+                list={relationV?.map(res => ({
+                  label: res.label,
+                  value: res.value,
+                }))}
               />
-              {validationErrors.verbalResponse && (
-                <Text style={styles.errorText}>
-                  {validationErrors.verbalResponse}
-                </Text>
-              )}
             </View>
-            <View style={styles.txtInput}>
-              <Text style={styles.tableWrapperTXT}>Motor Resp.</Text>
-              <TextInput
-                style={styles.textinput}
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.tableWrapper3TXT}>Motor Response</Text>
+            <View style={{width: '60%'}}>
+              <DropDown
+                mode={'outlined'}
+                visible={showMotorResponse}
+                style={styles.dropdown}
+                showDropDown={() => setshowMotorResponse(true)}
+                onDismiss={() => setshowMotorResponse(false)}
                 value={motorResponse}
-                keyboardType="numeric"
-                onChangeText={text => {
-                  setmotorResponse(text);
-                  setValidationErrors(prevState => ({
-                    ...prevState,
-                    motorResponse: validateInputRange(text, 1, 6)
-                      ? ''
-                      : 'Motor range 1-6',
-                  }));
-                }}
-                error={!!validationErrors.motorResponse}
+                setValue={setmotorResponse}
+                list={relationM?.map(res => ({
+                  label: res.label,
+                  value: res.value,
+                }))}
               />
-              {validationErrors.motorResponse && (
-                <Text style={styles.errorText}>
-                  {validationErrors.motorResponse}
-                </Text>
-              )}
+              <View style={styles.spacerStyle} />
             </View>
           </View>
-          <View style={styles.tableWrapper3}>
-            <View style={styles.formGroup}>
-              <Text style={styles.tableWrapper3TXT}>Eye Opening</Text>
-              <View style={{width: '60%'}}>
-                <DropDown
-                  mode={'outlined'}
-                  dropDownStyle={{backgroundColor: 'white'}}
-                  visible={showEyeopening}
-                  showDropDown={() => setshowEyeopening(true)}
-                  onDismiss={() => setshowEyeopening(false)}
-                  value={eyeopening}
-                  setValue={seteyeopening}
-                  list={relation?.map(res => ({
-                    label: res.label,
-                    value: res.value,
-                  }))}
-                />
-              </View>
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.tableWrapper3TXT}>Verbal Response</Text>
-              <View style={{width: '60%'}}>
-                <DropDown
-                  mode={'outlined'}
-                  visible={showverbalReaponse}
-                  style={styles.dropdown}
-                  showDropDown={() => setshowverbalReaponse(true)}
-                  onDismiss={() => setshowverbalReaponse(false)}
-                  value={verbalResponse}
-                  setValue={setverbalResponse}
-                  list={relationV?.map(res => ({
-                    label: res.label,
-                    value: res.value,
-                  }))}
-                />
-              </View>
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.tableWrapper3TXT}>Motor Response</Text>
-              <View style={{width: '60%'}}>
-                <DropDown
-                  mode={'outlined'}
-                  visible={showMotorResponse}
-                  style={styles.dropdown}
-                  showDropDown={() => setshowMotorResponse(true)}
-                  onDismiss={() => setshowMotorResponse(false)}
-                  value={motorResponse}
-                  setValue={setmotorResponse}
-                  list={relationM?.map(res => ({
-                    label: res.label,
-                    value: res.value,
-                  }))}
-                />
-                <View style={styles.spacerStyle} />
-              </View>
-            </View>
+        </View>
+        <Text style={styles.tableWrapper2TXT}>Glasgow Coma Scale Score</Text>
+        <View style={styles.tableWrapper4}>
+          <View
+            key="Mild"
+            style={[
+              styles.gcsStatus,
+              {
+                backgroundColor: mildColor,
+              },
+            ]}>
+            <Text style={styles.gcsStatusTxt}>Mild</Text>
+            <Text style={styles.gcsStatusTxt}>13-15</Text>
           </View>
-          <Text style={styles.tableWrapper2TXT}>Glasgow Coma Scale Score</Text>
-          <View style={styles.tableWrapper4}>
-            <View
-              key="Mild"
-              style={[
-                styles.gcsStatus,
-                {
-                  backgroundColor: mildColor,
-                },
-              ]}>
-              <Text style={styles.gcsStatusTxt}>Mild</Text>
-              <Text style={styles.gcsStatusTxt}>13-15</Text>
-            </View>
-            <View
-              key="Moderate"
-              style={[
-                styles.gcsStatus,
-                {
-                  backgroundColor: moderateColor,
-                },
-              ]}>
-              <Text style={styles.gcsStatusTxt}>Moderate</Text>
-              <Text style={styles.gcsStatusTxt}>9-12</Text>
-            </View>
-            <View
-              key="Severe"
-              style={[
-                styles.gcsStatus,
-                {
-                  backgroundColor: severeColor,
-                },
-              ]}>
-              <Text style={styles.gcsStatusTxt}>Severe</Text>
-              <Text style={styles.gcsStatusTxt}>3-8</Text>
-            </View>
+          <View
+            key="Moderate"
+            style={[
+              styles.gcsStatus,
+              {
+                backgroundColor: moderateColor,
+              },
+            ]}>
+            <Text style={styles.gcsStatusTxt}>Moderate</Text>
+            <Text style={styles.gcsStatusTxt}>9-12</Text>
           </View>
-        </ScrollView>
+          <View
+            key="Severe"
+            style={[
+              styles.gcsStatus,
+              {
+                backgroundColor: severeColor,
+              },
+            ]}>
+            <Text style={styles.gcsStatusTxt}>Severe</Text>
+            <Text style={styles.gcsStatusTxt}>3-8</Text>
+          </View>
+        </View>
         <View style={styles.grpBtn}>
           {/* Group Buttons .....  */}
           <View style={styles.submitbutton}>
@@ -633,7 +683,51 @@ const OpdVitals = () => {
             </Button>
           </View>
         </View>
-      </SafeAreaView>
+        {opdAssessment?.length > 0 && (
+          <View style={[styles.categorySelection]}>
+            <ScrollView horizontal={true} style={{padding: 10}}>
+              <View style={{height: 'auto', maxHeight: 400}}>
+                <Table
+                  borderStyle={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                  }}>
+                  <Row
+                    data={keys3}
+                    widthArr={widthArr2}
+                    style={styles.head}
+                    textStyle={styles.text}
+                  />
+                </Table>
+                <ScrollView
+                  vertical={true}
+                  style={[styles.dataWrapper, {height: 100, maxHeight: 250}]}>
+                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                    <Rows
+                      // data={tableData}
+                      data={opdAssessment.map(row => [
+                        row.p_temp,
+                        row.p_pulse,
+                        row.p_spo2,
+                        row.p_systolicbp,
+                        row.p_diastolicbp,
+                        row.p_rsprate,
+                        row.eyeopening,
+                        row.verbalResponse,
+                        row.motorResponse,
+                        `${row.opd_date} / ${row.opd_time}`,
+                      ])}
+                      widthArr={widthArr2}
+                      style={styles.row}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                </ScrollView>
+              </View>
+            </ScrollView>
+          </View>
+        )}
+      </ScrollView>
     </>
   );
 };
@@ -756,4 +850,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 10,
   },
+  head: {height: 40, backgroundColor: '#80aaff'},
+  text: {textAlign: 'center', color: 'black', padding: 2},
+  row: {height: 'auto'},
 });

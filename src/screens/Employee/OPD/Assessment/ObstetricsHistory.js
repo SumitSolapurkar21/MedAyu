@@ -18,7 +18,7 @@ import axios from 'axios';
 const ObstetricsHistory = () => {
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id} = scannedPatientsData;
+  const {appoint_id, mobilenumber} = scannedPatientsData;
 
   const navigation = useNavigation();
   const [temp, setTemp] = useState([]);
@@ -103,18 +103,78 @@ const ObstetricsHistory = () => {
     setInjuctionChecked(false);
     setOtherChecked(false);
   };
+
+  const [opdAssessment, setOpdAssessment] = useState([]);
+  const keys3 = [
+    'G',
+    'P',
+    'L',
+    'A',
+    'D',
+    'Pregnant',
+    'Breast Feeding',
+    'Planing to Conceive',
+    'Contraception',
+    'Pill',
+    'Injuction',
+    'Other',
+    'Date / Time',
+  ];
+  const [widthArr2, setWidthArr2] = useState([]);
+  useEffect(() => {
+    setWidthArr2([
+      50,
+      50,
+      50,
+      50,
+      50,
+      100,
+      100,
+      100,
+      100,
+      100,
+      150,
+      120,
+      120,
+      ...Array(keys3.length).fill(1),
+    ]);
+  }, []);
+  useEffect(() => {
+    FetchMobileOpdAssessment();
+    return () => {};
+  }, [hospital_id, patient_id, reception_id]);
+  //list of FetchMobileOpdAssessment....
+  const FetchMobileOpdAssessment = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
+          hospital_id: hospital_id,
+          reception_id: reception_id,
+          patient_id: patient_id,
+          appoint_id: appoint_id,
+          api_type: 'OPD-OBSTETRICS-HISTORY',
+          uhid: uhid,
+          mobilenumber: mobilenumber,
+        })
+        .then(res => {
+          setOpdAssessment(res.data.data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('PersonalHistory');
+            navigation.replace('PersonalHistory');
           }}
         />
         <Appbar.Content title="Obstetrics History" />
       </Appbar.Header>
-      <SafeAreaView style={styles.container}>
+      <ScrollView vertical style={styles.container}>
         <View style={styles.card}>
           <View style={styles.card2}>
             <View style={styles.cardContent}>
@@ -356,7 +416,52 @@ const ObstetricsHistory = () => {
             Skip
           </Button>
         </View>
-      </SafeAreaView>
+        {opdAssessment?.length > 0 && (
+          <View style={[styles.categorySelection]}>
+            <ScrollView horizontal={true} style={{padding: 10}}>
+              <View style={{height: 'auto', maxHeight: 400}}>
+                <Table
+                  borderStyle={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                  }}>
+                  <Row
+                    data={keys3}
+                    widthArr={widthArr2}
+                    style={styles.head}
+                    textStyle={styles.text}
+                  />
+                </Table>
+                <ScrollView vertical={true} style={styles.dataWrapper}>
+                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                    <Rows
+                      // data={tableData}
+                      data={opdAssessment.map(row => [
+                        row.g,
+                        row.p,
+                        row.l,
+                        row.a,
+                        row.d,
+                        row.pregnant,
+                        row.breastFeeding,
+                        row.conception,
+                        row.contraception,
+                        row.pillsChecked,
+                        row.injuctionChecked,
+                        row.otherChecked,
+                        `${row.opd_date} / ${row.opd_time}`,
+                      ])}
+                      widthArr={widthArr2}
+                      style={styles.row}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                </ScrollView>
+              </View>
+            </ScrollView>
+          </View>
+        )}
+      </ScrollView>
     </>
   );
 };
@@ -398,4 +503,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 10,
   },
+  head: {height: 40, backgroundColor: '#80aaff'},
+  text: {textAlign: 'center', color: 'black', padding: 2},
+  row: {height: 'auto'},
 });

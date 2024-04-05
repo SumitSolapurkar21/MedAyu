@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#127359',
     flexWrap: 'wrap',
-    width: 80,
+    width: 90,
   },
 });
