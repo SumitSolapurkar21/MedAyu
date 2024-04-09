@@ -32,7 +32,7 @@ const Epatientadt = () => {
     useContext(UserContext);
 
   const {uhid, patient_id} = scannedPatientsData;
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
   const [selectedButton, setSelectedButton] = useState('Admitted');
   //backHandler ...
   useEffect(() => {

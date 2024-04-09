@@ -80,12 +80,24 @@ import Consult from '../screens/Patients/Consult';
 import Medicines from '../screens/Patients/Medicines';
 import Tests from '../screens/Patients/Tests';
 import HealthRecords from '../screens/Patients/HealthRecords';
+import AttendantHome from '../screens/Attendant/AttendantHome';
+import HouseKeepingHome from '../screens/HouseKeeping/HouseKeepingHome';
+import NurseHome from '../screens/Nurse/NurseHome';
+import PExecutiveHome from '../screens/PExecutive/PExecutiveHome';
+import SecurityHome from '../screens/Security/SecurityHome';
+import PharmacyHome from '../screens/Pharmacy/PharmacyHome';
+import KitchenHome from '../screens/Kitchen/KitchenHome';
+import HRHome from '../screens/HR/HRHome';
+import HrModal from '../screens/HRModal/HrModal';
+import Regularization from '../screens/HRModal/Regularization';
+import LeaveHomePage from '../screens/HRModal/Leave/LeaveHomePage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Routes = () => {
   const {setIsLoggedIn, selectCategory} = useContext(UserContext);
+
   const logoutHandler = async () => {
     // Clear user token from AsyncStorage
     await AsyncStorage.removeItem('userToken');
@@ -946,89 +958,152 @@ const Routes = () => {
           component={OpdProcedure}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AttendantHome"
+          component={AttendantHome}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="HouseKeepingHome"
+          component={HouseKeepingHome}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="NurseHome"
+          component={NurseHome}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PExecutiveHome"
+          component={PExecutiveHome}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SecurityHome"
+          component={SecurityHome}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PharmacyHome"
+          component={PharmacyHome}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="KitchenHome"
+          component={KitchenHome}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="HRHome"
+          component={HRHome}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="HrModal"
+          component={HrModal}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Regularization"
+          component={Regularization}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="LeaveHomePage"
+          component={LeaveHomePage}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 function Tabs() {
   return (
-    <Tab.Navigator
-      screenOptions={() => ({
-        tabBarActiveTintColor: '#FFA500',
-        tabBarInactiveTintColor: '#127359',
-        tabBarLabelStyle: {fontSize: 11, fontWeight: '600'},
-      })}>
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused, color, size}) => (
-            <FontAwesome6
-              name="house"
-              color={focused ? '#FFA500' : color}
-              size={size}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Consult"
-        component={Consult}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused, color, size}) => (
-            <FontAwesome6
-              name="user-doctor"
-              color={focused ? '#FFA500' : color}
-              size={size}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Medicines"
-        component={Medicines}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused, color, size}) => (
-            <FontAwesome6
-              name="capsules"
-              color={focused ? '#FFA500' : color}
-              size={size}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Tests"
-        component={Tests}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused, color, size}) => (
-            <FontAwesome6
-              name="microscope"
-              color={focused ? '#FFA500' : color}
-              size={size}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="HealthRecords"
-        component={HealthRecords}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused, color, size}) => (
-            <FontAwesome6
-              name="table-list"
-              color={focused ? '#FFA500' : color}
-              size={size}
-            />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+    <>
+      <Tab.Navigator
+        screenOptions={() => ({
+          tabBarActiveTintColor: '#FFA500',
+          tabBarInactiveTintColor: '#127359',
+          tabBarLabelStyle: {fontSize: 11, fontWeight: '600'},
+        })}>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) => (
+              <FontAwesome6
+                name="house"
+                color={focused ? '#FFA500' : color}
+                size={size}
+              />
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="Consult"
+          component={Consult}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) => (
+              <FontAwesome6
+                name="user-doctor"
+                color={focused ? '#FFA500' : color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Medicines"
+          component={Medicines}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) => (
+              <FontAwesome6
+                name="capsules"
+                color={focused ? '#FFA500' : color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Tests"
+          component={Tests}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) => (
+              <FontAwesome6
+                name="microscope"
+                color={focused ? '#FFA500' : color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="HealthRecords"
+          component={HealthRecords}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused, color, size}) => (
+              <FontAwesome6
+                name="table-list"
+                color={focused ? '#FFA500' : color}
+                size={size}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </>
   );
 }
 

@@ -12,7 +12,7 @@ import {ToastNotification} from '../../../components/ToastNotification/ToastNoti
 
 const PatientDischargeHistory = () => {
   const {userData, selectedPatientMobileNumber} = useContext(UserContext);
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
   const [patientDetails, setPatientDetails] = useState(null);
   const navigation = useNavigation();
   const [visible, setVisible] = React.useState(false);

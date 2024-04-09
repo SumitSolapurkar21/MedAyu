@@ -10,7 +10,7 @@ const ConditionAtAdmission = ({route}) => {
   const [text, setText] = React.useState('');
   const navigation = useNavigation();
   const {userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
   const patient_id = route?.params?.patient_id;
   const ip_no = route?.params?.ip_no;
 

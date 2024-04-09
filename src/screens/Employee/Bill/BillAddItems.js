@@ -21,7 +21,7 @@ const BillAddItems = ({route}) => {
   const [opdServices, setOpdServices] = useState([]);
   const [selectedItemCharge, setSelectedItemCharge] = useState('');
 
-  const {_id, hospital_id, name} = userData.data[0];
+  const {_id, hospital_id, name} = userData;
   const {firstname, mobilenumber, patient_id, patientgender, uhid} =
     scannedPatientsData;
 

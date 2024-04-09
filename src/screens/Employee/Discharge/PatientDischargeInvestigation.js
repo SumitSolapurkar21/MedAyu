@@ -11,7 +11,7 @@ const PatientDischargeInvestigation = ({route}) => {
   const navigation = useNavigation();
   const {userData} = useContext(UserContext);
   const patient_id = route?.params?.patient_id;
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
   //table content ....
   const [tableData, setTableData] = useState([]);
   const [widthArr, setWidthArr] = useState([]);

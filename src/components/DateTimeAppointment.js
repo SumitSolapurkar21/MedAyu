@@ -20,7 +20,7 @@ const DateTimeAppointment = ({
   setBackdropOpacity,
 }) => {
   const {userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [timeslotArray, setTimeSlotArray] = useState([]);

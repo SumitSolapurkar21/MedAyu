@@ -18,7 +18,7 @@ const BillEditItemForm = ({route}) => {
   const {userData, scannedPatientsData} = useContext(UserContext);
   const [selectedItemCharge, setSelectedItemCharge] = useState('');
 
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
   const {patient_id} = scannedPatientsData;
 
   //diaglog...

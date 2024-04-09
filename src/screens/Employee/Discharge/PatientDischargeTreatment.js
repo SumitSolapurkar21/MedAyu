@@ -19,7 +19,7 @@ import DateTimePicker from 'react-native-ui-datepicker';
 const PatientDischargeTreatment = ({route}) => {
   const {userData} = useContext(UserContext);
   const patient_id = route?.params?.patient_id;
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
   const [treatmentHistory, setTreatmentHistory] = useState([]);
   const navigation = useNavigation();
   //table content ....

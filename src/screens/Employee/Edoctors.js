@@ -62,7 +62,7 @@ const Edoctors = ({route}) => {
       <View style={styles.outerHeader}>
         <View style={styles.hlcontent}>
           <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>{userData.data[0].name}</Text>
+          <Text style={styles.uName}>{userData.name}</Text>
         </View>
         <View style={styles.hrcontent}>
           <TouchableOpacity>

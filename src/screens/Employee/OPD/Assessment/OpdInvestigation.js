@@ -1,5 +1,5 @@
 import {BackHandler, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Appbar, Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
@@ -35,7 +35,7 @@ const OpdInvestigation = () => {
         <View style={styles.submitbutton}>
           <Button
             mode="contained"
-            onPress={() => navigation.navigate('OpdDiagnosis')}>
+            onPress={() => navigation.replace('OpdDiagnosis')}>
             Previous
           </Button>
           <Button

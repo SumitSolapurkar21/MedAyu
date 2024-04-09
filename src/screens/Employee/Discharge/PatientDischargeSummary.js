@@ -17,7 +17,7 @@ import {Table, Row, Rows} from 'react-native-table-component';
 const PatientDischargeSummary = () => {
   const navigation = useNavigation();
   const {userData, setSelectedPatientMobileNumber} = useContext(UserContext);
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
   //
 
   const [tableData, setTableData] = useState([]);

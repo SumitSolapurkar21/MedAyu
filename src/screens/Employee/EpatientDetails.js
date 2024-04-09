@@ -16,11 +16,9 @@ import panchakarma from '../../images/panchakarma.png';
 import invoice from '../../images/invoice.png';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome';
 import HomeButton from '../../components/HomeButton/HomeButton';
-import PatientDischargeSelection from './Discharge/PatientDischargeSelection';
 
-const EpatientDetails = ({route}) => {
+const EpatientDetails = () => {
   const navigation = useNavigation();
 
   //backHandler ...
@@ -43,7 +41,7 @@ const EpatientDetails = ({route}) => {
 
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
     scannedPatientsData;
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
 
   useEffect(() => {
     setPatientsData({

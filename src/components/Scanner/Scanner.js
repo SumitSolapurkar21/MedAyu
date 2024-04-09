@@ -23,7 +23,7 @@ LogBox.ignoreLogs([
   'ViewPropTypes will be removed from React Native, along with all other PropTypes. We recommend that you migrate away from PropTypes and switch to a type system like TypeScript. If you need to continue using ViewPropTypes',
 ]);
 
-export default function Scanner({route}) {
+export default function Scanner() {
   const navigation = useNavigation();
 
   const {userData, setScannedPatientsData, patientSelectedValue} =
@@ -35,7 +35,7 @@ export default function Scanner({route}) {
   const [message, setMessage] = useState('');
   const [searchInput, setSearchInput] = useState('');
 
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id, role} = userData;
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -76,28 +76,55 @@ export default function Scanner({route}) {
 
   let uhid;
   let appoint_id;
+  let qrid;
   useEffect(() => {
     if (uhid != '') handleScannerSuccess();
-  }, [uhid]);
+  }, [uhid, qrid]);
 
-  
   const handleScannerSuccess = e => {
     if (e) {
       const data = e.data.split(',');
-      uhid = data[0];
       appoint_id = data[1];
-
+      uhid = data[0];
+      qrid = data[3];
+      console.log('data 2 : ', appoint_id, uhid, qrid);
       handleNavigation();
       // Clear the variables after handling the scan
       uhid = '';
       appoint_id = '';
+      qrid = '';
 
       setScannedPatientsData([]);
     } else {
       return;
     }
   };
-
+  const _navigationTabs = tabs => {
+    console.log('tabs : ', tabs);
+    if (tabs === 'Doctor') {
+      navigation.navigate('Tabs');
+    } else if (tabs === 'Receptionist') {
+      navigation.navigate('Home');
+    } else if (tabs === 'PExecutive') {
+      navigation.navigate('PExecutiveHome');
+    } else if (tabs === 'Nurse') {
+      navigation.navigate('NurseHome');
+    } else if (tabs === 'Attendant') {
+      navigation.navigate('AttendantHome');
+    } else if (tabs === 'Security') {
+      navigation.navigate('SecurityHome');
+    } else if (tabs === 'Kitchen') {
+      navigation.navigate('KitchenHome');
+    } else if (tabs === 'HouseKeeping') {
+      navigation.navigate('HouseKeepingHome');
+    } else if (tabs === 'Pharmacy') {
+      navigation.navigate('PharmacyHome');
+    } else if (tabs === 'HR') {
+      navigation.navigate('HRHome');
+    } else {
+      return;
+    }
+  };
   const handleNavigation = async () => {
     if (patientSelectedValue != '1' || patientSelectedValue != '3') {
       try {
@@ -108,10 +135,16 @@ export default function Scanner({route}) {
             login_time: `${hours}.${minutes}`,
             login_date: date,
             location: 'Nagpur',
+            qrid: qrid,
           })
           .then(response => {
             setMessage(response.data.message);
-            return response.data;
+            // Clear the variables after handling the scan
+            uhid = '';
+            appoint_id = '';
+            qrid = '';
+
+            // return response.data;
           });
       } catch (error) {
         console.error(error);
@@ -140,10 +173,15 @@ export default function Scanner({route}) {
             if (patientSelectedValue === '3') {
               navigation.navigate('DischargeInitiation');
             } else {
-              navigation.navigate('EpatientDetails');
+              if (userData?.role === 'Doctor') {
+                navigation.replace('Tabs');
+              } else {
+                navigation.navigate('EpatientDetails');
+              }
             }
             uhid = '';
             appoint_id = '';
+            qrid = '';
           } else {
             console.warn(res.data.message);
           }
@@ -234,7 +272,13 @@ export default function Scanner({route}) {
                     style={styles.modalBtn}
                     onPress={() => {
                       setMsgPopup(false);
-                      navigation.navigate('Ehome');
+                      _navigationTabs(role);
+
+                      // if (userData?.role === 'Doctor') {
+                      //   navigation.replace('Tabs');
+                      // } else {
+                      //   navigation.replace('Ehome');
+                      // }
                     }}>
                     <Text style={styles.modalBtnText}>Ok</Text>
                   </TouchableOpacity>

@@ -34,7 +34,7 @@ const BillHistory = ({route}) => {
   } = useContext(UserContext);
   const navigation = useNavigation();
   const {uhid, patient_id} = scannedPatientsData;
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
   const [billPatientHistory, setBillPatientHistory] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);

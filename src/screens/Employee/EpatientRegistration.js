@@ -177,13 +177,13 @@ const EpatientRegistration = () => {
     }
   }, [s_code]);
 
-  let reception_id = userData.data[0]._id;
+  let reception_id = userData._id;
   useEffect(() => {
     const departmentData = async () => {
       try {
         await axios
           .post(`${api.baseurl}/FetchReceptionDepartmentDeopdown`, {
-            reception_id: userData.data[0]._id,
+            reception_id: userData._id,
           })
           .then(res => {
             const dpt_data = res.data.data;
@@ -241,7 +241,7 @@ const EpatientRegistration = () => {
     await axios
       .post(`${api.baseurl}/GetSchedulerForMobile`, {
         reception_id: reception_id,
-        hospital_id: userData.data[0].hospital_id,
+        hospital_id: userData.hospital_id,
         doctor_id: doctor_id,
         mydate: formData.app_date,
       })
@@ -327,7 +327,7 @@ const EpatientRegistration = () => {
     appointmentTime: '',
   });
   // const formSubmitedData = {
-  //   reception_id: userData.data[0]?._id,
+  //   reception_id: userData?._id,
   //   patientcategory: 'New',
   //   firstname: formData?.firstname,
   //   patientgender: formData?.patientgender,
@@ -369,7 +369,7 @@ const EpatientRegistration = () => {
     try {
       await axios
         .post(`${api.baseurl}/AddReceptionOutPatientForMobile`, {
-          reception_id: userData.data[0]._id,
+          reception_id: userData._id,
           patientcategory: 'New',
           firstname: formData.firstname,
           patientgender: formData.patientgender,

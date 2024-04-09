@@ -115,31 +115,6 @@ const OpdComplaints = () => {
     return () => backHandler.remove();
   }, []);
 
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    // Listen to keyboard events and update keyboard height
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      e => {
-        setKeyboardHeight(e.endCoordinates.height);
-      },
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setKeyboardHeight(0);
-      },
-    );
-
-    return () => {
-      // Clean up listeners when the component is unmounted
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
   // to set width of table ......
   useEffect(() => {
     setWidthArr([120, 80, 120, 150, 150, ...Array(keys.length).fill(2)]);
@@ -336,7 +311,7 @@ const OpdComplaints = () => {
           <Dialog.Icon icon="check-all" style={{color: 'green'}} />
           <Dialog.Title style={styles.title}>Success!</Dialog.Title>
           <Dialog.Content>
-            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
+            <Text variant="bodyMedi um" style={{textAlign: 'center'}}>
               Complaint Added Successfully!
             </Text>
           </Dialog.Content>
@@ -559,8 +534,7 @@ const OpdComplaints = () => {
           </Button>
         </View>
         {opdAssessment?.length > 0 && (
-          <View
-            style={[styles.categorySelection, {marginBottom: keyboardHeight}]}>
+          <View style={[styles.categorySelection]}>
             <ScrollView horizontal={true} style={{padding: 10}}>
               <View style={{height: 'auto', maxHeight: 400}}>
                 <Table

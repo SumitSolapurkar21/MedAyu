@@ -42,7 +42,7 @@ const Eappointment = ({route}) => {
   const [backdropOpacity, setBackdropOpacity] = useState(0);
   const navigation = useNavigation();
 
-  let reception_id = userData.data[0]._id;
+  let reception_id = userData._id;
   const {department_id, patient_id, doctor_id} = route.params;
 
   const [formData, setFormData] = useState({
@@ -72,7 +72,7 @@ const Eappointment = ({route}) => {
       await axios
         .post(`${api.baseurl}/ShowAppointDatesForMobile`, {
           reception_id,
-          hospital_id: userData.data[0].hospital_id,
+          hospital_id: userData.hospital_id,
           todaysdates: date,
         })
         .then(res => {
@@ -88,7 +88,7 @@ const Eappointment = ({route}) => {
       <View style={styles.outerHeader}>
         <View style={styles.hlcontent}>
           <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>{userData.data[0].name}</Text>
+          <Text style={styles.uName}>{userData.name}</Text>
         </View>
         <View style={styles.hrcontent}>
           <TouchableOpacity>

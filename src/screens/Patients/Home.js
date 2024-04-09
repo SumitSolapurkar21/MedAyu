@@ -6,8 +6,10 @@ import {
   View,
   TextInput,
   SafeAreaView,
+  BackHandler,
+  Alert,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -17,6 +19,7 @@ import doctorImg from '../../images/doctor.png';
 import medImg from '../../images/medicines.png';
 import healthImg from '../../images/medical-record.png';
 import labtestsImg from '../../images/labtests.png';
+import attendence from '../../images/calendar.png';
 import UserContext from '../../components/Context/Context';
 import Ehome from '../Employee/Ehome';
 
@@ -24,15 +27,42 @@ const Home = () => {
   const navigation = useNavigation();
 
   const {userData} = useContext(UserContext);
-  const {role} = userData;
+
+  const {role, name} = userData;
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert('', 'Are you sure you want to Exit App?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'YES',
+          onPress: () => {
+            BackHandler.exitApp();
+          },
+        },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
-      {userData === '9' ? (
+      {role === 'Doctor' ? (
         <>
           <View style={styles.outerHeader}>
             <View style={styles.hlcontent}>
               <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-              <Text style={styles.uName}>Hi Sumit</Text>
+              <Text style={styles.uNamee}>Hi ! , {name}</Text>
             </View>
             <View style={styles.hrcontent}>
               <TouchableOpacity>
@@ -88,6 +118,14 @@ const Home = () => {
               <Text style={styles.contentText}>Health Records</Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.contentDiv}>
+            <TouchableOpacity
+              style={styles.contentItem}
+              onPress={() => navigation.navigate('HrModal')}>
+              <Image source={attendence} style={styles.img} />
+              <Text style={styles.contentText}>HR</Text>
+            </TouchableOpacity>
+          </View>
         </>
       ) : role === 'Receptionist' ? (
         <Ehome />
@@ -117,7 +155,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#127359',
+    width: 90,
   },
+  uNamee: {fontSize: 17, fontWeight: '600', color: '#127359'},
   hrcontent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -126,8 +166,8 @@ const styles = StyleSheet.create({
   },
   img: {
     resizeMode: 'contain',
-    width: 50,
-    height: 50,
+    width: 35,
+    height: 35,
   },
   searchDiv: {
     marginHorizontal: 12,

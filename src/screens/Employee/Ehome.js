@@ -25,7 +25,6 @@ import attendence from '../../images/calendar.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Ehome = () => {
-  
   // ........ //
   const navigation = useNavigation();
 
@@ -72,8 +71,9 @@ const Ehome = () => {
       <View style={styles.outerHeader}>
         <View style={styles.hlcontent}>
           <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>Hi {userData?.username} </Text>
+          <Text style={styles.uName}>Hi {userData?.name} </Text>
         </View>
+
         <View style={styles.hrcontent}>
           <TouchableOpacity
             onPress={() => {
@@ -88,6 +88,9 @@ const Ehome = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <Text style={{fontSize: 12, color: '#127359', marginLeft: '21%'}}>
+        {userData?.role}
+      </Text>
 
       <View style={styles.searchDiv}>
         <FontAwesome6
@@ -123,10 +126,10 @@ const Ehome = () => {
         <TouchableOpacity
           style={styles.contentItem}
           onPress={() => {
-            navigation.navigate('QRScanner'), setPatientSelectedValue('2');
+            navigation.navigate('HrModal');
           }}>
           <Image source={attendence} style={styles.img} />
-          <Text style={styles.contentText}>Attendence</Text>
+          <Text style={styles.contentText}>HR</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.contentItem}

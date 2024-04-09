@@ -39,13 +39,13 @@ const Edepartment = ({route}) => {
   const [departmentData, setDepartmentData] = useState([]);
 
   //   Get Department Data ...
-  let reception_id = userData.data[0]._id;
+  let reception_id = userData._id;
   useEffect(() => {
     const departmentData = async () => {
       try {
         await axios
           .post(`${api.baseurl}/FetchReceptionDepartmentDeopdown`, {
-            reception_id: userData.data[0]._id,
+            reception_id: userData._id,
           })
           .then(res => {
             const dpt_data = res.data.data;
@@ -63,7 +63,7 @@ const Edepartment = ({route}) => {
       <View style={styles.outerHeader}>
         <View style={styles.hlcontent}>
           <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>{userData.data[0].name}</Text>
+          <Text style={styles.uName}>{userData.name}</Text>
         </View>
         <View style={styles.hrcontent}>
           <TouchableOpacity>

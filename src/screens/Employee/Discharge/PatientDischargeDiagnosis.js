@@ -45,7 +45,7 @@ const PatientDischargeDiagnosis = ({route}) => {
   }, []);
 
   const {userData} = useContext(UserContext);
-  const {hospital_id, _id} = userData.data[0];
+  const {hospital_id, _id} = userData;
 
   useEffect(() => {
     if (searchQuery != '') search_Diagnosis_data();

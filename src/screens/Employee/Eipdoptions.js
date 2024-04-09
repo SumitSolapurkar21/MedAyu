@@ -42,7 +42,7 @@ const Eipdoptions = () => {
     useContext(UserContext);
 
   const {uhid, patient_id} = scannedPatientsData;
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
 
   useEffect(() => {
     setPatientsData({

@@ -60,6 +60,31 @@ const Onboarding = () => {
 
   const navigation = useNavigation();
 
+  const _navigationTabs = tabs => {
+    if (tabs.role === 'Doctor') {
+      navigation.navigate('Tabs');
+    } else if (tabs.role === 'Receptionist') {
+      navigation.navigate('Home');
+    } else if (tabs.role === 'PExecutive') {
+      navigation.navigate('PExecutiveHome');
+    } else if (tabs.role === 'Nurse') {
+      navigation.navigate('NurseHome');
+    } else if (tabs.role === 'Attendant') {
+      navigation.navigate('AttendantHome');
+    } else if (tabs.role === 'Security') {
+      navigation.navigate('SecurityHome');
+    } else if (tabs.role === 'Kitchen') {
+      navigation.navigate('KitchenHome');
+    } else if (tabs.role === 'HouseKeeping') {
+      navigation.navigate('HouseKeepingHome');
+    } else if (tabs.role === 'Pharmacy') {
+      navigation.navigate('PharmacyHome');
+    } else if (tabs.role === 'HR') {
+      navigation.navigate('HRHome');
+    } else {
+      return;
+    }
+  };
   //
   useEffect(() => {
     const checkUserSignIn = async () => {
@@ -67,10 +92,10 @@ const Onboarding = () => {
       if (userToken !== null) {
         const userData = JSON.parse(userToken);
         setIsLoggedIn(true);
-        navigation.navigate('Ehome');
         // Extracting hospital _id from the response
         const USERDATA = userData.res;
         setUserData(USERDATA);
+        _navigationTabs(USERDATA);
       }
     };
 
@@ -85,21 +110,23 @@ const Onboarding = () => {
       });
 
       const res = response.data;
-
+      console.log('res data : ', res.data[0]);
       if (res.status === true) {
         ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
         await AsyncStorage?.setItem(
           'userToken',
-          JSON.stringify({res: response.data}),
+          JSON.stringify({res: res?.data[0]}),
         );
         setIsLoggedIn(true);
-        navigation.navigate('Ehome');
+        setUserData(res.data[0]);
         setMobilenumber('');
         setPassword('');
+
+        const _resData = res.data[0];
+        _navigationTabs(_resData);
       } else {
         ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
       }
-      setUserData(res);
     } catch (error) {
       console.error(error);
     }

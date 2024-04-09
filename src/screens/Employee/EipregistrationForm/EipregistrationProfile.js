@@ -221,13 +221,13 @@ const EipregistrationProfile = () => {
   };
 
   //   Get Department Data ...
-  // let reception_id = userData.data[0]._id;
+  // let reception_id = userData._id;
   // useEffect(() => {
   //   const departmentData = async () => {
   //     try {
   //       await axios
   //         .post(`${api.baseurl}/FetchReceptionDepartmentDeopdown`, {
-  //           reception_id: userData.data[0]._id,
+  //           reception_id: userData._id,
   //         })
   //         .then(res => {
   //           const dpt_data = res.data.data;

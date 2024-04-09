@@ -17,7 +17,7 @@ const DischargeInitiation = () => {
   const {scannedPatientsData, userData} = useContext(UserContext);
   const {firstname, patientage, patientgender, uhid, ipno, ip_id} =
     scannedPatientsData;
-  const {_id, hospital_id} = userData.data[0];
+  const {_id, hospital_id} = userData;
 
   let _dischargetype = [
     {
