@@ -87,7 +87,6 @@ export default function Scanner() {
       appoint_id = data[1];
       uhid = data[0];
       qrid = data[3];
-      console.log('data 2 : ', appoint_id, uhid, qrid);
       handleNavigation();
       // Clear the variables after handling the scan
       uhid = '';
@@ -100,7 +99,6 @@ export default function Scanner() {
     }
   };
   const _navigationTabs = tabs => {
-    console.log('tabs : ', tabs);
     if (tabs === 'Doctor') {
       navigation.navigate('Tabs');
     } else if (tabs === 'Receptionist') {

@@ -1,13 +1,9 @@
 import {
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  Keyboard,
   ToastAndroid,
-  SafeAreaView,
   BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
@@ -19,6 +15,7 @@ import {
   SegmentedButtons,
   DefaultTheme,
   Appbar,
+  Card,
 } from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
 import axios from 'axios';
@@ -35,7 +32,6 @@ const OpdComplaints = () => {
   //table content ....
   const [widthArr, setWidthArr] = useState([]);
   const [widthArr1, setWidthArr1] = useState([]);
-  const [widthArr2, setWidthArr2] = useState([]);
 
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
@@ -47,14 +43,7 @@ const OpdComplaints = () => {
 
   const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Action'];
   const keys2 = ['Category', 'Symptoms', 'Duration', 'Time', 'Frequency'];
-  const keys3 = [
-    'Category',
-    'Symptoms',
-    'Duration',
-    'Time',
-    'Frequency',
-    'Date / Time',
-  ];
+
   let data = [
     {
       label: 'Often',
@@ -119,7 +108,6 @@ const OpdComplaints = () => {
   useEffect(() => {
     setWidthArr([120, 80, 120, 150, 150, ...Array(keys.length).fill(2)]);
     setWidthArr1([120, 120, 80, 120, 110, ...Array(keys2.length).fill(2)]);
-    setWidthArr2([120, 120, 80, 120, 110, 110, ...Array(keys3.length).fill(2)]);
   }, []);
 
   const updateSelectedCategoryData = selectedValue => {
@@ -534,42 +522,108 @@ const OpdComplaints = () => {
           </Button>
         </View>
         {opdAssessment?.length > 0 && (
-          <View style={[styles.categorySelection]}>
-            <ScrollView horizontal={true} style={{padding: 10}}>
-              <View style={{height: 'auto', maxHeight: 400}}>
-                <Table
-                  borderStyle={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                  }}>
-                  <Row
-                    data={keys3}
-                    widthArr={widthArr2}
-                    style={styles.head}
-                    textStyle={styles.text}
-                  />
-                </Table>
-                <ScrollView vertical={true} style={styles.dataWrapper}>
-                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                    <Rows
-                      // data={tableData}
-                      data={opdAssessment.map(row => [
-                        row.category,
-                        row.symptoms,
-                        row.duration,
-                        row.time,
-                        row.frequency,
-                        `${row.opd_date} / ${row.opd_time}`,
-                      ])}
+          <>
+            {/* <View style={[styles.categorySelection]}>
+              <ScrollView horizontal={true} style={{padding: 10}}>
+                <View style={{height: 'auto', maxHeight: 400}}>
+                  <Table
+                    borderStyle={{
+                      borderWidth: 1,
+                      borderColor: 'gray',
+                    }}>
+                    <Row
+                      data={keys3}
                       widthArr={widthArr2}
-                      style={styles.row}
+                      style={styles.head}
                       textStyle={styles.text}
                     />
                   </Table>
-                </ScrollView>
-              </View>
-            </ScrollView>
-          </View>
+                  <ScrollView vertical={true} style={styles.dataWrapper}>
+                    <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                      <Rows
+                        // data={tableData}
+                        data={opdAssessment.map(row => [
+                          row.category,
+                          row.symptoms,
+                          row.duration,
+                          row.time,
+                          row.frequency,
+                          `${row.opd_date} / ${row.opd_time}`,
+                        ])}
+                        widthArr={widthArr2}
+                        style={styles.row}
+                        textStyle={styles.text}
+                      />
+                    </Table>
+                  </ScrollView>
+                </View>
+              </ScrollView>
+            </View> */}
+            {opdAssessment?.map((row, index) => {
+              return (
+                <Card style={styles.card} key={index + 1}>
+                  <Card.Content>
+                    <View style={styles.cardBodyHead}>
+                      <View style={[styles.cardBody, {gap: 8}]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Category :
+                        </Text>
+                        <Text variant="titleLarge" style={styles.cardtext2}>
+                          {row.category}
+                        </Text>
+                      </View>
+                      <View style={[styles.cardBody, {gap: 8}]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Symptoms :
+                        </Text>
+                        <Text
+                          variant="titleLarge"
+                          style={[styles.cardtext2, {width: 80}]}>
+                          {row.symptoms}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.cardBodyHead}>
+                      <View style={[styles.cardBody, {gap: 8}]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Duration :
+                        </Text>
+                        <Text variant="titleLarge" style={styles.cardtext2}>
+                          {row.duration}
+                        </Text>
+                      </View>
+                      <View style={[styles.cardBody, {gap: 8}]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Time :
+                        </Text>
+                        <Text variant="titleLarge" style={styles.cardtext2}>
+                          {row.time}
+                        </Text>
+                      </View>
+                    </View>
+                    {/* <View style={styles.cardBodyHead}> */}
+                    <View style={[styles.cardBody, {gap: 10}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Frequency :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row.frequency}
+                      </Text>
+                    </View>
+                    <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Date / Time :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row.opd_date} / {row.opd_time}
+                      </Text>
+                    </View>
+                    {/* </View> */}
+                  </Card.Content>
+                </Card>
+              );
+            })}
+          </>
         )}
       </ScrollView>
     </>
@@ -621,13 +675,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  submitBtn: {
-    //     position: 'absolute',
-    //     alignSelf: 'center',
-    marginVertical: 10,
-    bottom: 0,
-    zIndex: 0,
-  },
+
   btn: {
     flexDirection: 'row',
     gap: 8,
@@ -673,5 +721,29 @@ const styles = StyleSheet.create({
   segmentBtn: {
     marginHorizontal: 14,
     marginTop: '5%',
+  },
+  card: {
+    marginTop: 10,
+    marginHorizontal: 14,
+    marginBottom: 10,
+  },
+  cardBody: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: 150,
+  },
+  cardtext: {
+    fontWeight: '600',
+    color: 'black',
+  },
+  cardtext2: {
+    fontWeight: '600',
+    flexWrap: 'wrap',
+    // width: 100,
+  },
+  cardBodyHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
   },
 });

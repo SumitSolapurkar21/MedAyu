@@ -41,7 +41,6 @@ const PatientDischargeInvestigation = ({route}) => {
       });
 
       const {status, message, data} = res.data;
-      console.log('data : ', data);
       if (status === true) {
         const dataArray = data.map((res, index) => [
           index + 1,

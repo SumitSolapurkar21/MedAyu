@@ -123,7 +123,7 @@ const PatientDischargeDiagnosis = ({route}) => {
         })
         .then(res => {
           if (res.data.status === false) {
-            console.log('Data Not Received');
+            console.error('Data Not Received');
           } else {
             const data = res.data.data;
             const dataArray = data.map((res, index) => [

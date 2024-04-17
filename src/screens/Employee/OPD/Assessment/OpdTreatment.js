@@ -1,26 +1,11 @@
 import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  BackHandler,
-} from 'react-native';
-import {
-  Appbar,
-  Button,
-  Dialog,
-  List,
-  Portal,
-  TextInput,
-} from 'react-native-paper';
+import {ScrollView, StyleSheet, Text, View, BackHandler} from 'react-native';
+import {Appbar, Button, Card, List, TextInput} from 'react-native-paper';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {useNavigation} from '@react-navigation/native';
-import {Table, Row, Rows} from 'react-native-table-component';
 
 const OpdTreatment = () => {
   const {patientsData, scannedPatientsData} = useContext(UserContext);
@@ -429,53 +414,96 @@ const OpdTreatment = () => {
             Skip
           </Button>
         </View>
-        {opdAssessment?.length > 0 && (
-          <View style={[styles.categorySelection]}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={{padding: 10}}>
-              <View style={{height: 'auto', maxHeight: 400}}>
-                <Table
-                  borderStyle={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                  }}>
-                  <Row
-                    data={keys3}
-                    widthArr={widthArr2}
-                    style={styles.head}
-                    textStyle={styles.text}
-                  />
-                </Table>
-                <ScrollView
-                  vertical={true}
-                  showsVerticalScrollIndicator={false}
-                  style={styles.dataWrapper}>
-                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                    <Rows
-                      // data={tableData}
-                      data={opdAssessment.map(row => [
-                        row.drugcode,
-                        row.drugname,
-                        row.brandname,
-                        row.dose,
-                        row.anupan,
-                        row.route,
-                        row.schedule,
-                        row.dateValues,
-                        `${row.opd_date} / ${row.opd_time}`,
-                      ])}
-                      widthArr={widthArr2}
-                      style={styles.row}
-                      textStyle={styles.text}
-                    />
-                  </Table>
-                </ScrollView>
-              </View>
-            </ScrollView>
-          </View>
-        )}
+
+        {opdAssessment.length > 0 &&
+          opdAssessment?.map((row, index) => {
+            return (
+              <Card style={styles.card2} key={index + 1}>
+                <Card.Content>
+                  <View style={styles.cardBodyHead}>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Drugcode :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.drugcode}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Drugname :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.drugname}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Brandname :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.brandname}
+                    </Text>
+                  </View>
+                  <View style={styles.cardBodyHead}>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Dose :
+                      </Text>
+                      <Text variant="titleLarge" style={[styles.cardtext2]}>
+                        {row?.dose}
+                      </Text>
+                    </View>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Route :
+                      </Text>
+                      <Text variant="titleLarge" style={[styles.cardtext2]}>
+                        {row?.route}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Anupan :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.anupan}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Schedule :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.schedule}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      From Date :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.dateValues}
+                    </Text>
+                  </View>
+
+                  {/* <View style={styles.cardBodyHead}> */}
+
+                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Date / Time :
+                    </Text>
+                    <Text variant="titleLarge" style={styles.cardtext2}>
+                      {row.opd_date} / {row.opd_time}
+                    </Text>
+                  </View>
+                  {/* </View> */}
+                </Card.Content>
+              </Card>
+            );
+          })}
       </ScrollView>
     </>
   );
@@ -501,12 +529,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input2: {
-    //     backgroundColor: '#ffffff',
     paddingTop: 0,
     paddingLeft: 0,
     height: 45,
     width: '100%',
-    // maxWidth: 220,
   },
   addButton: {
     marginVertical: 10,
@@ -569,4 +595,28 @@ const styles = StyleSheet.create({
   head: {height: 40, backgroundColor: '#80aaff'},
   text: {textAlign: 'center', color: 'black', padding: 2},
   row: {height: 'auto'},
+
+  card2: {
+    marginTop: 10,
+    marginHorizontal: 14,
+    marginBottom: 10,
+  },
+  cardBody: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  cardtext: {
+    fontWeight: '600',
+    color: 'black',
+  },
+  cardtext2: {
+    fontWeight: '600',
+    flexWrap: 'wrap',
+    width: 230,
+  },
+  cardBodyHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
 });

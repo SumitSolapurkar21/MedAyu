@@ -1,13 +1,6 @@
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, ToastAndroid, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, TextInput, Dialog, Portal, Appbar} from 'react-native-paper';
+import {Button, TextInput, Appbar, Card} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import api from '../../../../../api.json';
@@ -126,7 +119,6 @@ const OpdVitals = () => {
     }
 
     if (isValidInput) {
-      console.log('valid');
       const _body = {
         p_rsprate: p_rsprate,
         p_diastolicbp: p_diastolicbp,
@@ -683,50 +675,101 @@ const OpdVitals = () => {
             </Button>
           </View>
         </View>
-        {opdAssessment?.length > 0 && (
-          <View style={[styles.categorySelection]}>
-            <ScrollView horizontal={true} style={{padding: 10}}>
-              <View style={{height: 'auto', maxHeight: 400}}>
-                <Table
-                  borderStyle={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                  }}>
-                  <Row
-                    data={keys3}
-                    widthArr={widthArr2}
-                    style={styles.head}
-                    textStyle={styles.text}
-                  />
-                </Table>
-                <ScrollView
-                  vertical={true}
-                  style={[styles.dataWrapper, {height: 100, maxHeight: 250}]}>
-                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                    <Rows
-                      // data={tableData}
-                      data={opdAssessment.map(row => [
-                        row.p_temp,
-                        row.p_pulse,
-                        row.p_spo2,
-                        row.p_systolicbp,
-                        row.p_diastolicbp,
-                        row.p_rsprate,
-                        row.eyeopening,
-                        row.verbalResponse,
-                        row.motorResponse,
-                        `${row.opd_date} / ${row.opd_time}`,
-                      ])}
-                      widthArr={widthArr2}
-                      style={styles.row}
-                      textStyle={styles.text}
-                    />
-                  </Table>
-                </ScrollView>
-              </View>
-            </ScrollView>
-          </View>
-        )}
+
+        {opdAssessment?.map((row, index) => {
+          return (
+            <Card style={styles.card2} key={index + 1}>
+              <Card.Content>
+                <View style={styles.cardBodyHead}>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Temp :
+                    </Text>
+                    <Text variant="titleLarge" style={styles.cardtext2}>
+                      {row?.p_temp}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Pulse :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.p_pulse}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.cardBodyHead}>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      SPO2 :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.p_spo2}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Systolic BP :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.p_systolicbp}
+                    </Text>
+                  </View>
+                </View>
+                <View style={[styles.cardBody, {gap: 8}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Diastolic BP :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.p_diastolicbp}
+                  </Text>
+                </View>
+                <View style={[styles.cardBody, {gap: 8}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Resp. Rate :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.p_rsprate}
+                  </Text>
+                </View>
+                {/* <View style={styles.cardBodyHead}> */}
+                <View style={[styles.cardBody, {gap: 10}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Eye Opening :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.eyeopening}
+                  </Text>
+                </View>
+                <View style={[styles.cardBody, {gap: 10}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Verbal Resp :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.verbalResponse}
+                  </Text>
+                </View>
+                <View style={[styles.cardBody, {gap: 10}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Mortor Resp :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.motorResponse}
+                  </Text>
+                </View>
+                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Date / Time :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row.opd_date} / {row.opd_time}
+                  </Text>
+                </View>
+                {/* </View> */}
+              </Card.Content>
+            </Card>
+          );
+        })}
       </ScrollView>
     </>
   );
@@ -853,4 +896,29 @@ const styles = StyleSheet.create({
   head: {height: 40, backgroundColor: '#80aaff'},
   text: {textAlign: 'center', color: 'black', padding: 2},
   row: {height: 'auto'},
+
+  card2: {
+    marginTop: 10,
+    marginHorizontal: 14,
+    marginBottom: 10,
+  },
+  cardBody: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: 100,
+  },
+  cardtext: {
+    fontWeight: '600',
+    color: 'black',
+  },
+  cardtext2: {
+    fontWeight: '600',
+    flexWrap: 'wrap',
+    // width: 100,
+  },
+  cardBodyHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
 });

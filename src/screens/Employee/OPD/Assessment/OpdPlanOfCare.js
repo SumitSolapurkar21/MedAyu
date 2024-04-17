@@ -4,7 +4,7 @@ import axios from 'axios';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
-import {Appbar, Checkbox, Button} from 'react-native-paper';
+import {Appbar, Checkbox, Button, Card} from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
 
 const OpdPlanOfCare = () => {
@@ -317,46 +317,64 @@ const OpdPlanOfCare = () => {
             Skip
           </Button>
         </View>
-        {opdAssessment?.length > 0 && (
-          <View style={[styles.categorySelection]}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={{padding: 10}}>
-              <View style={{height: 'auto', maxHeight: 400}}>
-                <Table
-                  borderStyle={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                  }}>
-                  <Row
-                    data={keys3}
-                    widthArr={widthArr2}
-                    style={styles.head}
-                    textStyle={styles.text}
-                  />
-                </Table>
-                <ScrollView vertical={true} style={styles.dataWrapper}>
-                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                    <Rows
-                      // data={tableData}
-                      data={opdAssessment.map(row => [
-                        row.preventive ? 'Yes' : 'No', // Example, modify based on your data structure
-                        row.medicine ? 'Yes' : 'No',
-                        row.physiotherapy ? 'Yes' : 'No',
-                        row.physicaltherapy ? 'Yes' : 'No',
-                        `${row.opd_date} / ${row.opd_time}`,
-                      ])}
-                      widthArr={widthArr2}
-                      style={styles.row}
-                      textStyle={styles.text}
-                    />
-                  </Table>
-                </ScrollView>
-              </View>
-            </ScrollView>
-          </View>
-        )}
+
+        {opdAssessment.length > 0 &&
+          opdAssessment?.map((row, index) => {
+            return (
+              <Card style={styles.card2} key={index + 1}>
+                <Card.Content>
+                  <View style={styles.cardBodyHead}>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Preventive :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.preventive ? 'Yes' : 'No'}
+                      </Text>
+                    </View>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Medicine :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.medicine ? 'Yes' : 'No'}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.cardBodyHead}>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Physiotherapy :
+                      </Text>
+                      <Text variant="titleLarge" style={[styles.cardtext2]}>
+                        {row?.physiotherapy ? 'Yes' : 'No'}
+                      </Text>
+                    </View>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Physicaltherapy :
+                      </Text>
+                      <Text variant="titleLarge" style={[styles.cardtext2]}>
+                        {row?.physicaltherapy ? 'Yes' : 'No'}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* <View style={styles.cardBodyHead}> */}
+
+                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Date / Time :
+                    </Text>
+                    <Text variant="titleLarge" style={styles.cardtext2}>
+                      {row.opd_date} / {row.opd_time}
+                    </Text>
+                  </View>
+                  {/* </View> */}
+                </Card.Content>
+              </Card>
+            );
+          })}
       </ScrollView>
     </>
   );
@@ -408,6 +426,30 @@ const styles = StyleSheet.create({
   radioBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  card2: {
+    marginTop: 10,
+    marginHorizontal: 14,
+    marginBottom: 10,
+  },
+  cardBody: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    // width: 140,
+  },
+  cardtext: {
+    fontWeight: '600',
+    color: 'black',
+  },
+  cardtext2: {
+    fontWeight: '600',
+    flexWrap: 'wrap',
+    // width: 100,
+  },
+  cardBodyHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
 });

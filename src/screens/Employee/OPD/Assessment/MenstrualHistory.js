@@ -1,14 +1,7 @@
 import {ScrollView, StyleSheet, Text, View, SafeAreaView} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {Table, Row, Rows} from 'react-native-table-component';
-import {
-  Appbar,
-  Button,
-  RadioButton,
-  TextInput,
-  Divider,
-  Checkbox,
-} from 'react-native-paper';
+import {Appbar, Button, Card, RadioButton, TextInput} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {BackHandler} from 'react-native';
 import api from '../../../../../api.json';
@@ -455,46 +448,85 @@ const MenstrualHistory = () => {
             Skip
           </Button>
         </View>
-        {opdAssessment?.length > 0 && (
-          <View style={[styles.categorySelection]}>
-            <ScrollView horizontal={true} style={{padding: 10}}>
-              <View style={{height: 'auto', maxHeight: 400}}>
-                <Table
-                  borderStyle={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                  }}>
-                  <Row
-                    data={keys3}
-                    widthArr={widthArr2}
-                    style={styles.head}
-                    textStyle={styles.text}
-                  />
-                </Table>
-                <ScrollView vertical={true} style={styles.dataWrapper}>
-                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                    <Rows
-                      // data={tableData}
-                      data={opdAssessment.map(row => [
-                        row.menarche_age,
-                        row.lmp,
-                        row.periods,
-                        row.durations,
-                        row.qualityofbloodflow,
-                        row.painduringcycle,
-                        row.menopause,
-                        `${row.opd_date} / ${row.opd_time}`,
-                      ])}
-                      widthArr={widthArr2}
-                      style={styles.row}
-                      textStyle={styles.text}
-                    />
-                  </Table>
-                </ScrollView>
-              </View>
-            </ScrollView>
-          </View>
-        )}
+
+        {opdAssessment?.map((row, index) => {
+          return (
+            <Card style={styles.card2} key={index + 1}>
+              <Card.Content>
+                <View style={styles.cardBodyHead}>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Menarche Age :
+                    </Text>
+                    <Text variant="titleLarge" style={styles.cardtext2}>
+                      {row?.menarche_age}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Lmp :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.lmp}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.cardBodyHead}>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Periods :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.periods}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Durations :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.durations}
+                    </Text>
+                  </View>
+                </View>
+                <View style={[styles.cardBody, {gap: 8}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Quality of Blood Flow :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.qualityofbloodflow}
+                  </Text>
+                </View>
+                <View style={[styles.cardBody, {gap: 8}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Pain during Cycle :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.painduringcycle}
+                  </Text>
+                </View>
+                {/* <View style={styles.cardBodyHead}> */}
+                <View style={[styles.cardBody, {gap: 10}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Menopause :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.menopause}
+                  </Text>
+                </View>
+                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Date / Time :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row.opd_date} / {row.opd_time}
+                  </Text>
+                </View>
+                {/* </View> */}
+              </Card.Content>
+            </Card>
+          );
+        })}
       </ScrollView>
     </>
   );
@@ -565,5 +597,29 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#071bf5',
     marginLeft: 6,
+  },
+  card2: {
+    marginTop: 10,
+    marginHorizontal: 14,
+    marginBottom: 10,
+  },
+  cardBody: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: 100,
+  },
+  cardtext: {
+    fontWeight: '600',
+    color: 'black',
+  },
+  cardtext2: {
+    fontWeight: '600',
+    flexWrap: 'wrap',
+    // width: 100,
+  },
+  cardBodyHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
   },
 });

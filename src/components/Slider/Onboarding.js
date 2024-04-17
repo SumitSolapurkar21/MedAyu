@@ -110,7 +110,6 @@ const Onboarding = () => {
       });
 
       const res = response.data;
-      console.log('res data : ', res.data[0]);
       if (res.status === true) {
         ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
         await AsyncStorage?.setItem(

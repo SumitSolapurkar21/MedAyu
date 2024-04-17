@@ -1,21 +1,7 @@
 import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  BackHandler,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import {
-  Appbar,
-  Button,
-  Dialog,
-  List,
-  Portal,
-  TextInput,
-} from 'react-native-paper';
+import {BackHandler, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Appbar, Button, Card, List, TextInput} from 'react-native-paper';
 import api from '../../../../../api.json';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {useNavigation} from '@react-navigation/native';
@@ -33,13 +19,6 @@ const MedicineHistory = () => {
   const [showCalender, setShowCalender] = useState(false);
   const [dateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
-
-  const [visibleMsg, setVisibleMsg] = useState(false);
-
-  const hideDialog = () => {
-    setVisibleMsg(false);
-    navigation.navigate('EpatientTreatmentHistory');
-  };
 
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
@@ -436,44 +415,73 @@ const MedicineHistory = () => {
             Skip
           </Button>
         </View>
-        {opdAssessment?.length > 0 && (
-          <View style={[styles.categorySelection]}>
-            <ScrollView horizontal={true} style={{padding: 10}}>
-              <View style={{height: 'auto', maxHeight: 400}}>
-                <Table
-                  borderStyle={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                  }}>
-                  <Row
-                    data={keys3}
-                    widthArr={widthArr2}
-                    style={styles.head}
-                    textStyle={styles.text}
-                  />
-                </Table>
-                <ScrollView vertical={true} style={styles.dataWrapper}>
-                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                    <Rows
-                      // data={tableData}
-                      data={opdAssessment.map(row => [
-                        row.drugname,
-                        row.route,
-                        row.schedule,
-                        row.dateValues,
-                        `${row.years} / ${row.months} / ${row.days}`,
-                        `${row.opd_date} / ${row.opd_time}`,
-                      ])}
-                      widthArr={widthArr2}
-                      style={styles.row}
-                      textStyle={styles.text}
-                    />
-                  </Table>
-                </ScrollView>
-              </View>
-            </ScrollView>
-          </View>
-        )}
+
+        {opdAssessment?.map((row, index) => {
+          return (
+            <Card style={styles.card2} key={index + 1}>
+              <Card.Content>
+                <View style={styles.cardBodyHead}>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Dose :
+                    </Text>
+                    <Text variant="titleLarge" style={styles.cardtext2}>
+                      {row?.dose}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Route :
+                    </Text>
+                    <Text
+                      variant="titleLarge"
+                      style={[styles.cardtext2, {width: 80}]}>
+                      {row?.route}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.cardBodyHead}>
+                  <View style={[styles.cardBody, {gap: 10}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Schedule :
+                    </Text>
+                    <Text variant="titleLarge" style={styles.cardtext2}>
+                      {row?.schedule}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      From Date :
+                    </Text>
+                    <Text variant="titleLarge" style={styles.cardtext2}>
+                      {row?.dateValues}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.cardBodyHead}>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Days / Months / Years :
+                    </Text>
+                    <Text variant="titleLarge" style={styles.cardtext2}>
+                      {row?.days} / {row?.months} / {row?.years}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Date / Time :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row.opd_date} / {row.opd_time}
+                  </Text>
+                </View>
+                {/* </View> */}
+              </Card.Content>
+            </Card>
+          );
+        })}
       </ScrollView>
     </>
   );
@@ -586,4 +594,29 @@ const styles = StyleSheet.create({
   head: {height: 40, backgroundColor: '#80aaff'},
   text: {textAlign: 'center', color: 'black', padding: 2},
   row: {height: 'auto'},
+
+  card2: {
+    marginTop: 10,
+    marginHorizontal: 14,
+    marginBottom: 10,
+  },
+  cardBody: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: 150,
+  },
+  cardtext: {
+    fontWeight: '600',
+    color: 'black',
+  },
+  cardtext2: {
+    fontWeight: '600',
+    flexWrap: 'wrap',
+    // width: 100,
+  },
+  cardBodyHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
 });
