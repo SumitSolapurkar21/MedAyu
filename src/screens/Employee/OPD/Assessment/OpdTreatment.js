@@ -6,6 +6,7 @@ import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {useNavigation} from '@react-navigation/native';
+import {IconButton, MD3Colors} from 'react-native-paper';
 
 const OpdTreatment = () => {
   const {patientsData, scannedPatientsData} = useContext(UserContext);
@@ -128,36 +129,11 @@ const OpdTreatment = () => {
   };
 
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = [
-    'Drug Code',
-    'Drug Name',
-    'Brand Name',
-    'Dose',
-    'Instruction',
-    'Route',
-    'Days',
-    'From Date',
-    'Date / Time',
-  ];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([
-      120,
-      120,
-      120,
-      120,
-      120,
-      120,
-      120,
-      120,
-      120,
-      ...Array(keys3.length).fill(2),
-    ]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
   }, [hospital_id, patient_id, reception_id]);
+
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
     try {
@@ -178,6 +154,14 @@ const OpdTreatment = () => {
       console.error(error);
     }
   };
+
+  // remove selected data handler ....
+  const _removeSelectedDataHandler = _id => {
+    // Filter out data with the specified id
+    const updatedSelectedRow = temp?.filter(row => row.prescription_id !== _id);
+    setTemp(updatedSelectedRow);
+  };
+
   return (
     <>
       {/* Appbar header */}
@@ -189,24 +173,24 @@ const OpdTreatment = () => {
         />
         <Appbar.Content title="OPD Treatment" style={styles.appbar_title} />
       </Appbar.Header>
-      <ScrollView style={styles.container}>
-        {showCalender && (
-          <View style={styles.datePickerContainer}>
-            <View style={styles.datePicker}>
-              <DateTimePicker
-                mode="date"
-                headerButtonColor={Themes[0]?.mainColor}
-                selectedItemColor={Themes[0]?.mainColor}
-                selectedTextStyle={{
-                  fontWeight: 'bold',
-                  color: Themes[0]?.activeTextColor,
-                }}
-                value={dateValues[datePickerIndex]} // Use separate state variable for each date field
-                onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
-              />
-            </View>
+      {showCalender && (
+        <View style={styles.datePickerContainer}>
+          <View style={styles.datePicker}>
+            <DateTimePicker
+              mode="date"
+              headerButtonColor={Themes[0]?.mainColor}
+              selectedItemColor={Themes[0]?.mainColor}
+              selectedTextStyle={{
+                fontWeight: 'bold',
+                color: Themes[0]?.activeTextColor,
+              }}
+              value={dateValues[datePickerIndex]} // Use separate state variable for each date field
+              onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
+            />
           </View>
-        )}
+        </View>
+      )}
+      <ScrollView style={styles.container}>
         <Text style={styles.heading}>OPD Treatments</Text>
         <TextInput
           mode="outlined"
@@ -255,6 +239,19 @@ const OpdTreatment = () => {
           {temp.map((res, index) => {
             return (
               <View style={styles.card} key={index + 1}>
+                <View style={styles.cardContentDiv}>
+                  <Text style={[styles.label, {width: 200, marginLeft: 10}]}>
+                    Drug Name : &nbsp; {res.drugname}
+                  </Text>
+                  <IconButton
+                    icon="trash-can"
+                    iconColor={MD3Colors.error50}
+                    size={20}
+                    onPress={() =>
+                      _removeSelectedDataHandler(res?.prescription_id)
+                    }
+                  />
+                </View>
                 <View style={styles.cardContent}>
                   <Text style={styles.label}>Drug Code : </Text>
                   <TextInput
@@ -618,5 +615,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+  },
+  cardContentDiv: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });

@@ -13,6 +13,7 @@ import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import {Table, Row, Rows} from 'react-native-table-component';
 import {useNavigation} from '@react-navigation/native';
+import {IconButton, MD3Colors} from 'react-native-paper';
 
 const OpdDiagnosis = () => {
   const navigation = useNavigation();
@@ -25,12 +26,12 @@ const OpdDiagnosis = () => {
   const [widthArr, setWidthArr] = useState([]);
   const [diagnosisArray, setDiagnosisArray] = useState([]);
 
-  const keys = ['Sr.No', 'Diagnosis', 'Diagnosis Type', 'Date/Time'];
+  const keys = ['Sr.No', 'Diagnosis', 'Diagnosis Type', 'Date/Time', 'Action'];
 
   // to set width of table ......
   useEffect(() => {
     // Set a specific width for the 'Sr.No' column, and the same width for the rest
-    setWidthArr([60, ...Array(keys.length - 1).fill(170)]);
+    setWidthArr([60, ...Array(keys.length - 1).fill(110)]);
   }, []);
 
   const {patientsData, scannedPatientsData} = useContext(UserContext);
@@ -145,21 +146,11 @@ const OpdDiagnosis = () => {
       },
     ];
     setDiagnosisArray(prev => [...prev, ..._data]);
-
-    // AddMobileDiagnosis();
-    // setSearchQuery('');
-    // setSelectedDiagnosis({});
-    // setChecked('');
   };
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = ['Illnessname', 'Diagnosis Type', 'Date / Time'];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([120, 120, 100, ...Array(keys3.length).fill(2)]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
   }, [hospital_id, patient_id, reception_id]);
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
@@ -181,6 +172,15 @@ const OpdDiagnosis = () => {
       console.error(error);
     }
   };
+
+  // remove selected data handler ....
+  const _removeSelectedDataHandler = _id => {
+    // Filter out data with the specified id
+    const updatedSelectedRow = diagnosisArray?.filter(
+      row => row.illness_id !== _id,
+    );
+    setDiagnosisArray(updatedSelectedRow);
+  };
   return (
     <>
       {/* Appbar header */}
@@ -193,7 +193,7 @@ const OpdDiagnosis = () => {
         <Appbar.Content title="OPD Diagnosis" style={styles.appbar_title} />
       </Appbar.Header>
       <ScrollView vertical style={styles.container}>
-        <View style={styles.card}>
+        <View style={styles.cardd}>
           <View style={styles.search}>
             <Text style={styles.searchTxt}>Diagnosis</Text>
             <TextInput
@@ -292,6 +292,14 @@ const OpdDiagnosis = () => {
                       row.illnessname,
                       row.diagnosis_type,
                       `${row.adddate} / ${row.addtime}`,
+                      <IconButton
+                        icon="trash-can"
+                        iconColor={MD3Colors.error50}
+                        size={20}
+                        onPress={() =>
+                          _removeSelectedDataHandler(row?.illness_id)
+                        }
+                      />,
                     ])}
                     widthArr={widthArr}
                     style={styles.row}

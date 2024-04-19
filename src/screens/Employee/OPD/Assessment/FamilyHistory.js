@@ -7,8 +7,8 @@ import DateTimePicker from 'react-native-ui-datepicker';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import {Dropdown} from 'react-native-element-dropdown';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {Avatar, Card} from 'react-native-paper';
+import {Card} from 'react-native-paper';
+import {IconButton, MD3Colors} from 'react-native-paper';
 
 const FamilyHistory = () => {
   const navigation = useNavigation();
@@ -355,20 +355,9 @@ const FamilyHistory = () => {
   ];
 
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = [
-    'Illnessname',
-    'From Date',
-    'Years / Months / Days',
-    'Relation',
-    'Date / Time',
-  ];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([120, 120, 150, 120, 120, ...Array(keys3.length).fill(2)]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
   }, [hospital_id, patient_id, reception_id]);
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
@@ -390,6 +379,12 @@ const FamilyHistory = () => {
       console.error(error);
     }
   };
+  // remove selected data handler ....
+  const _removeSelectedDataHandler = _id => {
+    // Filter out data with the specified id
+    const updatedSelectedRow = temp?.filter(row => row.illness_id !== _id);
+    setTemp(updatedSelectedRow);
+  };
   return (
     <>
       {/* Appbar header */}
@@ -401,25 +396,24 @@ const FamilyHistory = () => {
         />
         <Appbar.Content title="OPD Family History" />
       </Appbar.Header>
-      <ScrollView vertical style={styles.container}>
-        {showCalender && (
-          <View style={styles.datePickerContainer}>
-            <View style={styles.datePicker}>
-              <DateTimePicker
-                mode="date"
-                headerButtonColor={Themes[0]?.mainColor}
-                selectedItemColor={Themes[0]?.mainColor}
-                selectedTextStyle={{
-                  fontWeight: 'bold',
-                  color: Themes[0]?.activeTextColor,
-                }}
-                value={dateValues[datePickerIndex]}
-                onValueChange={date => handleDateChange(date, datePickerIndex)}
-              />
-            </View>
+      {showCalender && (
+        <View style={styles.datePickerContainer}>
+          <View style={styles.datePicker}>
+            <DateTimePicker
+              mode="date"
+              headerButtonColor={Themes[0]?.mainColor}
+              selectedItemColor={Themes[0]?.mainColor}
+              selectedTextStyle={{
+                fontWeight: 'bold',
+                color: Themes[0]?.activeTextColor,
+              }}
+              value={dateValues[datePickerIndex]}
+              onValueChange={date => handleDateChange(date, datePickerIndex)}
+            />
           </View>
-        )}
-
+        </View>
+      )}
+      <ScrollView vertical style={styles.container}>
         <Text style={styles.heading}>Family History</Text>
         <TextInput
           mode="outlined"
@@ -469,97 +463,112 @@ const FamilyHistory = () => {
             return (
               <>
                 <View style={styles.card} key={index}>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>From Date : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={temp[index].dateValues}
-                      editable={false}
-                      right={
-                        <TextInput.Icon
-                          icon="calendar"
-                          onPress={() => calenderHandler(index)}
-                        />
+                  <View style={styles.cardContentDiv}>
+                    <Text style={[styles.label, {width: 200}]}>
+                      Illness : &nbsp; {res.illnessname}
+                    </Text>
+                    <IconButton
+                      icon="trash-can"
+                      iconColor={MD3Colors.error50}
+                      size={20}
+                      onPress={() =>
+                        _removeSelectedDataHandler(res?.illness_id)
                       }
                     />
                   </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Years : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.years}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].years = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Months : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.months}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].months = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Days : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.days}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].days = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={[styles.label, {width: '200%'}]}>
-                      Relation
-                    </Text>
-                    <View>
-                      <Dropdown
-                        mode={'outlined'}
-                        style={[styles.dropdown, {borderColor: 'blue'}]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        data={data?.map(res => ({
-                          label: res.label,
-                          value: res.value,
-                        }))}
-                        //   search
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        placeholder={!isFocus2 ? 'Select' : '...'}
-                        //   searchPlaceholder="Search..."
-                        value={res.treatment_status}
-                        onFocus={() => setIsFocus2(true)}
-                        onBlur={() => setIsFocus2(false)}
-                        onChange={item => {
-                          setP_category(item.value);
-                          //     updateSelectedCategoryData(item.value);
-                          setIsFocus2(false);
+                  <View style={styles.innerCard}>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>From Date : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={temp[index].dateValues}
+                        editable={false}
+                        right={
+                          <TextInput.Icon
+                            icon="calendar"
+                            onPress={() => calenderHandler(index)}
+                          />
+                        }
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Years : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.years}
+                        onChangeText={text => {
                           const updatedTemp = [...temp];
-                          updatedTemp[index].treatment_status = item.value;
+                          updatedTemp[index].years = text;
                           setTemp(updatedTemp);
                         }}
+                        editable={true}
                       />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Months : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.months}
+                        onChangeText={text => {
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].months = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Days : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.days}
+                        onChangeText={text => {
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].days = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={[styles.label, {width: '200%'}]}>
+                        Relation
+                      </Text>
+                      <View>
+                        <Dropdown
+                          mode={'outlined'}
+                          style={[styles.dropdown, {borderColor: 'blue'}]}
+                          placeholderStyle={styles.placeholderStyle}
+                          selectedTextStyle={styles.selectedTextStyle}
+                          inputSearchStyle={styles.inputSearchStyle}
+                          iconStyle={styles.iconStyle}
+                          data={data?.map(res => ({
+                            label: res.label,
+                            value: res.value,
+                          }))}
+                          //   search
+                          maxHeight={300}
+                          labelField="label"
+                          valueField="value"
+                          placeholder={!isFocus2 ? 'Select' : '...'}
+                          //   searchPlaceholder="Search..."
+                          value={res.treatment_status}
+                          onFocus={() => setIsFocus2(true)}
+                          onBlur={() => setIsFocus2(false)}
+                          onChange={item => {
+                            setP_category(item.value);
+                            //     updateSelectedCategoryData(item.value);
+                            setIsFocus2(false);
+                            const updatedTemp = [...temp];
+                            updatedTemp[index].treatment_status = item.value;
+                            setTemp(updatedTemp);
+                          }}
+                        />
+                      </View>
                     </View>
                   </View>
                 </View>
@@ -705,8 +714,6 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   card: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     borderWidth: 0.7,
     borderRadius: 6,
     marginBottom: 10,
@@ -790,6 +797,15 @@ const styles = StyleSheet.create({
   cardBodyHead: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+  cardContentDiv: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  innerCard: {
+    flexDirection: 'row',
     flexWrap: 'wrap',
   },
 });

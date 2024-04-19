@@ -9,8 +9,6 @@ import {
 import React, {useContext, useEffect, useState} from 'react';
 import {
   Button,
-  Dialog,
-  Portal,
   TextInput,
   SegmentedButtons,
   DefaultTheme,
@@ -23,6 +21,7 @@ import api from '../../../../../api.json';
 import {Dropdown} from 'react-native-element-dropdown';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
+import {IconButton, MD3Colors} from 'react-native-paper';
 
 const OpdComplaints = () => {
   const navigation = useNavigation();
@@ -38,11 +37,16 @@ const OpdComplaints = () => {
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
   //popup msg....
-  const [visible, setVisible] = useState(false);
-  const hideDialog = () => setVisible(false);
 
   const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Action'];
-  const keys2 = ['Category', 'Symptoms', 'Duration', 'Time', 'Frequency'];
+  const keys2 = [
+    'Category',
+    'Symptoms',
+    'Duration',
+    'Time',
+    'Frequency',
+    'Action',
+  ];
 
   let data = [
     {
@@ -107,7 +111,7 @@ const OpdComplaints = () => {
   // to set width of table ......
   useEffect(() => {
     setWidthArr([120, 80, 120, 150, 150, ...Array(keys.length).fill(2)]);
-    setWidthArr1([120, 120, 80, 120, 110, ...Array(keys2.length).fill(2)]);
+    setWidthArr1([120, 120, 80, 120, 110, 110, ...Array(keys2.length).fill(2)]);
   }, []);
 
   const updateSelectedCategoryData = selectedValue => {
@@ -193,7 +197,6 @@ const OpdComplaints = () => {
 
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
   }, [hospital_id, patient_id, reception_id]);
 
   //list of FetchMobileOpdAssessment....
@@ -245,6 +248,13 @@ const OpdComplaints = () => {
     setSelectedRow(prev => [...prev, ...uniqueData]);
   };
 
+  // remove selected data handler ....
+  const _removeSelectedDataHandler = _id => {
+    // Filter out data with the specified id
+    const updatedSelectedRow = selectedRow.filter(row => row.id !== _id);
+    setSelectedRow(updatedSelectedRow);
+  };
+
   const submitHandler = async () => {
     const _body = {
       hospital_id: hospital_id,
@@ -267,8 +277,6 @@ const OpdComplaints = () => {
             setDropdownValues2([]);
             setP_category('');
             setSelectedRow([]);
-            // setVisible(true);
-            // onToggleSnackBar();
             navigation.navigate('OpdPastHistory');
           } else {
             ToastAndroid.show(
@@ -294,23 +302,7 @@ const OpdComplaints = () => {
         />
         <Appbar.Content title="OPD Complaints" />
       </Appbar.Header>
-      <Portal>
-        <Dialog visible={visible}>
-          <Dialog.Icon icon="check-all" style={{color: 'green'}} />
-          <Dialog.Title style={styles.title}>Success!</Dialog.Title>
-          <Dialog.Content>
-            <Text variant="bodyMedi um" style={{textAlign: 'center'}}>
-              Complaint Added Successfully!
-            </Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => hideDialog()}>Cancel</Button>
-            <Button onPress={() => navigation.navigate('Eipdoptions')}>
-              Ok
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+
       {/* after submit Msg... */}
 
       <ScrollView vertical style={styles.container}>
@@ -496,6 +488,13 @@ const OpdComplaints = () => {
                         row.duration,
                         row.time,
                         row.frequency,
+                        <IconButton
+                          key={row.id}
+                          icon="trash-can"
+                          iconColor={MD3Colors.error50}
+                          size={20}
+                          onPress={() => _removeSelectedDataHandler(row?.id)}
+                        />,
                       ])}
                       widthArr={widthArr1}
                       style={styles.row}
