@@ -14,6 +14,7 @@ import {
   DefaultTheme,
   Appbar,
   Card,
+  Divider,
 } from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
 import axios from 'axios';
@@ -213,12 +214,57 @@ const OpdComplaints = () => {
           mobilenumber: mobilenumber,
         })
         .then(res => {
-          setOpdAssessment(res.data.data);
+          const DATA = JSON.stringify(res.data.data);
+          const parsedData = JSON.parse(DATA);
+          const filteredData = parsedData.filter(item =>
+            Object.values(item).some(
+              value => Array.isArray(value) && value.length > 0,
+            ),
+          );
+          const filteredString = JSON.stringify(filteredData);
+          const parsedData2 = JSON.parse(filteredString);
+          setOpdAssessment(parsedData2);
         });
     } catch (error) {
       console.error(error);
     }
   };
+
+  const displayData = opdAssessment.map((item, index) => (
+    <View key={index}>
+      {Object.entries(item).map(([key, value]) => (
+        <Card key={key} style={styles.card}>
+          {Array.isArray(value) ? (
+            value.map((obj, i) => (
+              <>
+                <View key={i} style={{padding: 10}}>
+                  {Object.entries(obj).map(
+                    ([propKey, propValue]) =>
+                      propKey !== 'id' && (
+                        <View key={propKey}>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              // justifyContent: 'space-between',
+                              gap: 10,
+                            }}>
+                            <Text style={styles.cardtext}>{propKey}:</Text>
+                            <Text>{propValue}</Text>
+                          </View>
+                        </View>
+                      ),
+                  )}
+                </View>
+                <Divider />
+              </>
+            ))
+          ) : (
+            <Text>{value}</Text>
+          )}
+        </Card>
+      ))}
+    </View>
+  ));
 
   // fetch FetchSysmptomsAccCategory .......
   useEffect(() => {
@@ -520,110 +566,98 @@ const OpdComplaints = () => {
             Skip
           </Button>
         </View>
-        {opdAssessment?.length > 0 && (
+        <View>
+          <Text>{displayData}</Text>
+        </View>
+
+        {/* {opdAssessment?.length > 0 && (
           <>
-            {/* <View style={[styles.categorySelection]}>
-              <ScrollView horizontal={true} style={{padding: 10}}>
-                <View style={{height: 'auto', maxHeight: 400}}>
-                  <Table
-                    borderStyle={{
-                      borderWidth: 1,
-                      borderColor: 'gray',
-                    }}>
-                    <Row
-                      data={keys3}
-                      widthArr={widthArr2}
-                      style={styles.head}
-                      textStyle={styles.text}
-                    />
-                  </Table>
-                  <ScrollView vertical={true} style={styles.dataWrapper}>
-                    <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                      <Rows
-                        // data={tableData}
-                        data={opdAssessment.map(row => [
-                          row.category,
-                          row.symptoms,
-                          row.duration,
-                          row.time,
-                          row.frequency,
-                          `${row.opd_date} / ${row.opd_time}`,
-                        ])}
-                        widthArr={widthArr2}
-                        style={styles.row}
-                        textStyle={styles.text}
-                      />
-                    </Table>
-                  </ScrollView>
-                </View>
-              </ScrollView>
-            </View> */}
-            {opdAssessment?.map((row, index) => {
+            {opdAssessment.map((assessment, index) => {
               return (
-                <Card style={styles.card} key={index + 1}>
-                  <Card.Content>
-                    <View style={styles.cardBodyHead}>
-                      <View style={[styles.cardBody, {gap: 8}]}>
-                        <Text variant="titleLarge" style={styles.cardtext}>
-                          Category :
-                        </Text>
-                        <Text variant="titleLarge" style={styles.cardtext2}>
-                          {row.category}
-                        </Text>
-                      </View>
-                      <View style={[styles.cardBody, {gap: 8}]}>
-                        <Text variant="titleLarge" style={styles.cardtext}>
-                          Symptoms :
-                        </Text>
-                        <Text
-                          variant="titleLarge"
-                          style={[styles.cardtext2, {width: 80}]}>
-                          {row.symptoms}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.cardBodyHead}>
-                      <View style={[styles.cardBody, {gap: 8}]}>
-                        <Text variant="titleLarge" style={styles.cardtext}>
-                          Duration :
-                        </Text>
-                        <Text variant="titleLarge" style={styles.cardtext2}>
-                          {row.duration}
-                        </Text>
-                      </View>
-                      <View style={[styles.cardBody, {gap: 8}]}>
-                        <Text variant="titleLarge" style={styles.cardtext}>
-                          Time :
-                        </Text>
-                        <Text variant="titleLarge" style={styles.cardtext2}>
-                          {row.time}
-                        </Text>
-                      </View>
-                    </View>
-                    {/* <View style={styles.cardBodyHead}> */}
-                    <View style={[styles.cardBody, {gap: 10}]}>
-                      <Text variant="titleLarge" style={styles.cardtext}>
-                        Frequency :
-                      </Text>
-                      <Text variant="titleLarge" style={styles.cardtext2}>
-                        {row.frequency}
-                      </Text>
-                    </View>
-                    <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
-                      <Text variant="titleLarge" style={styles.cardtext}>
-                        Date / Time :
-                      </Text>
-                      <Text variant="titleLarge" style={styles.cardtext2}>
-                        {row.opd_date} / {row.opd_time}
-                      </Text>
-                    </View>
-                    {/* </View> */}
-                  </Card.Content>
-                </Card>
+                <React.Fragment key={index + 1}>
+                  {assessment.opdcomplaintArray.map((row, rowIndex) => {
+                    return (
+                      <Card style={styles.card} key={rowIndex + 1}>
+                        <Card.Content>
+                          <View style={styles.cardBodyHead}>
+                            <View style={[styles.cardBody, {gap: 8}]}>
+                              <Text
+                                variant="titleLarge"
+                                style={styles.cardtext}>
+                                Category :
+                              </Text>
+                              <Text
+                                variant="titleLarge"
+                                style={styles.cardtext2}>
+                                {row.category}
+                              </Text>
+                            </View>
+                            <View style={[styles.cardBody, {gap: 8}]}>
+                              <Text
+                                variant="titleLarge"
+                                style={styles.cardtext}>
+                                Symptoms :
+                              </Text>
+                              <Text
+                                variant="titleLarge"
+                                style={[styles.cardtext2, {width: 80}]}>
+                                {row.symptoms}
+                              </Text>
+                            </View>
+                          </View>
+                          <View style={styles.cardBodyHead}>
+                            <View style={[styles.cardBody, {gap: 8}]}>
+                              <Text
+                                variant="titleLarge"
+                                style={styles.cardtext}>
+                                Duration :
+                              </Text>
+                              <Text
+                                variant="titleLarge"
+                                style={styles.cardtext2}>
+                                {row.duration}
+                              </Text>
+                            </View>
+                            <View style={[styles.cardBody, {gap: 8}]}>
+                              <Text
+                                variant="titleLarge"
+                                style={styles.cardtext}>
+                                Time :
+                              </Text>
+                              <Text
+                                variant="titleLarge"
+                                style={styles.cardtext2}>
+                                {row.time}
+                              </Text>
+                            </View>
+                          </View>
+                          <View style={[styles.cardBody, {gap: 10}]}>
+                            <Text variant="titleLarge" style={styles.cardtext}>
+                              Frequency :
+                            </Text>
+                            <Text variant="titleLarge" style={styles.cardtext2}>
+                              {row.frequency}
+                            </Text>
+                          </View>
+                          <View
+                            style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                            <Text variant="titleLarge" style={styles.cardtext}>
+                              Date / Time :
+                            </Text>
+                            <Text variant="titleLarge" style={styles.cardtext2}>
+                              {row.opd_complaints_date} /{' '}
+                              {row.opd_complaints_time}
+                            </Text>
+                          </View>
+                        </Card.Content>
+                      </Card>
+                    );
+                  })}
+                </React.Fragment>
               );
             })}
           </>
-        )}
+        )} */}
       </ScrollView>
     </>
   );
@@ -725,15 +759,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 14,
     marginBottom: 10,
+    width: 330,
   },
   cardBody: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    width: 150,
+    // flexDirection: 'column',
+    // justifyContent: 'flex-start',
   },
   cardtext: {
     fontWeight: '600',
     color: 'black',
+    textTransform: 'uppercase',
+    width: 100,
   },
   cardtext2: {
     fontWeight: '600',
