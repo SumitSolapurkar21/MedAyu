@@ -12,13 +12,13 @@ import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import {Appbar, RadioButton, Button, Card} from 'react-native-paper';
-import {Table, Row, Rows} from 'react-native-table-component';
 
 const GeneralExamination = () => {
   const navigation = useNavigation();
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
+
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -49,6 +49,7 @@ const GeneralExamination = () => {
       [name]: value,
     }));
   };
+
   const _data = [
     {
       id: 1,
@@ -161,6 +162,7 @@ const GeneralExamination = () => {
       ),
     },
   ];
+
   const renderItem = ({item}) => (
     <ScrollView
       horizontal
@@ -220,23 +222,12 @@ const GeneralExamination = () => {
   };
 
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = ['Pallor', 'Cyanosis', 'Icterus', 'LN', 'Odema', 'Date / Time'];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([
-      100,
-      100,
-      100,
-      100,
-      100,
-      120,
-      ...Array(keys3.length).fill(2),
-    ]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
     return () => {};
   }, [hospital_id, patient_id, reception_id]);
+
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
     try {
@@ -251,12 +242,32 @@ const GeneralExamination = () => {
           mobilenumber: mobilenumber,
         })
         .then(res => {
-          setOpdAssessment(res.data.data);
+          const DATA = JSON.stringify(res.data.data);
+          const parsedData = JSON.parse(DATA);
+          const filteredData = parsedData.filter(item =>
+            Object.values(item).some(
+              value => Array.isArray(value) && value.length > 0,
+            ),
+          );
+          const filteredString = JSON.stringify(filteredData);
+          const parsedData2 = JSON.parse(filteredString);
+          setOpdAssessment(parsedData2);
         });
     } catch (error) {
       console.error(error);
     }
   };
+  const displayData = opdAssessment.map((item, index) => (
+    <View key={index}>
+      {Object.entries(item).map(([key, value]) => (
+        <Card key={key} style={styles.card}>
+          {Array.isArray(value) ? (
+            <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
+          ) : null}
+        </Card>
+      ))}
+    </View>
+  ));
   return (
     <>
       {/* Appbar header */}
@@ -302,70 +313,9 @@ const GeneralExamination = () => {
           </Button>
         </View>
 
-        {opdAssessment?.map((row, index) => {
-          return (
-            <Card style={styles.card2} key={index + 1}>
-              <Card.Content>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Pallor :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.pallor}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Cyanosis :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.cyanosis}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Icterus :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.icterus}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Ln :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.ln}
-                    </Text>
-                  </View>
-                </View>
-                <View style={[styles.cardBody, {gap: 8}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Odema :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row?.odema}
-                  </Text>
-                </View>
-
-                {/* <View style={styles.cardBodyHead}> */}
-
-                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Date / Time :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row.opd_date} / {row.opd_time}
-                  </Text>
-                </View>
-                {/* </View> */}
-              </Card.Content>
-            </Card>
-          );
-        })}
+        <View style={{marginHorizontal: 10, padding: 10}}>
+          <Text>{displayData}</Text>
+        </View>
       </ScrollView>
     </>
   );
@@ -423,5 +373,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+  },
+  card: {
+    padding: 10,
+    width: 320,
+    maxWidth: 340,
+    marginBottom: 10,
   },
 });

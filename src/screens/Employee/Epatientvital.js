@@ -50,7 +50,7 @@ const Epatientvital = () => {
   const [visible, setVisible] = useState(false);
   const hideDialog = () => setVisible(false);
   const {scannedPatientsData, userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData?.data[0];
+  const {_id, hospital_id} = userData;
   const {patient_id} = scannedPatientsData;
   const [validationErrors, setValidationErrors] = React.useState({
     p_temp: '',

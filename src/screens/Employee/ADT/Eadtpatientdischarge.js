@@ -25,7 +25,7 @@ import {BackHandler} from 'react-native';
 
 const Eadtpatientdischarge = ({selectedStatus}) => {
   const {userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData?.data[0];
+  const {_id, hospital_id} = userData
   const [editText, setEditText] = useState('');
   const navigation = useNavigation();
 

@@ -23,7 +23,7 @@ const Epatientvitalhistory = () => {
     return () => backHandler.remove();
   }, []);
   const {scannedPatientsData, userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData?.data[0];
+  const {_id, hospital_id} = userData;
   const {patient_id} = scannedPatientsData;
   //   const [vitalHistoryData, setVitalHistoryData] = useState([]);
   const [tableData, setTableData] = useState([]);

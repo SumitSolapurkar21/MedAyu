@@ -207,7 +207,16 @@ const OpdPastHistory = () => {
           mobilenumber: mobilenumber,
         })
         .then(res => {
-          setOpdAssessment(res.data.data);
+          const DATA = JSON.stringify(res.data.data);
+          const parsedData = JSON.parse(DATA);
+          const filteredData = parsedData.filter(item =>
+            Object.values(item).some(
+              value => Array.isArray(value) && value.length > 0,
+            ),
+          );
+          const filteredString = JSON.stringify(filteredData);
+          const parsedData2 = JSON.parse(filteredString);
+          setOpdAssessment(parsedData2);
         });
     } catch (error) {
       console.error(error);
@@ -220,6 +229,18 @@ const OpdPastHistory = () => {
     const updatedSelectedRow = temp?.filter(row => row.illness_id !== _id);
     setTemp(updatedSelectedRow);
   };
+
+  const displayData = opdAssessment.map((item, index) => (
+    <View key={index}>
+      {Object.entries(item).map(([key, value]) => (
+        <Card key={key} style={styles.card}>
+          {Array.isArray(value) ? (
+            <Text style={{lineHeight: 20, width: 330}}>{value.join('\n')}</Text>
+          ) : null}
+        </Card>
+      ))}
+    </View>
+  ));
   return (
     <>
       {/* Appbar header */}
@@ -437,63 +458,9 @@ const OpdPastHistory = () => {
             Skip
           </Button>
         </View>
-
-        {opdAssessment?.map(row => {
-          return (
-            <Card style={styles.card2} key={row?.illness_id}>
-              <Card.Content>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Illness :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.illnessname}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      From Date :
-                    </Text>
-                    <Text
-                      variant="titleLarge"
-                      style={[styles.cardtext2, {width: 80}]}>
-                      {row?.dateValues}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Days / Months / Years :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.days} / {row?.months} / {row?.years}
-                    </Text>
-                  </View>
-                </View>
-                {/* <View style={styles.cardBodyHead}> */}
-                <View style={[styles.cardBody, {gap: 10}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Treatment Status :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row.treatment_status}
-                  </Text>
-                </View>
-                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Date / Time :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row.opd_date} / {row.opd_time}
-                  </Text>
-                </View>
-                {/* </View> */}
-              </Card.Content>
-            </Card>
-          );
-        })}
+        <View style={{padding: 10}}>
+          <Text>{displayData}</Text>
+        </View>
       </ScrollView>
     </>
   );
@@ -543,9 +510,6 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   card: {
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
-    borderWidth: 0.7,
     borderRadius: 6,
     marginBottom: 10,
     padding: 6,

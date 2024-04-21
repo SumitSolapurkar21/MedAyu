@@ -180,7 +180,16 @@ const MedicineHistory = () => {
           mobilenumber: mobilenumber,
         })
         .then(res => {
-          setOpdAssessment(res.data.data);
+          const DATA = JSON.stringify(res.data.data);
+          const parsedData = JSON.parse(DATA);
+          const filteredData = parsedData.filter(item =>
+            Object.values(item).some(
+              value => Array.isArray(value) && value.length > 0,
+            ),
+          );
+          const filteredString = JSON.stringify(filteredData);
+          const parsedData2 = JSON.parse(filteredString);
+          setOpdAssessment(parsedData2);
         });
     } catch (error) {
       console.error(error);
@@ -193,6 +202,17 @@ const MedicineHistory = () => {
     const updatedSelectedRow = temp?.filter(row => row.prescription_id !== _id);
     setTemp(updatedSelectedRow);
   };
+  const displayData = opdAssessment.map((item, index) => (
+    <View key={index}>
+      {Object.entries(item).map(([key, value]) => (
+        <Card key={key} style={styles.card}>
+          {Array.isArray(value) ? (
+            <Text style={{lineHeight: 20, width: 330}}>{value.join('\n')}</Text>
+          ) : null}
+        </Card>
+      ))}
+    </View>
+  ));
   return (
     <>
       {/* Appbar header */}
@@ -417,72 +437,9 @@ const MedicineHistory = () => {
           </Button>
         </View>
 
-        {opdAssessment?.map((row, index) => {
-          return (
-            <Card style={styles.card2} key={index + 1}>
-              <Card.Content>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Dose :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.dose}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Route :
-                    </Text>
-                    <Text
-                      variant="titleLarge"
-                      style={[styles.cardtext2, {width: 80}]}>
-                      {row?.route}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 10}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Schedule :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.schedule}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      From Date :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.dateValues}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Days / Months / Years :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.days} / {row?.months} / {row?.years}
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Date / Time :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row.opd_date} / {row.opd_time}
-                  </Text>
-                </View>
-                {/* </View> */}
-              </Card.Content>
-            </Card>
-          );
-        })}
+        <View style={{padding: 10}}>
+          <Text>{displayData}</Text>
+        </View>
       </ScrollView>
     </>
   );
@@ -532,7 +489,6 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   card: {
-    borderWidth: 0.7,
     borderRadius: 6,
     marginBottom: 10,
     padding: 6,

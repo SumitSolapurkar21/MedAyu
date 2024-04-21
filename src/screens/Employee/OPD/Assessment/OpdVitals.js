@@ -46,6 +46,7 @@ const OpdVitals = () => {
   const [mildColor, setmildColor] = useState('');
   const [moderateColor, setmoderateColor] = useState('');
   const [severeColor, setsevereColor] = useState('');
+  const [gcssStatus, setGcssStatus] = useState('');
 
   const {patientsData, scannedPatientsData} = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
@@ -65,6 +66,7 @@ const OpdVitals = () => {
   const [showEyeopening, setshowEyeopening] = useState(false);
   const [showverbalReaponse, setshowverbalReaponse] = useState(false);
   const [showMotorResponse, setshowMotorResponse] = useState(false);
+
   // Input handler
   const addVitalsData = async () => {
     const errors = {};
@@ -129,6 +131,7 @@ const OpdVitals = () => {
         eyeopening: eyeopening,
         motorResponse: motorResponse,
         verbalResponse: verbalResponse,
+        gcss_status: gcssStatus,
       };
       try {
         await axios
@@ -264,14 +267,17 @@ const OpdVitals = () => {
       parseInt(eyeopening) + parseInt(verbalResponse) + parseInt(motorResponse);
 
     if (scalecount >= 13) {
+      setGcssStatus('mild');
       setmildColor('green');
       setmoderateColor('white');
       setsevereColor('white');
     } else if (scalecount >= 9 && scalecount <= 12) {
+      setGcssStatus('moderate');
       setmoderateColor('yellow');
       setmildColor('white');
       setsevereColor('white');
     } else if (scalecount >= 3 && scalecount <= 8) {
+      setGcssStatus('severe');
       setsevereColor('red');
       setmoderateColor('white');
       setmildColor('white');
@@ -281,38 +287,11 @@ const OpdVitals = () => {
   }, [eyeopening, verbalResponse, motorResponse]);
 
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = [
-    'Temp',
-    'Pulse',
-    'SPO2',
-    'Systolic BP',
-    'Diastolic BP',
-    'RESP.Rate',
-    'Eye Opening',
-    'Verbal Resp.',
-    'Motor Resp.',
-    'Date / Time',
-  ];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-      ...Array(keys3.length).fill(2),
-    ]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
   }, [hospital_id, patient_id, reception_id]);
+
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
     try {
@@ -656,7 +635,7 @@ const OpdVitals = () => {
             <Button
               mode="contained"
               style={styles.btn}
-              onPress={() => navigation.navigate('MenstrualHistory')}>
+              onPress={() => navigation.replace('MenstrualHistory')}>
               Previous
             </Button>
 
@@ -680,92 +659,65 @@ const OpdVitals = () => {
           return (
             <Card style={styles.card2} key={index + 1}>
               <Card.Content>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Temp :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.p_temp}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Pulse :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.p_pulse}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      SPO2 :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.p_spo2}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Systolic BP :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.p_systolicbp}
-                    </Text>
-                  </View>
-                </View>
-                <View style={[styles.cardBody, {gap: 8}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Diastolic BP :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row?.p_diastolicbp}
-                  </Text>
-                </View>
-                <View style={[styles.cardBody, {gap: 8}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Resp. Rate :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row?.p_rsprate}
-                  </Text>
-                </View>
-                {/* <View style={styles.cardBodyHead}> */}
-                <View style={[styles.cardBody, {gap: 10}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Eye Opening :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row?.eyeopening}
-                  </Text>
-                </View>
-                <View style={[styles.cardBody, {gap: 10}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Verbal Resp :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row?.verbalResponse}
-                  </Text>
-                </View>
-                <View style={[styles.cardBody, {gap: 10}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Mortor Resp :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row?.motorResponse}
-                  </Text>
-                </View>
                 <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     Date / Time :
                   </Text>
                   <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row.opd_date} / {row.opd_time}
+                    {row.opd_date} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{row.opd_time}
                   </Text>
                 </View>
-                {/* </View> */}
+                <View style={[styles.cardBody, {gap: 8}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Temp :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.p_temp} &#8457;
+                  </Text>
+                </View>
+                <View style={[styles.cardBody, {gap: 8}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    Pulse :
+                  </Text>
+                  <Text variant="titleLarge" style={[styles.cardtext2]}>
+                    {row?.p_pulse} /min
+                  </Text>
+                </View>
+
+                <View style={[styles.cardBody, {gap: 8}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    SPO2 :
+                  </Text>
+                  <Text variant="titleLarge" style={[styles.cardtext2]}>
+                    {row?.p_spo2} %
+                  </Text>
+                </View>
+                <View style={[styles.cardBody, {gap: 8}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    BP :
+                  </Text>
+                  <Text variant="titleLarge" style={[styles.cardtext2]}>
+                    {row?.p_systolicbp} / {row?.p_diastolicbp} mmHg
+                  </Text>
+                </View>
+
+                <View style={[styles.cardBody, {gap: 8}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    RR :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.p_rsprate} /min
+                  </Text>
+                </View>
+                <View style={[styles.cardBody, {gap: 10}]}>
+                  <Text variant="titleLarge" style={styles.cardtext}>
+                    GC :
+                  </Text>
+                  <Text variant="titleLarge" style={styles.cardtext2}>
+                    {row?.gcss_status} (E{row?.eyeopening}V{row?.verbalResponse}
+                    M{row?.motorResponse})
+                  </Text>
+                </View>
               </Card.Content>
             </Card>
           );
@@ -905,11 +857,12 @@ const styles = StyleSheet.create({
   cardBody: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    width: 100,
+    // width: 100,
   },
   cardtext: {
     fontWeight: '600',
     color: 'black',
+    width: 85,
   },
   cardtext2: {
     fontWeight: '600',

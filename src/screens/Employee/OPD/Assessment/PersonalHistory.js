@@ -34,100 +34,100 @@ const PersonalHistory = () => {
       id: 1,
       label: 'Tea',
       options: [
-        {value: 'tea_none', label: 'None'},
-        {value: 'tea_light', label: 'Light'},
-        {value: 'tea_moderate', label: 'Moderate'},
-        {value: 'tea_heavy', label: 'Heavy'},
+        {value: 'none', label: 'None'},
+        {value: 'light', label: 'Light'},
+        {value: 'moderate', label: 'Moderate'},
+        {value: 'heavy', label: 'Heavy'},
       ],
-      checked: 'tea_none',
+      checked: 'none',
     },
     {
       id: 2,
       label: 'Coffee',
       options: [
-        {value: 'coffee_none', label: 'None'},
-        {value: 'coffee_light', label: 'Light'},
-        {value: 'coffee_moderate', label: 'Moderate'},
-        {value: 'coffee_heavy', label: 'Heavy'},
+        {value: 'none', label: 'None'},
+        {value: 'light', label: 'Light'},
+        {value: 'moderate', label: 'Moderate'},
+        {value: 'heavy', label: 'Heavy'},
       ],
-      checked: 'coffee_none',
+      checked: 'none',
     },
     {
       id: 3,
-      label: 'Tobacco /Kharra',
+      label: 'Tobacco',
       options: [
-        {value: 'tobaco_none', label: 'None'},
-        {value: 'tobaco_light', label: 'Light'},
-        {value: 'tobaco_moderate', label: 'Moderate'},
-        {value: 'tobaco_heavy', label: 'Heavy'},
+        {value: 'none', label: 'None'},
+        {value: 'light', label: 'Light'},
+        {value: 'moderate', label: 'Moderate'},
+        {value: 'heavy', label: 'Heavy'},
       ],
-      checked: 'tobaco_none',
+      checked: 'none',
     },
     {
       id: 4,
       label: 'Smoking',
       options: [
-        {value: 'smoking_none', label: 'None'},
-        {value: 'smoking_light', label: 'Light'},
-        {value: 'smoking_moderate', label: 'Moderate'},
-        {value: 'smoking_heavy', label: 'Heavy'},
+        {value: 'none', label: 'None'},
+        {value: 'light', label: 'Light'},
+        {value: 'moderate', label: 'Moderate'},
+        {value: 'heavy', label: 'Heavy'},
       ],
-      checked: 'smoking_none',
+      checked: 'none',
     },
     {
       id: 5,
       label: 'Alcohol',
       options: [
-        {value: 'alcohol_none', label: 'None'},
-        {value: 'alcohol_light', label: 'Light'},
-        {value: 'alcohol_moderate', label: 'Moderate'},
-        {value: 'alcohol_heavy', label: 'Heavy'},
+        {value: 'none', label: 'None'},
+        {value: 'light', label: 'Light'},
+        {value: 'moderate', label: 'Moderate'},
+        {value: 'heavy', label: 'Heavy'},
       ],
-      checked: 'alcohol_none',
+      checked: 'none',
     },
     {
       id: 6,
       label: 'Drugs',
       options: [
-        {value: 'drugs_none', label: 'None'},
-        {value: 'drugs_light', label: 'Light'},
-        {value: 'drugs_moderate', label: 'Moderate'},
-        {value: 'drugs_heavy', label: 'Heavy'},
+        {value: 'none', label: 'None'},
+        {value: 'light', label: 'Light'},
+        {value: 'moderate', label: 'Moderate'},
+        {value: 'heavy', label: 'Heavy'},
       ],
-      checked: 'drugs_none',
+      checked: 'none',
     },
     {
       id: 7,
       label: 'Exercise',
       options: [
-        {value: 'excercise_none', label: 'None'},
-        {value: 'excercise_light', label: 'Light'},
-        {value: 'excercise_moderate', label: 'Moderate'},
-        {value: 'excercise_heavy', label: 'Heavy'},
+        {value: 'none', label: 'None'},
+        {value: 'light', label: 'Light'},
+        {value: 'moderate', label: 'Moderate'},
+        {value: 'heavy', label: 'Heavy'},
       ],
-      checked: 'excercise_none',
+      checked: 'none',
     },
     {
       id: 8,
-      label: 'Soft Drink',
+      label: 'SoftDrink',
       options: [
-        {value: 'soft_none', label: 'None'},
-        {value: 'soft_light', label: 'Light'},
-        {value: 'soft_moderate', label: 'Moderate'},
-        {value: 'soft_heavy', label: 'Heavy'},
+        {value: 'none', label: 'None'},
+        {value: 'light', label: 'Light'},
+        {value: 'moderate', label: 'Moderate'},
+        {value: 'heavy', label: 'Heavy'},
       ],
-      checked: 'soft_none',
+      checked: 'none',
     },
     {
       id: 9,
-      label: 'Salty food',
+      label: 'Saltyfood',
       options: [
-        {value: 'salty_none', label: 'None'},
-        {value: 'salty_light', label: 'Light'},
-        {value: 'salty_moderate', label: 'Moderate'},
-        {value: 'salty_heavy', label: 'Heavy'},
+        {value: 'none', label: 'None'},
+        {value: 'light', label: 'Light'},
+        {value: 'moderate', label: 'Moderate'},
+        {value: 'heavy', label: 'Heavy'},
       ],
-      checked: 'salty_none',
+      checked: 'none',
     },
   ]);
 
@@ -146,10 +146,13 @@ const PersonalHistory = () => {
 
   const _filterData = parsedData.map(item => {
     return {
-      id: item.id,
       label: item.label,
       checked: item.checked,
     };
+  });
+  const singleObject = {};
+  _filterData.forEach(item => {
+    singleObject[item.label] = item.checked;
   });
 
   const _tableData = tableData?.map(item => {
@@ -190,7 +193,7 @@ const PersonalHistory = () => {
       appoint_id: appoint_id,
       uhid: uhid,
       api_type: 'OPD-PERSONAL-HISTORY',
-      opdpersonalhistoryarray: _filterData,
+      opdpersonalhistoryarray: [singleObject],
     };
     try {
       await axios
@@ -208,11 +211,7 @@ const PersonalHistory = () => {
     }
   };
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = ['Habit', 'Status', 'Date / Time'];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([120, 110, 90, ...Array(keys3.length).fill(2)]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
     return () => {};
@@ -298,31 +297,106 @@ const PersonalHistory = () => {
             <Card style={styles.card2} key={index + 1}>
               <Card.Content>
                 <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Habit :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.label}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Status :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.checked}
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Date / Time :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row.opd_date} / {row.opd_time}
-                  </Text>
+                  {row.opd_date && row.opd_time && (
+                    <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Date / Time :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row.opd_date} / {row.opd_time}
+                      </Text>
+                    </View>
+                  )}
+                  {row.Alcohol !== 'none' && (
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Alcohol :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.Alcohol}
+                      </Text>
+                    </View>
+                  )}
+                  {row.Coffee !== 'none' && (
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Coffee :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.Coffee}
+                      </Text>
+                    </View>
+                  )}
+                  {row.Drugs !== 'none' && (
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Drugs :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.Drugs}
+                      </Text>
+                    </View>
+                  )}
+                  {row.Exercise !== 'none' && (
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Exercise :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.Exercise}
+                      </Text>
+                    </View>
+                  )}
+                  {row.Saltyfood !== 'none' && (
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Salty food :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.Saltyfood}
+                      </Text>
+                    </View>
+                  )}
+                  {row.SoftDrink !== 'none' && (
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Soft Drink :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.SoftDrink}
+                      </Text>
+                    </View>
+                  )}
+                  {row.Smoking !== 'none' && (
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Smoking :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.Smoking}
+                      </Text>
+                    </View>
+                  )}
+                  {row.Tea !== 'none' && (
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Tea :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.Tea}
+                      </Text>
+                    </View>
+                  )}
+                  {row.Tobacco !== 'none' && (
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Tobacco/Kharra :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.Tobacco}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               </Card.Content>
             </Card>
@@ -370,11 +444,12 @@ const styles = StyleSheet.create({
   cardtext: {
     fontWeight: '600',
     color: 'black',
+    width: 120,
   },
   cardtext2: {
     fontWeight: '600',
     flexWrap: 'wrap',
-    // width: 100,
+    textTransform: 'capitalize',
   },
   cardBodyHead: {
     flexDirection: 'row',

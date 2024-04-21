@@ -20,7 +20,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const EipregistrationProfile = () => {
   const {scannedPatientsData, userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData?.data[0];
+  const {_id, hospital_id} = userData;
   const {
     firstname,
     mobilenumber,

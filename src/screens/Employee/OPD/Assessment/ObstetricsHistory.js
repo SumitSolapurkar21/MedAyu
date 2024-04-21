@@ -106,44 +106,11 @@ const ObstetricsHistory = () => {
   };
 
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = [
-    'G',
-    'P',
-    'L',
-    'A',
-    'D',
-    'Pregnant',
-    'Breast Feeding',
-    'Planing to Conceive',
-    'Contraception',
-    'Pill',
-    'Injuction',
-    'Other',
-    'Date / Time',
-  ];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([
-      50,
-      50,
-      50,
-      50,
-      50,
-      100,
-      100,
-      100,
-      100,
-      100,
-      150,
-      120,
-      120,
-      ...Array(keys3.length).fill(1),
-    ]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
   }, [hospital_id, patient_id, reception_id]);
+
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
     try {
@@ -158,12 +125,35 @@ const ObstetricsHistory = () => {
           mobilenumber: mobilenumber,
         })
         .then(res => {
-          setOpdAssessment(res.data.data);
+          const DATA = JSON.stringify(res.data.data);
+          const parsedData = JSON.parse(DATA);
+          const filteredData = parsedData.filter(item =>
+            Object.values(item).some(
+              value => Array.isArray(value) && value.length > 0,
+            ),
+          );
+          const filteredString = JSON.stringify(filteredData);
+          const parsedData2 = JSON.parse(filteredString);
+          setOpdAssessment(parsedData2);
         });
     } catch (error) {
       console.error(error);
     }
   };
+  const displayData = opdAssessment.map((item, index) => (
+    <>
+      {Object.entries(item).map(([key, value]) => (
+        <>
+          <Card key={key} style={styles.card2}>
+            {Array.isArray(value) ? (
+              <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
+            ) : null}
+          </Card>
+          <Divider />
+        </>
+      ))}
+    </>
+  ));
   return (
     <>
       {/* Appbar header */}
@@ -400,7 +390,7 @@ const ObstetricsHistory = () => {
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('PersonalHistory')}>
+            onPress={() => navigation.replace('PersonalHistory')}>
             Previous
           </Button>
           <Button
@@ -417,127 +407,9 @@ const ObstetricsHistory = () => {
             Skip
           </Button>
         </View>
-
-        {opdAssessment?.map((row, index) => {
-          return (
-            <Card style={styles.card3} key={index + 1}>
-              <Card.Content>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      G :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.g}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      P :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.p}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      L :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.l}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      A :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.a}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      D :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.d}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Pregnant :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.pregnant}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Breast Feeding :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.breastFeeding}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 10}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Planning of Conceive :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row.conception}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 10}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Contraception :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row.contraception}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Pills :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.pillsChecked}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Injuction :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.injuctionChecked}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Other :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.otherChecked}
-                    </Text>
-                  </View>
-                </View>
-                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Date / Time :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row.opd_date} / {row.opd_time}
-                  </Text>
-                </View>
-              </Card.Content>
-            </Card>
-          );
-        })}
+        <View style={{padding: 8, marginBottom: 10}}>
+          <Text>{displayData}</Text>
+        </View>
       </ScrollView>
     </>
   );
@@ -606,5 +478,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+  },
+  card4: {
+    width: 320, // 90% width of the container
+    maxWidth: 340, // Maximum width of 400 pixels
+    borderRadius: 5,
+    padding: 10,
+    marginTop: 10,
   },
 });

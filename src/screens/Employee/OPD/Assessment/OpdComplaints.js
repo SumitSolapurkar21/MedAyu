@@ -235,32 +235,8 @@ const OpdComplaints = () => {
       {Object.entries(item).map(([key, value]) => (
         <Card key={key} style={styles.card}>
           {Array.isArray(value) ? (
-            value.map((obj, i) => (
-              <>
-                <View key={i} style={{padding: 10}}>
-                  {Object.entries(obj).map(
-                    ([propKey, propValue]) =>
-                      propKey !== 'id' && (
-                        <View key={propKey}>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              // justifyContent: 'space-between',
-                              gap: 10,
-                            }}>
-                            <Text style={styles.cardtext}>{propKey}:</Text>
-                            <Text>{propValue}</Text>
-                          </View>
-                        </View>
-                      ),
-                  )}
-                </View>
-                <Divider />
-              </>
-            ))
-          ) : (
-            <Text>{value}</Text>
-          )}
+            <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
+          ) : null}
         </Card>
       ))}
     </View>
@@ -760,6 +736,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 14,
     marginBottom: 10,
     width: 330,
+    padding: 10,
   },
   cardBody: {
     // flexDirection: 'column',

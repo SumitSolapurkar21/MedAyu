@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 
 const Eipdbeds = () => {
   const {userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData?.data[0];
+  const {_id, hospital_id} = userData;
   const navigation = useNavigation();
   //backHandler ...
   useEffect(() => {

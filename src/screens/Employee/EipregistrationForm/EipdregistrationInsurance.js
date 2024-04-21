@@ -18,7 +18,7 @@ import UserContext from '../../../components/Context/Context';
 
 const EipdregistrationInsurance = () => {
   const {scannedPatientsData, userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData?.data[0];
+  const {_id, hospital_id} = userData;
   const {patient_id} = scannedPatientsData;
   const navigation = useNavigation();
   const [datePicker, setDatePicker] = useState(false);
