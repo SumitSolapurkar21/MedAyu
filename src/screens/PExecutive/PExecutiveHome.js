@@ -17,14 +17,15 @@ import {useNavigation} from '@react-navigation/native';
 //images
 
 import attendence from '../../images/calendar.png';
+import expenses from '../../images/expenses.png';
 import UserContext from '../../components/Context/Context';
+import {Appbar, Button, Menu} from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PExecutiveHome = () => {
   const navigation = useNavigation();
 
-  const {userData} = useContext(UserContext);
-
-  const {role, name} = userData;
+  const {userData, setIsLoggedIn} = useContext(UserContext);
 
   useEffect(() => {
     const backAction = () => {
@@ -51,50 +52,94 @@ const PExecutiveHome = () => {
 
     return () => backHandler.remove();
   }, []);
-  return (
-    <SafeAreaView style={styles.container}>
-      <>
-        <View style={styles.outerHeader}>
-          <View style={styles.hlcontent}>
-            <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-            <Text style={styles.uNamee}>Hi ! , {name}</Text>
-          </View>
-          <View style={styles.hrcontent}>
-            <TouchableOpacity>
-              <FontAwesome name="shopping-cart" size={22} color="#127359" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <FontAwesome name="bell" size={22} color="#127359" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
-              <FontAwesome name="user" size={22} color="#127359" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.searchDiv}>
-          <FontAwesome6
-            name="magnifying-glass"
-            color="#127359"
-            size={18}
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchtext}
-            placeholder="Search for Medicines, Doctors, Lab Tests"
-            placeholderTextColor="#127359"
-          />
-        </View>
 
-        <View style={styles.contentDiv}>
-          <TouchableOpacity
-            style={styles.contentItem}
-            onPress={() => navigation.navigate('HrModal')}>
-            <Image source={attendence} style={styles.img} />
-            <Text style={styles.contentText}>HR</Text>
-          </TouchableOpacity>
-        </View>
-      </>
-    </SafeAreaView>
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = React.useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+
+  const logoutHandler = async () => {
+    // Clear user token from AsyncStorage
+    await AsyncStorage.removeItem('userToken');
+    setIsLoggedIn(false);
+    navigation.navigate('LoginPage');
+  };
+  return (
+    <>
+      <Appbar.Header
+        style={{
+          // marginBottom: -60,
+          backgroundColor: 'white',
+          borderBottomWidth: 2,
+          borderBottomColor: '#ebebeb',
+        }}>
+        <Image source={medayuLogo} alt="MedAyu" style={styles.img2} />
+        <Appbar.Content
+          title={userData?.name}
+          titleStyle={{fontSize: 18, marginLeft: 10}}
+        />
+        {/* <Appbar.Action icon="magnify" onPress={_handleSearch} /> */}
+        <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+      </Appbar.Header>
+      <View
+        style={{
+          position: 'absolute',
+          right: 3,
+          top: 60,
+        }}>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={<Button onPress={openMenu}></Button>}>
+          <Menu.Item
+            dense
+            leadingIcon="logout"
+            onPress={() => {
+              logoutHandler();
+            }}
+            title="Logout"
+          />
+
+          {/* <Menu.Item onPress={() => {}} title="Item 2" /> */}
+        </Menu>
+      </View>
+      <SafeAreaView style={styles.container}>
+        <>
+          <View style={styles.searchDiv}>
+            <FontAwesome6
+              name="magnifying-glass"
+              color="#127359"
+              size={18}
+              style={styles.searchIcon}
+            />
+            <TextInput
+              style={styles.searchtext}
+              placeholder="Search for Medicines, Doctors, Lab Tests"
+              placeholderTextColor="#127359"
+            />
+          </View>
+
+          <View style={styles.contentDiv}>
+            <TouchableOpacity
+              style={styles.contentItem}
+              onPress={() => navigation.navigate('HrModal')}>
+              <Image source={attendence} style={styles.img} />
+              <Text style={styles.contentText}>HR</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.contentItem}
+              onPress={() => {
+                navigation.navigate('Expenses');
+              }}>
+              <Image source={expenses} style={styles.img} />
+              <Text style={styles.contentText}>Expenses</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -115,13 +160,7 @@ const styles = StyleSheet.create({
     gap: 10,
     marginHorizontal: 6,
   },
-  uName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#127359',
-    width: 90,
-  },
-  uNamee: {fontSize: 17, fontWeight: '600', color: '#127359'},
+
   hrcontent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -164,7 +203,7 @@ const styles = StyleSheet.create({
     elevation: 6,
     width: '48%',
     padding: 6,
-    height: 75,
+    height: 55,
     borderRadius: 8,
     alignItems: 'center',
     gap: 10,
@@ -175,5 +214,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#127359',
     fontWeight: '600',
+  },
+  img2: {
+    resizeMode: 'contain',
+    width: 55,
+    height: 55,
+    marginLeft: 6,
   },
 });

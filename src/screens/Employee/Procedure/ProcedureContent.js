@@ -9,12 +9,8 @@ import procedure from '../../../images/prodedure.png';
 
 const ProcedureContent = () => {
   const navigation = useNavigation();
-  const {
-    opdServices,
-    setSelectedCategory,
-    selectserviceCategory,
-    setSelectedServiceCategory,
-  } = useContext(UserContext);
+  const {opdServices, setSelectedCategory, setSelectedServiceCategory} =
+    useContext(UserContext);
   const [_serviceCategoryArray, _setServiceCategoryArray] = useState([]);
 
   const _filterData = opdServices.filter(
@@ -32,6 +28,7 @@ const ProcedureContent = () => {
             servicetype_id: procedure_id,
           })
           .then(res => {
+            console.log(res.data);
             _setServiceCategoryArray(res.data.data);
           });
       } catch (error) {

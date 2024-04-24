@@ -76,9 +76,7 @@ const ProcedureServiceType = ({route}) => {
             const {status, message} = res.data;
             if (status === true) {
               _setCategory(res.data.data);
-              //     setSelectionValue(
-              //       res.data.data.length > 0 ? res.data.data[0].category_id : null,
-              //     );
+             
             } else {
               console.error(message);
             }

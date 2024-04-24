@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
@@ -20,9 +19,10 @@ import UserContext from '../../components/Context/Context';
 import pr from '../../images/pr.png';
 import ss from '../../images/sss.png';
 import attendence from '../../images/calendar.png';
-// import axios from 'axios';
-// import api from '../../../api.json';
+import expenses from '../../images/expenses.png';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Appbar, Button, Menu} from 'react-native-paper';
 
 const Ehome = () => {
   // ........ //
@@ -65,92 +65,122 @@ const Ehome = () => {
     return () => backHandler.remove();
   }, []);
 
-  // qrscan
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.outerHeader}>
-        <View style={styles.hlcontent}>
-          <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>Hi {userData?.name} </Text>
-        </View>
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = React.useState(false);
 
-        <View style={styles.hrcontent}>
-          <TouchableOpacity
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
+
+  return (
+    <>
+      <Appbar.Header
+        style={{
+          backgroundColor: 'white',
+          borderBottomWidth: 2,
+          borderBottomColor: '#ebebeb',
+        }}>
+        <Image source={medayuLogo} alt="MedAyu" style={styles.img2} />
+        <Appbar.Content
+          title={userData?.name}
+          titleStyle={{fontSize: 18, marginLeft: 10}}
+        />
+        {/* <Appbar.Action icon="magnify" onPress={_handleSearch} /> */}
+        <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+      </Appbar.Header>
+      <View
+        style={{
+          position: 'absolute',
+          right: 3,
+          top: 60,
+        }}>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={<Button onPress={openMenu}></Button>}>
+          <Menu.Item
+            dense
+            leadingIcon="logout"
             onPress={() => {
               navigation.navigate('LoginPage'), logoutHandler();
+            }}
+            title="Logout"
+          />
+
+          {/* <Menu.Item onPress={() => {}} title="Item 2" /> */}
+        </Menu>
+      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.searchDiv}>
+          <FontAwesome6
+            name="magnifying-glass"
+            color="#127359"
+            size={18}
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchtext}
+            placeholder="Search for Medicines, Doctors, Lab Tests"
+            placeholderTextColor="#127359"
+          />
+        </View>
+
+        <View style={styles.contentDiv}>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => navigation.navigate('EpatientRegistration')}>
+            <Image source={pr} style={styles.img} />
+            <Text style={styles.contentText}>Patient Registration</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => {
+              navigation.navigate('QRScanner'), setPatientSelectedValue('1');
             }}>
-            <FontAwesome
-              name="sign-out"
-              size={22}
-              color="#127359"
-              style={{marginLeft: 20}}
-            />
+            <Image source={ss} style={styles.img} />
+            <Text style={styles.contentText}>Search Patient</Text>
           </TouchableOpacity>
         </View>
-      </View>
-      <Text style={{fontSize: 12, color: '#127359', marginLeft: '21%'}}>
-        {userData?.role}
-      </Text>
-
-      <View style={styles.searchDiv}>
-        <FontAwesome6
-          name="magnifying-glass"
-          color="#127359"
-          size={18}
-          style={styles.searchIcon}
-        />
-        <TextInput
-          style={styles.searchtext}
-          placeholder="Search for Medicines, Doctors, Lab Tests"
-          placeholderTextColor="#127359"
-        />
-      </View>
-
-      <View style={styles.contentDiv}>
-        <TouchableOpacity
-          style={styles.contentItem}
-          onPress={() => navigation.navigate('EpatientRegistration')}>
-          <Image source={pr} style={styles.img} />
-          <Text style={styles.contentText}>Patient Registration</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.contentItem}
-          onPress={() => {
-            navigation.navigate('QRScanner'), setPatientSelectedValue('1');
-          }}>
-          <Image source={ss} style={styles.img} />
-          <Text style={styles.contentText}>Search Patient</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.contentDiv}>
-        <TouchableOpacity
-          style={styles.contentItem}
-          onPress={() => {
-            navigation.navigate('HrModal');
-          }}>
-          <Image source={attendence} style={styles.img} />
-          <Text style={styles.contentText}>HR</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.contentItem}
-          onPress={() => {
-            navigation.navigate('QRScanner'), setPatientSelectedValue('3');
-          }}>
-          <Image source={attendence} style={styles.img} />
-          <Text style={styles.contentText}>Discharge Initiate</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.contentDiv}>
-        <TouchableOpacity
-          style={styles.contentItem}
-          onPress={() => {
-            navigation.navigate('PatientDischargeSummary');
-          }}>
-          <Image source={attendence} style={styles.img} />
-          <Text style={styles.contentText}>Discharge Summary</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        <View style={styles.contentDiv}>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => {
+              navigation.navigate('HrModal');
+            }}>
+            <Image source={attendence} style={styles.img} />
+            <Text style={styles.contentText}>HR</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => {
+              navigation.navigate('QRScanner'), setPatientSelectedValue('3');
+            }}>
+            <Image source={attendence} style={styles.img} />
+            <Text style={styles.contentText}>Discharge Initiate</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.contentDiv}>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => {
+              navigation.navigate('PatientDischargeSummary');
+            }}>
+            <Image source={attendence} style={styles.img} />
+            <Text style={styles.contentText}>Discharge Summary</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => {
+              navigation.navigate('Expenses');
+            }}>
+            <Image source={expenses} style={styles.img} />
+            <Text style={styles.contentText}>Expenses</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -158,7 +188,7 @@ export default Ehome;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
+    // backgroundColor: '#ffffff',
     flex: 1,
   },
   outerHeader: {
@@ -230,5 +260,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#127359',
     fontWeight: '600',
+  },
+  img2: {
+    resizeMode: 'contain',
+    width: 55,
+    height: 55,
+    marginLeft: 6,
   },
 });

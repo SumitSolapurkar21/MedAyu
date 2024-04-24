@@ -31,7 +31,7 @@ const HrModal = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.replace('Ehome');
+      _navigationTabs(`${userData.role}`);
       return true;
     };
 
@@ -42,13 +42,38 @@ const HrModal = () => {
 
     return () => backHandler.remove();
   }, []);
+  const _navigationTabs = tabs => {
+    if (tabs === 'Doctor') {
+      navigation.replace('Tabs');
+    } else if (tabs === 'Receptionist') {
+      navigation.replace('Home');
+    } else if (tabs === 'PExecutive') {
+      navigation.replace('PExecutiveHome');
+    } else if (tabs === 'Nurse') {
+      navigation.replace('NurseHome');
+    } else if (tabs === 'Attendant') {
+      navigation.replace('AttendantHome');
+    } else if (tabs === 'Security') {
+      navigation.replace('SecurityHome');
+    } else if (tabs === 'Kitchen') {
+      navigation.replace('KitchenHome');
+    } else if (tabs === 'HouseKeeping') {
+      navigation.replace('HouseKeepingHome');
+    } else if (tabs === 'Pharmacy') {
+      navigation.replace('PharmacyHome');
+    } else if (tabs === 'HR') {
+      navigation.replace('HRHome');
+    } else {
+      return;
+    }
+  };
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('Ehome');
+            _navigationTabs(`${userData.role}`);
           }}
         />
         <Appbar.Content title="HR" />

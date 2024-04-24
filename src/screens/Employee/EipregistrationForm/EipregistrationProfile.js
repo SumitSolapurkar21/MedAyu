@@ -46,11 +46,6 @@ const EipregistrationProfile = () => {
   const [cityData, setCityData] = useState([]);
   const [datePicker, setDatePicker] = useState(false);
 
-  const [departmentData, setDepartmentData] = useState([]);
-  const [selectedDepartment, setSelectedDepartment] = useState('');
-
-  const [doctorData, setDoctorData] = useState([]);
-  const [selectedDoctor, setSelectedDoctor] = useState('');
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -67,12 +62,7 @@ const EipregistrationProfile = () => {
   }, []);
   // current data ...
   let today = new Date();
-  // let currentDate =
-  //   today.getDate().toString().padStart(2, '0') +
-  //   '-' +
-  //   (today.getMonth() + 1).toString().padStart(2, '0') +
-  //   '-' +
-  //   today.getFullYear();
+
   let currentDate =
     today.getFullYear() +
     (today.getMonth() + 1).toString().padStart(2, '0') +
@@ -168,7 +158,6 @@ const EipregistrationProfile = () => {
 
   //form data ....
   const [formData, setFormData] = useState({
-    // patientcategory: 'New',
     firstname: firstname,
     patientgender: patientgender,
     patientmartial: patientmartial,
@@ -188,8 +177,6 @@ const EipregistrationProfile = () => {
     pincode: '',
     landlineno: '',
     whatsappno: '',
-    // depart_id: '',
-    // doctor_id: '',
   });
   // Date
   const datePickerHandler = () => {
@@ -204,7 +191,6 @@ const EipregistrationProfile = () => {
     const year = dt.getFullYear();
     const month = (dt.getMonth() + 1).toString().padStart(2, '0');
     const day = dt.getDate().toString().padStart(2, '0');
-    // const Dateformat = `${year}-${month}-${day}`;
     const Dateformat = `${day}-${month}-${year}`;
     setFormData({
       ...formData,
@@ -220,74 +206,6 @@ const EipregistrationProfile = () => {
     });
   };
 
-  //   Get Department Data ...
-  // let reception_id = userData._id;
-  // useEffect(() => {
-  //   const departmentData = async () => {
-  //     try {
-  //       await axios
-  //         .post(`${api.baseurl}/FetchReceptionDepartmentDeopdown`, {
-  //           reception_id: userData._id,
-  //         })
-  //         .then(res => {
-  //           const dpt_data = res.data.data;
-  //           setDepartmentData(dpt_data);
-  //         });
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   if (reception_id !== '') departmentData();
-  // }, [reception_id]);
-
-  // let department_id = formData.depart_id;
-  // useEffect(() => {
-  //   const consultDoctorData = async () => {
-  //     try {
-  //       await axios
-  //         .post(`${api.baseurl}/DoctorAccDepartmentinAppmtRecpt`, {
-  //           depart_id: department_id,
-  //         })
-  //         .then(res => {
-  //           const consultDoctor_data = res.data.data;
-  //           setDoctorData(consultDoctor_data);
-  //         });
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   if (department_id !== '') consultDoctorData();
-  // }, [department_id]);
-
-  //submit profile handler.....
-  // const _profiledata = {
-  //   registerdate: registerdate,
-  //   admissiondata: currentDate,
-  //   admissiontime: admissiontime,
-  //   uhidno: uhid,
-  //   opno: appoint_id,
-  //   firstname: formData.firstname,
-  //   patientgender: formData.patientgender,
-  //   patientmartial: formData.patientmartial,
-  //   mobilenumber: formData.mobilenumber,
-  //   patientdob: formData.patientdob,
-  //   patientage: formData.patientage,
-  //   country: selectedCountry[1],
-  //   state: selectedState[1],
-  //   city: formData.city,
-  //   patientnationality: formData.patientnationality,
-  //   patientlanguage: formData.patientlanguage,
-  //   patientaddress: formData.patientaddress,
-  //   patientemail: formData.patientemail,
-  //   patientprofession: formData.patientprofession,
-  //   flatno: formData.flatno,
-  //   building_village: formData.building_village,
-  //   road_street: formData.road_street,
-  //   area: formData.area,
-  //   pincode: formData.pincode,
-  //   landlineno: formData.landlineno,
-  //   whatsappno: formData.whatsappno,
-  // };
   const addProfileData = async () => {
     try {
       await axios
@@ -378,40 +296,7 @@ const EipregistrationProfile = () => {
                 value={appoint_id}
               />
             </View>
-            {/* <View style={styles.formGroup}>
-              <View style={styles.fields}>
-                <Text style={styles.fieldText}>Department</Text>
-                <SelectList
-                  setSelected={val => {
-                    setSelectedDepartment(val);
-                    handleInputChange('depart_id', val);
-                  }}
-                  data={departmentData.map(res => ({
-                    key: [res.depart_id, res.deptname],
-                    value: res.deptname,
-                  }))}
-                  search={false}
-                  boxStyles={styles.selectBox}
-                />
-              </View>
-            </View>
-            <View style={styles.formGroup}>
-              <View style={styles.fields}>
-                <Text style={styles.fieldText}>Treating Doctor</Text>
-                <SelectList
-                  setSelected={val => {
-                    setSelectedDoctor(val);
-                    handleInputChange('doctor_id', val);
-                  }}
-                  data={doctorData.map(res => ({
-                    key: res._id,
-                    value: res.name,
-                  }))}
-                  search={false}
-                  boxStyles={styles.selectBox}
-                />
-              </View>
-            </View> */}
+
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>Full Name </Text>
               <TextInput
@@ -661,16 +546,6 @@ const EipregistrationProfile = () => {
             Save & Next
           </Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationSocioeconomics')}>
-          <Text
-            style={[
-              styles.formButton,
-              {backgroundColor: '#049be0', width: 100},
-            ]}>
-            Skip
-          </Text>
-        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

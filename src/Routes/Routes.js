@@ -91,6 +91,7 @@ import HRHome from '../screens/HR/HRHome';
 import HrModal from '../screens/HRModal/HrModal';
 import Regularization from '../screens/HRModal/Regularization';
 import LeaveHomePage from '../screens/HRModal/Leave/LeaveHomePage';
+import Expenses from '../components/Expenses/Expenses';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -165,21 +166,7 @@ const Routes = () => {
         <Stack.Screen
           name="EpatientDetails"
           component={EpatientDetails}
-          options={({navigation}) => ({
-            title: 'Patient Details',
-            headerRight: () => (
-              <FontAwesome
-                name="sign-out"
-                size={22}
-                color="#127359"
-                style={{marginLeft: 20}}
-                onPress={() => {
-                  navigation.navigate('LoginPage'), logoutHandler();
-                }}
-              />
-            ),
-            headerTitleStyle: {fontSize: 16},
-          })}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Eappointment"
@@ -1016,6 +1003,11 @@ const Routes = () => {
         <Stack.Screen
           name="LeaveHomePage"
           component={LeaveHomePage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Expenses"
+          component={Expenses}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

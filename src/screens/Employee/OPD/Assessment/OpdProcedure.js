@@ -1,23 +1,16 @@
 import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  BackHandler,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, BackHandler} from 'react-native';
 import {
   Appbar,
-  Dialog,
   List,
-  Portal,
   SegmentedButtons,
   DefaultTheme,
   Button,
   TextInput,
+  IconButton,
+  MD3Colors,
+  Card,
 } from 'react-native-paper';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
@@ -42,8 +35,9 @@ const OpdProcedure = () => {
   }, []);
 
   const navigation = useNavigation();
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id} = patientsData;
+  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
+  const {appoint_id, mobilenumber} = scannedPatientsData;
   const [selectionValue, setSelectionValue] = useState(null);
   const [p_category, setP_category] = useState('');
   const [isFocus2, setIsFocus2] = useState(false);
@@ -57,31 +51,56 @@ const OpdProcedure = () => {
     useState('');
 
   const [_category, _setCategory] = useState(null);
+  const [procedureId, setProcedureId] = useState('');
+  const [_serviceCategoryArray, _setServiceCategoryArray] = useState([]);
+
+  const [opdAssessment, setOpdAssessment] = useState([]);
+
+  // get service type data :
   useEffect(() => {
-    const _GetPanchakarmaCategoryMobile = async () => {
+    const _fetchservicetype = async () => {
       try {
         await axios
-          .post(`${api.baseurl}/GetPanchakarmaCategoryMobile`, {
+          .post(`${api.baseurl}/FetchServiceType`, {
             hospital_id: hospital_id,
           })
           .then(res => {
-            const {status, message} = res.data;
-            if (status === true) {
-              _setCategory(res.data.data);
-              setSelectionValue(
-                res.data.data.length > 0 ? res.data.data[0].category_id : null,
-              );
-            } else {
-              console.error(message);
-            }
+            const _filterData = res.data.data.filter(
+              item => item.servicetype === 'PROCEDURE',
+            );
+            setProcedureId(_filterData[0]._id);
           });
       } catch (error) {
         console.error(error);
       }
     };
+    if (hospital_id !== '' || undefined || null) _fetchservicetype();
+  }, []);
 
-    _GetPanchakarmaCategoryMobile();
-  }, [hospital_id]);
+  // getservicecategoryacctype ....
+
+  useEffect(() => {
+    const _fetchservicecategory = async () => {
+      try {
+        await axios
+          .post(`${api.baseurl}/getservicecategoryacctype`, {
+            hospital_id: hospital_id,
+            servicetype_id: procedureId,
+          })
+          .then(res => {
+            _setServiceCategoryArray(res.data.data);
+            const category = res.data.data;
+            const defaultCategory = category?.find(
+              category => category.servicecategory === 'PANCHAKARMA',
+            );
+            setSelectionValue(defaultCategory._id);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (procedureId !== '' || undefined || null) _fetchservicecategory();
+  }, [procedureId]);
 
   const theme = {
     ...DefaultTheme,
@@ -112,7 +131,7 @@ const OpdProcedure = () => {
           .post(`${api.baseurl}/SearchPanchakarmaProcedureMobile`, {
             hospital_id: hospital_id,
             category_id: selectionValue,
-            proceduretype: p_category,
+            procedure_id: procedureId,
             text: searchInput,
           })
           .then(res => {
@@ -142,8 +161,69 @@ const OpdProcedure = () => {
   }, [selectedProcedureDataCode, selectedProcedure]);
   const resetHandler = () => {
     setSearchInput('');
+    setVisibleList(false);
   };
 
+  // remove selected data handler ....
+  const _removeSelectedDataHandler = _id => {
+    // Filter out data with the specified id
+    const updatedSelectedRow = temp?.filter(row => row.procedure_id !== _id);
+    setTemp(updatedSelectedRow);
+  };
+
+  //submit handler ....
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: hospital_id,
+      patient_id: patient_id,
+      reception_id: reception_id,
+      appoint_id: appoint_id,
+      uhid: uhid,
+      api_type: 'OPD-PROCEDURE',
+      opdprocedurehistoryarray: temp,
+    };
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            setTemp([]);
+            navigation.navigate('EpatientDetails');
+          } else {
+            console.error(`${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    FetchMobileOpdAssessment();
+  }, [hospital_id, patient_id, reception_id]);
+
+  //list of FetchMobileOpdAssessment....
+  const FetchMobileOpdAssessment = async () => {
+    try {
+      await axios
+        .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
+          hospital_id: hospital_id,
+          reception_id: reception_id,
+          patient_id: patient_id,
+          appoint_id: appoint_id,
+          api_type: 'OPD-PROCEDURE',
+          uhid: uhid,
+          mobilenumber: mobilenumber,
+        })
+        .then(res => {
+          setOpdAssessment(res.data.data);
+          // console.log('res.data.data : ', res.data.data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       {/* Appbar header */}
@@ -155,18 +235,18 @@ const OpdProcedure = () => {
         />
         <Appbar.Content title="OPD Procedure" style={styles.appbar_title} />
       </Appbar.Header>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View>
           <ScrollView horizontal style={styles.categoryTabs}>
-            {_category ? (
+            {_serviceCategoryArray ? (
               <SegmentedButtons
                 theme={theme}
                 style={styles.segmentBtn}
                 value={selectionValue}
                 onValueChange={setSelectionValue}
-                buttons={_category.map(res => ({
-                  label: res.category,
-                  value: res.category_id,
+                buttons={_serviceCategoryArray.map(res => ({
+                  label: res.servicecategory,
+                  value: res._id,
                 }))}
               />
             ) : (
@@ -247,130 +327,204 @@ const OpdProcedure = () => {
             )}
           </ScrollView>
         </View>
-        <View style={styles._card}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={styles.inputGroup}>
-            {temp.map((res, index) => {
-              return (
-                <View style={styles.card} key={index}>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}> Name : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.procedurename}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].procedurename = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}> Amount : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.procedureamount}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].procedureamount = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}> Time : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.proceduretime}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].proceduretime = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}> KIT : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.procedurekit}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].procedurekit = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Instruction : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.procedureinstruction}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].procedureinstruction = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}> Day's : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.proceduredays}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].proceduredays = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.inputGroup}>
+          {temp.map((res, index) => {
+            // console.log('temp : ', temp);
+            return (
+              <View style={styles.card} key={index}>
+                <View style={styles.cardContentDiv}>
+                  <Text style={[styles.label, {width: 200, marginLeft: 10}]}>
+                    Name : &nbsp; {res.procedurename}
+                  </Text>
+                  <IconButton
+                    icon="trash-can"
+                    iconColor={MD3Colors.error50}
+                    size={20}
+                    onPress={() =>
+                      _removeSelectedDataHandler(res?.procedure_id)
+                    }
+                  />
                 </View>
-              );
-            })}
+                <View style={styles.cardContent}>
+                  <Text style={styles.label}> Name : </Text>
+                  <TextInput
+                    mode="flat"
+                    style={[styles.input2]}
+                    value={res.procedurename}
+                    onChangeText={text => {
+                      const updatedTemp = [...temp];
+                      updatedTemp[index].procedurename = text;
+                      setTemp(updatedTemp);
+                    }}
+                    editable={true}
+                  />
+                </View>
+                <View style={styles.cardContent}>
+                  <Text style={styles.label}> Amount : </Text>
+                  <TextInput
+                    mode="flat"
+                    style={[styles.input2]}
+                    value={res.procedureamount}
+                    onChangeText={text => {
+                      const updatedTemp = [...temp];
+                      updatedTemp[index].procedureamount = text;
+                      setTemp(updatedTemp);
+                    }}
+                    editable={true}
+                  />
+                </View>
+                <View style={styles.cardContent}>
+                  <Text style={styles.label}> Time : </Text>
+                  <TextInput
+                    mode="flat"
+                    style={[styles.input2]}
+                    value={res.proceduretime}
+                    onChangeText={text => {
+                      const updatedTemp = [...temp];
+                      updatedTemp[index].proceduretime = text;
+                      setTemp(updatedTemp);
+                    }}
+                    editable={true}
+                  />
+                </View>
+                <View style={styles.cardContent}>
+                  <Text style={styles.label}> KIT : </Text>
+                  <TextInput
+                    mode="flat"
+                    style={[styles.input2]}
+                    value={res.procedurekit}
+                    onChangeText={text => {
+                      const updatedTemp = [...temp];
+                      updatedTemp[index].procedurekit = text;
+                      setTemp(updatedTemp);
+                    }}
+                    editable={true}
+                  />
+                </View>
 
+                <View style={styles.cardContent}>
+                  <Text style={styles.label}>Instruction : </Text>
+                  <TextInput
+                    mode="flat"
+                    style={[styles.input2]}
+                    value={res.procedureinstruction}
+                    onChangeText={text => {
+                      const updatedTemp = [...temp];
+                      updatedTemp[index].procedureinstruction = text;
+                      setTemp(updatedTemp);
+                    }}
+                    editable={true}
+                  />
+                </View>
+
+                <View style={styles.cardContent}>
+                  <Text style={styles.label}> Day's : </Text>
+                  <TextInput
+                    mode="flat"
+                    style={[styles.input2]}
+                    value={res.proceduredays}
+                    onChangeText={text => {
+                      const updatedTemp = [...temp];
+                      updatedTemp[index].proceduredays = text;
+                      setTemp(updatedTemp);
+                    }}
+                    editable={true}
+                  />
+                </View>
+              </View>
+            );
+          })}
+
+          <Button
+            mode="contained"
+            style={[styles.btn, {alignSelf: 'flex-start'}]}
+            onPress={() => resetHandler()}>
+            Add More
+          </Button>
+          <View style={styles.submitbutton}>
             <Button
               mode="contained"
-              style={[styles.btn, {alignSelf: 'flex-start'}]}
-              onPress={() => resetHandler()}>
-              Add More
+              onPress={() => navigation.navigate('OpdTreatment')}>
+              Previous
             </Button>
-          </ScrollView>
-        </View>
-        <View style={styles.submitbutton}>
-          <Button
-            mode="contained"
-            onPress={() => navigation.navigate('OpdTreatment')}>
-            Previous
-          </Button>
-          <Button
-            mode="contained"
-            onPress={() => navigation.navigate('OpdHomePage')}>
-            Save
-          </Button>
+            <Button mode="contained" onPress={() => submitTreatmenthandler()}>
+              Save
+            </Button>
+          </View>
+        </ScrollView>
+        {opdAssessment.length > 0 &&
+          opdAssessment?.map((row, index) => {
+            return (
+              <Card style={styles.card2} key={index + 1}>
+                <Card.Content>
+                  <View style={styles.cardBodyHead}>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Name :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.procedurename}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Amount :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.procedureamount}
+                    </Text>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Time :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.proceduretime}
+                    </Text>
+                  </View>
+                  <View style={styles.cardBodyHead}>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Kit :
+                      </Text>
+                      <Text variant="titleLarge" style={[styles.cardtext2]}>
+                        {row?.procedurekit}
+                      </Text>
+                    </View>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
+                        Instruction :
+                      </Text>
+                      <Text variant="titleLarge" style={[styles.cardtext2]}>
+                        {row?.procedureinstruction}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={[styles.cardBody, {gap: 8}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Procedure Type :
+                    </Text>
+                    <Text variant="titleLarge" style={[styles.cardtext2]}>
+                      {row?.proceduretype}
+                    </Text>
+                  </View>
 
-          {/* <Button
-            mode="contained"
-            onPress={() => navigation.navigate('OpdTreatment')}>
-            Skip
-          </Button> */}
-        </View>
-      </View>
+                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                    <Text variant="titleLarge" style={styles.cardtext}>
+                      Date / Time :
+                    </Text>
+                    <Text variant="titleLarge" style={styles.cardtext2}>
+                      {row.opd_date} / {row.opd_time}
+                    </Text>
+                  </View>
+                </Card.Content>
+              </Card>
+            );
+          })}
+      </ScrollView>
     </>
   );
 };
@@ -385,7 +539,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   segmentBtn: {
-    width: 500,
+    width: 700,
     gap: 2,
   },
   placeholderStyle: {
@@ -408,7 +562,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 4,
     paddingHorizontal: 6,
-    marginHorizontal: 6,
+    backgroundColor: '#ffffff',
   },
   dropdownCategory: {
     marginHorizontal: 12,
@@ -430,7 +584,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   input2: {
-    //     backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',
     paddingTop: 0,
     paddingLeft: 0,
     height: 35,
@@ -440,6 +594,7 @@ const styles = StyleSheet.create({
   cardContent: {
     flexDirection: 'row',
     padding: 5,
+    alignItems: 'center',
   },
   label: {
     fontWeight: '600',
@@ -462,9 +617,32 @@ const styles = StyleSheet.create({
   submitbutton: {
     flexDirection: 'row',
     gap: 10,
-    bottom: 10,
-    position: 'absolute',
-    textAlign: 'center',
-    alignSelf: 'center',
+  },
+  cardContentDiv: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  card2: {
+    marginHorizontal: 12,
+    marginVertical: 10,
+  },
+  cardBodyHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+  cardBody: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  cardtext: {
+    fontWeight: '600',
+    color: 'black',
+  },
+  cardtext2: {
+    fontWeight: '600',
+    flexWrap: 'wrap',
+    width: 230,
   },
 });

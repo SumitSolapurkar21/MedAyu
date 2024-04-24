@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  ToastAndroid,
 } from 'react-native';
 
 import React, {useContext, useEffect, useState} from 'react';
@@ -23,7 +22,7 @@ import api from '../../../api.json';
 
 const Eipdoptions = () => {
   const navigation = useNavigation();
-  const [_serviceTypeArray, _setServiceTypeArray] = useState([]);
+
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -61,9 +60,8 @@ const Eipdoptions = () => {
             hospital_id: hospital_id,
           })
           .then(res => {
-            _setServiceTypeArray(res.data.data);
-
             setOpdServices(res.data.data);
+            console.log('opdServices : ', res.data.data);
           });
       } catch (error) {
         console.error(error);

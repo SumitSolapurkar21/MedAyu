@@ -19,7 +19,7 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native-paper';
-import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
+import {TimePickerModal} from 'react-native-paper-dates';
 import DropDown from 'react-native-paper-dropdown';
 import {useNavigation} from '@react-navigation/native';
 import {BackHandler} from 'react-native';
@@ -164,7 +164,6 @@ const Eadtpatientadmitted = () => {
   const onChangeText = text => setText(text);
   //for date and time :
   const [visibleTime, setVisibleTime] = React.useState(false);
-  const [date, setDate] = React.useState('');
   const [selectedTime, setSelectedTime] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [showIndicator, setShowIndicator] = React.useState(false);
@@ -188,10 +187,6 @@ const Eadtpatientadmitted = () => {
     },
     [setVisibleTime],
   );
-  //date :
-  const onDismissSingle = React.useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
 
   let today = new Date();
   let currentDate =

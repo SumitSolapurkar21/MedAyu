@@ -17,6 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 //images
 
 import attendence from '../../images/calendar.png';
+import expenses from '../../images/expenses.png';
 import UserContext from '../../components/Context/Context';
 
 const PharmacyHome = () => {
@@ -91,6 +92,14 @@ const PharmacyHome = () => {
             onPress={() => navigation.navigate('HrModal')}>
             <Image source={attendence} style={styles.img} />
             <Text style={styles.contentText}>HR</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => {
+              navigation.navigate('Expenses');
+            }}>
+            <Image source={expenses} style={styles.img} />
+            <Text style={styles.contentText}>Expenses</Text>
           </TouchableOpacity>
         </View>
       </>

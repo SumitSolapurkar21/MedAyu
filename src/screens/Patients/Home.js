@@ -20,6 +20,7 @@ import medImg from '../../images/medicines.png';
 import healthImg from '../../images/medical-record.png';
 import labtestsImg from '../../images/labtests.png';
 import attendence from '../../images/calendar.png';
+import expenses from '../../images/expenses.png';
 import UserContext from '../../components/Context/Context';
 import Ehome from '../Employee/Ehome';
 
@@ -125,6 +126,14 @@ const Home = () => {
               <Image source={attendence} style={styles.img} />
               <Text style={styles.contentText}>HR</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.contentItem}
+              onPress={() => {
+                navigation.navigate('Expenses');
+              }}>
+              <Image source={expenses} style={styles.img} />
+              <Text style={styles.contentText}>Expenses</Text>
+            </TouchableOpacity>
           </View>
         </>
       ) : role === 'Receptionist' ? (
@@ -188,7 +197,7 @@ const styles = StyleSheet.create({
   contentDiv: {
     flexDirection: 'row',
     marginHorizontal: 12,
-    marginVertical: 14,
+    marginVertical: 8,
     justifyContent: 'space-between',
   },
   contentItem: {
@@ -200,7 +209,7 @@ const styles = StyleSheet.create({
     elevation: 6,
     width: '48%',
     padding: 6,
-    height: 75,
+    height: 55,
     borderRadius: 8,
     alignItems: 'center',
     gap: 10,
