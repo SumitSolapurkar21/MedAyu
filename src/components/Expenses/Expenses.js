@@ -16,10 +16,11 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import DocumentPicker from 'react-native-document-picker';
 import {Platform} from 'react-native';
 import api from '../../../api.json';
+import axios from 'axios';
 
 const Expenses = () => {
   const {userData} = useContext(UserContext);
-  const [fileResponse, setFileResponse] = useState([]);
+  const [fileResponse, setFileResponse] = useState(null);
   const {role} = userData;
   const navigation = useNavigation();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -105,7 +106,7 @@ const Expenses = () => {
     },
   ];
   //   form inputs....
-  const [formData, setFormData] = useState({
+  const [submittedformData, setsubmittedFormData] = useState({
     amount: '',
     category: '',
     availablebudget: '',
@@ -117,8 +118,8 @@ const Expenses = () => {
   });
 
   const inputHandlers = (fieldName, value) => {
-    setFormData({
-      ...formData,
+    setsubmittedFormData({
+      ...submittedformData,
       [fieldName]: value,
     });
   };
@@ -139,47 +140,122 @@ const Expenses = () => {
     const day = dt.getDate().toString().padStart(2, '0');
     //     const Dateformat = `${year}-${month}-${day}`;
     const Dateformat = `${day}-${month}-${year}`;
-    setFormData({
-      ...formData,
+    setsubmittedFormData({
+      ...submittedformData,
       duedate: Dateformat,
     });
     hideDatePicker();
   };
 
-  const formSubmitHandler = () => {
-    console.log(formData);
-    navigation.navigate('Ehome');
-  };
+  let formData = new FormData();
 
-  const handleDocumentSelection = async () => {
+  const handleDocumentSelection = async filename => {
     try {
       const doc = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles], // Specify the types of files to pick (optional)
       });
-      const formData = new FormData();
-      const data = {
-        uri: doc[0].uri,
-        name: doc[0].name,
-        type: doc[0].type,
-      };
-      formData.append('image', data);
-      // Make API call to upload the image
-      const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          // Add any additional headers if needed
-        },
-        body: formData,
+
+      // Create a new FormData object
+
+      // Loop through each selected document
+      doc.forEach((doc, index) => {
+        // Append image data to FormData with unique keys
+        formData.append(`${filename}${index}`, {
+          uri: doc.uri,
+          name: doc.name,
+          type: doc.type,
+        });
       });
-      // console.log('Upload response:', JSON.stringify(formData));
-      // Handle response
-      const data3 = await response.json();
-      console.log('Upload response:', data3);
+
+      // Append other form data fields if needed
+      formData.append('amount', submittedformData.amount);
+      formData.append('category', submittedformData.category);
+      formData.append('availablebudget', submittedformData.availablebudget);
+      formData.append('duedate', submittedformData.duedate);
+      formData.append('payee', submittedformData.payee);
+      formData.append('modeofpayment', submittedformData.modeofpayment);
+      formData.append(
+        'transactiondetails',
+        submittedformData.transactiondetails,
+      );
+      formData.append('approvedby', submittedformData.approvedby);
+
+      // Pass formData to dataSubmitHandlerr
+      // dataSubmitHandler(formData);
     } catch (err) {
       console.warn('Document picker error:', err);
     }
   };
+
+  const dataSubmitHandler = async () => {
+    // Append other form data fields if needed
+
+    try {
+      // Make API call to upload the image and form data
+      const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          // Add any additional headers if needed
+        },
+        method: 'POST',
+        body: formData, // Use the FormData object
+      });
+
+      // Handle response
+      const data3 = await response.json();
+      console.log('Upload response:', data3);
+    } catch (error) {
+      // Handle error
+      console.error('Error:', error);
+    }
+  };
+
+  // const handleDocumentSelection = async () => {
+  //   try {
+  //     const doc = await DocumentPicker.pick({
+  //       type: [DocumentPicker.types.allFiles], // Specify the types of files to pick (optional)
+  //     });
+  //     const imageData = new FormData();
+  //     const data = {
+  //       uri: doc[0].uri,
+  //       name: doc[0].name,
+  //       type: doc[0].type,
+  //       // amount: formData.amount,
+  //       // category: formData.category,
+  //       // availablebudget: formData.availablebudget,
+  //       // duedate: formData.duedate,
+  //       // payee: formData.payee,
+  //       // modeofpayment: formData.modeofpayment,
+  //       // transactiondetails: formData.transactiondetails,
+  //       // approvedby: formData.approvedby,
+  //     };
+  //     imageData.append('image', data, formData.amount);
+  //   } catch (err) {
+  //     console.warn('Document picker error:', err);
+  //   }
+  // };
+
+  // const dataSubmitHandler = async () => {
+
+  //   try {
+  //     // Make API call to upload the image and form data
+  //     const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //         // Add any additional headers if needed
+  //       },
+  //       method: 'POST',
+  //       body: fileResponse,
+  //     });
+
+  //     // Handle response
+  //     const data3 = await response.json();
+  //     console.log('Upload response:', data3);
+  //   } catch (error) {
+  //     // Handle error
+  //     console.error('Error:', error);
+  //   }
+  // };
 
   return (
     <>
@@ -198,11 +274,11 @@ const Expenses = () => {
         </View>
         <View style={styles.form}>
           <View style={styles.cardContent}>
-            <Text style={styles.label}>Name : </Text>
+            <Text style={styles.label}>Amount : </Text>
             <TextInput
               mode="flat"
               style={styles.input}
-              value={formData?.amount}
+              value={submittedformData.amount}
               onChangeText={text => inputHandlers('amount', text)}
             />
           </View>
@@ -223,11 +299,11 @@ const Expenses = () => {
                 valueField="value"
                 placeholder={!isFocus2 ? 'Select' : '...'}
                 searchPlaceholder="Search..."
-                value={formData.category}
+                value={submittedformData.category}
                 onFocus={() => setIsFocus2(true)}
                 onBlur={() => setIsFocus2(false)}
                 onChange={item => {
-                  inputHandlers('category', item);
+                  inputHandlers('category', item.value);
                   setIsFocus2(false);
                 }}
               />
@@ -238,7 +314,7 @@ const Expenses = () => {
             <TextInput
               mode="flat"
               style={styles.input}
-              value={formData?.availablebudget}
+              value={submittedformData.availablebudget}
               onChangeText={text => inputHandlers('availablebudget', text)}
             />
           </View>
@@ -253,7 +329,7 @@ const Expenses = () => {
                 borderBottomWidth: 2,
               }}>
               <Text style={[styles.input, {padding: 10, flex: 1}]}>
-                {formData.duedate || 'DD / MM / YYYY'}
+                {submittedformData.duedate || 'DD / MM / YYYY'}
               </Text>
               {/* <FontAwesome6 name="calendar-days" color="red" size={22} /> */}
             </TouchableOpacity>
@@ -269,7 +345,7 @@ const Expenses = () => {
             <TextInput
               mode="flat"
               style={styles.input}
-              value={formData?.payee}
+              value={submittedformData.payee}
               onChangeText={text => inputHandlers('payee', text)}
             />
           </View>
@@ -290,11 +366,11 @@ const Expenses = () => {
                 valueField="value"
                 placeholder={!isFocus1 ? 'Select' : '...'}
                 searchPlaceholder="Search..."
-                value={formData.modeofpayment}
+                value={submittedformData.modeofpayment}
                 onFocus={() => setIsFocus1(true)}
                 onBlur={() => setIsFocus1(false)}
                 onChange={item => {
-                  inputHandlers('modeofpayment', item);
+                  inputHandlers('modeofpayment', item.value);
                   setIsFocus1(false);
                 }}
               />
@@ -305,13 +381,23 @@ const Expenses = () => {
             <TextInput
               mode="flat"
               style={styles.input}
-              value={formData?.transactiondetails}
+              value={submittedformData.transactiondetails}
               onChangeText={text => inputHandlers('transactiondetails', text)}
             />
           </View>
           <View style={styles.cardContent}>
+            <Text style={styles.label}>Approved By : </Text>
+            <TextInput
+              mode="flat"
+              style={styles.input}
+              value={submittedformData.approvedby}
+              onChangeText={text => inputHandlers('approvedby', text)}
+            />
+          </View>
+          <View style={styles.cardContent}>
             <Text style={styles.label}>Bill Photo : </Text>
-            <TouchableOpacity onPress={handleDocumentSelection}>
+            <TouchableOpacity
+              onPress={() => handleDocumentSelection('bill_photo')}>
               <View style={styles.upload}>
                 <FontAwesome6
                   name="cloud-arrow-up"
@@ -325,7 +411,8 @@ const Expenses = () => {
           </View>
           <View style={styles.cardContent}>
             <Text style={styles.label}>Payment Proof : </Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleDocumentSelection('payment_proof')}>
               <View style={styles.upload}>
                 <FontAwesome6
                   name="cloud-arrow-up"
@@ -337,19 +424,11 @@ const Expenses = () => {
               </View>
             </TouchableOpacity>
           </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Approved By : </Text>
-            <TextInput
-              mode="flat"
-              style={styles.input}
-              value={formData?.approvedby}
-              onChangeText={text => inputHandlers('approvedby', text)}
-            />
-          </View>
+
           <Button
             mode="contained"
             style={styles.button}
-            onPress={() => formSubmitHandler()}>
+            onPress={() => dataSubmitHandler()}>
             Submit
           </Button>
         </View>
@@ -414,5 +493,12 @@ const styles = StyleSheet.create({
   button: {
     alignSelf: 'center',
     marginVertical: 10,
+  },
+  upload: {
+    flexDirection: 'row',
+    gap: 10,
+    padding: 18,
+    borderWidth: 1,
+    borderRadius: 4,
   },
 });
