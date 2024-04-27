@@ -76,7 +76,7 @@ const SystemicExamination = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.replace('GeneralHistory');
+      navigation.replace('GeneralExamination');
       return true;
     };
 
@@ -1953,9 +1953,8 @@ const styles = StyleSheet.create({
     width: 200,
   },
   card2: {
-    marginTop: 10,
-    marginHorizontal: 14,
-    marginBottom: 10,
+    marginHorizontal: 6,
+    marginVertical: 10,
   },
   cardBody: {
     flexDirection: 'row',

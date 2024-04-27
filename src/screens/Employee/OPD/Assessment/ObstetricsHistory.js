@@ -1,6 +1,5 @@
-import {ScrollView, StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import {Table, Row, Rows} from 'react-native-table-component';
 import {
   Appbar,
   Button,
@@ -143,14 +142,11 @@ const ObstetricsHistory = () => {
   const displayData = opdAssessment.map((item, index) => (
     <>
       {Object.entries(item).map(([key, value]) => (
-        <>
-          <Card key={key} style={styles.card2}>
-            {Array.isArray(value) ? (
-              <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
-            ) : null}
-          </Card>
-          <Divider />
-        </>
+        <Card key={key} style={styles.card}>
+          {Array.isArray(value) ? (
+            <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
+          ) : null}
+        </Card>
       ))}
     </>
   ));
@@ -167,7 +163,7 @@ const ObstetricsHistory = () => {
       </Appbar.Header>
       <ScrollView vertical style={styles.container}>
         <View style={styles.card}>
-          <View style={styles.card2}>
+          <View style={styles.cardDiv}>
             <View style={styles.cardContent}>
               <Text style={styles.label}>G : </Text>
               <TextInput
@@ -407,9 +403,7 @@ const ObstetricsHistory = () => {
             Skip
           </Button>
         </View>
-        <View style={{padding: 8, marginBottom: 10}}>
-          <Text>{displayData}</Text>
-        </View>
+        <View style={{padding: 8, marginBottom: 10}}>{displayData}</View>
       </ScrollView>
     </>
   );
@@ -439,7 +433,7 @@ const styles = StyleSheet.create({
     color: 'black',
     width: 100,
   },
-  card2: {
+  cardDiv: {
     flexDirection: 'row',
     flexWrap: 'wrap',
   },

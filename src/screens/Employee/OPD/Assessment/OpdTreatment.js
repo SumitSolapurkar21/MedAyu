@@ -594,9 +594,8 @@ const styles = StyleSheet.create({
   row: {height: 'auto'},
 
   card2: {
-    marginTop: 10,
     marginHorizontal: 14,
-    marginBottom: 10,
+    marginVertical: 10,
   },
   cardBody: {
     flexDirection: 'row',
@@ -605,6 +604,7 @@ const styles = StyleSheet.create({
   cardtext: {
     fontWeight: '600',
     color: 'black',
+    width: 80,
   },
   cardtext2: {
     fontWeight: '600',

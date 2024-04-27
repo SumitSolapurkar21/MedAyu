@@ -1,5 +1,12 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {
+  BackHandler,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect} from 'react';
 import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import billHistory from '../../../images/billHistory.png';
@@ -7,13 +14,28 @@ import billHistory from '../../../images/billHistory.png';
 const OpdHomePage = () => {
   const navigation = useNavigation();
 
+  //backHandler ...
+  useEffect(() => {
+    const backAction = () => {
+      navigation.replace('EpatientDetails');
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <>
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('EpatientDetails');
+            navigation.replace('EpatientDetails');
           }}
         />
         <Appbar.Content title="OPD" />

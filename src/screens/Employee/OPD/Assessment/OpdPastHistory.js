@@ -458,9 +458,7 @@ const OpdPastHistory = () => {
             Skip
           </Button>
         </View>
-        <View style={{padding: 10}}>
-          <Text>{displayData}</Text>
-        </View>
+        <View style={{padding: 10}}>{displayData}</View>
       </ScrollView>
     </>
   );

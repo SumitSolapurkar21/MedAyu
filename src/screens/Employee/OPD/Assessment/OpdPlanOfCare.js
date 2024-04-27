@@ -429,9 +429,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   card2: {
-    marginTop: 10,
-    marginHorizontal: 14,
-    marginBottom: 10,
+    marginHorizontal: 6,
+    marginVertical: 10,
   },
   cardBody: {
     flexDirection: 'row',

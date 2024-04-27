@@ -628,67 +628,7 @@ const FamilyHistory = () => {
           </Button>
         </View>
 
-        {/* {opdAssessment?.map(row => {
-          return (
-            <Card style={styles.card2} key={row?.illness_id}>
-              <Card.Content>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8, width: 220}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Illness :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.illnessname}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      From Date :
-                    </Text>
-                    <Text
-                      variant="titleLarge"
-                      style={[styles.cardtext2, {width: 80}]}>
-                      {row?.dateValues}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Days / Months / Years :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row?.days} / {row?.months} / {row?.years}
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={[styles.cardBody, {gap: 10}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Treatment Status :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row.treatment_status}
-                  </Text>
-                </View>
-                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
-                  <Text variant="titleLarge" style={styles.cardtext}>
-                    Date / Time :
-                  </Text>
-                  <Text variant="titleLarge" style={styles.cardtext2}>
-                    {row.opd_date} / {row.opd_time}
-                  </Text>
-                </View>
-              </Card.Content>
-            </Card>
-          );
-        })} */}
-
-        <View style={{padding: 10}}>
-          <Text>{displayData}</Text>
-        </View>
+        <View style={{padding: 10}}>{displayData}</View>
       </ScrollView>
     </>
   );

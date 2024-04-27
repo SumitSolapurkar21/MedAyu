@@ -14,7 +14,6 @@ import {
   DefaultTheme,
   Appbar,
   Card,
-  Divider,
 } from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
 import axios from 'axios';
@@ -542,9 +541,7 @@ const OpdComplaints = () => {
             Skip
           </Button>
         </View>
-        <View>
-          <Text>{displayData}</Text>
-        </View>
+        <View>{displayData}</View>
 
         {/* {opdAssessment?.length > 0 && (
           <>

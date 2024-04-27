@@ -260,7 +260,7 @@ const GeneralExamination = () => {
   const displayData = opdAssessment.map((item, index) => (
     <View key={index}>
       {Object.entries(item).map(([key, value]) => (
-        <Card key={key} style={styles.card}>
+        <Card key={key} style={styles.card2}>
           {Array.isArray(value) ? (
             <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
           ) : null}
@@ -313,9 +313,7 @@ const GeneralExamination = () => {
           </Button>
         </View>
 
-        <View style={{marginHorizontal: 10, padding: 10}}>
-          <Text>{displayData}</Text>
-        </View>
+        <View style={{padding: 10}}>{displayData}</View>
       </ScrollView>
     </>
   );
@@ -350,10 +348,10 @@ const styles = StyleSheet.create({
   head: {height: 40, backgroundColor: '#80aaff'},
   text: {textAlign: 'center', color: 'black', padding: 2},
   row: {height: 'auto'},
+
   card2: {
-    marginTop: 10,
-    marginHorizontal: 14,
     marginBottom: 10,
+    padding: 10,
   },
   cardBody: {
     flexDirection: 'row',

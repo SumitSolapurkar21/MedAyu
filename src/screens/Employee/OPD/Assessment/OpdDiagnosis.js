@@ -423,9 +423,8 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   card2: {
-    marginTop: 10,
-    marginHorizontal: 14,
-    marginBottom: 10,
+    marginHorizontal: 12,
+    marginVertical: 10,
   },
   cardBody: {
     flexDirection: 'row',
@@ -439,7 +438,7 @@ const styles = StyleSheet.create({
   cardtext2: {
     fontWeight: '600',
     flexWrap: 'wrap',
-    // width: 100,
+    width: 300,
   },
   cardBodyHead: {
     flexDirection: 'row',

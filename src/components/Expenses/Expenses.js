@@ -20,7 +20,10 @@ import axios from 'axios';
 
 const Expenses = () => {
   const {userData} = useContext(UserContext);
-  const [fileResponse, setFileResponse] = useState(null);
+  const [selectedFileNames, setSelectedFileNames] = useState({
+    bill_photo: '',
+    payment_proof: '',
+  });
   const {role} = userData;
   const navigation = useNavigation();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -155,7 +158,8 @@ const Expenses = () => {
         type: [DocumentPicker.types.allFiles], // Specify the types of files to pick (optional)
       });
 
-      // Create a new FormData object
+      // Set the selected file name based on the filename parameter
+      setSelectedFileNames({...selectedFileNames, [filename]: doc[0].name});
 
       // Loop through each selected document
       doc.forEach((doc, index) => {
@@ -209,53 +213,6 @@ const Expenses = () => {
       console.error('Error:', error);
     }
   };
-
-  // const handleDocumentSelection = async () => {
-  //   try {
-  //     const doc = await DocumentPicker.pick({
-  //       type: [DocumentPicker.types.allFiles], // Specify the types of files to pick (optional)
-  //     });
-  //     const imageData = new FormData();
-  //     const data = {
-  //       uri: doc[0].uri,
-  //       name: doc[0].name,
-  //       type: doc[0].type,
-  //       // amount: formData.amount,
-  //       // category: formData.category,
-  //       // availablebudget: formData.availablebudget,
-  //       // duedate: formData.duedate,
-  //       // payee: formData.payee,
-  //       // modeofpayment: formData.modeofpayment,
-  //       // transactiondetails: formData.transactiondetails,
-  //       // approvedby: formData.approvedby,
-  //     };
-  //     imageData.append('image', data, formData.amount);
-  //   } catch (err) {
-  //     console.warn('Document picker error:', err);
-  //   }
-  // };
-
-  // const dataSubmitHandler = async () => {
-
-  //   try {
-  //     // Make API call to upload the image and form data
-  //     const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //         // Add any additional headers if needed
-  //       },
-  //       method: 'POST',
-  //       body: fileResponse,
-  //     });
-
-  //     // Handle response
-  //     const data3 = await response.json();
-  //     console.log('Upload response:', data3);
-  //   } catch (error) {
-  //     // Handle error
-  //     console.error('Error:', error);
-  //   }
-  // };
 
   return (
     <>
@@ -406,6 +363,9 @@ const Expenses = () => {
                   style={styles.searchIcon}
                 />
                 <Text>Upload</Text>
+                <Text style={styles.label}>
+                  &nbsp; &nbsp; &nbsp;{selectedFileNames?.bill_photo}
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -421,6 +381,9 @@ const Expenses = () => {
                   style={styles.searchIcon}
                 />
                 <Text>Upload</Text>
+                <Text style={styles.label}>
+                  &nbsp; &nbsp; &nbsp; {selectedFileNames?.payment_proof}
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
