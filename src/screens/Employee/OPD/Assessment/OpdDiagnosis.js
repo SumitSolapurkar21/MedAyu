@@ -190,7 +190,7 @@ const OpdDiagnosis = () => {
             navigation.replace('SystemicExamination');
           }}
         />
-        <Appbar.Content title="OPD Diagnosis" style={styles.appbar_title} />
+        <Appbar.Content title="Diagnosis" style={styles.appbar_title} />
       </Appbar.Header>
       <ScrollView vertical style={styles.container}>
         <View style={styles.cardd}>

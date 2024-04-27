@@ -415,7 +415,7 @@ const FamilyHistory = () => {
             navigation.replace('OpdPastHistory');
           }}
         />
-        <Appbar.Content title="OPD Family History" />
+        <Appbar.Content title="Family History" />
       </Appbar.Header>
       {showCalender && (
         <View style={styles.datePickerContainer}>

@@ -250,7 +250,7 @@ const OpdPastHistory = () => {
             navigation.replace('OpdComplaints');
           }}
         />
-        <Appbar.Content title="OPD Past History" />
+        <Appbar.Content title="Past History" />
       </Appbar.Header>
       {showCalender && (
         <View style={styles.datePickerContainer}>

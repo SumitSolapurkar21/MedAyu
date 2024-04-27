@@ -273,7 +273,7 @@ const OpdPlanOfCare = () => {
             navigation.replace('OpdInvestigation');
           }}
         />
-        <Appbar.Content title="OPD Plan oF Care" style={styles.appbar_title} />
+        <Appbar.Content title="Plan oF Care" style={styles.appbar_title} />
       </Appbar.Header>
       <ScrollView
         vertical

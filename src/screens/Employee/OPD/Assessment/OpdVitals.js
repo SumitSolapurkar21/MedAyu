@@ -320,7 +320,7 @@ const OpdVitals = () => {
             navigation.replace('MenstrualHistory');
           }}
         />
-        <Appbar.Content title="OPD Vitals" />
+        <Appbar.Content title="Vitals" />
       </Appbar.Header>
       <ScrollView vertical style={styles.container}>
         <View style={styles.tableWrapper}>

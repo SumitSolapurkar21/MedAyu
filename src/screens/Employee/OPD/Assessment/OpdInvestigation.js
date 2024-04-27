@@ -28,7 +28,7 @@ const OpdInvestigation = () => {
             navigation.navigate('OpdDiagnosis');
           }}
         />
-        <Appbar.Content title="OPD Investigation" style={styles.appbar_title} />
+        <Appbar.Content title="Investigation" style={styles.appbar_title} />
       </Appbar.Header>
       <View>
         <Text style={{padding: 20}}>OpdInvestigation</Text>

@@ -233,7 +233,7 @@ const OpdProcedure = () => {
             navigation.replace('OpdTreatment');
           }}
         />
-        <Appbar.Content title="OPD Procedure" style={styles.appbar_title} />
+        <Appbar.Content title="Procedure" style={styles.appbar_title} />
       </Appbar.Header>
       <ScrollView style={styles.container}>
         <View>

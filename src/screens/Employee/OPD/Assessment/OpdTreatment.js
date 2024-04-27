@@ -171,7 +171,7 @@ const OpdTreatment = () => {
             navigation.replace('OpdPlanOfCare');
           }}
         />
-        <Appbar.Content title="OPD Treatment" style={styles.appbar_title} />
+        <Appbar.Content title="Treatment" style={styles.appbar_title} />
       </Appbar.Header>
       {showCalender && (
         <View style={styles.datePickerContainer}>

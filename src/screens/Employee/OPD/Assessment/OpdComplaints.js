@@ -321,7 +321,7 @@ const OpdComplaints = () => {
             navigation.navigate('OpdHomePage');
           }}
         />
-        <Appbar.Content title="OPD Complaints" />
+        <Appbar.Content title="Complaints" />
       </Appbar.Header>
 
       {/* after submit Msg... */}
