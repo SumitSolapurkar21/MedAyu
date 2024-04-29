@@ -154,9 +154,8 @@ const OpdPastHistory = () => {
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
-            navigation.navigate('FamilyHistory');
-            //         setVisibleMsg(true);
             setTemp([]);
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -448,14 +447,14 @@ const OpdPastHistory = () => {
             mode="contained"
             style={styles.btn}
             onPress={() => submitTreatmenthandler()}>
-            Save & Next
+            Submit
           </Button>
 
           <Button
             mode="contained"
             style={styles.btn}
             onPress={() => navigation.navigate('FamilyHistory')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
         <View style={{padding: 10}}>{displayData}</View>

@@ -211,7 +211,7 @@ const GeneralExamination = () => {
           const {status, message} = res.data;
           if (status === true) {
             setRadioValues({});
-            navigation.navigate('SystemicExamination');
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -302,14 +302,14 @@ const GeneralExamination = () => {
             mode="contained"
             style={styles.btn}
             onPress={() => submitTreatmenthandler()}>
-            Save & Next
+            Submit
           </Button>
 
           <Button
             mode="contained"
             style={styles.btn}
             onPress={() => navigation.navigate('SystemicExamination')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
 

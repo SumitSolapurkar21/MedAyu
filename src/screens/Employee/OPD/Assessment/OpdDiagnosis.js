@@ -1,4 +1,11 @@
-import {BackHandler, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  BackHandler,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {
   RadioButton,
@@ -105,14 +112,13 @@ const OpdDiagnosis = () => {
         .post(`${api.baseurl}/AddMobileOpdAssessment`, opddiagnosishistoryarray)
         .then(res => {
           if (res.data.status === false) {
-            const message = res.data;
-            console.error(message);
+            Alert.alert('Error', `${res.data.message}`);
           } else {
             setSearchQuery('');
             setSelectedDiagnosis({});
             setChecked('');
             setDiagnosisArray([]);
-            navigation.navigate('OpdInvestigation');
+            FetchMobileOpdAssessment();
             // FetchMobileDiagnosis();
           }
         });
@@ -317,13 +323,13 @@ const OpdDiagnosis = () => {
             Previous
           </Button>
           <Button mode="contained" onPress={() => AddMobileDiagnosis()}>
-            Save & Next
+            Submit
           </Button>
 
           <Button
             mode="contained"
             onPress={() => navigation.navigate('OpdInvestigation')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
 
@@ -434,6 +440,7 @@ const styles = StyleSheet.create({
   cardtext: {
     fontWeight: '600',
     color: 'black',
+    width: 90,
   },
   cardtext2: {
     fontWeight: '600',

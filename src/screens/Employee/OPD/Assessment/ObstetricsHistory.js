@@ -82,8 +82,8 @@ const ObstetricsHistory = () => {
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
-            navigation.navigate('MenstrualHistory');
             _resetHandler();
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -139,10 +139,10 @@ const ObstetricsHistory = () => {
       console.error(error);
     }
   };
-  const displayData = opdAssessment.map((item, index) => (
+  const displayData = opdAssessment.map(item => (
     <>
-      {Object.entries(item).map(([key, value]) => (
-        <Card key={key} style={styles.card}>
+      {Object.entries(item).map(([key, value], index) => (
+        <Card key={index + 1} style={styles.card}>
           {Array.isArray(value) ? (
             <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
           ) : null}
@@ -393,7 +393,7 @@ const ObstetricsHistory = () => {
             mode="contained"
             style={styles.btn}
             onPress={submitTreatmenthandler}>
-            Save & Next
+            Submit
           </Button>
 
           <Button

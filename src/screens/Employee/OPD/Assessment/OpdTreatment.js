@@ -118,7 +118,7 @@ const OpdTreatment = () => {
           const {status, message} = res.data;
           if (status === true) {
             setTemp([]);
-            navigation.navigate('OpdProcedure');
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -402,13 +402,13 @@ const OpdTreatment = () => {
             mode="contained"
             style={styles.btn}
             onPress={() => submitTreatmenthandler()}>
-            Save & Next
+            Submit
           </Button>
           <Button
             mode="contained"
             style={styles.btn}
             onPress={() => navigation.navigate('OpdProcedure')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
 

@@ -218,8 +218,8 @@ const OpdPlanOfCare = () => {
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
-            navigation.navigate('OpdTreatment');
             setCheckedValues({});
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -308,13 +308,12 @@ const OpdPlanOfCare = () => {
             Previous
           </Button>
           <Button mode="contained" onPress={() => submitTreatmenthandler()}>
-            Save & Next
+            Submit
           </Button>
-
           <Button
             mode="contained"
             onPress={() => navigation.navigate('OpdTreatment')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
 

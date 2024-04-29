@@ -1,4 +1,5 @@
 import {
+  Alert,
   BackHandler,
   ScrollView,
   StyleSheet,
@@ -6,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Appbar, Button, TextInput} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -14,21 +15,18 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import UserContext from '../Context/Context';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import DocumentPicker from 'react-native-document-picker';
-import {Platform} from 'react-native';
 import api from '../../../api.json';
-import axios from 'axios';
 
 const Expenses = () => {
   const {userData} = useContext(UserContext);
-  const [selectedFileNames, setSelectedFileNames] = useState({
-    bill_photo: '',
-    payment_proof: '',
-  });
+
   const {role} = userData;
   const navigation = useNavigation();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isFocus2, setIsFocus2] = useState(false);
   const [isFocus1, setIsFocus1] = useState(false);
+  const [bill_photo, setBill_photo] = useState(false);
+  const [payment_proof, setPayment_proof] = useState(false);
 
   const _navigationTabs = tabs => {
     if (tabs === 'Doctor') {
@@ -141,7 +139,6 @@ const Expenses = () => {
     const year = dt.getFullYear();
     const month = (dt.getMonth() + 1).toString().padStart(2, '0');
     const day = dt.getDate().toString().padStart(2, '0');
-    //     const Dateformat = `${year}-${month}-${day}`;
     const Dateformat = `${day}-${month}-${year}`;
     setsubmittedFormData({
       ...submittedformData,
@@ -157,9 +154,6 @@ const Expenses = () => {
       const doc = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles], // Specify the types of files to pick (optional)
       });
-
-      // Set the selected file name based on the filename parameter
-      setSelectedFileNames({...selectedFileNames, [filename]: doc[0].name});
 
       // Loop through each selected document
       doc.forEach((doc, index) => {
@@ -183,37 +177,84 @@ const Expenses = () => {
         submittedformData.transactiondetails,
       );
       formData.append('approvedby', submittedformData.approvedby);
-
-      // Pass formData to dataSubmitHandlerr
-      // dataSubmitHandler(formData);
     } catch (err) {
       console.warn('Document picker error:', err);
     }
   };
+  // const displayFileName = formData => {
+  //   const reducedFormData = formData?._parts?.reduce((acc, [key, value]) => {
+  //     if (!acc[key]) {
+  //       acc[key] = value;
+  //     } else {
+  //       // If key already exists, handle it as an array
+  //       if (!Array.isArray(acc[key])) {
+  //         acc[key] = [acc[key]];
+  //       }
+  //       acc[key].push(value);
+  //     }
+  //     return acc;
+  //   }, {});
+
+  //   // Convert reducedFormData to an array of objects
+  //   const newFormDataArray = Object.keys(reducedFormData).map(key => ({
+  //     [key]: reducedFormData[key],
+  //   }));
+
+  //   // Merge the previous data with the new form data
+  //   const mergedData = {
+  //     ...reducedFormData,
+  //     ...Object.assign({}, ...newFormDataArray),
+  //   };
+
+  //   // Set bill_photo and payment_proof if they exist in mergedData
+  //   if (mergedData?.bill_photo0?.name) {
+  //     setBill_photo(mergedData.bill_photo0.name);
+  //   }
+  //   if (mergedData?.payment_proof0?.name) {
+  //     setPayment_proof(mergedData.payment_proof0.name);
+  //   }
+  // };
 
   const dataSubmitHandler = async () => {
-    // Append other form data fields if needed
-
     try {
       // Make API call to upload the image and form data
       const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          // Add any additional headers if needed
         },
         method: 'POST',
         body: formData, // Use the FormData object
       });
-
       // Handle response
       const data3 = await response.json();
-      console.log('Upload response:', data3);
+      if (data3.status === true) {
+        Alert.alert(`Success !!`, 'Expenses form Submitted', [
+          {text: 'OK', onPress: () => navigation.replace('Home')},
+        ]);
+      } else {
+        Alert.alert('Data Not Submitted!!');
+      }
     } catch (error) {
-      // Handle error
-      console.error('Error:', error);
+      Alert.alert(`Please fill form and Upload Files`, `${error}`);
     }
   };
 
+  const formdetails = filename => {
+    if (
+      submittedformData.amount === '' ||
+      submittedformData.approvedby === '' ||
+      submittedformData.availablebudget === '' ||
+      submittedformData.category === '' ||
+      submittedformData.duedate === '' ||
+      submittedformData.modeofpayment === '' ||
+      submittedformData.payee === '' ||
+      submittedformData.transactiondetails === ''
+    ) {
+      Alert.alert('Please Fill Above Details First');
+    } else {
+      handleDocumentSelection(filename);
+    }
+  };
   return (
     <>
       {/* Appbar header */}
@@ -256,7 +297,7 @@ const Expenses = () => {
                 valueField="value"
                 placeholder={!isFocus2 ? 'Select' : '...'}
                 searchPlaceholder="Search..."
-                value={submittedformData.category}
+                value={submittedformData?.category}
                 onFocus={() => setIsFocus2(true)}
                 onBlur={() => setIsFocus2(false)}
                 onChange={item => {
@@ -353,8 +394,7 @@ const Expenses = () => {
           </View>
           <View style={styles.cardContent}>
             <Text style={styles.label}>Bill Photo : </Text>
-            <TouchableOpacity
-              onPress={() => handleDocumentSelection('bill_photo')}>
+            <TouchableOpacity onPress={() => formdetails('bill_photo')}>
               <View style={styles.upload}>
                 <FontAwesome6
                   name="cloud-arrow-up"
@@ -364,15 +404,14 @@ const Expenses = () => {
                 />
                 <Text>Upload</Text>
                 <Text style={styles.label}>
-                  &nbsp; &nbsp; &nbsp;{selectedFileNames?.bill_photo}
+                  &nbsp; &nbsp; &nbsp;{bill_photo}
                 </Text>
               </View>
             </TouchableOpacity>
           </View>
           <View style={styles.cardContent}>
             <Text style={styles.label}>Payment Proof : </Text>
-            <TouchableOpacity
-              onPress={() => handleDocumentSelection('payment_proof')}>
+            <TouchableOpacity onPress={() => formdetails('payment_proof')}>
               <View style={styles.upload}>
                 <FontAwesome6
                   name="cloud-arrow-up"
@@ -382,7 +421,7 @@ const Expenses = () => {
                 />
                 <Text>Upload</Text>
                 <Text style={styles.label}>
-                  &nbsp; &nbsp; &nbsp; {selectedFileNames?.payment_proof}
+                  &nbsp; &nbsp; &nbsp; {payment_proof}
                 </Text>
               </View>
             </TouchableOpacity>

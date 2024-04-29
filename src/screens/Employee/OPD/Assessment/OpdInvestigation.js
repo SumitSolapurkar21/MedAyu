@@ -25,7 +25,7 @@ const OpdInvestigation = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('OpdDiagnosis');
+            navigation.replace('OpdDiagnosis');
           }}
         />
         <Appbar.Content title="Investigation" style={styles.appbar_title} />
@@ -41,13 +41,13 @@ const OpdInvestigation = () => {
           <Button
             mode="contained"
             onPress={() => navigation.navigate('OpdPlanOfCare')}>
-            Save & Next
+            Submit
           </Button>
 
           <Button
             mode="contained"
             onPress={() => navigation.navigate('OpdPlanOfCare')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
       </View>

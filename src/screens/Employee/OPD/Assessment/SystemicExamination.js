@@ -1591,7 +1591,7 @@ const SystemicExamination = () => {
           const {status, message} = res.data;
           if (status === true) {
             setCheckedValues({});
-            navigation.navigate('OpdDiagnosis');
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -1601,15 +1601,11 @@ const SystemicExamination = () => {
     }
   };
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = ['Eyes', 'Ears', 'Nose', 'Oral Cavity', 'Date / Time'];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([120, 120, 150, 120, 120, ...Array(keys3.length).fill(2)]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
   }, [hospital_id, patient_id, reception_id]);
+
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
     try {
@@ -1833,14 +1829,14 @@ const SystemicExamination = () => {
             mode="contained"
             style={styles.btn}
             onPress={() => submitTreatmenthandler()}>
-            Save & Next
+            Submit
           </Button>
 
           <Button
             mode="contained"
             style={styles.btn}
             onPress={() => navigation.navigate('OpdDiagnosis')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
 

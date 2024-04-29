@@ -298,7 +298,7 @@ const OpdComplaints = () => {
             setDropdownValues2([]);
             setP_category('');
             setSelectedRow([]);
-            navigation.navigate('OpdPastHistory');
+            FetchMobileOpdAssessment();
           } else {
             ToastAndroid.show(
               `${message}`,
@@ -532,105 +532,17 @@ const OpdComplaints = () => {
             style={styles.submitBtn}
             mode="contained"
             onPress={() => _buttonHandler('Save')}>
-            Save & Next
+            Submit
           </Button>
+
           <Button
             style={styles.submitBtn}
             mode="contained"
             onPress={() => _buttonHandler('Skip')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
         <View>{displayData}</View>
-
-        {/* {opdAssessment?.length > 0 && (
-          <>
-            {opdAssessment.map((assessment, index) => {
-              return (
-                <React.Fragment key={index + 1}>
-                  {assessment.opdcomplaintArray.map((row, rowIndex) => {
-                    return (
-                      <Card style={styles.card} key={rowIndex + 1}>
-                        <Card.Content>
-                          <View style={styles.cardBodyHead}>
-                            <View style={[styles.cardBody, {gap: 8}]}>
-                              <Text
-                                variant="titleLarge"
-                                style={styles.cardtext}>
-                                Category :
-                              </Text>
-                              <Text
-                                variant="titleLarge"
-                                style={styles.cardtext2}>
-                                {row.category}
-                              </Text>
-                            </View>
-                            <View style={[styles.cardBody, {gap: 8}]}>
-                              <Text
-                                variant="titleLarge"
-                                style={styles.cardtext}>
-                                Symptoms :
-                              </Text>
-                              <Text
-                                variant="titleLarge"
-                                style={[styles.cardtext2, {width: 80}]}>
-                                {row.symptoms}
-                              </Text>
-                            </View>
-                          </View>
-                          <View style={styles.cardBodyHead}>
-                            <View style={[styles.cardBody, {gap: 8}]}>
-                              <Text
-                                variant="titleLarge"
-                                style={styles.cardtext}>
-                                Duration :
-                              </Text>
-                              <Text
-                                variant="titleLarge"
-                                style={styles.cardtext2}>
-                                {row.duration}
-                              </Text>
-                            </View>
-                            <View style={[styles.cardBody, {gap: 8}]}>
-                              <Text
-                                variant="titleLarge"
-                                style={styles.cardtext}>
-                                Time :
-                              </Text>
-                              <Text
-                                variant="titleLarge"
-                                style={styles.cardtext2}>
-                                {row.time}
-                              </Text>
-                            </View>
-                          </View>
-                          <View style={[styles.cardBody, {gap: 10}]}>
-                            <Text variant="titleLarge" style={styles.cardtext}>
-                              Frequency :
-                            </Text>
-                            <Text variant="titleLarge" style={styles.cardtext2}>
-                              {row.frequency}
-                            </Text>
-                          </View>
-                          <View
-                            style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
-                            <Text variant="titleLarge" style={styles.cardtext}>
-                              Date / Time :
-                            </Text>
-                            <Text variant="titleLarge" style={styles.cardtext2}>
-                              {row.opd_complaints_date} /{' '}
-                              {row.opd_complaints_time}
-                            </Text>
-                          </View>
-                        </Card.Content>
-                      </Card>
-                    );
-                  })}
-                </React.Fragment>
-              );
-            })}
-          </>
-        )} */}
       </ScrollView>
     </>
   );

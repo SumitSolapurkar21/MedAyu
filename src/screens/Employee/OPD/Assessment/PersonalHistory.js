@@ -201,7 +201,7 @@ const PersonalHistory = () => {
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
-            navigation.navigate('ObstetricsHistory');
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -275,27 +275,27 @@ const PersonalHistory = () => {
           <Button
             mode="contained"
             style={styles.btn}
-            onPress={() => navigation.navigate('MedicineHistory')}>
+            onPress={() => navigation.replace('MedicineHistory')}>
             Previous
           </Button>
           <Button
             mode="contained"
             style={styles.btn}
             onPress={() => submitTreatmenthandler()}>
-            Save & Next
+            Submit
           </Button>
 
           <Button
             mode="contained"
             style={styles.btn}
             onPress={() => navigation.navigate('ObstetricsHistory')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
         {opdAssessment?.map((row, index) => {
           return (
             <Card style={styles.card2} key={index + 1}>
-              <Card.Content>
+              <Card.Content key={index + 1}>
                 <View style={styles.cardBodyHead}>
                   {row.opd_date && row.opd_time && (
                     <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>

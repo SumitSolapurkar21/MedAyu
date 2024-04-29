@@ -156,9 +156,8 @@ const FamilyHistory = () => {
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
-            navigation.navigate('MedicineHistory');
-            //         setVisibleMsg(true);
             setTemp([]);
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -617,14 +616,14 @@ const FamilyHistory = () => {
             mode="contained"
             style={styles.btn}
             onPress={() => submitTreatmenthandler()}>
-            Save & Next
+            Submit
           </Button>
 
           <Button
             mode="contained"
             style={styles.btn}
             onPress={() => navigation.navigate('MedicineHistory')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
 

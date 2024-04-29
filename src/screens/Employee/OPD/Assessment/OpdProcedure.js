@@ -189,7 +189,8 @@ const OpdProcedure = () => {
           const {status, message} = res.data;
           if (status === true) {
             setTemp([]);
-            navigation.navigate('EpatientDetails');
+            // navigation.navigate('EpatientDetails');
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -450,7 +451,12 @@ const OpdProcedure = () => {
               Previous
             </Button>
             <Button mode="contained" onPress={() => submitTreatmenthandler()}>
-              Save
+              Submit
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => navigation.navigate('EpatientDetails')}>
+              Home
             </Button>
           </View>
         </ScrollView>
@@ -639,10 +645,11 @@ const styles = StyleSheet.create({
   cardtext: {
     fontWeight: '600',
     color: 'black',
+    width: 90,
   },
   cardtext2: {
     fontWeight: '600',
     flexWrap: 'wrap',
-    width: 230,
+    width: 200,
   },
 });

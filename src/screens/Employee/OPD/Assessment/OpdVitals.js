@@ -172,7 +172,7 @@ const OpdVitals = () => {
               setmoderateColor('');
               setsevereColor('');
 
-              navigation.navigate('GeneralExamination');
+              FetchMobileOpdAssessment();
             }
           });
       } catch (error) {
@@ -642,14 +642,14 @@ const OpdVitals = () => {
               mode="contained"
               style={styles.btn}
               onPress={() => addVitalsData()}>
-              Save & Next
+              Submit
             </Button>
 
             <Button
               mode="contained"
               style={styles.btn}
               onPress={() => navigation.navigate('GeneralExamination')}>
-              Skip
+              Next / Skip
             </Button>
           </View>
         </View>

@@ -284,9 +284,9 @@ const MenstrualHistory = () => {
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
-            navigation.navigate('OpdVitals');
             setTemp([]);
             setRadioValues({});
+            FetchMobileOpdAssessment();
           } else {
             console.error(`${message}`);
           }
@@ -307,24 +307,11 @@ const MenstrualHistory = () => {
     'Menopause Age',
     'Date / Time',
   ];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([
-      120,
-      120,
-      150,
-      120,
-      120,
-      120,
-      120,
-      120,
-      ...Array(keys3.length).fill(2),
-    ]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
   }, [hospital_id, patient_id, reception_id]);
+
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
     try {
@@ -438,14 +425,14 @@ const MenstrualHistory = () => {
             mode="contained"
             style={styles.btn}
             onPress={submitTreatmenthandler}>
-            Save & Next
+            Submit
           </Button>
 
           <Button
             mode="contained"
             style={styles.btn}
             onPress={() => navigation.navigate('OpdVitals')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
 
