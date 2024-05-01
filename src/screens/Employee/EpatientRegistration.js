@@ -445,7 +445,7 @@ const EpatientRegistration = () => {
                   style={styles.modalBtnText}
                   onPress={() => {
                     setMsgPopup(false);
-                    navigation.navigate('Ehome');
+                    navigation.navigate('Home');
                   }}>
                   Ok
                 </Text>

@@ -26,7 +26,7 @@ const EpatientDetails = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('Ehome');
+      navigation.replace('Home');
       return true;
     };
 
@@ -84,7 +84,7 @@ const EpatientDetails = () => {
         }}>
         <Appbar.BackAction
           onPress={() => {
-            navigation.replace('Ehome');
+            navigation.replace('Home');
           }}
         />
         <Appbar.Content

@@ -9,7 +9,8 @@ import {useNavigation} from '@react-navigation/native';
 import {IconButton, MD3Colors} from 'react-native-paper';
 
 const OpdTreatment = () => {
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
@@ -145,7 +146,7 @@ const OpdTreatment = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-TREATMENT',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);

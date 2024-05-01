@@ -60,7 +60,7 @@ const DischargeInitiation = () => {
         .then(res => {
           const {status, message} = res.data;
           status === true
-            ? navigation.navigate('Ehome')
+            ? navigation.navigate('Ho')
             : console.warn(message);
         });
     } catch (error) {

@@ -18,7 +18,8 @@ export const UserProvider = ({children}) => {
   const [patientSelectedValue, setPatientSelectedValue] = useState('');
   const [selectedPatientMobileNumber, setSelectedPatientMobileNumber] =
     useState('');
-
+  const [waitingListData, setWaitingListData] = useState([]);
+  const [dashboardpatientListData, setDashboardpatientListData] = useState([]);
   const updateSharedData = data => {
     setPatientEditArray(prevData => [...prevData, data]);
   };
@@ -52,6 +53,10 @@ export const UserProvider = ({children}) => {
     setPatientSelectedValue,
     selectedPatientMobileNumber,
     setSelectedPatientMobileNumber,
+    waitingListData,
+    setWaitingListData,
+    dashboardpatientListData,
+    setDashboardpatientListData,
   };
 
   return (

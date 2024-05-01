@@ -16,7 +16,8 @@ import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 
 const ObstetricsHistory = () => {
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
@@ -121,7 +122,7 @@ const ObstetricsHistory = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-OBSTETRICS-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -363,7 +364,7 @@ const ObstetricsHistory = () => {
                     setInjuctionChecked(!injuctionChecked);
                   }}
                 />
-                <Text style={styles.label}>Injuction</Text>
+                <Text style={styles.label}>Injection</Text>
               </View>
               <View
                 style={{

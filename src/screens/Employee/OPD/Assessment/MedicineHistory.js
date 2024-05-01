@@ -20,7 +20,8 @@ const MedicineHistory = () => {
   const [dateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
 
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
@@ -176,7 +177,7 @@ const MedicineHistory = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-MEDICINE-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);

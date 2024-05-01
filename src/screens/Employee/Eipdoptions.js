@@ -61,7 +61,6 @@ const Eipdoptions = () => {
           })
           .then(res => {
             setOpdServices(res.data.data);
-            console.log('opdServices : ', res.data.data);
           });
       } catch (error) {
         console.error(error);

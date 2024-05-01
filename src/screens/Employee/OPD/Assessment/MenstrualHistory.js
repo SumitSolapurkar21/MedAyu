@@ -9,7 +9,8 @@ import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 
 const MenstrualHistory = () => {
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
@@ -297,16 +298,6 @@ const MenstrualHistory = () => {
   };
 
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = [
-    'Menarche Age',
-    'LMP',
-    'Periods',
-    'Durations',
-    'Quality of Blood Flow',
-    'Pain During Cycle',
-    'Menopause Age',
-    'Date / Time',
-  ];
 
   useEffect(() => {
     FetchMobileOpdAssessment();
@@ -323,7 +314,7 @@ const MenstrualHistory = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-MENSTRUAL-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);

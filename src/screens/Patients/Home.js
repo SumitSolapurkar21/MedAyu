@@ -11,25 +11,47 @@ import {
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+// import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 //images
-import doctorImg from '../../images/doctor.png';
-import medImg from '../../images/medicines.png';
-import healthImg from '../../images/medical-record.png';
-import labtestsImg from '../../images/labtests.png';
+// import doctorImg from '../../images/doctor.png';
+// import medImg from '../../images/medicines.png';
+// import healthImg from '../../images/medical-record.png';
+// import labtestsImg from '../../images/labtests.png';
+
+//images
+import pr from '../../images/pr.png';
+import ss from '../../images/sss.png';
 import attendence from '../../images/calendar.png';
 import expenses from '../../images/expenses.png';
 import UserContext from '../../components/Context/Context';
 import Ehome from '../Employee/Ehome';
+import {Appbar, Button, Menu} from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
   const navigation = useNavigation();
 
-  const {userData} = useContext(UserContext);
+  const {userData, setIsLoggedIn, setPatientSelectedValue} =
+    useContext(UserContext);
 
-  const {role, name} = userData;
+  const {role} = userData;
+
+  const [visible, setVisible] = React.useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const logoutHandler = async () => {
+    // Clear user token from AsyncStorage
+    await AsyncStorage.removeItem('userToken');
+    setIsLoggedIn(false);
+    navigation.navigate('LoginPage');
+  };
 
   useEffect(() => {
     const backAction = () => {
@@ -57,41 +79,66 @@ const Home = () => {
     return () => backHandler.remove();
   }, []);
   return (
-    <SafeAreaView style={styles.container}>
-      {role === 'Doctor' ? (
-        <>
-          <View style={styles.outerHeader}>
-            <View style={styles.hlcontent}>
-              <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-              <Text style={styles.uNamee}>Hi ! , {name}</Text>
+    <>
+      <Appbar.Header
+        style={{
+          backgroundColor: 'white',
+          borderBottomWidth: 2,
+          borderBottomColor: '#ebebeb',
+        }}>
+        <Image source={medayuLogo} alt="MedAyu" style={styles.img2} />
+        <Appbar.Content
+          title={
+            <>
+              <Text style={styles.titleText}>{userData?.name}</Text>
+              <Text style={[styles.titleText, {fontSize: 14}]}>
+                {userData?.role}
+              </Text>
+            </>
+          }
+        />
+        {/* <Appbar.Action icon="magnify" onPress={_handleSearch} /> */}
+        <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+      </Appbar.Header>
+      <View
+        style={{
+          position: 'absolute',
+          right: 3,
+          top: 60,
+        }}>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={<Button onPress={openMenu}></Button>}>
+          <Menu.Item
+            dense
+            leadingIcon="logout"
+            onPress={() => {
+              navigation.navigate('LoginPage'), logoutHandler();
+            }}
+            title="Logout"
+          />
+
+          {/* <Menu.Item onPress={() => {}} title="Item 2" /> */}
+        </Menu>
+      </View>
+      <SafeAreaView style={styles.container}>
+        {role === 'Receptionist' ? (
+          <>
+            <View style={styles.searchDiv}>
+              <FontAwesome6
+                name="magnifying-glass"
+                color="#127359"
+                size={18}
+                style={styles.searchIcon}
+              />
+              <TextInput
+                style={styles.searchtext}
+                placeholder="Search for Medicines, Doctors, Lab Tests"
+                placeholderTextColor="#127359"
+              />
             </View>
-            <View style={styles.hrcontent}>
-              <TouchableOpacity>
-                <FontAwesome name="shopping-cart" size={22} color="#127359" />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <FontAwesome name="bell" size={22} color="#127359" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('LoginPage')}>
-                <FontAwesome name="user" size={22} color="#127359" />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.searchDiv}>
-            <FontAwesome6
-              name="magnifying-glass"
-              color="#127359"
-              size={18}
-              style={styles.searchIcon}
-            />
-            <TextInput
-              style={styles.searchtext}
-              placeholder="Search for Medicines, Doctors, Lab Tests"
-              placeholderTextColor="#127359"
-            />
-          </View>
-          <View style={styles.contentDiv}>
+            {/* <View style={styles.contentDiv}>
             <TouchableOpacity
               style={styles.contentItem}
               onPress={() => navigation.navigate('Consult')}>
@@ -118,28 +165,67 @@ const Home = () => {
               <Image source={healthImg} style={styles.img} />
               <Text style={styles.contentText}>Health Records</Text>
             </TouchableOpacity>
-          </View>
-          <View style={styles.contentDiv}>
-            <TouchableOpacity
-              style={styles.contentItem}
-              onPress={() => navigation.navigate('HrModal')}>
-              <Image source={attendence} style={styles.img} />
-              <Text style={styles.contentText}>HR</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.contentItem}
-              onPress={() => {
-                navigation.navigate('Expenses');
-              }}>
-              <Image source={expenses} style={styles.img} />
-              <Text style={styles.contentText}>Expenses</Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      ) : role === 'Receptionist' ? (
-        <Ehome />
-      ) : null}
-    </SafeAreaView>
+          </View> */}
+            <View style={styles.contentDiv}>
+              <TouchableOpacity
+                style={styles.contentItem}
+                onPress={() => navigation.navigate('EpatientRegistration')}>
+                <Image source={pr} style={styles.img} />
+                <Text style={styles.contentText}>Patient Registration</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.contentItem}
+                onPress={() => {
+                  navigation.navigate('QRScanner'),
+                    setPatientSelectedValue('1');
+                }}>
+                <Image source={ss} style={styles.img} />
+                <Text style={styles.contentText}>Search Patient</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.contentDiv}>
+              <TouchableOpacity
+                style={styles.contentItem}
+                onPress={() => {
+                  navigation.navigate('HrModal');
+                }}>
+                <Image source={attendence} style={styles.img} />
+                <Text style={styles.contentText}>HR</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.contentItem}
+                onPress={() => {
+                  navigation.navigate('QRScanner'),
+                    setPatientSelectedValue('3');
+                }}>
+                <Image source={attendence} style={styles.img} />
+                <Text style={styles.contentText}>Discharge Initiate</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.contentDiv}>
+              <TouchableOpacity
+                style={styles.contentItem}
+                onPress={() => {
+                  navigation.navigate('PatientDischargeSummary');
+                }}>
+                <Image source={attendence} style={styles.img} />
+                <Text style={styles.contentText}>Discharge Summary</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.contentItem}
+                onPress={() => {
+                  navigation.navigate('Expenses');
+                }}>
+                <Image source={expenses} style={styles.img} />
+                <Text style={styles.contentText}>Expenses</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : role === 'Doctor' ? (
+          <Ehome />
+        ) : null}
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -215,9 +301,20 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   contentText: {
-    textAlign: 'left',
-    width: 95,
-    fontSize: 14,
+    flexWrap: 'wrap',
+    width: 100,
+    fontSize: 12,
+    color: '#127359',
+    fontWeight: '600',
+  },
+  img2: {
+    resizeMode: 'contain',
+    width: 55,
+    height: 55,
+    marginLeft: 6,
+  },
+  titleText: {
+    fontSize: 16,
     color: '#127359',
     fontWeight: '600',
   },

@@ -28,7 +28,7 @@ const ProcedureContent = () => {
             servicetype_id: procedure_id,
           })
           .then(res => {
-            console.log(res.data);
+           
             _setServiceCategoryArray(res.data.data);
           });
       } catch (error) {

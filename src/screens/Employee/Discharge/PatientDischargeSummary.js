@@ -29,7 +29,7 @@ const PatientDischargeSummary = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack('Ehome');
+      navigation.goBack('Home');
       return true;
     };
 
@@ -119,7 +119,7 @@ const PatientDischargeSummary = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('Ehome');
+            navigation.navigate('Home');
           }}
         />
         <Appbar.Content

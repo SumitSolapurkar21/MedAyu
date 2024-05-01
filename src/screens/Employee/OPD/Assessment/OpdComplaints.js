@@ -5,6 +5,7 @@ import {
   View,
   ToastAndroid,
   BackHandler,
+  Alert,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {
@@ -23,7 +24,9 @@ import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import {IconButton, MD3Colors} from 'react-native-paper';
 
-const OpdComplaints = () => {
+const OpdComplaints = ({route}) => {
+  // comming from dashboard.....
+  // const {appointment_id, newpatient_id, depart_id, doctor_id} = route.params;
   const navigation = useNavigation();
   const [p_category, setP_category] = useState('');
   const [selectedCategoryData, setSelectedCategoryData] = useState('');
@@ -32,7 +35,8 @@ const OpdComplaints = () => {
   const [widthArr, setWidthArr] = useState([]);
   const [widthArr1, setWidthArr1] = useState([]);
 
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
@@ -96,7 +100,11 @@ const OpdComplaints = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.replace('OpdHomePage');
+      if (waitingListData) {
+        navigation.replace('Listofpatients');
+      } else {
+        navigation.replace('OpdHomePage');
+      }
       return true;
     };
 
@@ -210,7 +218,7 @@ const OpdComplaints = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-COMPLAINTS',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -318,7 +326,11 @@ const OpdComplaints = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('OpdHomePage');
+            if (waitingListData) {
+              navigation.replace('Listofpatients');
+            } else {
+              navigation.replace('OpdHomePage');
+            }
           }}
         />
         <Appbar.Content title="Complaints" />

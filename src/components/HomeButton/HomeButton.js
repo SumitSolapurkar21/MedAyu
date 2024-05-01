@@ -9,7 +9,7 @@ const HomeButton = () => {
     <View style={styles.homeDiv}>
       <TouchableOpacity
         style={styles.homeBnt}
-        onPress={() => navigation.navigate('Ehome')}>
+        onPress={() => navigation.navigate('Home')}>
         <FontAwesome6 name="home" size={26} color="white" />
       </TouchableOpacity>
     </View>

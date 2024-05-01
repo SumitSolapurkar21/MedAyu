@@ -25,7 +25,8 @@ const OpdPastHistory = () => {
 
   const [p_category, setP_category] = useState('');
 
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
@@ -176,20 +177,9 @@ const OpdPastHistory = () => {
   ];
 
   const [opdAssessment, setOpdAssessment] = useState([]);
-  const keys3 = [
-    'Illnessname',
-    'From Date',
-    'Years / Months / Days',
-    'Treatment Status',
-    'Date / Time',
-  ];
-  const [widthArr2, setWidthArr2] = useState([]);
-  useEffect(() => {
-    setWidthArr2([120, 120, 150, 120, 120, ...Array(keys3.length).fill(2)]);
-  }, []);
+
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
   }, [hospital_id, patient_id, reception_id]);
 
   //list of FetchMobileOpdAssessment....
@@ -203,7 +193,7 @@ const OpdPastHistory = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-PAST-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);

@@ -8,7 +8,8 @@ import {Appbar, Checkbox, Button, Card} from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
 
 const OpdPlanOfCare = () => {
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
@@ -255,7 +256,7 @@ const OpdPlanOfCare = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-PLAN-OF-CARE',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);

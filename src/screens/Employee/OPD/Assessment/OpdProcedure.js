@@ -35,7 +35,13 @@ const OpdProcedure = () => {
   }, []);
 
   const navigation = useNavigation();
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {
+    patientsData,
+    scannedPatientsData,
+    waitingListData,
+    setWaitingListData,
+  } = useContext(UserContext);
+
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
   const [selectionValue, setSelectionValue] = useState(null);
@@ -68,7 +74,7 @@ const OpdProcedure = () => {
             const _filterData = res.data.data.filter(
               item => item.servicetype === 'PROCEDURE',
             );
-            setProcedureId(_filterData[0]._id);
+            setProcedureId(_filterData[0]?._id);
           });
       } catch (error) {
         console.error(error);
@@ -93,7 +99,7 @@ const OpdProcedure = () => {
             const defaultCategory = category?.find(
               category => category.servicecategory === 'PANCHAKARMA',
             );
-            setSelectionValue(defaultCategory._id);
+            setSelectionValue(defaultCategory?._id);
           });
       } catch (error) {
         console.error(error);
@@ -215,7 +221,7 @@ const OpdProcedure = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-PROCEDURE',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -223,6 +229,16 @@ const OpdProcedure = () => {
         });
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  // navigate handler .....
+  const navigateHandler = () => {
+    if (waitingListData?.assessmenttype === 'NewAssessment') {
+      setWaitingListData([]);
+      navigation.replace('Listofpatients');
+    } else {
+      navigation.replace('EpatientDetails');
     }
   };
   return (
@@ -453,9 +469,7 @@ const OpdProcedure = () => {
             <Button mode="contained" onPress={() => submitTreatmenthandler()}>
               Submit
             </Button>
-            <Button
-              mode="contained"
-              onPress={() => navigation.navigate('EpatientDetails')}>
+            <Button mode="contained" onPress={() => navigateHandler()}>
               Home
             </Button>
           </View>

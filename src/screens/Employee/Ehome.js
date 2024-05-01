@@ -11,7 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
-import medayuLogo from '../../images/medayu.jpeg';
+// import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
@@ -21,22 +21,25 @@ import ss from '../../images/sss.png';
 import attendence from '../../images/calendar.png';
 import expenses from '../../images/expenses.png';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Appbar, Button, Menu} from 'react-native-paper';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import {Appbar, Button, Menu} from 'react-native-paper';
 
 const Ehome = () => {
   // ........ //
   const navigation = useNavigation();
 
-  const {userData, setIsLoggedIn, setPatientSelectedValue} =
-    useContext(UserContext);
+  const {
+    // userData,
+    //  setIsLoggedIn,
+    setPatientSelectedValue,
+  } = useContext(UserContext);
 
-  const logoutHandler = async () => {
-    // Clear user token from AsyncStorage
-    await AsyncStorage.removeItem('userToken');
-    setIsLoggedIn(false);
-    navigation.navigate('LoginPage');
-  };
+  // const logoutHandler = async () => {
+  //   // Clear user token from AsyncStorage
+  //   await AsyncStorage.removeItem('userToken');
+  //   setIsLoggedIn(false);
+  //   navigation.navigate('LoginPage');
+  // };
 
   //backHandler ...
   useEffect(() => {
@@ -65,53 +68,17 @@ const Ehome = () => {
     return () => backHandler.remove();
   }, []);
 
-  const _handleMore = () => {
-    setVisible(true);
-  };
-  const [visible, setVisible] = React.useState(false);
+  // const _handleMore = () => {
+  //   setVisible(true);
+  // };
+  // const [visible, setVisible] = React.useState(false);
 
-  const openMenu = () => setVisible(true);
+  // const openMenu = () => setVisible(true);
 
-  const closeMenu = () => setVisible(false);
+  // const closeMenu = () => setVisible(false);
 
   return (
     <>
-      <Appbar.Header
-        style={{
-          backgroundColor: 'white',
-          borderBottomWidth: 2,
-          borderBottomColor: '#ebebeb',
-        }}>
-        <Image source={medayuLogo} alt="MedAyu" style={styles.img2} />
-        <Appbar.Content
-          title={userData?.name}
-          titleStyle={{fontSize: 18, marginLeft: 10}}
-        />
-        {/* <Appbar.Action icon="magnify" onPress={_handleSearch} /> */}
-        <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
-      </Appbar.Header>
-      <View
-        style={{
-          position: 'absolute',
-          right: 3,
-          top: 60,
-        }}>
-        <Menu
-          visible={visible}
-          onDismiss={closeMenu}
-          anchor={<Button onPress={openMenu}></Button>}>
-          <Menu.Item
-            dense
-            leadingIcon="logout"
-            onPress={() => {
-              navigation.navigate('LoginPage'), logoutHandler();
-            }}
-            title="Logout"
-          />
-
-          {/* <Menu.Item onPress={() => {}} title="Item 2" /> */}
-        </Menu>
-      </View>
       <SafeAreaView style={styles.container}>
         <View style={styles.searchDiv}>
           <FontAwesome6
@@ -130,10 +97,18 @@ const Ehome = () => {
         <View style={styles.contentDiv}>
           <TouchableOpacity
             style={styles.contentItem}
+            onPress={() => navigation.replace('DashboardHomePage')}>
+            <Image source={pr} style={styles.img} />
+            <Text style={styles.contentText}>Dashboard</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.contentItem}
             onPress={() => navigation.navigate('EpatientRegistration')}>
             <Image source={pr} style={styles.img} />
             <Text style={styles.contentText}>Patient Registration</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.contentDiv}>
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() => {
@@ -142,8 +117,7 @@ const Ehome = () => {
             <Image source={ss} style={styles.img} />
             <Text style={styles.contentText}>Search Patient</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.contentDiv}>
+
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() => {
@@ -152,6 +126,8 @@ const Ehome = () => {
             <Image source={attendence} style={styles.img} />
             <Text style={styles.contentText}>HR</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.contentDiv}>
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() => {
@@ -160,8 +136,7 @@ const Ehome = () => {
             <Image source={attendence} style={styles.img} />
             <Text style={styles.contentText}>Discharge Initiate</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.contentDiv}>
+
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() => {
@@ -170,6 +145,8 @@ const Ehome = () => {
             <Image source={attendence} style={styles.img} />
             <Text style={styles.contentText}>Discharge Summary</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.contentDiv}>
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() => {

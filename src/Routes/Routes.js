@@ -92,6 +92,8 @@ import HrModal from '../screens/HRModal/HrModal';
 import Regularization from '../screens/HRModal/Regularization';
 import LeaveHomePage from '../screens/HRModal/Leave/LeaveHomePage';
 import Expenses from '../components/Expenses/Expenses';
+import DashboardHomePage from '../screens/Employee/Dashboard/DashboardHomePage';
+import {Listofpatients} from '../screens/Employee/Dashboard/Listofpatients';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -1008,6 +1010,16 @@ const Routes = () => {
         <Stack.Screen
           name="Expenses"
           component={Expenses}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="DashboardHomePage"
+          component={DashboardHomePage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Listofpatients"
+          component={Listofpatients}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

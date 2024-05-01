@@ -26,7 +26,8 @@ const FamilyHistory = () => {
 
   const [p_category, setP_category] = useState('');
 
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
@@ -369,7 +370,7 @@ const FamilyHistory = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-FAMILY-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);

@@ -15,7 +15,8 @@ import {Appbar, RadioButton, Button, Card} from 'react-native-paper';
 
 const GeneralExamination = () => {
   const navigation = useNavigation();
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
 
@@ -239,7 +240,7 @@ const GeneralExamination = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-GENERAL-EXAMINATION',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);

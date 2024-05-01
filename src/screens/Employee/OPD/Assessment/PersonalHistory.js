@@ -9,7 +9,8 @@ import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 
 const PersonalHistory = () => {
-  const {patientsData, scannedPatientsData} = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData} =
+    useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
   //backHandler ...
@@ -227,7 +228,7 @@ const PersonalHistory = () => {
           appoint_id: appoint_id,
           api_type: 'OPD-PERSONAL-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber,
+          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
