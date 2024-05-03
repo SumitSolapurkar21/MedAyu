@@ -6,12 +6,10 @@ import {
   View,
   TextInput,
   SafeAreaView,
-  // ToastAndroid,
   BackHandler,
   Alert,
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
-// import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
@@ -21,25 +19,11 @@ import ss from '../../images/sss.png';
 import attendence from '../../images/calendar.png';
 import expenses from '../../images/expenses.png';
 
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import {Appbar, Button, Menu} from 'react-native-paper';
-
 const Ehome = () => {
   // ........ //
   const navigation = useNavigation();
 
-  const {
-    // userData,
-    //  setIsLoggedIn,
-    setPatientSelectedValue,
-  } = useContext(UserContext);
-
-  // const logoutHandler = async () => {
-  //   // Clear user token from AsyncStorage
-  //   await AsyncStorage.removeItem('userToken');
-  //   setIsLoggedIn(false);
-  //   navigation.navigate('LoginPage');
-  // };
+  const {setPatientSelectedValue} = useContext(UserContext);
 
   //backHandler ...
   useEffect(() => {
@@ -67,15 +51,6 @@ const Ehome = () => {
 
     return () => backHandler.remove();
   }, []);
-
-  // const _handleMore = () => {
-  //   setVisible(true);
-  // };
-  // const [visible, setVisible] = React.useState(false);
-
-  // const openMenu = () => setVisible(true);
-
-  // const closeMenu = () => setVisible(false);
 
   return (
     <>
@@ -165,7 +140,6 @@ export default Ehome;
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#ffffff',
     flex: 1,
   },
   outerHeader: {
@@ -213,7 +187,6 @@ const styles = StyleSheet.create({
   contentDiv: {
     flexDirection: 'row',
     marginHorizontal: 12,
-    // marginVertical: 14,
     marginTop: 12,
     justifyContent: 'space-between',
   },

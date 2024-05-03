@@ -10,6 +10,8 @@ import {
   BackHandler,
   Alert,
   ScrollView,
+  Dimensions,
+  FlatList,
 } from 'react-native';
 import {Appbar} from 'react-native-paper';
 import question from '../../../images/question.png';
@@ -20,12 +22,16 @@ import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
 import {Table, Row, Rows} from 'react-native-table-component';
 
+const {width: screenWidth} = Dimensions.get('window');
+
 const DashboardHomePage = () => {
   const navigation = useNavigation();
   const {userData, setDashboardpatientListData} = useContext(UserContext);
   const {hospital_id, _id} = userData;
   const [count, setCount] = useState([]);
   const [departwiseData, setDepartwiseData] = useState([]);
+  const [widthArr2, setWidthArr2] = useState([]);
+  const [widthArr3, setWidthArr3] = useState([]);
 
   //backHandler ...
   useEffect(() => {
@@ -42,27 +48,52 @@ const DashboardHomePage = () => {
     return () => backHandler.remove();
   }, []);
 
-  const _body = {
-    hospital_id: hospital_id,
-    reception_id: _id,
-    fromdate: new Date().toISOString().slice(0, 10),
-    todate: new Date().toISOString().slice(0, 10),
-  };
+  const tableHead = [
+    'DEPARTMENT',
+    'APPOINTMENT',
+    'WAITING',
+    'CONSULTED',
+    'CANCELLED',
+  ];
+  useEffect(() => {
+    setWidthArr2([
+      screenWidth * 0.28,
+      screenWidth * 0.18,
+      screenWidth * 0.21,
+      screenWidth * 0.21,
+      screenWidth * 0.21,
+    ]);
+  }, []);
+
+  useEffect(() => {
+    setWidthArr3([
+      screenWidth * 0.28,
+      screenWidth * 0.18,
+      screenWidth * 0.21,
+      screenWidth * 0.21,
+      screenWidth * 0.21,
+    ]);
+  }, [departwiseData]);
 
   // fetch ShowMobileTodaysOIPECount ......
   useEffect(() => {
     const fetchOIPECount = async () => {
       try {
-        await axios
-          .post(`${api.baseurl}/ShowMobileTodaysOIPECount`, _body)
-          .then(response => {
-            const {status, message} = response.data;
-            if (status === true) {
-              setCount(response.data);
-            } else {
-              Alert.alert('Response Error !', `${message}`);
-            }
-          });
+        const response = await axios.post(
+          `${api.baseurl}/ShowMobileTodaysOIPECount`,
+          {
+            hospital_id: hospital_id,
+            reception_id: _id,
+            fromdate: new Date().toISOString().slice(0, 10),
+            todate: new Date().toISOString().slice(0, 10),
+          },
+        );
+        const {status, message} = response.data;
+        if (status === true) {
+          setCount(response.data);
+        } else {
+          Alert.alert('Response Error !', `${message}`);
+        }
       } catch (error) {
         Alert.alert('Error !!', `${error}`);
       }
@@ -75,51 +106,28 @@ const DashboardHomePage = () => {
   useEffect(() => {
     const FetchMobileDepartmentwiseDashboarddata = async () => {
       try {
-        await axios
-          .post(`${api.baseurl}/FetchMobileDepartmentwiseDashboarddata`, {
+        const response = await axios.post(
+          `${api.baseurl}/FetchMobileDepartmentwiseDashboarddata`,
+          {
             hospital_id: hospital_id,
             reception_id: _id,
             fromdate: new Date().toISOString().slice(0, 10),
             todate: new Date().toISOString().slice(0, 10),
-          })
-          .then(response => {
-            const {status, message} = response?.data;
-            if (status === true) {
-              const data = response.data.data;
-              setDepartwiseData(data);
-              // data?.map(item => {
-              //   return [
-              //     item.deptname,
-              //     item.opdcount,
-              //     item.waiting_count,
-              //     item.consulted_count,
-              //     item.cancelcount,
-              //   ];
-              // }),
-            } else {
-              Alert.alert('Response Error !', `${message}`);
-            }
-          });
+            role: userData?.role,
+          },
+        );
+        const {status, message, data} = response.data;
+        if (status === true) {
+          setDepartwiseData(data);
+        } else {
+          Alert.alert('Response Error !', `${message}`);
+        }
       } catch (error) {
         Alert.alert('Error !!', `${error}`);
       }
     };
 
     FetchMobileDepartmentwiseDashboarddata();
-  }, []);
-
-  const tableHead = [
-    'DEPARTMENT',
-    'APPOINTMENT',
-    'WAITING',
-    'CONSULTED',
-    'CANCELLED',
-  ];
-  const [widthArr2, setWidthArr2] = useState([]);
-  const [widthArr3, setWidthArr3] = useState([]);
-  useEffect(() => {
-    setWidthArr2([90, 60, 60, 76, 76, ...Array(tableHead.length).fill(1)]);
-    setWidthArr3([90, 60, 60, 76, 76, ...Array(departwiseData.length).fill(1)]);
   }, []);
 
   // nxt page handler ...
@@ -135,14 +143,84 @@ const DashboardHomePage = () => {
     setDashboardpatientListData(_body2);
     navigation.navigate('Listofpatients');
   };
+  // nxt page handler ...
+  const pageHandler2 = (role, status) => {
+    const _body2 = {
+      hospital_id: hospital_id,
+      reception_id: _id,
+      fromdate: new Date().toISOString().slice(0, 10),
+      todate: new Date().toISOString().slice(0, 10),
+      role: role,
+      status: status,
+    };
+    setDashboardpatientListData(_body2);
+    navigation.navigate('Listofpatients');
+  };
+  const item = () => (
+    <>
+      <View style={{marginHorizontal: 10}}>
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.secTablehead}>
+            <Text style={styles.secTableheadText}>CATEGORY</Text>
+          </View>
+          <View style={styles.secTablehead}>
+            <Text style={styles.secTableheadText}>NO. OF PATIENTS</Text>
+          </View>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.contenthead}>
+            <Text style={styles.contentheadText}>APPOINTMENT</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.contenthead}
+            onPress={() => pageHandler2(userData?.role, 'Confirmed')}>
+            <Text style={[styles.contentheadText, {textAlign: 'center'}]}>
+              {departwiseData[0]?.opdcount}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.contenthead}>
+            <Text style={styles.contentheadText}>WAITING</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.contenthead}
+            onPress={() => pageHandler2(userData?.role, 'Waiting')}>
+            <Text style={[styles.contentheadText, {textAlign: 'center'}]}>
+              {departwiseData[0]?.waiting_count}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.contenthead}>
+            <Text style={styles.contentheadText}>CONSULTED</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.contenthead}
+            onPress={() => pageHandler2(userData?.role, 'Consulted')}>
+            <Text style={[styles.contentheadText, {textAlign: 'center'}]}>
+              {departwiseData[0]?.consulted_count}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.contenthead}>
+            <Text style={styles.contentheadText}>CANCELLED</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.contenthead}
+            onPress={() => pageHandler2(userData?.role, 'Cancelled')}>
+            <Text style={[styles.contentheadText, {textAlign: 'center'}]}>
+              {departwiseData[0]?.cancelcount}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
+  );
   return (
     <>
-      <Appbar.Header
-        style={{
-          backgroundColor: 'white',
-          borderBottomWidth: 2,
-          borderBottomColor: '#ebebeb',
-        }}>
+      <Appbar.Header mode="small">
         <Appbar.BackAction onPress={() => navigation.navigate('Home')} />
         <Appbar.Content title={'Dashboard'} />
       </Appbar.Header>
@@ -173,7 +251,6 @@ const DashboardHomePage = () => {
               <Text style={styles.contentText}>{count?.panchakarmacount}</Text>
             </View>
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.contentItem}>
             <Image source={question} style={styles.img} />
             <View>
@@ -182,66 +259,67 @@ const DashboardHomePage = () => {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={styles.tableDiv}>
-          <View style={{marginVertical: 10}}>
-            <Text style={styles.headtext2}>Department Wise Patients</Text>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{height: 'auto', maxHeight: 400}}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                <Row
-                  data={tableHead}
-                  widthArr={widthArr2}
-                  style={styles.head}
-                  textStyle={styles.headtext}
-                />
-              </Table>
-              <ScrollView
-                vertical
-                showsVerticalScrollIndicator={false}
-                style={styles.dataWrapper}>
-                <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
-                  <Rows
-                    data={departwiseData?.map(item => {
-                      return [
-                        item.deptname,
-                        <TouchableOpacity
-                          onPress={() =>
-                            pageHandler(item.depart_id, 'Confirmed')
-                          }>
-                          <Text style={styles.text}>{item.opdcount}</Text>
-                        </TouchableOpacity>,
-                        <TouchableOpacity
-                          onPress={() =>
-                            pageHandler(item.depart_id, 'Waiting')
-                          }>
-                          <Text style={styles.text}>{item.waiting_count}</Text>
-                        </TouchableOpacity>,
-                        <TouchableOpacity
-                          onPress={() =>
-                            pageHandler(item.depart_id, 'Consulted')
-                          }>
-                          <Text style={styles.text}>
-                            {item.consulted_count}
-                          </Text>
-                        </TouchableOpacity>,
-                        <TouchableOpacity
-                          onPress={() =>
-                            pageHandler(item.depart_id, 'Cancelled')
-                          }>
-                          <Text style={styles.text}>{item.cancelcount}</Text>
-                        </TouchableOpacity>,
-                      ];
-                    })}
-                    widthArr={widthArr3}
-                    style={[styles.row]}
-                    textStyle={styles.text}
-                  />
-                </Table>
-              </ScrollView>
+        {userData?.role === 'Receptionist' ? (
+          <View style={styles.tableDiv}>
+            <View style={{marginVertical: 10}}>
+              <Text style={styles.headtext2}>Department Wise Patients</Text>
             </View>
-          </ScrollView>
-        </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View style={{flex: 1}}>
+                <ScrollView horizontal>
+                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                    <Row
+                      data={tableHead}
+                      widthArr={widthArr2}
+                      style={styles.head}
+                      textStyle={styles.headtext}
+                    />
+                    <Rows
+                      data={departwiseData?.map(item => {
+                        return [
+                          item.deptname,
+                          <TouchableOpacity
+                            onPress={() =>
+                              pageHandler(item.depart_id, 'Confirmed')
+                            }>
+                            <Text style={styles.text}>{item.opdcount}</Text>
+                          </TouchableOpacity>,
+                          <TouchableOpacity
+                            onPress={() =>
+                              pageHandler(item.depart_id, 'Waiting')
+                            }>
+                            <Text style={styles.text}>
+                              {item.waiting_count}
+                            </Text>
+                          </TouchableOpacity>,
+                          <TouchableOpacity
+                            onPress={() =>
+                              pageHandler(item.depart_id, 'Consulted')
+                            }>
+                            <Text style={styles.text}>
+                              {item.consulted_count}
+                            </Text>
+                          </TouchableOpacity>,
+                          <TouchableOpacity
+                            onPress={() =>
+                              pageHandler(item.depart_id, 'Cancelled')
+                            }>
+                            <Text style={styles.text}>{item.cancelcount}</Text>
+                          </TouchableOpacity>,
+                        ];
+                      })}
+                      widthArr={widthArr3}
+                      style={[styles.row]}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                </ScrollView>
+              </View>
+            </ScrollView>
+          </View>
+        ) : userData?.role === 'Doctor' ? (
+          item()
+        ) : null}
       </SafeAreaView>
     </>
   );
@@ -251,7 +329,6 @@ export default DashboardHomePage;
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#ffffff',
     flex: 1,
   },
   img: {
@@ -262,7 +339,6 @@ const styles = StyleSheet.create({
   contentDiv: {
     flexDirection: 'row',
     marginHorizontal: 12,
-    // marginVertical: 14,
     marginTop: 12,
     justifyContent: 'space-between',
   },
@@ -306,5 +382,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#127359',
     fontWeight: '600',
+  },
+  secTablehead: {
+    backgroundColor: '#80aaff',
+    width: '50%',
+    borderWidth: 0.2,
+    padding: 8,
+  },
+  secTableheadText: {
+    fontSize: 12,
+    color: '#ffffff',
+    fontWeight: '600',
+  },
+  contenthead: {
+    width: '50%',
+    borderWidth: 0.2,
+    padding: 8,
+  },
+  contentheadText: {
+    fontSize: 12,
+    color: 'black',
   },
 });

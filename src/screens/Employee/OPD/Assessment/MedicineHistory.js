@@ -166,6 +166,7 @@ const MedicineHistory = () => {
   useEffect(() => {
     FetchMobileOpdAssessment();
   }, [hospital_id, patient_id, reception_id]);
+
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
     try {

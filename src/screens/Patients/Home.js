@@ -169,10 +169,18 @@ const Home = () => {
             <View style={styles.contentDiv}>
               <TouchableOpacity
                 style={styles.contentItem}
+                onPress={() => navigation.navigate('DashboardHomePage')}>
+                <Image source={pr} style={styles.img} />
+                <Text style={styles.contentText}>Dashboard</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.contentItem}
                 onPress={() => navigation.navigate('EpatientRegistration')}>
                 <Image source={pr} style={styles.img} />
                 <Text style={styles.contentText}>Patient Registration</Text>
               </TouchableOpacity>
+            </View>
+            <View style={styles.contentDiv}>
               <TouchableOpacity
                 style={styles.contentItem}
                 onPress={() => {
@@ -182,8 +190,6 @@ const Home = () => {
                 <Image source={ss} style={styles.img} />
                 <Text style={styles.contentText}>Search Patient</Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.contentDiv}>
               <TouchableOpacity
                 style={styles.contentItem}
                 onPress={() => {
@@ -192,6 +198,9 @@ const Home = () => {
                 <Image source={attendence} style={styles.img} />
                 <Text style={styles.contentText}>HR</Text>
               </TouchableOpacity>
+            </View>
+
+            <View style={styles.contentDiv}>
               <TouchableOpacity
                 style={styles.contentItem}
                 onPress={() => {
@@ -201,8 +210,6 @@ const Home = () => {
                 <Image source={attendence} style={styles.img} />
                 <Text style={styles.contentText}>Discharge Initiate</Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.contentDiv}>
               <TouchableOpacity
                 style={styles.contentItem}
                 onPress={() => {
@@ -211,6 +218,8 @@ const Home = () => {
                 <Image source={attendence} style={styles.img} />
                 <Text style={styles.contentText}>Discharge Summary</Text>
               </TouchableOpacity>
+            </View>
+            <View style={styles.contentDiv}>
               <TouchableOpacity
                 style={styles.contentItem}
                 onPress={() => {
