@@ -16,7 +16,7 @@ import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 
 const ObstetricsHistory = () => {
-  const {patientsData, scannedPatientsData, waitingListData} =
+  const {patientsData, scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -69,10 +69,10 @@ const ObstetricsHistory = () => {
   //  submit handler ....
   const submitTreatmenthandler = async () => {
     const _body = {
-      hospital_id: hospital_id,
+      hospital_id: userData?.hospital_id,
       patient_id: patient_id,
-      reception_id: reception_id,
-      appoint_id: appoint_id,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
       uhid: uhid,
       api_type: 'OPD-OBSTETRICS-HISTORY',
       opdobstetricshistoryarray: _formObject,
@@ -140,15 +140,17 @@ const ObstetricsHistory = () => {
       console.error(error);
     }
   };
-  const displayData = opdAssessment.map(item => (
+  const displayData = opdAssessment.map((item, index) => (
     <>
-      {Object.entries(item).map(([key, value], index) => (
-        <Card key={index + 1} style={styles.card}>
-          {Array.isArray(value) ? (
-            <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
-          ) : null}
-        </Card>
-      ))}
+      <View key={index + 1}>
+        {Object.entries(item).map(([key, value], index) => (
+          <Card key={index + 1} style={styles.card}>
+            {Array.isArray(value) ? (
+              <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
+            ) : null}
+          </Card>
+        ))}
+      </View>
     </>
   ));
   return (
@@ -401,7 +403,7 @@ const ObstetricsHistory = () => {
             mode="contained"
             style={styles.btn}
             onPress={() => navigation.navigate('MenstrualHistory')}>
-            Skip
+            Next / Skip
           </Button>
         </View>
         <View style={{padding: 8, marginBottom: 10}}>{displayData}</View>

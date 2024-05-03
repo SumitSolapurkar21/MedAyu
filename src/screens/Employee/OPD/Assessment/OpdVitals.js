@@ -47,7 +47,7 @@ const OpdVitals = () => {
   const [severeColor, setsevereColor] = useState('');
   const [gcssStatus, setGcssStatus] = useState('');
 
-  const {patientsData, scannedPatientsData, waitingListData} =
+  const {patientsData, scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -136,10 +136,10 @@ const OpdVitals = () => {
       try {
         await axios
           .post(`${api.baseurl}/AddMobileOpdAssessment  `, {
-            reception_id: reception_id,
-            hospital_id: hospital_id,
+            reception_id: userData?._id,
+            hospital_id: userData?.hospital_id,
             patient_id: patient_id,
-            appoint_id: appoint_id,
+            appoint_id: appoint_id || waitingListData?.appoint_id,
             uhid: uhid,
             api_type: 'OPD-VITALS',
             opdvitalshistoryarray: [_body],
@@ -297,10 +297,10 @@ const OpdVitals = () => {
     try {
       await axios
         .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
-          hospital_id: hospital_id,
-          reception_id: reception_id,
+          hospital_id: userData?.hospital_id,
+          reception_id: userData?._id,
           patient_id: patient_id,
-          appoint_id: appoint_id,
+          appoint_id: appoint_id || waitingListData?.appoint_id,
           api_type: 'OPD-VITALS',
           uhid: uhid,
           mobilenumber: mobilenumber || waitingListData?.mobilenumber,

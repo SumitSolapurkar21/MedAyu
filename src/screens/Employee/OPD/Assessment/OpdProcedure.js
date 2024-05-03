@@ -39,6 +39,7 @@ const OpdProcedure = () => {
     scannedPatientsData,
     waitingListData,
     setWaitingListData,
+    userData,
   } = useContext(UserContext);
 
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
@@ -67,7 +68,8 @@ const OpdProcedure = () => {
       try {
         await axios
           .post(`${api.baseurl}/FetchServiceType`, {
-            hospital_id: hospital_id,
+            hospital_id: userData?.hospital_id,
+            reception_id: userData?._id,
           })
           .then(res => {
             const _filterData = res.data.data.filter(
@@ -89,8 +91,9 @@ const OpdProcedure = () => {
       try {
         await axios
           .post(`${api.baseurl}/getservicecategoryacctype`, {
-            hospital_id: hospital_id,
+            hospital_id: userData?.hospital_id,
             servicetype_id: procedureId,
+            reception_id: userData?._id,
           })
           .then(res => {
             _setServiceCategoryArray(res.data.data);
@@ -134,10 +137,11 @@ const OpdProcedure = () => {
       try {
         await axios
           .post(`${api.baseurl}/SearchPanchakarmaProcedureMobile`, {
-            hospital_id: hospital_id,
+            hospital_id: userData?.hospital_id,
             category_id: selectionValue,
             procedure_id: procedureId,
             text: searchInput,
+            reception_id: userData?._id,
           })
           .then(res => {
             const _procedurename = res.data.data.map(res => ({
@@ -179,10 +183,10 @@ const OpdProcedure = () => {
   //submit handler ....
   const submitTreatmenthandler = async () => {
     const _body = {
-      hospital_id: hospital_id,
+      hospital_id: userData?.hospital_id,
       patient_id: patient_id,
-      reception_id: reception_id,
-      appoint_id: appoint_id,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
       uhid: uhid,
       api_type: 'OPD-PROCEDURE',
       opdprocedurehistoryarray: temp,
@@ -214,10 +218,10 @@ const OpdProcedure = () => {
     try {
       await axios
         .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
-          hospital_id: hospital_id,
-          reception_id: reception_id,
+          hospital_id: userData?.hospital_id,
+          reception_id: userData?._id,
           patient_id: patient_id,
-          appoint_id: appoint_id,
+          appoint_id: appoint_id || waitingListData?.appoint_id,
           api_type: 'OPD-PROCEDURE',
           uhid: uhid,
           mobilenumber: mobilenumber || waitingListData?.mobilenumber,

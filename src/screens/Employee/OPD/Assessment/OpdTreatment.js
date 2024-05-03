@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {IconButton, MD3Colors} from 'react-native-paper';
 
 const OpdTreatment = () => {
-  const {patientsData, scannedPatientsData, waitingListData} =
+  const {patientsData, scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -59,9 +59,9 @@ const OpdTreatment = () => {
       const response = await axios.post(
         `${api.baseurl}/search_prescription_data`,
         {
-          hospital_id: hospital_id,
+          hospital_id: userData?.hospital_id,
           patient_id: patient_id,
-          reception_id: reception_id,
+          reception_id: userData?._id,
           text: searchInput,
         },
       );
@@ -104,10 +104,10 @@ const OpdTreatment = () => {
   //submit handler ....
   const submitTreatmenthandler = async () => {
     const _body = {
-      hospital_id: hospital_id,
+      hospital_id: userData?.hospital_id,
       patient_id: patient_id,
-      reception_id: reception_id,
-      appoint_id: appoint_id,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
       uhid: uhid,
       api_type: 'OPD-TREATMENT',
       opdtreatmenthistoryarray: temp,
@@ -140,10 +140,10 @@ const OpdTreatment = () => {
     try {
       await axios
         .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
-          hospital_id: hospital_id,
-          reception_id: reception_id,
+          hospital_id: userData?.hospital_id,
+          reception_id: userData?._id,
           patient_id: patient_id,
-          appoint_id: appoint_id,
+          appoint_id: appoint_id || waitingListData?.appoint_id,
           api_type: 'OPD-TREATMENT',
           uhid: uhid,
           mobilenumber: mobilenumber || waitingListData?.mobilenumber,

@@ -41,7 +41,7 @@ const OpdDiagnosis = () => {
     setWidthArr([60, ...Array(keys.length - 1).fill(110)]);
   }, []);
 
-  const {patientsData, scannedPatientsData, waitingListData} =
+  const {patientsData, scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -56,7 +56,8 @@ const OpdDiagnosis = () => {
       await axios
         .post(`${api.baseurl}/search_Mobile_Diagnosis_data`, {
           text: searchQuery,
-          hospital_id: hospital_id,
+          hospital_id: userData?.hospital_id,
+          reception_id: userData?._id,
         })
         .then(res => {
           if (res.data.status === false) {
@@ -102,11 +103,11 @@ const OpdDiagnosis = () => {
       }
 
       const opddiagnosishistoryarray = {
-        reception_id: reception_id,
-        hospital_id: hospital_id,
+        reception_id: userData?._id,
+        hospital_id: userData?.hospital_id,
         patient_id: patient_id,
         api_type: 'OPD-DIAGNOSIS',
-        appoint_id: appoint_id,
+        appoint_id: appoint_id || waitingListData?.appoint_id,
         opddiagnosishistoryarray: diagnosisArray,
       };
       await axios
@@ -149,7 +150,7 @@ const OpdDiagnosis = () => {
         addtime: currenttime,
         api_type: 'OPD-DIAGNOSIS',
         uhid: uhid,
-        appoint_id: appoint_id,
+        appoint_id: appoint_id || waitingListData?.appoint_id,
       },
     ];
     setDiagnosisArray(prev => [...prev, ..._data]);
@@ -164,10 +165,10 @@ const OpdDiagnosis = () => {
     try {
       await axios
         .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
-          hospital_id: hospital_id,
-          reception_id: reception_id,
+          hospital_id: userData?.hospital_id,
+          reception_id: userData?._id,
           patient_id: patient_id,
-          appoint_id: appoint_id,
+          appoint_id: appoint_id || waitingListData?.appoint_id,
           api_type: 'OPD-DIAGNOSIS',
           uhid: uhid,
           mobilenumber: mobilenumber || waitingListData?.mobilenumber,

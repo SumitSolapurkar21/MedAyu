@@ -24,7 +24,7 @@ import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import {IconButton, MD3Colors} from 'react-native-paper';
 
-const OpdComplaints = ({route}) => {
+const OpdComplaints = () => {
   // comming from dashboard.....
   // const {appointment_id, newpatient_id, depart_id, doctor_id} = route.params;
   const navigation = useNavigation();
@@ -35,7 +35,7 @@ const OpdComplaints = ({route}) => {
   const [widthArr, setWidthArr] = useState([]);
   const [widthArr1, setWidthArr1] = useState([]);
 
-  const {patientsData, scannedPatientsData, waitingListData} =
+  const {patientsData, scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -143,9 +143,8 @@ const OpdComplaints = ({route}) => {
     };
     setRowData(newData);
   };
-
   useEffect(() => {
-    if (selectionValue) {
+    if (selectionValue || userData?.hospital_id || hospital_id) {
       FetchMobileComplaintsCategory();
       // setRowData([]);
       // setSelectedCategoryData([]);
@@ -157,8 +156,8 @@ const OpdComplaints = ({route}) => {
   const FetchMobileComplaintsCategory = async () => {
     await axios
       .post(`${api.baseurl}/FetchMobileComplaintsCategory`, {
-        hospital_id: hospital_id,
-        reception_id: reception_id,
+        hospital_id: hospital_id || userData?.hospital_id,
+        reception_id: reception_id || userData?._id,
         patient_id: patient_id,
         type: selectionValue,
       })
@@ -181,8 +180,8 @@ const OpdComplaints = ({route}) => {
       await axios
         .post(`${api.baseurl}/FetchSysmptomsAccCategory`, {
           category: selectedCategoryData,
-          hospital_id: hospital_id,
-          reception_id: reception_id,
+          hospital_id: userData?.hospital_id,
+          reception_id: userData?._id,
           patient_id: patient_id,
           type: selectionValue,
         })
@@ -205,17 +204,17 @@ const OpdComplaints = ({route}) => {
 
   useEffect(() => {
     FetchMobileOpdAssessment();
-  }, [hospital_id, patient_id, reception_id]);
+  }, [userData?.hospital_id, userData?.reception_id]);
 
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
     try {
       await axios
         .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
-          hospital_id: hospital_id,
-          reception_id: reception_id,
+          hospital_id: userData?.hospital_id || hospital_id,
+          reception_id: userData?._id || reception_id,
           patient_id: patient_id,
-          appoint_id: appoint_id,
+          appoint_id: appoint_id || waitingListData?.appoint_id,
           api_type: 'OPD-COMPLAINTS',
           uhid: uhid,
           mobilenumber: mobilenumber || waitingListData?.mobilenumber,
@@ -286,13 +285,14 @@ const OpdComplaints = ({route}) => {
 
   const submitHandler = async () => {
     const _body = {
-      hospital_id: hospital_id,
-      reception_id: reception_id,
+      hospital_id: hospital_id || userData?.hospital_id,
+      reception_id: reception_id || userData?._id,
       patient_id: patient_id,
-      appoint_id: appoint_id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
       complaintArray: selectedRow,
       api_type: 'OPD-COMPLAINTS',
       uhid: uhid,
+      mobilenumber: mobilenumber || waitingListData?.mobilenumber,
     };
     try {
       await axios

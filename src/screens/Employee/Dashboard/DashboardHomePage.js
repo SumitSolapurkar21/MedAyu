@@ -158,7 +158,7 @@ const DashboardHomePage = () => {
   };
   const item = () => (
     <>
-      <View style={{marginHorizontal: 10}}>
+      <View style={{padding: 14}}>
         <View style={{flexDirection: 'row'}}>
           <View style={styles.secTablehead}>
             <Text style={styles.secTableheadText}>CATEGORY</Text>

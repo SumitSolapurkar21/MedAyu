@@ -26,7 +26,7 @@ const FamilyHistory = () => {
 
   const [p_category, setP_category] = useState('');
 
-  const {patientsData, scannedPatientsData, waitingListData} =
+  const {patientsData, scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -65,9 +65,9 @@ const FamilyHistory = () => {
       const response = await axios.post(
         `${api.baseurl}/search_opd_past_history`,
         {
-          hospital_id: hospital_id,
+          hospital_id: userData?.hospital_id,
           patient_id: patient_id,
-          reception_id: reception_id,
+          reception_id: userData?._id,
           text: searchInput,
         },
       );
@@ -143,10 +143,10 @@ const FamilyHistory = () => {
   //submit handler ....
   const submitTreatmenthandler = async () => {
     const _body = {
-      hospital_id: hospital_id,
+      hospital_id: userData?.hospital_id,
       patient_id: patient_id,
-      reception_id: reception_id,
-      appoint_id: appoint_id,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
       uhid: uhid,
       api_type: 'OPD-FAMILY-HISTORY',
       opdfamilyhistoryarray: temp,
@@ -364,10 +364,10 @@ const FamilyHistory = () => {
     try {
       await axios
         .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
-          hospital_id: hospital_id,
-          reception_id: reception_id,
+          hospital_id: userData?.hospital_id,
+          reception_id: userData?._id,
           patient_id: patient_id,
-          appoint_id: appoint_id,
+          appoint_id: appoint_id || waitingListData?.appoint_id,
           api_type: 'OPD-FAMILY-HISTORY',
           uhid: uhid,
           mobilenumber: mobilenumber || waitingListData?.mobilenumber,

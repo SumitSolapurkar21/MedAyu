@@ -1,5 +1,4 @@
 import {
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,12 +17,17 @@ import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
-export const Listofpatients = ({route}) => {
+export const Listofpatients = () => {
   const navigation = useNavigation();
-  const {setWaitingListData, dashboardpatientListData, userData} =
-    useContext(UserContext);
-  //   const {_body2} = route.params;
-  const [patientList, setPatientList] = useState([]);
+  const {
+    setWaitingListData,
+    dashboardpatientListData,
+    userData,
+    patientList,
+    setPatientList,
+  } = useContext(UserContext);
+
+  console.log('patientList : ', patientList);
 
   //backHandler ...
   useEffect(() => {
@@ -45,8 +49,6 @@ export const Listofpatients = ({route}) => {
     See_Mobile_Appointment_List();
   }, []);
 
-  // console.log(dashboardpatientListData);
-
   const See_Mobile_Appointment_List = async () => {
     try {
       await axios
@@ -55,12 +57,11 @@ export const Listofpatients = ({route}) => {
           dashboardpatientListData,
         )
         .then(response => {
-          //   console.log('response', response.data.data);
           const {status, message} = response?.data;
           if (status === true) {
             const data = response.data.data;
+            console.log('data : ', data);
             setPatientList(data);
-            //   setWaitingListData(data);
           } else {
             Alert.alert('Response Error !', `${message}`);
           }
@@ -69,8 +70,6 @@ export const Listofpatients = ({route}) => {
       Alert.alert('Error !!', `${error}`);
     }
   };
-
-  console.log('userData : ', userData.role, patientList[0]?.appoint_status);
 
   const wstatus = patientList[0]?.appoint_status;
   let tableHead;
@@ -81,7 +80,6 @@ export const Listofpatients = ({route}) => {
     tableHead = [
       'SR.NO',
       'UHID',
-      // 'TOKEN',
       'NAME',
       'MOBILE',
       'GENDER',
@@ -90,7 +88,6 @@ export const Listofpatients = ({route}) => {
       'ROOM',
       'DATE / TIME',
       'STATUS',
-      // 'ACTION',
     ];
   } else if (
     (userData?.role === 'Doctor' && wstatus === 'Waiting') ||
@@ -175,8 +172,6 @@ export const Listofpatients = ({route}) => {
           60,
           50,
           76,
-          // 76,
-          // 150,
           ...Array(tableHead.length).fill(0),
         ]);
         setWidthArr3([
@@ -190,8 +185,6 @@ export const Listofpatients = ({route}) => {
           60,
           50,
           76,
-          // 76,
-          // 150,
           ...Array(patientList.length).fill(0),
         ]);
       } else if (
@@ -422,20 +415,23 @@ export const Listofpatients = ({route}) => {
     doctor_id,
     mobilenumber,
     assessment,
+    hospital_id,
   ) => {
     const data = {
-      appointment_id: appointment_id,
+      appoint_id: appointment_id,
       newpatient_id: patient_id,
       depart_id: depart_id,
       doctor_id: doctor_id,
       mobilenumber: mobilenumber,
       assessmenttype: assessment,
+      hospital_id: hospital_id,
     };
     MobileChangeWaitingToConsult(data);
 
     setWaitingListData(data);
     navigation.navigate('OpdComplaints');
   };
+
   return (
     <>
       <Appbar.Header
@@ -512,49 +508,6 @@ export const Listofpatients = ({route}) => {
                           item.roomno,
                           `${item.app_date} / ${item.slot_id}`,
                           item.appoint_status,
-                          // <View
-                          //   style={{
-                          //     flexDirection: 'row',
-                          //     gap: 10,
-                          //     marginLeft: 10,
-                          //   }}>
-                          //   <TouchableOpacity
-                          //     onPress={() =>
-                          //       MobileCallToPatients(
-                          //         item.appointment_id,
-                          //         item._id,
-                          //       )
-                          //     }
-                          //     style={{
-                          //       alignSelf: 'center',
-                          //       borderColor: 'red',
-                          //       borderWidth: 1,
-                          //       borderRadius: 8,
-                          //       padding: 8,
-                          //     }}>
-                          //     <Text>Call</Text>
-                          //   </TouchableOpacity>
-                          //   <TouchableOpacity
-                          //     onPress={() =>
-                          //       navigationPage(
-                          //         item.appointment_id,
-                          //         item._id,
-                          //         item.depart_id,
-                          //         item.doctor_id,
-                          //         item.mobilenumber,
-                          //         'NewAssessment',
-                          //       )
-                          //     }
-                          //     style={{
-                          //       alignSelf: 'center',
-                          //       borderColor: 'green',
-                          //       borderWidth: 1,
-                          //       borderRadius: 8,
-                          //       padding: 8,
-                          //     }}>
-                          //     <Text>Consult</Text>
-                          //   </TouchableOpacity>
-                          // </View>,
                         ];
                       } else if (
                         (item.appoint_status === 'Waiting' ||
@@ -598,31 +551,36 @@ export const Listofpatients = ({route}) => {
                               gap: 10,
                               marginLeft: 10,
                             }}>
-                            <TouchableOpacity
-                              onPress={() =>
-                                MobileCallToPatients(
-                                  item.appointment_id,
-                                  item._id,
-                                )
-                              }
-                              style={{
-                                alignSelf: 'center',
-                                borderColor: 'red',
-                                borderWidth: 1,
-                                borderRadius: 8,
-                                padding: 8,
-                              }}>
-                              <Text>Call</Text>
-                            </TouchableOpacity>
+                            {(item.appoint_status === 'Waiting' ||
+                              item.appoint_status === 'Called') &&
+                            userData?.role === 'Doctor' ? (
+                              <TouchableOpacity
+                                onPress={() =>
+                                  MobileCallToPatients(
+                                    item.appointment_id,
+                                    item._id,
+                                  )
+                                }
+                                style={{
+                                  alignSelf: 'center',
+                                  borderColor: 'red',
+                                  borderWidth: 1,
+                                  borderRadius: 8,
+                                  padding: 8,
+                                }}>
+                                <Text>Call</Text>
+                              </TouchableOpacity>
+                            ) : null}
                             <TouchableOpacity
                               onPress={() =>
                                 navigationPage(
-                                  item.appointment_id,
+                                  item.appoint_id,
                                   item._id,
                                   item.depart_id,
                                   item.doctor_id,
                                   item.mobilenumber,
                                   'NewAssessment',
+                                  userData?.hospital_id,
                                 )
                               }
                               style={{

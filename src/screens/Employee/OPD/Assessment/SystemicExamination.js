@@ -15,7 +15,7 @@ import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../../api.json';
 const SystemicExamination = () => {
-  const {patientsData, scannedPatientsData, waitingListData} =
+  const {patientsData, scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -1577,10 +1577,10 @@ const SystemicExamination = () => {
   //  submit handler ....
   const submitTreatmenthandler = async () => {
     const _body = {
-      hospital_id: hospital_id,
+      hospital_id: userData?.hospital_id,
       patient_id: patient_id,
-      reception_id: reception_id,
-      appoint_id: appoint_id,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
       uhid: uhid,
       api_type: 'OPD-SYSTEMIC-EXAMINATION',
       opdsystemicexaminationhistoryarray: [checkedValues],
@@ -1612,10 +1612,10 @@ const SystemicExamination = () => {
     try {
       await axios
         .post(`${api.baseurl}/FetchMobileOpdAssessment`, {
-          hospital_id: hospital_id,
-          reception_id: reception_id,
+          hospital_id: userData?.hospital_id,
+          reception_id: userData?._id,
           patient_id: patient_id,
-          appoint_id: appoint_id,
+          appoint_id: appoint_id || waitingListData?.appoint_id,
           api_type: 'OPD-SYSTEMIC-EXAMINATION',
           uhid: uhid,
           mobilenumber: mobilenumber || waitingListData?.mobilenumber,

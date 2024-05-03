@@ -20,6 +20,7 @@ export const UserProvider = ({children}) => {
     useState('');
   const [waitingListData, setWaitingListData] = useState([]);
   const [dashboardpatientListData, setDashboardpatientListData] = useState([]);
+  const [patientList, setPatientList] = useState([]);
   const updateSharedData = data => {
     setPatientEditArray(prevData => [...prevData, data]);
   };
@@ -57,6 +58,8 @@ export const UserProvider = ({children}) => {
     setWaitingListData,
     dashboardpatientListData,
     setDashboardpatientListData,
+    patientList,
+    setPatientList,
   };
 
   return (
