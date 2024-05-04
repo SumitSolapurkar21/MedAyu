@@ -89,7 +89,7 @@ import PharmacyHome from '../screens/Pharmacy/PharmacyHome';
 import KitchenHome from '../screens/Kitchen/KitchenHome';
 import HRHome from '../screens/HR/HRHome';
 import HrModal from '../screens/HRModal/HrModal';
-import Regularization from '../screens/HRModal/Regularization';
+import Regularization from '../screens/HRModal/Regularization/Regularization';
 import LeaveHomePage from '../screens/HRModal/Leave/LeaveHomePage';
 import Expenses from '../components/Expenses/Expenses';
 import DashboardHomePage from '../screens/Employee/Dashboard/DashboardHomePage';

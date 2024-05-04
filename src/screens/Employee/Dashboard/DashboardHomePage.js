@@ -86,6 +86,7 @@ const DashboardHomePage = () => {
             reception_id: _id,
             fromdate: new Date().toISOString().slice(0, 10),
             todate: new Date().toISOString().slice(0, 10),
+            role: userData?.role,
           },
         );
         const {status, message} = response.data;

@@ -27,8 +27,6 @@ export const Listofpatients = () => {
     setPatientList,
   } = useContext(UserContext);
 
-  console.log('patientList : ', patientList);
-
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -47,7 +45,7 @@ export const Listofpatients = () => {
   // fetch See_Mobile_Appointment_List ......
   useEffect(() => {
     See_Mobile_Appointment_List();
-  }, []);
+  }, [dashboardpatientListData]);
 
   const See_Mobile_Appointment_List = async () => {
     try {
@@ -60,7 +58,6 @@ export const Listofpatients = () => {
           const {status, message} = response?.data;
           if (status === true) {
             const data = response.data.data;
-            console.log('data : ', data);
             setPatientList(data);
           } else {
             Alert.alert('Response Error !', `${message}`);
@@ -410,6 +407,7 @@ export const Listofpatients = () => {
   // navigation page ....
   const navigationPage = (
     appointment_id,
+    appoint_id,
     patient_id,
     depart_id,
     doctor_id,
@@ -418,7 +416,8 @@ export const Listofpatients = () => {
     hospital_id,
   ) => {
     const data = {
-      appoint_id: appointment_id,
+      appointment_id: appointment_id,
+      appoint_id: appoint_id,
       newpatient_id: patient_id,
       depart_id: depart_id,
       doctor_id: doctor_id,
@@ -574,6 +573,7 @@ export const Listofpatients = () => {
                             <TouchableOpacity
                               onPress={() =>
                                 navigationPage(
+                                  item.appointment_id,
                                   item.appoint_id,
                                   item._id,
                                   item.depart_id,
