@@ -181,39 +181,6 @@ const Expenses = () => {
       console.warn('Document picker error:', err);
     }
   };
-  // const displayFileName = formData => {
-  //   const reducedFormData = formData?._parts?.reduce((acc, [key, value]) => {
-  //     if (!acc[key]) {
-  //       acc[key] = value;
-  //     } else {
-  //       // If key already exists, handle it as an array
-  //       if (!Array.isArray(acc[key])) {
-  //         acc[key] = [acc[key]];
-  //       }
-  //       acc[key].push(value);
-  //     }
-  //     return acc;
-  //   }, {});
-
-  //   // Convert reducedFormData to an array of objects
-  //   const newFormDataArray = Object.keys(reducedFormData).map(key => ({
-  //     [key]: reducedFormData[key],
-  //   }));
-
-  //   // Merge the previous data with the new form data
-  //   const mergedData = {
-  //     ...reducedFormData,
-  //     ...Object.assign({}, ...newFormDataArray),
-  //   };
-
-  //   // Set bill_photo and payment_proof if they exist in mergedData
-  //   if (mergedData?.bill_photo0?.name) {
-  //     setBill_photo(mergedData.bill_photo0.name);
-  //   }
-  //   if (mergedData?.payment_proof0?.name) {
-  //     setPayment_proof(mergedData.payment_proof0.name);
-  //   }
-  // };
 
   const dataSubmitHandler = async () => {
     try {
