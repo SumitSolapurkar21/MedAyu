@@ -16,6 +16,7 @@ import UserContext from '../Context/Context';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import DocumentPicker from 'react-native-document-picker';
 import api from '../../../api.json';
+import axios from 'axios';
 
 const Expenses = () => {
   const {userData} = useContext(UserContext);
@@ -27,6 +28,7 @@ const Expenses = () => {
   const [isFocus1, setIsFocus1] = useState(false);
   const [bill_photo, setBill_photo] = useState(false);
   const [payment_proof, setPayment_proof] = useState(false);
+  const [categoryArray, setCategoryArray] = useState([]);
 
   const _navigationTabs = tabs => {
     if (tabs === 'Doctor') {
@@ -69,29 +71,6 @@ const Expenses = () => {
     return () => backHandler.remove();
   }, []);
 
-  //dropdown for procedure type .....
-  const _dropdowndata = [
-    {
-      label: 'Grocery',
-      value: 'Grocery',
-    },
-    {
-      label: 'Vegetable',
-      value: 'Vegetable',
-    },
-    {
-      label: 'Milk',
-      value: 'Milk',
-    },
-    {
-      label: 'Hospital',
-      value: 'Hospital',
-    },
-    {
-      label: 'Pharmacy',
-      value: 'Pharmacy',
-    },
-  ];
   const modeofpayment = [
     {
       label: 'Cash',
@@ -110,12 +89,14 @@ const Expenses = () => {
   const [submittedformData, setsubmittedFormData] = useState({
     amount: '',
     category: '',
+    category_id: '',
     availablebudget: '',
     duedate: '',
     payee: '',
     modeofpayment: '',
     transactiondetails: '',
     approvedby: '',
+    fixedmonthamount: '',
   });
 
   const inputHandlers = (fieldName, value) => {
@@ -124,7 +105,6 @@ const Expenses = () => {
       [fieldName]: value,
     });
   };
-
   //due date
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -177,6 +157,8 @@ const Expenses = () => {
         submittedformData.transactiondetails,
       );
       formData.append('approvedby', submittedformData.approvedby);
+      formData.append('category_id', submittedformData.category_id);
+      formData.append('fixedmonthamount', submittedformData.fixedmonthamount);
     } catch (err) {
       console.warn('Document picker error:', err);
     }
@@ -222,6 +204,36 @@ const Expenses = () => {
       handleDocumentSelection(filename);
     }
   };
+
+  useEffect(() => {
+    GetMobileExpensesCategory();
+  }, [userData?.hospital_id]);
+
+  // frtch GetMobileExpensesCategory ....
+  const GetMobileExpensesCategory = async () => {
+    const body = {
+      hospital_id: userData?.hospital_id,
+      reception_id: userData?._id,
+    };
+    try {
+      await axios
+        .post(`${api.baseurl}/GetMobileExpensesCategory`, body)
+        .then(res => {
+          const {status, message, data} = res.data;
+          if (status === true) {
+            setCategoryArray(data);
+            // console.log(data);
+          } else {
+            Alert.alert('Error !!', message);
+          }
+        });
+    } catch (error) {
+      Alert.alert('Error !!', error);
+    }
+  };
+
+  // const selectedCategoryData = submittedformData?.category;
+  // console.log('categoryArray : ', submittedformData);
   return (
     <>
       {/* Appbar header */}
@@ -245,6 +257,7 @@ const Expenses = () => {
               style={styles.input}
               value={submittedformData.amount}
               onChangeText={text => inputHandlers('amount', text)}
+              inputMode={'numeric'}
             />
           </View>
           <View style={styles.cardContent}>
@@ -257,18 +270,25 @@ const Expenses = () => {
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
-                data={_dropdowndata}
+                data={categoryArray}
                 search
                 maxHeight={300}
-                labelField="label"
-                valueField="value"
+                labelField="category"
+                valueField="category"
                 placeholder={!isFocus2 ? 'Select' : '...'}
                 searchPlaceholder="Search..."
                 value={submittedformData?.category}
                 onFocus={() => setIsFocus2(true)}
                 onBlur={() => setIsFocus2(false)}
                 onChange={item => {
-                  inputHandlers('category', item.value);
+                  setsubmittedFormData({
+                    ...submittedformData,
+                    availablebudget: item.monthlybudget,
+                    category: item.category,
+                    category_id: item.expenses_id,
+                    fixedmonthamount: item.fixedmonthamount,
+                  });
+
                   setIsFocus2(false);
                 }}
               />
@@ -279,8 +299,9 @@ const Expenses = () => {
             <TextInput
               mode="flat"
               style={styles.input}
-              value={submittedformData.availablebudget}
+              value={submittedformData?.availablebudget}
               onChangeText={text => inputHandlers('availablebudget', text)}
+              editable={false}
             />
           </View>
           <View style={styles.cardContent}>
