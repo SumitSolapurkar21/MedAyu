@@ -19,7 +19,7 @@ const FamilyHistory = () => {
   const [illnessSelectedData, setIllnessSelectedData] = useState([]);
   const [temp, setTemp] = useState([]);
   const [showCalender, setShowCalender] = useState(false);
-  const [dateValues] = useState([]);
+  const [dateValues, setDateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
 
   const [isFocus2, setIsFocus2] = useState(false);
@@ -97,47 +97,36 @@ const FamilyHistory = () => {
     setDatePickerIndex(index); // Set the index of the date field for which the calendar is being opened
   };
 
-  const handleDateChange = (date, index) => {
+  const handleDateChange = async (date, index) => {
     const [_dateformat] = date.split(' ');
     const updatedTemp = [...temp];
-    updatedTemp[index].dateValues = _dateformat;
     updatedTemp[index].activestatus = true;
+    updatedTemp[index].dateValues = _dateformat; // Store the selected date in the temp array
+    const updatedDateValues = [...dateValues];
+    updatedDateValues[index] = _dateformat;
+    setDateValues(updatedDateValues);
 
-    // Convert selectedDate to Date object
-    const selectedDate = new Date(_dateformat);
-    const currentDate = new Date();
-    const yearDifference =
-      currentDate.getFullYear() - selectedDate.getFullYear();
-    const monthDifference =
-      currentDate.getMonth() - selectedDate.getMonth() + yearDifference * 12;
-
-    // Calculate day difference considering only the current month
-    const firstDayOfCurrentMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1,
-    );
-    const lastDayOfCurrentMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      0,
-    );
-    const firstDayDifference =
-      Math.floor((lastDayOfCurrentMonth - selectedDate) / (1000 * 3600 * 24)) +
-      1;
-    const lastDayDifference = Math.floor(
-      (currentDate - firstDayOfCurrentMonth) / (1000 * 3600 * 24),
-    );
-
-    const dayDifference = Math.min(lastDayDifference, firstDayDifference);
-
-    updatedTemp[index].days = dayDifference.toString();
-    updatedTemp[index].months = monthDifference.toString();
-    updatedTemp[index].years = yearDifference.toString();
     updatedTemp[index].treatment_status = p_category;
+    try {
+      await axios
+        .post(`${api.baseurl}/GetMobiledatedetails`, {
+          date: _dateformat,
+        })
+        .then(res => {
+          // const updatedTemp = [...temp];
+          updatedTemp[index] = {
+            ...updatedTemp[index],
+            days: res.data.days.toString(),
+            months: res.data.month.toString(),
+            years: res.data.year.toString(),
+          };
+          setTemp(updatedTemp);
 
-    setTemp(updatedTemp);
-    setShowCalender(false); // Hide the calendar after selecting a date
+          setShowCalender(false);
+        });
+    } catch (error) {
+      Alert.alert('Error !!', `${error}`);
+    }
   };
 
   //submit handler ....
@@ -396,7 +385,7 @@ const FamilyHistory = () => {
   };
 
   const displayData = opdAssessment.map((item, index) => (
-    <View key={index}>
+    <View key={index + 1}>
       {Object.entries(item).map(([key, value]) => (
         <Card key={key} style={styles.card}>
           {Array.isArray(value) ? (
@@ -483,7 +472,7 @@ const FamilyHistory = () => {
           {temp.map((res, index) => {
             return (
               <>
-                <View style={styles.card} key={index}>
+                <View style={styles.card} key={index + 1}>
                   <View style={styles.cardContentDiv}>
                     <Text style={[styles.label, {width: 200}]}>
                       Illness : &nbsp; {res.illnessname}
@@ -503,7 +492,7 @@ const FamilyHistory = () => {
                       <TextInput
                         mode="flat"
                         style={[styles.input2]}
-                        value={temp[index].dateValues}
+                        value={res?.dateValues}
                         editable={false}
                         right={
                           <TextInput.Icon
@@ -519,12 +508,7 @@ const FamilyHistory = () => {
                         mode="flat"
                         style={[styles.input2]}
                         value={res.years}
-                        onChangeText={text => {
-                          const updatedTemp = [...temp];
-                          updatedTemp[index].years = text;
-                          setTemp(updatedTemp);
-                        }}
-                        editable={true}
+                        editable={false}
                       />
                     </View>
                     <View style={styles.cardContent}>
@@ -533,12 +517,7 @@ const FamilyHistory = () => {
                         mode="flat"
                         style={[styles.input2]}
                         value={res.months}
-                        onChangeText={text => {
-                          const updatedTemp = [...temp];
-                          updatedTemp[index].months = text;
-                          setTemp(updatedTemp);
-                        }}
-                        editable={true}
+                        editable={false}
                       />
                     </View>
                     <View style={styles.cardContent}>
@@ -547,12 +526,7 @@ const FamilyHistory = () => {
                         mode="flat"
                         style={[styles.input2]}
                         value={res.days}
-                        onChangeText={text => {
-                          const updatedTemp = [...temp];
-                          updatedTemp[index].days = text;
-                          setTemp(updatedTemp);
-                        }}
-                        editable={true}
+                        editable={false}
                       />
                     </View>
                     <View style={styles.cardContent}>

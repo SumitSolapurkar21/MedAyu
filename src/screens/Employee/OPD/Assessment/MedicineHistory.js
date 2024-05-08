@@ -17,7 +17,7 @@ const MedicineHistory = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [temp, setTemp] = useState([]);
   const [showCalender, setShowCalender] = useState(false);
-  const [dateValues] = useState([]);
+  const [dateValues, setDateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
 
   const {patientsData, scannedPatientsData, waitingListData, userData} =
@@ -92,46 +92,36 @@ const MedicineHistory = () => {
     setDatePickerIndex(index); // Set the index of the date field for which the calendar is being opened
   };
 
-  const handleDateChange = (date, index) => {
+  const handleDateChange = async (date, index) => {
     const [_dateformat] = date.split(' ');
     const updatedTemp = [...temp];
-    updatedTemp[index].dateValues = _dateformat;
     updatedTemp[index].activestatus = true;
+    updatedTemp[index].dateValues = _dateformat; // Store the selected date in the temp array
+    const updatedDateValues = [...dateValues];
+    updatedDateValues[index] = _dateformat;
+    setDateValues(updatedDateValues);
 
-    // Convert selectedDate to Date object
-    const selectedDate = new Date(_dateformat);
-    const currentDate = new Date();
-    const yearDifference =
-      currentDate.getFullYear() - selectedDate.getFullYear();
-    const monthDifference =
-      currentDate.getMonth() - selectedDate.getMonth() + yearDifference * 12;
+    // updatedTemp[index].treatment_status = p_category;
+    try {
+      await axios
+        .post(`${api.baseurl}/GetMobiledatedetails`, {
+          date: _dateformat,
+        })
+        .then(res => {
+          // const updatedTemp = [...temp];
+          updatedTemp[index] = {
+            ...updatedTemp[index],
+            days: res.data.days.toString(),
+            months: res.data.month.toString(),
+            years: res.data.year.toString(),
+          };
+          setTemp(updatedTemp);
 
-    // Calculate day difference considering only the current month
-    const firstDayOfCurrentMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1,
-    );
-    const lastDayOfCurrentMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      0,
-    );
-    const firstDayDifference =
-      Math.floor((lastDayOfCurrentMonth - selectedDate) / (1000 * 3600 * 24)) +
-      1;
-    const lastDayDifference = Math.floor(
-      (currentDate - firstDayOfCurrentMonth) / (1000 * 3600 * 24),
-    );
-
-    const dayDifference = Math.min(lastDayDifference, firstDayDifference);
-
-    updatedTemp[index].days = dayDifference.toString();
-    updatedTemp[index].months = monthDifference.toString();
-    updatedTemp[index].years = yearDifference.toString();
-
-    setTemp(updatedTemp);
-    setShowCalender(false); // Hide the calendar after selecting a date
+          setShowCalender(false);
+        });
+    } catch (error) {
+      Alert.alert('Error !!', `${error}`);
+    }
   };
 
   //submit handler ....

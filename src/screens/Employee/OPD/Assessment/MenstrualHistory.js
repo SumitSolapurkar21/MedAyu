@@ -1,4 +1,11 @@
-import {ScrollView, StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {Table, Row, Rows} from 'react-native-table-component';
 import {Appbar, Button, Card, RadioButton, TextInput} from 'react-native-paper';
@@ -7,6 +14,8 @@ import {BackHandler} from 'react-native';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
 const MenstrualHistory = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =
@@ -18,6 +27,28 @@ const MenstrualHistory = () => {
   const navigation = useNavigation();
   const [widthArr, setWidthArr] = useState([]);
 
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  //due date
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  // Function for handling Date
+  const handleDate = date => {
+    const dt = new Date(date);
+    const year = dt.getFullYear();
+    const month = (dt.getMonth() + 1).toString().padStart(2, '0');
+    const day = dt.getDate().toString().padStart(2, '0');
+    const Dateformat = `${day}-${month}-${year}`;
+    setTemp({
+      ...temp,
+      lmp: Dateformat,
+    });
+    hideDatePicker();
+  };
   // radio states ...
   const [radioValues, setRadioValues] = useState({
     periods: '',
@@ -74,7 +105,7 @@ const MenstrualHistory = () => {
               flexDirection: 'row',
               marginHorizontal: 6,
             }}>
-            <TextInput
+            {/* <TextInput
               mode="flat"
               style={[styles.input2, {width: '100%'}]}
               value={temp['lmp'] ?? ''}
@@ -85,6 +116,22 @@ const MenstrualHistory = () => {
                 }));
               }}
               editable={true}
+            /> */}
+            <TouchableOpacity
+              onPress={showDatePicker}
+              style={{
+                borderBottomWidth: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={[styles.input, {padding: 4}]}>{temp['lmp']}</Text>
+              <FontAwesome6 name="calendar-days" color="red" size={20} />
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleDate}
+              onCancel={hideDatePicker}
             />
           </View>
         </>
@@ -267,7 +314,6 @@ const MenstrualHistory = () => {
       ...radioValues,
     }));
   }, [radioValues]);
-
   //  submit handler ....
   const submitTreatmenthandler = async () => {
     const _body = {
@@ -599,5 +645,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+  },
+  input: {
+    // height: 45,
+    backgroundColor: 'white',
+    width: '80%',
   },
 });
