@@ -97,6 +97,8 @@ const Expenses = () => {
     transactiondetails: '',
     approvedby: '',
     fixedmonthamount: '',
+    hospital_id: userData.hospital_id,
+    reception_id: userData._id,
   });
 
   const inputHandlers = (fieldName, value) => {
@@ -159,50 +161,154 @@ const Expenses = () => {
       formData.append('approvedby', submittedformData.approvedby);
       formData.append('category_id', submittedformData.category_id);
       formData.append('fixedmonthamount', submittedformData.fixedmonthamount);
+      formData.append('hospital_id', userData.hospital_id);
+      formData.append('reception_id', userData._id);
     } catch (err) {
       console.warn('Document picker error:', err);
     }
   };
 
   const dataSubmitHandler = async () => {
-    try {
-      // Make API call to upload the image and form data
-      const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        method: 'POST',
-        body: formData, // Use the FormData object
-      });
-      // Handle response
-      const data3 = await response.json();
-      if (data3.status === true) {
-        Alert.alert(`Success !!`, 'Expenses form Submitted', [
-          {text: 'OK', onPress: () => navigation.replace('Home')},
-        ]);
+    if (
+      submittedformData.amount !== '' ||
+      submittedformData.approvedby !== '' ||
+      submittedformData.availablebudget !== '' ||
+      submittedformData.category !== '' ||
+      submittedformData.duedate !== '' ||
+      submittedformData.modeofpayment !== '' ||
+      submittedformData.payee !== '' ||
+      submittedformData.transactiondetails !== ''
+    ) {
+      if (formData._parts.length > 0) {
+        try {
+          // Make API call to upload the image and form data
+          const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+            method: 'POST',
+            body: formData, // Use the FormData object
+          });
+          // Handle response
+          const data3 = await response.json();
+          if (data3.status === true) {
+            Alert.alert(`Success !!`, 'Expenses form Submitted', [
+              {text: 'OK', onPress: () => navigation.replace('Home')},
+            ]);
+          } else {
+            Alert.alert('Data Not Submitted!!');
+          }
+        } catch (error) {
+          Alert.alert(`Please fill form and Upload Files`, `${error}`);
+        }
+      } else if (
+        formData._parts.length > 0 &&
+        submittedformData.amount === '' &&
+        submittedformData.approvedby === '' &&
+        submittedformData.availablebudget === '' &&
+        submittedformData.category === '' &&
+        submittedformData.duedate === '' &&
+        submittedformData.modeofpayment === '' &&
+        submittedformData.payee === '' &&
+        submittedformData.transactiondetails === ''
+      ) {
+        try {
+          // Make API call to upload the image and form data
+          const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+            method: 'POST',
+            body: formData, // Use the FormData object
+          });
+          // Handle response
+          const data3 = await response.json();
+          if (data3.status === true) {
+            Alert.alert(`Success !!`, 'Expenses form Submitted', [
+              {text: 'OK', onPress: () => navigation.replace('Home')},
+            ]);
+          } else {
+            Alert.alert('Data Not Submitted!!');
+          }
+        } catch (error) {
+          Alert.alert(`Please fill form and Upload Files`, `${error}`);
+        }
       } else {
-        Alert.alert('Data Not Submitted!!');
+        try {
+          // Make API call to upload the image and form data
+          const response = await axios.post(
+            `${api.baseurl}/AddMobileExpensesForm`,
+            submittedformData, // Use the FormData object
+          );
+          // Handle response
+          if (response.data.status === true) {
+            Alert.alert(`Success !!`, 'Expenses form Submitted', [
+              {text: 'OK', onPress: () => navigation.replace('Home')},
+            ]);
+          } else {
+            Alert.alert('Data Not Submitted!!');
+          }
+        } catch (error) {
+          Alert.alert(`Please fill form and Upload Files`, `${error}`);
+        }
       }
-    } catch (error) {
-      Alert.alert(`Please fill form and Upload Files`, `${error}`);
+    } else {
+      Alert.alert('Error!!', `Please fill form and Upload Files`);
     }
+
+    // else if (
+    //   formData._parts.length > 0 &&
+    //   (submittedformData.amount === '' ?? '') &&
+    //   (submittedformData.approvedby === '' ?? '') &&
+    //   (submittedformData.availablebudget === '' ?? '') &&
+    //   (submittedformData.category === '' ?? '') &&
+    //   (submittedformData.duedate === '' ?? '') &&
+    //   (submittedformData.modeofpayment === '' ?? '') &&
+    //   (submittedformData.payee === '' ?? '') &&
+    //   (submittedformData.transactiondetails === '' ?? '')
+    // ) {
+    //   console.log('omly file : ', formData);
+    //   try {
+    //     // Make API call to upload the image and form data
+    //     const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
+    //       headers: {
+    //         'Content-Type': 'multipart/form-data',
+    //       },
+    //       method: 'POST',
+    //       body: formData, // Use the FormData object
+    //     });
+    //     // Handle response
+    //     const data3 = await response.json();
+    //     console.log('omly file : ', data3);
+    //     if (data3.status === true) {
+    //       Alert.alert(`Success !!`, 'Expenses form Submitted', [
+    //         {text: 'OK', onPress: () => navigation.replace('Home')},
+    //       ]);
+    //     } else {
+    //       Alert.alert('Data Not Submitted!!');
+    //     }
+    //   } catch (error) {
+    //     Alert.alert(`Please fill form and Upload Files`, `${error}`);
+    //   }
+    // }
   };
 
   const formdetails = filename => {
-    if (
-      submittedformData.amount === '' ||
-      submittedformData.approvedby === '' ||
-      submittedformData.availablebudget === '' ||
-      submittedformData.category === '' ||
-      submittedformData.duedate === '' ||
-      submittedformData.modeofpayment === '' ||
-      submittedformData.payee === '' ||
-      submittedformData.transactiondetails === ''
-    ) {
-      Alert.alert('Please Fill Above Details First');
-    } else {
-      handleDocumentSelection(filename);
-    }
+    // if (
+    //   submittedformData.amount === '' ||
+    //   submittedformData.approvedby === '' ||
+    //   submittedformData.availablebudget === '' ||
+    //   submittedformData.category === '' ||
+    //   submittedformData.duedate === '' ||
+    //   submittedformData.modeofpayment === '' ||
+    //   submittedformData.payee === '' ||
+    //   submittedformData.transactiondetails === ''
+    // ) {
+    //   Alert.alert('Please Fill Above Details First');
+    // } else {
+    //   handleDocumentSelection(filename);
+    // }
+    handleDocumentSelection(filename);
   };
 
   useEffect(() => {

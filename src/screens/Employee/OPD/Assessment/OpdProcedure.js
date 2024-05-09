@@ -167,10 +167,11 @@ const OpdProcedure = () => {
       );
       setTemp(prevData => [...prevData, ...filteredData]);
     }
-  }, [selectedProcedureDataCode, selectedProcedure]);
+  }, [selectedProcedureDataCode]);
   const resetHandler = () => {
     setSearchInput('');
     setVisibleList(false);
+    setP_category('');
   };
 
   // remove selected data handler ....
