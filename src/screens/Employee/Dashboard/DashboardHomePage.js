@@ -248,14 +248,14 @@ const DashboardHomePage = () => {
           <TouchableOpacity style={styles.contentItem}>
             <Image source={medicine} style={styles.img} />
             <View>
-              <Text style={styles.contentText}>PANCHAKARMA</Text>
+              <Text style={styles.contentText}>PROCEDURE</Text>
               <Text style={styles.contentText}>{count?.panchakarmacount}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.contentItem}>
             <Image source={question} style={styles.img} />
             <View>
-              <Text style={styles.contentText}>INQUIRY</Text>
+              <Text style={styles.contentText}>ENQUIRY</Text>
               <Text style={styles.contentText}>{count?.enquirycount}</Text>
             </View>
           </TouchableOpacity>

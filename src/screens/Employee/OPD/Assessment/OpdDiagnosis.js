@@ -21,6 +21,7 @@ import UserContext from '../../../../components/Context/Context';
 import {Table, Row, Rows} from 'react-native-table-component';
 import {useNavigation} from '@react-navigation/native';
 import {IconButton, MD3Colors} from 'react-native-paper';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const OpdDiagnosis = () => {
   const navigation = useNavigation();
@@ -189,6 +190,15 @@ const OpdDiagnosis = () => {
     );
     setDiagnosisArray(updatedSelectedRow);
   };
+
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -199,7 +209,18 @@ const OpdDiagnosis = () => {
           }}
         />
         <Appbar.Content title="Diagnosis" style={styles.appbar_title} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       <ScrollView vertical style={styles.container}>
         <View style={styles.cardd}>
           <View style={styles.search}>

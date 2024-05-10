@@ -16,6 +16,7 @@ import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const MenstrualHistory = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =
@@ -369,6 +370,14 @@ const MenstrualHistory = () => {
       console.error(error);
     }
   };
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -379,7 +388,18 @@ const MenstrualHistory = () => {
           }}
         />
         <Appbar.Content title="Menstrual History" />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
 
       {/*  */}
       <ScrollView vertical style={styles.container}>

@@ -102,7 +102,9 @@ const Ehome = () => {
             <Text style={styles.contentText}>HR</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.contentDiv}>
+
+        {/*  */}
+        {/* <View style={styles.contentDiv}>
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() => {
@@ -120,7 +122,9 @@ const Ehome = () => {
             <Image source={attendence} style={styles.img} />
             <Text style={styles.contentText}>Discharge Summary</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
+        {/*  */}
+
         <View style={styles.contentDiv}>
           <TouchableOpacity
             style={styles.contentItem}

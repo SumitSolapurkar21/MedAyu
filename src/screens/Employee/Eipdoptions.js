@@ -14,11 +14,13 @@ import adt from '../../images/adt.png';
 import diagnosis from '../../images/diagnosis.png';
 import treatment from '../../images/treatment.png';
 
+import attendence from '../../images/calendar.png';
+
 import {useNavigation} from '@react-navigation/native';
-import UserContext from '../../components/Context/Context';
 import {BackHandler} from 'react-native';
 import axios from 'axios';
 import api from '../../../api.json';
+import UserContext from '../../components/Context/Context';
 
 const Eipdoptions = () => {
   const navigation = useNavigation();
@@ -26,7 +28,7 @@ const Eipdoptions = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      navigation.replace('EpatientDetails');
       return true;
     };
 
@@ -37,8 +39,14 @@ const Eipdoptions = () => {
 
     return () => backHandler.remove();
   }, []);
-  const {setPatientsData, scannedPatientsData, userData, setOpdServices} =
-    useContext(UserContext);
+
+  const {
+    setPatientsData,
+    scannedPatientsData,
+    userData,
+    setOpdServices,
+    setPatientSelectedValue,
+  } = useContext(UserContext);
 
   const {uhid, patient_id} = scannedPatientsData;
   const {_id, hospital_id} = userData;
@@ -127,6 +135,23 @@ const Eipdoptions = () => {
           <Text style={styles.uName}>Procedure</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.cardSelection}>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => {
+            navigation.navigate('DischargeScanner'),
+              setPatientSelectedValue('3');
+          }}>
+          <Image source={attendence} alt="diagnosis" style={styles.img} />
+          <Text style={styles.uName}>Discharge Initiate</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.selectDiv}
+          onPress={() => navigation.navigate('PatientDischargeSummary')}>
+          <Image source={attendence} alt="diagnosis" style={styles.img} />
+          <Text style={styles.uName}>Discharge Summary</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* <HomeButton /> */}
     </SafeAreaView>
@@ -151,7 +176,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
   },
   uName: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: '600',
     color: '#127359',
     flexWrap: 'wrap',

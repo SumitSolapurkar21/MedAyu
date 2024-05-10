@@ -12,6 +12,7 @@ import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import {Appbar, RadioButton, Button, Card} from 'react-native-paper';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const GeneralExamination = () => {
   const navigation = useNavigation();
@@ -269,6 +270,14 @@ const GeneralExamination = () => {
       ))}
     </View>
   ));
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -279,7 +288,18 @@ const GeneralExamination = () => {
           }}
         />
         <Appbar.Content title="General Examination" />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       <ScrollView vertical>
         <ScrollView horizontal>
           <View style={{padding: 10}}>

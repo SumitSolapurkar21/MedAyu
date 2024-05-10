@@ -23,6 +23,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import {IconButton, MD3Colors} from 'react-native-paper';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const OpdComplaints = () => {
   // comming from dashboard.....
@@ -321,6 +322,14 @@ const OpdComplaints = () => {
     }
   };
 
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -335,7 +344,19 @@ const OpdComplaints = () => {
           }}
         />
         <Appbar.Content title="Complaints" />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
 
       {/* after submit Msg... */}
 

@@ -14,6 +14,7 @@ import {BackHandler} from 'react-native';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const ObstetricsHistory = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =
@@ -153,6 +154,14 @@ const ObstetricsHistory = () => {
       </View>
     </>
   ));
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -163,7 +172,18 @@ const ObstetricsHistory = () => {
           }}
         />
         <Appbar.Content title="Obstetrics History" />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       <ScrollView vertical style={styles.container}>
         <View style={styles.card}>
           <View style={styles.cardDiv}>

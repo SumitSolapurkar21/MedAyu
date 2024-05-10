@@ -60,7 +60,7 @@ const DischargeInitiation = () => {
         .then(res => {
           const {status, message} = res.data;
           status === true
-            ? navigation.navigate('Ho')
+            ? navigation.navigate('Eipdoptions')
             : console.warn(message);
         });
     } catch (error) {
@@ -95,7 +95,7 @@ const DischargeInitiation = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('QRScanner');
+            navigation.navigate('Eipdoptions');
           }}
         />
         <Appbar.Content

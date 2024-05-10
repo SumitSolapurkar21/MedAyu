@@ -14,6 +14,7 @@ import {BackHandler} from 'react-native';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../../api.json';
+import OpdpageNavigation from './OpdpageNavigation';
 const SystemicExamination = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
@@ -1627,6 +1628,14 @@ const SystemicExamination = () => {
       console.error(error);
     }
   };
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -1640,7 +1649,18 @@ const SystemicExamination = () => {
           title="Systemic Examination "
           style={styles.appbar_title}
         />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       {/* section 1 */}
       <ScrollView vertical style={styles.container}>
         <ScrollView vertical={true}>

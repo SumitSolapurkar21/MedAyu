@@ -16,6 +16,7 @@ import sysbp from '../../../../images/sysbp.png';
 import diabp from '../../../../images/diabp.png';
 import DropDown from 'react-native-paper-dropdown';
 import {BackHandler} from 'react-native';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const OpdVitals = () => {
   //backHandler ...
@@ -312,6 +313,14 @@ const OpdVitals = () => {
       console.error(error);
     }
   };
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -322,7 +331,18 @@ const OpdVitals = () => {
           }}
         />
         <Appbar.Content title="Vitals" />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       <ScrollView vertical style={styles.container}>
         <View style={styles.tableWrapper}>
           <View style={styles.grpInput}>

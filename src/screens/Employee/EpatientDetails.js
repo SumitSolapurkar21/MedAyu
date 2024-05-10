@@ -18,7 +18,7 @@ import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 import HomeButton from '../../components/HomeButton/HomeButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Appbar, Menu, Button} from 'react-native-paper';
+import {Appbar, Menu, Button, Divider} from 'react-native-paper';
 
 const EpatientDetails = () => {
   const navigation = useNavigation();
@@ -112,6 +112,15 @@ const EpatientDetails = () => {
             }}
             title="Logout"
           />
+          <Divider />
+          <Menu.Item
+            dense
+            leadingIcon="home"
+            onPress={() => {
+              navigation.navigate('Home'), closeMenu();
+            }}
+            title="Home"
+          />
 
           {/* <Menu.Item onPress={() => {}} title="Item 2" /> */}
         </Menu>
@@ -139,77 +148,73 @@ const EpatientDetails = () => {
         </View>
 
         {/* // when selected value is search patients  */}
-        {patientSelectedValue !== '3' && (
-          <>
-            <View style={styles.cardSelection}>
-              <TouchableOpacity
-                style={styles.selectDiv}
-                onPress={() => navigation.navigate('Edepartment')}>
-                <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
-                <Text style={styles.uName}>Appointment</Text>
-              </TouchableOpacity>
+        {/* {patientSelectedValue !== '3' && ( */}
+        <>
+          <View style={styles.cardSelection}>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() => navigation.navigate('Edepartment')}>
+              <Image source={doctorImg} alt="DoctorImg" style={styles.img} />
+              <Text style={styles.uName}>Appointment</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.selectDiv}
-                onPress={() => navigation.navigate('OpdHomePage')}>
-                <Image source={ipd} alt="OPD" style={styles.img} />
-                <Text style={[styles.uName, {marginLeft: 10}]}>OPD</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() => navigation.navigate('OpdHomePage')}>
+              <Image source={ipd} alt="OPD" style={styles.img} />
+              <Text style={[styles.uName, {marginLeft: 10}]}>OPD</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.selectDiv}
-                onPress={() => navigation.navigate('Eipdoptions')}>
-                <Image source={ipd} alt="IPD" style={styles.img} />
-                <Text style={[styles.uName, {marginLeft: 10}]}>IPD</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() => navigation.navigate('Eipdoptions')}>
+              <Image source={ipd} alt="IPD" style={styles.img} />
+              <Text style={[styles.uName, {marginLeft: 10}]}>IPD</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.selectDiv}
-                onPress={() =>
-                  ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
-                }>
-                <Image
-                  source={panchakarma}
-                  alt="DoctorImg"
-                  style={styles.img}
-                />
-                <Text style={styles.uName}>Panchakarma</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() =>
+                ToastAndroid.show(`Comming Soon`, ToastAndroid.SHORT)
+              }>
+              <Image source={panchakarma} alt="DoctorImg" style={styles.img} />
+              <Text style={styles.uName}>Panchakarma</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.selectDiv}
-                onPress={() =>
-                  navigation.replace('BillLayout', {
-                    uhid: uhid,
-                    patient_id: patient_id,
-                    reception_id: _id,
-                    hospital_id: hospital_id,
-                  })
-                }>
-                <Image source={invoice} alt="IPD" style={styles.img} />
-                <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() =>
+                navigation.replace('BillLayout', {
+                  uhid: uhid,
+                  patient_id: patient_id,
+                  reception_id: _id,
+                  hospital_id: hospital_id,
+                })
+              }>
+              <Image source={invoice} alt="IPD" style={styles.img} />
+              <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.selectDiv}
-                onPress={() =>
-                  navigation.navigate('BillHistory', {
-                    uhid: uhid,
-                    patient_id: patient_id,
-                    reception_id: _id,
-                    hospital_id: hospital_id,
-                  })
-                }>
-                <Image
-                  source={billHistory}
-                  alt="billHistory"
-                  style={styles.img}
-                />
-                <Text style={styles.uName}>History</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() =>
+                navigation.navigate('BillHistory', {
+                  uhid: uhid,
+                  patient_id: patient_id,
+                  reception_id: _id,
+                  hospital_id: hospital_id,
+                })
+              }>
+              <Image
+                source={billHistory}
+                alt="billHistory"
+                style={styles.img}
+              />
+              <Text style={styles.uName}>History</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+        {/* )} */}
 
         {/* patientSelection value is discharge or 3 */}
         {/* <PatientDischargeSelection /> */}

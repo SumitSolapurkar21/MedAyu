@@ -1,7 +1,8 @@
 import {BackHandler, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Appbar, Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const OpdInvestigation = () => {
   const navigation = useNavigation();
@@ -19,6 +20,14 @@ const OpdInvestigation = () => {
 
     return () => backHandler.remove();
   }, []);
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -29,7 +38,18 @@ const OpdInvestigation = () => {
           }}
         />
         <Appbar.Content title="Investigation" style={styles.appbar_title} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       <View>
         <Text style={{padding: 20}}>OpdInvestigation</Text>
         <View style={styles.submitbutton}>

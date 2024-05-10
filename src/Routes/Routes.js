@@ -94,6 +94,7 @@ import LeaveHomePage from '../screens/HRModal/Leave/LeaveHomePage';
 import Expenses from '../components/Expenses/Expenses';
 import DashboardHomePage from '../screens/Employee/Dashboard/DashboardHomePage';
 import {Listofpatients} from '../screens/Employee/Dashboard/Listofpatients';
+import DischargeScanner from '../screens/Employee/Discharge/DischargeScanner';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -163,7 +164,12 @@ const Routes = () => {
         <Stack.Screen
           name="QRScanner"
           component={Scanner}
-          // options={{headerShown: true}}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="DischargeScanner"
+          component={DischargeScanner}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="EpatientDetails"

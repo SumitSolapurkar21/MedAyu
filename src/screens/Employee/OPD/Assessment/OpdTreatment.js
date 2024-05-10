@@ -7,6 +7,7 @@ import UserContext from '../../../../components/Context/Context';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {useNavigation} from '@react-navigation/native';
 import {IconButton, MD3Colors} from 'react-native-paper';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const OpdTreatment = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =
@@ -163,6 +164,15 @@ const OpdTreatment = () => {
     setTemp(updatedSelectedRow);
   };
 
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
+
   return (
     <>
       {/* Appbar header */}
@@ -173,7 +183,18 @@ const OpdTreatment = () => {
           }}
         />
         <Appbar.Content title="Treatment" style={styles.appbar_title} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       {showCalender && (
         <View style={styles.datePickerContainer}>
           <View style={styles.datePicker}>

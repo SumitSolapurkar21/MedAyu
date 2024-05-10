@@ -29,7 +29,7 @@ const PatientDischargeSummary = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack('Home');
+      navigation.replace('Eipdoptions');
       return true;
     };
 
@@ -119,7 +119,7 @@ const PatientDischargeSummary = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('Home');
+            navigation.replace('Eipdoptions');
           }}
         />
         <Appbar.Content

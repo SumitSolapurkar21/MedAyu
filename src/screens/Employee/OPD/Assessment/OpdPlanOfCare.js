@@ -6,6 +6,7 @@ import UserContext from '../../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import {Appbar, Checkbox, Button, Card} from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const OpdPlanOfCare = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =
@@ -265,6 +266,14 @@ const OpdPlanOfCare = () => {
       console.error(error);
     }
   };
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -275,7 +284,18 @@ const OpdPlanOfCare = () => {
           }}
         />
         <Appbar.Content title="Plan oF Care" style={styles.appbar_title} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       <ScrollView
         vertical
         showsVerticalScrollIndicator={false}

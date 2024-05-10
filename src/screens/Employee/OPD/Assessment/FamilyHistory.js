@@ -9,6 +9,7 @@ import UserContext from '../../../../components/Context/Context';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Card} from 'react-native-paper';
 import {IconButton, MD3Colors} from 'react-native-paper';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const FamilyHistory = () => {
   const navigation = useNavigation();
@@ -395,6 +396,15 @@ const FamilyHistory = () => {
       ))}
     </View>
   ));
+
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -405,7 +415,18 @@ const FamilyHistory = () => {
           }}
         />
         <Appbar.Content title="Family History" />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       {showCalender && (
         <View style={styles.datePickerContainer}>
           <View style={styles.datePicker}>

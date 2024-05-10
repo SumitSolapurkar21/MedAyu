@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import {Dropdown} from 'react-native-element-dropdown';
 import {IconButton, MD3Colors} from 'react-native-paper';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const OpdPastHistory = () => {
   const navigation = useNavigation();
@@ -202,7 +203,7 @@ const OpdPastHistory = () => {
           );
           const filteredString = JSON.stringify(filteredData);
           const parsedData2 = JSON.parse(filteredString);
-       
+
           setOpdAssessment(parsedData2);
         });
     } catch (error) {
@@ -228,6 +229,15 @@ const OpdPastHistory = () => {
       ))}
     </View>
   ));
+
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
   return (
     <>
       {/* Appbar header */}
@@ -238,7 +248,18 @@ const OpdPastHistory = () => {
           }}
         />
         <Appbar.Content title="Past History" />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       {showCalender && (
         <View style={styles.datePickerContainer}>
           <View style={styles.datePicker}>

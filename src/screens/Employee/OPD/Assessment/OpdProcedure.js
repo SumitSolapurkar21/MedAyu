@@ -16,6 +16,7 @@ import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import {Dropdown} from 'react-native-element-dropdown';
+import OpdpageNavigation from './OpdpageNavigation';
 
 const OpdProcedure = () => {
   //backHandler ...
@@ -245,6 +246,16 @@ const OpdProcedure = () => {
       navigation.replace('EpatientDetails');
     }
   };
+
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
+
   return (
     <>
       {/* Appbar header */}
@@ -255,7 +266,18 @@ const OpdProcedure = () => {
           }}
         />
         <Appbar.Content title="Procedure" style={styles.appbar_title} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
       </Appbar.Header>
+      <OpdpageNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
       <ScrollView style={styles.container}>
         <View>
           <ScrollView horizontal style={styles.categoryTabs}>
