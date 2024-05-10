@@ -18,6 +18,7 @@ import {RNCamera} from 'react-native-camera';
 import successIcon from '../../images/success.gif';
 import axios from 'axios';
 import api from '../../../api.json';
+import {Appbar} from 'react-native-paper';
 
 LogBox.ignoreLogs([
   'ViewPropTypes will be removed from React Native, along with all other PropTypes. We recommend that you migrate away from PropTypes and switch to a type system like TypeScript. If you need to continue using ViewPropTypes',
@@ -38,11 +39,16 @@ export default function Scanner() {
   const {_id, hospital_id, role} = userData;
 
   const [refreshing, setRefreshing] = React.useState(false);
-
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      if (patientSelectedValue == '3') {
+        console.log('3');
+        navigation.replace('Eipdoptions');
+      } else if (patientSelectedValue == '1') {
+        console.log('1');
+        navigation.navigate('Home');
+      }
       return true;
     };
 
@@ -224,75 +230,90 @@ export default function Scanner() {
   return (
     <>
       {!refreshing && (
-        <View style={styles.container}>
-          <QRCodeScanner
-            onRead={handleScannerSuccess}
-            flashMode={RNCamera.Constants.FlashMode.off}
-            showMarker={true}
-            // topContent={
-            //   <Text style={styles.centerText}>
-            //     <Text style={styles.textBold}>QR Code Scanner</Text>
-            //   </Text>
-            // }
-            // topViewStyle={{marginVertical: 30}}
-            bottomViewStyle={{marginVertical: 20}}
-          />
-          {(patientSelectedValue === '1' || patientSelectedValue === '3') && (
-            <View style={styles.bottomContent}>
-              <Text style={styles.bottomTxt}>- OR -</Text>
-              <TextInput
-                style={styles.mobileInput}
-                placeholder="Enter Mobile Number or UHID No"
-                value={searchInput}
-                onChangeText={text => setSearchInput(text)}
-                autoComplete="off"
-                textAlign="center"
-                placeholderTextColor="black"
-              />
-              <TouchableOpacity
-                style={styles.buttonTouchable}
-                onPress={patientDetailBySearchInput}>
-                <Text style={styles.buttonText}>Search</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          {msgPopup && (
-            <View style={styles.modalContainer}>
-              <View style={styles.modal}>
-                <View style={styles.modalBody}>
-                  <Image
-                    source={successIcon}
-                    alt="successIcon"
-                    style={styles.img}
-                  />
-                  <Text style={styles.modalText}>{message}</Text>
-                  <TouchableOpacity
-                    style={styles.modalBtn}
-                    onPress={() => {
-                      setMsgPopup(false);
-                      _navigationTabs(role);
+        <>
+          {/* Appbar header */}
+          <Appbar.Header>
+            <Appbar.BackAction
+              onPress={() => {
+                patientSelectedValue == 3
+                  ? navigation.navigate('Eipdoptions')
+                  : patientSelectedValue == 1
+                  ? navigation.navigate('Home')
+                  : null;
+              }}
+            />
+            <Appbar.Content title="Scan QR" style={styles.appbar_title} />
+          </Appbar.Header>
+          <View style={styles.container}>
+            <QRCodeScanner
+              onRead={handleScannerSuccess}
+              flashMode={RNCamera.Constants.FlashMode.off}
+              showMarker={true}
+              // topContent={
+              //   <Text style={styles.centerText}>
+              //     <Text style={styles.textBold}>QR Code Scanner</Text>
+              //   </Text>
+              // }
+              // topViewStyle={{marginVertical: 30}}
+              bottomViewStyle={{marginVertical: 20}}
+            />
+            {(patientSelectedValue === '1' || patientSelectedValue === '3') && (
+              <View style={styles.bottomContent}>
+                <Text style={styles.bottomTxt}>- OR -</Text>
+                <TextInput
+                  style={styles.mobileInput}
+                  placeholder="Enter Mobile Number or UHID No"
+                  value={searchInput}
+                  onChangeText={text => setSearchInput(text)}
+                  autoComplete="off"
+                  textAlign="center"
+                  placeholderTextColor="black"
+                />
+                <TouchableOpacity
+                  style={styles.buttonTouchable}
+                  onPress={patientDetailBySearchInput}>
+                  <Text style={styles.buttonText}>Search</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {msgPopup && (
+              <View style={styles.modalContainer}>
+                <View style={styles.modal}>
+                  <View style={styles.modalBody}>
+                    <Image
+                      source={successIcon}
+                      alt="successIcon"
+                      style={styles.img}
+                    />
+                    <Text style={styles.modalText}>{message}</Text>
+                    <TouchableOpacity
+                      style={styles.modalBtn}
+                      onPress={() => {
+                        setMsgPopup(false);
+                        _navigationTabs(role);
 
-                      // if (userData?.role === 'Doctor') {
-                      //   navigation.replace('Tabs');
-                      // } else {
-                      //   navigation.replace('Ehome');
-                      // }
-                    }}>
-                    <Text style={styles.modalBtnText}>Ok</Text>
-                  </TouchableOpacity>
+                        // if (userData?.role === 'Doctor') {
+                        //   navigation.replace('Tabs');
+                        // } else {
+                        //   navigation.replace('Ehome');
+                        // }
+                      }}>
+                      <Text style={styles.modalBtnText}>Ok</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-          )}
-          {msgPopup && (
-            <View
-              style={[
-                styles.backdrop,
-                {backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`},
-              ]}
-            />
-          )}
-        </View>
+            )}
+            {msgPopup && (
+              <View
+                style={[
+                  styles.backdrop,
+                  {backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`},
+                ]}
+              />
+            )}
+          </View>
+        </>
       )}
     </>
   );
