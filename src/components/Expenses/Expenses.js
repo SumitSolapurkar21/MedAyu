@@ -8,7 +8,13 @@ import {
   View,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import {Appbar, Button, TextInput} from 'react-native-paper';
+import {
+  Appbar,
+  Button,
+  DefaultTheme,
+  SegmentedButtons,
+  TextInput,
+} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {Dropdown} from 'react-native-element-dropdown';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -17,6 +23,7 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import DocumentPicker from 'react-native-document-picker';
 import api from '../../../api.json';
 import axios from 'axios';
+import ExpensesStatuswiseList from './ExpensesStatuswiseList';
 
 const Expenses = () => {
   const {userData} = useContext(UserContext);
@@ -95,7 +102,6 @@ const Expenses = () => {
     payee: '',
     modeofpayment: '',
     transactiondetails: '',
-    approvedby: '',
     fixedmonthamount: '',
     hospital_id: userData.hospital_id,
     reception_id: userData._id,
@@ -158,7 +164,7 @@ const Expenses = () => {
         'transactiondetails',
         submittedformData.transactiondetails,
       );
-      formData.append('approvedby', submittedformData.approvedby);
+      // formData.append('approvedby', submittedformData.approvedby);
       formData.append('category_id', submittedformData.category_id);
       formData.append('fixedmonthamount', submittedformData.fixedmonthamount);
       formData.append('hospital_id', userData.hospital_id);
@@ -171,7 +177,6 @@ const Expenses = () => {
   const dataSubmitHandler = async () => {
     if (
       submittedformData.amount !== '' ||
-      submittedformData.approvedby !== '' ||
       submittedformData.availablebudget !== '' ||
       submittedformData.category !== '' ||
       submittedformData.duedate !== '' ||
@@ -190,7 +195,8 @@ const Expenses = () => {
             body: formData, // Use the FormData object
           });
           // Handle response
-          const data3 = await response.json();
+          const responseText = await response.text(); // Get the response as text
+          const data3 = JSON.parse(responseText);
           if (data3.status === true) {
             Alert.alert(`Success !!`, 'Expenses form Submitted', [
               {text: 'OK', onPress: () => navigation.replace('Home')},
@@ -204,7 +210,6 @@ const Expenses = () => {
       } else if (
         formData._parts.length > 0 &&
         submittedformData.amount === '' &&
-        submittedformData.approvedby === '' &&
         submittedformData.availablebudget === '' &&
         submittedformData.category === '' &&
         submittedformData.duedate === '' &&
@@ -255,59 +260,9 @@ const Expenses = () => {
     } else {
       Alert.alert('Error!!', `Please fill form and Upload Files`);
     }
-
-    // else if (
-    //   formData._parts.length > 0 &&
-    //   (submittedformData.amount === '' ?? '') &&
-    //   (submittedformData.approvedby === '' ?? '') &&
-    //   (submittedformData.availablebudget === '' ?? '') &&
-    //   (submittedformData.category === '' ?? '') &&
-    //   (submittedformData.duedate === '' ?? '') &&
-    //   (submittedformData.modeofpayment === '' ?? '') &&
-    //   (submittedformData.payee === '' ?? '') &&
-    //   (submittedformData.transactiondetails === '' ?? '')
-    // ) {
-    //   console.log('omly file : ', formData);
-    //   try {
-    //     // Make API call to upload the image and form data
-    //     const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
-    //       headers: {
-    //         'Content-Type': 'multipart/form-data',
-    //       },
-    //       method: 'POST',
-    //       body: formData, // Use the FormData object
-    //     });
-    //     // Handle response
-    //     const data3 = await response.json();
-    //     console.log('omly file : ', data3);
-    //     if (data3.status === true) {
-    //       Alert.alert(`Success !!`, 'Expenses form Submitted', [
-    //         {text: 'OK', onPress: () => navigation.replace('Home')},
-    //       ]);
-    //     } else {
-    //       Alert.alert('Data Not Submitted!!');
-    //     }
-    //   } catch (error) {
-    //     Alert.alert(`Please fill form and Upload Files`, `${error}`);
-    //   }
-    // }
   };
 
   const formdetails = filename => {
-    // if (
-    //   submittedformData.amount === '' ||
-    //   submittedformData.approvedby === '' ||
-    //   submittedformData.availablebudget === '' ||
-    //   submittedformData.category === '' ||
-    //   submittedformData.duedate === '' ||
-    //   submittedformData.modeofpayment === '' ||
-    //   submittedformData.payee === '' ||
-    //   submittedformData.transactiondetails === ''
-    // ) {
-    //   Alert.alert('Please Fill Above Details First');
-    // } else {
-    //   handleDocumentSelection(filename);
-    // }
     handleDocumentSelection(filename);
   };
 
@@ -340,6 +295,13 @@ const Expenses = () => {
 
   // const selectedCategoryData = submittedformData?.category;
   // console.log('categoryArray : ', submittedformData);
+
+  const [value, setValue] = useState('Apply');
+  const theme = {
+    ...DefaultTheme,
+    roundness: 0, // Set roundness to 0 to remove borderRadius
+  };
+
   return (
     <>
       {/* Appbar header */}
@@ -351,183 +313,205 @@ const Expenses = () => {
         />
         <Appbar.Content title="Expenses" style={styles.appbar_title} />
       </Appbar.Header>
+      <SegmentedButtons
+        style={{padding: 10}}
+        theme={theme}
+        value={value}
+        onValueChange={setValue}
+        density="small"
+        buttons={[
+          {
+            value: 'Apply',
+            label: 'Apply',
+          },
+          {
+            value: 'Pending',
+            label: 'Pending',
+          },
+          {value: 'Approved', label: 'Approved'},
+        ]}
+      />
       <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Expenses</Text>
-        </View>
-        <View style={styles.form}>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Amount : </Text>
-            <TextInput
-              mode="flat"
-              style={styles.input}
-              value={submittedformData.amount}
-              onChangeText={text => inputHandlers('amount', text)}
-              inputMode={'numeric'}
-            />
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Category : </Text>
-            <View>
-              <Dropdown
-                mode={'outlined'}
-                style={[styles.dropdown, isFocus2 && {borderColor: 'blue'}]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={categoryArray}
-                search
-                maxHeight={300}
-                labelField="category"
-                valueField="category"
-                placeholder={!isFocus2 ? 'Select' : '...'}
-                searchPlaceholder="Search..."
-                value={submittedformData?.category}
-                onFocus={() => setIsFocus2(true)}
-                onBlur={() => setIsFocus2(false)}
-                onChange={item => {
-                  setsubmittedFormData({
-                    ...submittedformData,
-                    availablebudget: item.monthlybudget,
-                    category: item.category,
-                    category_id: item.expenses_id,
-                    fixedmonthamount: item.fixedmonthamount,
-                  });
-
-                  setIsFocus2(false);
-                }}
-              />
+        {value === 'Apply' && (
+          <>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>Expenses</Text>
             </View>
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Available Budget/Month : </Text>
-            <TextInput
-              mode="flat"
-              style={styles.input}
-              value={submittedformData?.availablebudget}
-              onChangeText={text => inputHandlers('availablebudget', text)}
-              editable={false}
-            />
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Due Date : </Text>
-            <TouchableOpacity
-              onPress={showDatePicker}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                borderBottomColor: 'green',
-                borderBottomWidth: 2,
-              }}>
-              <Text style={[styles.input, {padding: 10, flex: 1}]}>
-                {submittedformData.duedate || 'DD / MM / YYYY'}
-              </Text>
-              {/* <FontAwesome6 name="calendar-days" color="red" size={22} /> */}
-            </TouchableOpacity>
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleDate}
-              onCancel={hideDatePicker}
-            />
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Payee : </Text>
-            <TextInput
-              mode="flat"
-              style={styles.input}
-              value={submittedformData.payee}
-              onChangeText={text => inputHandlers('payee', text)}
-            />
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Mode of Payment : </Text>
-            <View>
-              <Dropdown
-                mode={'outlined'}
-                style={[styles.dropdown, isFocus1 && {borderColor: 'blue'}]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={modeofpayment}
-                search
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus1 ? 'Select' : '...'}
-                searchPlaceholder="Search..."
-                value={submittedformData.modeofpayment}
-                onFocus={() => setIsFocus1(true)}
-                onBlur={() => setIsFocus1(false)}
-                onChange={item => {
-                  inputHandlers('modeofpayment', item.value);
-                  setIsFocus1(false);
-                }}
-              />
-            </View>
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Transaction Details : </Text>
-            <TextInput
-              mode="flat"
-              style={styles.input}
-              value={submittedformData.transactiondetails}
-              onChangeText={text => inputHandlers('transactiondetails', text)}
-            />
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Approved By : </Text>
-            <TextInput
-              mode="flat"
-              style={styles.input}
-              value={submittedformData.approvedby}
-              onChangeText={text => inputHandlers('approvedby', text)}
-            />
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Bill Photo : </Text>
-            <TouchableOpacity onPress={() => formdetails('bill_photo')}>
-              <View style={styles.upload}>
-                <FontAwesome6
-                  name="cloud-arrow-up"
-                  color="#127359"
-                  size={18}
-                  style={styles.searchIcon}
+            <View style={styles.form}>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Amount : </Text>
+                <TextInput
+                  mode="flat"
+                  style={styles.input}
+                  value={submittedformData.amount}
+                  onChangeText={text => inputHandlers('amount', text)}
+                  inputMode={'numeric'}
                 />
-                <Text>Upload</Text>
-                <Text style={styles.label}>
-                  &nbsp; &nbsp; &nbsp;{bill_photo}
-                </Text>
               </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.label}>Payment Proof : </Text>
-            <TouchableOpacity onPress={() => formdetails('payment_proof')}>
-              <View style={styles.upload}>
-                <FontAwesome6
-                  name="cloud-arrow-up"
-                  color="#127359"
-                  size={18}
-                  style={styles.searchIcon}
-                />
-                <Text>Upload</Text>
-                <Text style={styles.label}>
-                  &nbsp; &nbsp; &nbsp; {payment_proof}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Category : </Text>
+                <View>
+                  <Dropdown
+                    mode={'outlined'}
+                    style={[styles.dropdown, isFocus2 && {borderColor: 'blue'}]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={categoryArray}
+                    search
+                    maxHeight={300}
+                    labelField="category"
+                    valueField="category"
+                    placeholder={!isFocus2 ? 'Select' : '...'}
+                    searchPlaceholder="Search..."
+                    value={submittedformData?.category}
+                    onFocus={() => setIsFocus2(true)}
+                    onBlur={() => setIsFocus2(false)}
+                    onChange={item => {
+                      setsubmittedFormData({
+                        ...submittedformData,
+                        availablebudget: item.monthlybudget,
+                        category: item.category,
+                        category_id: item.expenses_id,
+                        fixedmonthamount: item.fixedmonthamount,
+                      });
 
-          <Button
-            mode="contained"
-            style={styles.button}
-            onPress={() => dataSubmitHandler()}>
-            Submit
-          </Button>
-        </View>
+                      setIsFocus2(false);
+                    }}
+                  />
+                </View>
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Available Budget/Month : </Text>
+                <TextInput
+                  mode="flat"
+                  style={styles.input}
+                  value={submittedformData?.fixedmonthamount}
+                  onChangeText={text => inputHandlers('availablebudget', text)}
+                  editable={false}
+                />
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Due Date : </Text>
+                <TouchableOpacity
+                  onPress={showDatePicker}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    borderBottomColor: 'green',
+                    borderBottomWidth: 2,
+                  }}>
+                  <Text style={[styles.input, {padding: 10, flex: 1}]}>
+                    {submittedformData.duedate || 'DD / MM / YYYY'}
+                  </Text>
+                  {/* <FontAwesome6 name="calendar-days" color="red" size={22} /> */}
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleDate}
+                  onCancel={hideDatePicker}
+                />
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Payee : </Text>
+                <TextInput
+                  mode="flat"
+                  style={styles.input}
+                  value={submittedformData.payee}
+                  onChangeText={text => inputHandlers('payee', text)}
+                />
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Mode of Payment : </Text>
+                <View>
+                  <Dropdown
+                    mode={'outlined'}
+                    style={[styles.dropdown, isFocus1 && {borderColor: 'blue'}]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={modeofpayment}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={!isFocus1 ? 'Select' : '...'}
+                    searchPlaceholder="Search..."
+                    value={submittedformData.modeofpayment}
+                    onFocus={() => setIsFocus1(true)}
+                    onBlur={() => setIsFocus1(false)}
+                    onChange={item => {
+                      inputHandlers('modeofpayment', item.value);
+                      setIsFocus1(false);
+                    }}
+                  />
+                </View>
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Transaction Details : </Text>
+                <TextInput
+                  mode="flat"
+                  style={styles.input}
+                  value={submittedformData.transactiondetails}
+                  onChangeText={text =>
+                    inputHandlers('transactiondetails', text)
+                  }
+                />
+              </View>
+
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Bill Photo : </Text>
+                <TouchableOpacity onPress={() => formdetails('bill_photo')}>
+                  <View style={styles.upload}>
+                    <FontAwesome6
+                      name="cloud-arrow-up"
+                      color="#127359"
+                      size={18}
+                      style={styles.searchIcon}
+                    />
+                    <Text>Upload</Text>
+                    <Text style={styles.label}>
+                      &nbsp; &nbsp; &nbsp;{bill_photo}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.label}>Payment Proof : </Text>
+                <TouchableOpacity onPress={() => formdetails('payment_proof')}>
+                  <View style={styles.upload}>
+                    <FontAwesome6
+                      name="cloud-arrow-up"
+                      color="#127359"
+                      size={18}
+                      style={styles.searchIcon}
+                    />
+                    <Text>Upload</Text>
+                    <Text style={styles.label}>
+                      &nbsp; &nbsp; &nbsp; {payment_proof}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              <Button
+                mode="contained"
+                style={styles.button}
+                onPress={() => dataSubmitHandler()}>
+                Submit
+              </Button>
+            </View>
+          </>
+        )}
+
+        {value === 'Pending' || value === 'Approved' ? (
+          <>
+            <ExpensesStatuswiseList value={value} />
+          </>
+        ) : null}
       </ScrollView>
     </>
   );

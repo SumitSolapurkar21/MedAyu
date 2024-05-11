@@ -13,7 +13,7 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
-import {Appbar} from 'react-native-paper';
+import {Appbar, Button, TextInput} from 'react-native-paper';
 import question from '../../../images/question.png';
 import ipdopd from '../../../images/ipd.png';
 import medicine from '../../../images/panchakarma.png';
@@ -21,6 +21,7 @@ import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
 import {Table, Row, Rows} from 'react-native-table-component';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -32,6 +33,7 @@ const DashboardHomePage = () => {
   const [departwiseData, setDepartwiseData] = useState([]);
   const [widthArr2, setWidthArr2] = useState([]);
   const [widthArr3, setWidthArr3] = useState([]);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   //backHandler ...
   useEffect(() => {
@@ -77,67 +79,67 @@ const DashboardHomePage = () => {
 
   // fetch ShowMobileTodaysOIPECount ......
   useEffect(() => {
-    const fetchOIPECount = async () => {
-      try {
-        const response = await axios.post(
-          `${api.baseurl}/ShowMobileTodaysOIPECount`,
-          {
-            hospital_id: hospital_id,
-            reception_id: _id,
-            fromdate: new Date().toISOString().slice(0, 10),
-            todate: new Date().toISOString().slice(0, 10),
-            role: userData?.role,
-          },
-        );
-        const {status, message} = response.data;
-        if (status === true) {
-          setCount(response.data);
-        } else {
-          Alert.alert('Response Error !', `${message}`);
-        }
-      } catch (error) {
-        Alert.alert('Error !!', `${error}`);
-      }
-    };
-
     fetchOIPECount();
   }, []);
 
+  const fetchOIPECount = async () => {
+    const body = {
+      hospital_id: hospital_id,
+      reception_id: _id,
+      fromdate: submittedformData.fromdate,
+      todate: submittedformData.todate,
+      role: userData?.role,
+    };
+    try {
+      const response = await axios.post(
+        `${api.baseurl}/ShowMobileTodaysOIPECount`,
+        body,
+      );
+      const {status, message} = response.data;
+      if (status === true) {
+        setCount(response.data);
+      } else {
+        Alert.alert('Response Error !', `${message}`);
+      }
+    } catch (error) {
+      Alert.alert('Error !!', `${error}`);
+    }
+  };
   // fetch FetchMobileDepartmentwiseDashboarddata ......
   useEffect(() => {
-    const FetchMobileDepartmentwiseDashboarddata = async () => {
-      try {
-        const response = await axios.post(
-          `${api.baseurl}/FetchMobileDepartmentwiseDashboarddata`,
-          {
-            hospital_id: hospital_id,
-            reception_id: _id,
-            fromdate: new Date().toISOString().slice(0, 10),
-            todate: new Date().toISOString().slice(0, 10),
-            role: userData?.role,
-          },
-        );
-        const {status, message, data} = response.data;
-        if (status === true) {
-          setDepartwiseData(data);
-        } else {
-          Alert.alert('Response Error !', `${message}`);
-        }
-      } catch (error) {
-        Alert.alert('Error !!', `${error}`);
-      }
-    };
-
     FetchMobileDepartmentwiseDashboarddata();
   }, []);
+  const FetchMobileDepartmentwiseDashboarddata = async () => {
+    try {
+      const response = await axios.post(
+        `${api.baseurl}/FetchMobileDepartmentwiseDashboarddata`,
+        {
+          hospital_id: hospital_id,
+          reception_id: _id,
+          fromdate: submittedformData.fromdate,
+          todate: submittedformData.todate,
+          role: userData?.role,
+        },
+      );
+      const {status, message, data} = response.data;
+      if (status === true) {
+        setDepartwiseData(data);
+        console.log(response.data.data);
+      } else {
+        Alert.alert('Response Error !', `${message}`);
+      }
+    } catch (error) {
+      Alert.alert('Error !!', `${error}`);
+    }
+  };
 
   // nxt page handler ...
   const pageHandler = (id, status) => {
     const _body2 = {
       hospital_id: hospital_id,
       reception_id: _id,
-      fromdate: new Date().toISOString().slice(0, 10),
-      todate: new Date().toISOString().slice(0, 10),
+      fromdate: submittedformData.fromdate,
+      todate: submittedformData.todate,
       status: status,
       depart_id: id,
     };
@@ -149,8 +151,8 @@ const DashboardHomePage = () => {
     const _body2 = {
       hospital_id: hospital_id,
       reception_id: _id,
-      fromdate: new Date().toISOString().slice(0, 10),
-      todate: new Date().toISOString().slice(0, 10),
+      fromdate: submittedformData.fromdate,
+      todate: submittedformData.todate,
       role: role,
       status: status,
     };
@@ -223,9 +225,50 @@ const DashboardHomePage = () => {
 
   // navigation handler ....
   const navigationHandler = label => {
-    navigation.replace('Dashboardpatientslist', {label: label});
+    navigation.replace('Dashboardpatientslist', {
+      label: label,
+      fromdate: submittedformData.fromdate,
+      todate: submittedformData.todate,
+    });
+  };
+  const [dateField, setDateField] = useState('');
+
+  //due date
+  const showFromDatePicker = () => {
+    setDatePickerVisibility(true);
+    setDateField('fromdate'); // Set the date field to 'fromdate'
   };
 
+  const showToDatePicker = () => {
+    setDatePickerVisibility(true);
+    setDateField('todate'); // Set the date field to 'todate'
+  };
+
+  // Function for handling Date
+  const handleDate = date => {
+    const dt = new Date(date).toISOString().slice(0, 10);
+
+    setsubmittedFormData(prevState => ({
+      ...prevState,
+      [dateField]: dt, // Set the date to the appropriate field based on dateField state
+    }));
+    hideDatePicker();
+  };
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  //   form inputs....
+  const [submittedformData, setsubmittedFormData] = useState({
+    fromdate: new Date().toISOString().slice(0, 10),
+    todate: new Date().toISOString().slice(0, 10),
+    hospital_id: userData.hospital_id,
+    reception_id: userData._id,
+  });
+
+  const submitHandler = async () => {
+    fetchOIPECount();
+    FetchMobileDepartmentwiseDashboarddata();
+  };
   return (
     <>
       <Appbar.Header mode="small">
@@ -233,6 +276,42 @@ const DashboardHomePage = () => {
         <Appbar.Content title={'Dashboard'} />
       </Appbar.Header>
       <SafeAreaView style={styles.container}>
+        <View style={styles.filterDiv}>
+          <View style={styles.filter}>
+            <TouchableOpacity onPress={showFromDatePicker} style={styles.input}>
+              <TextInput
+                dense
+                value={submittedformData.fromdate}
+                editable={false}
+                style={styles.inputText}
+                right={<TextInput.Icon icon="calendar" disabled />}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={showToDatePicker} style={styles.input}>
+              <TextInput
+                dense
+                value={submittedformData.todate}
+                editable={false}
+                style={styles.inputText}
+                right={<TextInput.Icon icon="calendar" disabled />}
+              />
+            </TouchableOpacity>
+
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleDate}
+              onCancel={hideDatePicker}
+            />
+          </View>
+          <Button
+            mode="elevated"
+            style={styles.button}
+            textColor="white"
+            onPress={() => submitHandler()}>
+            Get
+          </Button>
+        </View>
         <View style={styles.contentDiv}>
           <TouchableOpacity
             style={styles.contentItem}
@@ -418,5 +497,24 @@ const styles = StyleSheet.create({
   contentheadText: {
     fontSize: 12,
     color: 'black',
+  },
+  filter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  filterDiv: {
+    padding: 10,
+  },
+  button: {
+    marginTop: 8,
+    width: 80,
+    backgroundColor: '#80aaff',
+    alignSelf: 'center',
+  },
+  input: {
+    width: '45%',
+  },
+  inputText: {
+    backgroundColor: '#ffffff',
   },
 });

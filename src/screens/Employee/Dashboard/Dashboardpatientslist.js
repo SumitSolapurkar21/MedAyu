@@ -19,7 +19,7 @@ import {Table, Row, Rows} from 'react-native-table-component';
 const Dashboardpatientslist = ({route}) => {
   const {userData} = useContext(UserContext);
   const navigation = useNavigation();
-  const {label} = route.params;
+  const {label, fromdate, todate} = route.params;
   const [patientsList, setPatientsList] = useState([]);
   const {width: screenWidth} = Dimensions.get('window');
 
@@ -121,8 +121,8 @@ const Dashboardpatientslist = ({route}) => {
     const body = {
       hospital_id: userData?.hospital_id,
       reception_id: userData?._id,
-      fromdate: new Date().toISOString().slice(0, 10),
-      todate: new Date().toISOString().slice(0, 10),
+      fromdate: fromdate,
+      todate: todate,
       status: label,
       role: userData?.role,
     };
