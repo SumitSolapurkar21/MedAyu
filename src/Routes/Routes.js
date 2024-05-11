@@ -95,6 +95,7 @@ import Expenses from '../components/Expenses/Expenses';
 import DashboardHomePage from '../screens/Employee/Dashboard/DashboardHomePage';
 import {Listofpatients} from '../screens/Employee/Dashboard/Listofpatients';
 import DischargeScanner from '../screens/Employee/Discharge/DischargeScanner';
+import Dashboardpatientslist from '../screens/Employee/Dashboard/Dashboardpatientslist';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -1026,6 +1027,11 @@ const Routes = () => {
         <Stack.Screen
           name="Listofpatients"
           component={Listofpatients}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Dashboardpatientslist"
+          component={Dashboardpatientslist}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -157,6 +157,7 @@ const DashboardHomePage = () => {
     setDashboardpatientListData(_body2);
     navigation.navigate('Listofpatients');
   };
+
   const item = () => (
     <>
       <View style={{padding: 14}}>
@@ -219,6 +220,12 @@ const DashboardHomePage = () => {
       </View>
     </>
   );
+
+  // navigation handler ....
+  const navigationHandler = label => {
+    navigation.replace('Dashboardpatientslist', {label: label});
+  };
+
   return (
     <>
       <Appbar.Header mode="small">
@@ -227,7 +234,9 @@ const DashboardHomePage = () => {
       </Appbar.Header>
       <SafeAreaView style={styles.container}>
         <View style={styles.contentDiv}>
-          <TouchableOpacity style={styles.contentItem}>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => navigationHandler('OPD')}>
             <Image source={ipdopd} style={styles.img} />
             <View>
               <Text style={styles.contentText}>OPD</Text>
@@ -236,7 +245,9 @@ const DashboardHomePage = () => {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.contentItem}>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => navigationHandler('IPD')}>
             <Image source={ipdopd} style={styles.img} />
             <View>
               <Text style={styles.contentText}>IPD</Text>
@@ -245,14 +256,18 @@ const DashboardHomePage = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.contentDiv}>
-          <TouchableOpacity style={styles.contentItem}>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => navigationHandler('PROCEDURE')}>
             <Image source={medicine} style={styles.img} />
             <View>
               <Text style={styles.contentText}>PROCEDURE</Text>
               <Text style={styles.contentText}>{count?.panchakarmacount}</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.contentItem}>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => navigationHandler('ENQUIRY')}>
             <Image source={question} style={styles.img} />
             <View>
               <Text style={styles.contentText}>ENQUIRY</Text>
