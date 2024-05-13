@@ -35,13 +35,8 @@ const OpdProcedure = () => {
   }, []);
 
   const navigation = useNavigation();
-  const {
-    patientsData,
-    scannedPatientsData,
-    waitingListData,
-    setWaitingListData,
-    userData,
-  } = useContext(UserContext);
+  const {patientsData, scannedPatientsData, waitingListData, userData} =
+    useContext(UserContext);
 
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -234,16 +229,6 @@ const OpdProcedure = () => {
         });
     } catch (error) {
       console.error(error);
-    }
-  };
-
-  // navigate handler .....
-  const navigateHandler = () => {
-    if (waitingListData?.assessmenttype === 'NewAssessment') {
-      setWaitingListData([]);
-      navigation.replace('Listofpatients');
-    } else {
-      navigation.replace('EpatientDetails');
     }
   };
 
@@ -495,8 +480,10 @@ const OpdProcedure = () => {
             <Button mode="contained" onPress={() => submitTreatmenthandler()}>
               Submit
             </Button>
-            <Button mode="contained" onPress={() => navigateHandler()}>
-              Home
+            <Button
+              mode="contained"
+              onPress={() => navigation.navigate('OpdAdvice')}>
+              Next / Skip
             </Button>
           </View>
         </ScrollView>

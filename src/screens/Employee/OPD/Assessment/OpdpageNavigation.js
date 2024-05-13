@@ -153,6 +153,15 @@ const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
           }}
           title="Procedure"
         />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('OpdAdvice'), closeMenu();
+          }}
+          title="Advice"
+        />
       </Menu>
     </View>
   );

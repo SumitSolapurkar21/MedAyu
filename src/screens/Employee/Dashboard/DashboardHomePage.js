@@ -124,7 +124,6 @@ const DashboardHomePage = () => {
       const {status, message, data} = response.data;
       if (status === true) {
         setDepartwiseData(data);
-        console.log(response.data.data);
       } else {
         Alert.alert('Response Error !', `${message}`);
       }

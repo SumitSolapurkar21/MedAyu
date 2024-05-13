@@ -1636,6 +1636,8 @@ const SystemicExamination = () => {
   const openMenu = () => setVisible(true);
 
   const closeMenu = () => setVisible(false);
+
+  
   return (
     <>
       {/* Appbar header */}

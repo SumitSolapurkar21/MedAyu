@@ -311,12 +311,16 @@ export const Listofpatients = () => {
 
   // cancel handler ......
 
-  const cancelHandler = async (appointment_id, patient_id) => {
+  const cancelHandler = async (appointment_id, patient_id, uhid) => {
     try {
       await axios
         .post(`${api.baseurl}/CancelMobileAppointment`, {
           appointment_id: appointment_id,
           patient_id: patient_id,
+          hospital_id: userData.hospital_id,
+          reception_id: userData._id,
+          role: userData.role,
+          uhid: uhid,
         })
         .then(response => {
           const data = response?.data;
@@ -339,15 +343,21 @@ export const Listofpatients = () => {
     _id,
     depart_id,
     doctor_id,
+    uhid,
   ) => {
+    const body = {
+      appointment_id: appointment_id,
+      patient_id: _id,
+      depart_id: depart_id,
+      doctor_id: doctor_id,
+      uhid: uhid,
+      hospital_id: userData.hospital_id,
+      reception_id: userData._id,
+      role: userData.role,
+    };
     try {
       await axios
-        .post(`${api.baseurl}/ChangeMobileConfirmToWaiting`, {
-          appointment_id: appointment_id,
-          patient_id: _id,
-          depart_id: depart_id,
-          doctor_id: doctor_id,
-        })
+        .post(`${api.baseurl}/ChangeMobileConfirmToWaiting`, body)
         .then(response => {
           const data = response?.data;
           const {status, message} = data;
@@ -364,12 +374,16 @@ export const Listofpatients = () => {
   };
 
   // MobileCallToPatients api ....
-  const MobileCallToPatients = async (appointment_id, patient_id) => {
+  const MobileCallToPatients = async (appointment_id, patient_id, uhid) => {
     try {
       await axios
         .post(`${api.baseurl}/MobileCallToPatients`, {
           appointment_id: appointment_id,
           patient_id: patient_id,
+          uhid: uhid,
+          hospital_id: userData.hospital_id,
+          reception_id: userData._id,
+          role: userData.role,
         })
         .then(response => {
           const data = response?.data;
@@ -413,7 +427,7 @@ export const Listofpatients = () => {
     doctor_id,
     mobilenumber,
     assessment,
-    hospital_id,
+    uhid,
   ) => {
     const data = {
       appointment_id: appointment_id,
@@ -423,7 +437,10 @@ export const Listofpatients = () => {
       doctor_id: doctor_id,
       mobilenumber: mobilenumber,
       assessmenttype: assessment,
-      hospital_id: hospital_id,
+      uhid: uhid,
+      hospital_id: userData.hospital_id,
+      reception_id: userData._id,
+      role: userData.role,
     };
     MobileChangeWaitingToConsult(data);
 
@@ -487,14 +504,15 @@ export const Listofpatients = () => {
                             item.fullname || ''
                           ) : (
                             <TouchableOpacity
-                              onPress={() =>
+                              onPress={() => {
                                 ChangeMobileConfirmToWaiting(
                                   item.appointment_id,
                                   item._id,
                                   item.depart_id,
                                   item.doctor_id,
-                                )
-                              }>
+                                  item.patientuniqueno,
+                                );
+                              }}>
                               <Text style={[styles.text, {color: 'blue'}]}>
                                 {item.fullname}
                               </Text>
@@ -530,6 +548,7 @@ export const Listofpatients = () => {
                                   item._id,
                                   item.depart_id,
                                   item.doctor_id,
+                                  item.patientuniqueno,
                                 )
                               }>
                               <Text style={[styles.text, {color: 'blue'}]}>
@@ -558,6 +577,7 @@ export const Listofpatients = () => {
                                   MobileCallToPatients(
                                     item.appointment_id,
                                     item._id,
+                                    item.patientuniqueno,
                                   )
                                 }
                                 style={{
@@ -580,7 +600,7 @@ export const Listofpatients = () => {
                                   item.doctor_id,
                                   item.mobilenumber,
                                   'NewAssessment',
-                                  userData?.hospital_id,
+                                  item.patientuniqueno,
                                 )
                               }
                               style={{
@@ -608,6 +628,7 @@ export const Listofpatients = () => {
                                   item._id,
                                   item.depart_id,
                                   item.doctor_id,
+                                  item.patientuniqueno,
                                 )
                               }>
                               <Text style={[styles.text, {color: 'blue'}]}>
@@ -624,7 +645,11 @@ export const Listofpatients = () => {
                           item.appoint_status,
                           <TouchableOpacity
                             onPress={() =>
-                              cancelHandler(item.appointment_id, item._id)
+                              cancelHandler(
+                                item.appointment_id,
+                                item._id,
+                                item.patientuniqueno,
+                              )
                             }
                             style={{
                               alignSelf: 'center',
