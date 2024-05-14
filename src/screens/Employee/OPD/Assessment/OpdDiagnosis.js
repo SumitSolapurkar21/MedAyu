@@ -14,6 +14,8 @@ import {
   Button,
   Appbar,
   Card,
+  SegmentedButtons,
+  DefaultTheme,
 } from 'react-native-paper';
 import axios from 'axios';
 import api from '../../../../../api.json';
@@ -30,11 +32,19 @@ const OpdDiagnosis = () => {
   const [checked, setChecked] = useState('');
   const [searchDiagnosisData, setSearchDiagnosisData] = useState([]);
   const [visibleList, setVisibleList] = useState(false);
+  const [value, setValue] = useState('Medical');
 
   const [widthArr, setWidthArr] = useState([]);
   const [diagnosisArray, setDiagnosisArray] = useState([]);
 
-  const keys = ['Sr.No', 'Diagnosis', 'Diagnosis Type', 'Date/Time', 'Action'];
+  const keys = [
+    'Sr.No',
+    'ICD Code',
+    'Diagnosis',
+    'Diagnosis Type',
+    'Date/Time',
+    'Action',
+  ];
 
   // to set width of table ......
   useEffect(() => {
@@ -59,6 +69,7 @@ const OpdDiagnosis = () => {
           text: searchQuery,
           hospital_id: userData?.hospital_id,
           reception_id: userData?._id,
+          type: value,
         })
         .then(res => {
           if (res.data.status === false) {
@@ -77,6 +88,7 @@ const OpdDiagnosis = () => {
 
   let ILLNESSNAME = selectedDiagnosis?.illnessname;
   let ILLNESSID = selectedDiagnosis?.illness_id;
+  let icdcode = selectedDiagnosis?.icdcode;
 
   const [visible1, setVisible1] = useState(false);
 
@@ -110,7 +122,10 @@ const OpdDiagnosis = () => {
         api_type: 'OPD-DIAGNOSIS',
         appoint_id: appoint_id || waitingListData?.appoint_id,
         opddiagnosishistoryarray: diagnosisArray,
+        type: value,
+        icdcode: icdcode,
       };
+
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, opddiagnosishistoryarray)
         .then(res => {
@@ -152,6 +167,8 @@ const OpdDiagnosis = () => {
         api_type: 'OPD-DIAGNOSIS',
         uhid: uhid,
         appoint_id: appoint_id || waitingListData?.appoint_id,
+        type: value,
+        icdcode: icdcode,
       },
     ];
     setDiagnosisArray(prev => [...prev, ..._data]);
@@ -160,7 +177,7 @@ const OpdDiagnosis = () => {
 
   useEffect(() => {
     FetchMobileOpdAssessment();
-  }, [hospital_id, patient_id, reception_id]);
+  }, [hospital_id, patient_id, reception_id, value]);
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
     try {
@@ -173,6 +190,7 @@ const OpdDiagnosis = () => {
           api_type: 'OPD-DIAGNOSIS',
           uhid: uhid,
           mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          type: value,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -195,10 +213,14 @@ const OpdDiagnosis = () => {
     setVisible(true);
   };
   const [visible, setVisible] = useState(false);
-
   const openMenu = () => setVisible(true);
-
   const closeMenu = () => setVisible(false);
+
+  const theme = {
+    ...DefaultTheme,
+    roundness: 0, // Set roundness to 0 to remove borderRadius
+  };
+
   return (
     <>
       {/* Appbar header */}
@@ -220,6 +242,22 @@ const OpdDiagnosis = () => {
         openMenu={openMenu}
         _handleMore={_handleMore}
         visible={visible}
+      />
+      <SegmentedButtons
+        style={{padding: 10}}
+        theme={theme}
+        value={value}
+        onValueChange={setValue}
+        buttons={[
+          {
+            value: 'Medical',
+            label: 'Medical',
+          },
+          {
+            value: 'Ayurvedic',
+            label: 'Ayurvedic',
+          },
+        ]}
       />
       <ScrollView vertical style={styles.container}>
         <View style={styles.cardd}>
@@ -260,6 +298,7 @@ const OpdDiagnosis = () => {
                         setSelectedDiagnosis({
                           illnessname: res.illnessname,
                           illness_id: res.illness_id,
+                          icdcode: res.icdcode,
                         });
                         setVisibleList(false);
                       }}
@@ -318,6 +357,7 @@ const OpdDiagnosis = () => {
                     // data={tableData}
                     data={diagnosisArray?.map((row, index) => [
                       index + 1,
+                      row.icdcode,
                       row.illnessname,
                       row.diagnosis_type,
                       `${row.adddate} / ${row.addtime}`,
@@ -364,6 +404,16 @@ const OpdDiagnosis = () => {
                   <View style={styles.cardBodyHead}>
                     <View style={[styles.cardBody, {gap: 8}]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
+                        ICD Code :
+                      </Text>
+                      <Text variant="titleLarge" style={styles.cardtext2}>
+                        {row?.icdcode}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.cardBodyHead}>
+                    <View style={[styles.cardBody, {gap: 8}]}>
+                      <Text variant="titleLarge" style={styles.cardtext}>
                         Illness :
                       </Text>
                       <Text variant="titleLarge" style={styles.cardtext2}>
@@ -406,7 +456,6 @@ export default OpdDiagnosis;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
   },
   search: {
     marginHorizontal: 16,

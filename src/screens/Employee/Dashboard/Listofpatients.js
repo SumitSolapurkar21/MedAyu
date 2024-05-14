@@ -309,8 +309,8 @@ export const Listofpatients = () => {
     }
   }, [wstatus]);
 
+  
   // cancel handler ......
-
   const cancelHandler = async (appointment_id, patient_id, uhid) => {
     try {
       await axios
@@ -418,6 +418,7 @@ export const Listofpatients = () => {
       Alert.alert('Error !!', `${error}`);
     }
   };
+
   // navigation page ....
   const navigationPage = (
     appointment_id,
