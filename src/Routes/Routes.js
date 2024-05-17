@@ -97,6 +97,7 @@ import {Listofpatients} from '../screens/Employee/Dashboard/Listofpatients';
 import DischargeScanner from '../screens/Employee/Discharge/DischargeScanner';
 import Dashboardpatientslist from '../screens/Employee/Dashboard/Dashboardpatientslist';
 import OpdAdvice from '../screens/Employee/OPD/Assessment/OpdAdvice';
+import EpatientLogs from '../screens/Employee/EpatientLogs';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -1038,6 +1039,11 @@ const Routes = () => {
         <Stack.Screen
           name="OpdAdvice"
           component={OpdAdvice}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="EpatientLogs"
+          component={EpatientLogs}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

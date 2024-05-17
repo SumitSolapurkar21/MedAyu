@@ -16,6 +16,7 @@ import {Table, Row, Rows} from 'react-native-table-component';
 import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import {GeneratePdf} from './PdfReport';
 
 export const Listofpatients = () => {
   const navigation = useNavigation();
@@ -309,7 +310,6 @@ export const Listofpatients = () => {
     }
   }, [wstatus]);
 
-  
   // cancel handler ......
   const cancelHandler = async (appointment_id, patient_id, uhid) => {
     try {
@@ -447,6 +447,10 @@ export const Listofpatients = () => {
 
     setWaitingListData(data);
     navigation.navigate('OpdComplaints');
+  };
+
+  const generateReport = data => {
+    GeneratePdf(data);
   };
 
   return (
@@ -612,6 +616,35 @@ export const Listofpatients = () => {
                                 padding: 8,
                               }}>
                               <Text>Consult</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              onPress={() => {
+                                const data = {
+                                  appointment_id: item.appointment_id,
+                                  appoint_id: item.appoint_id,
+                                  depart_id: item.depart_id,
+                                  doctor_id: item.doctor_id,
+                                  mobilenumber: item.mobilenumber,
+                                  uhid: item.patientuniqueno,
+                                  patient_id: item._id,
+                                  role: userData.role,
+                                  hospital_id: userData.hospital_id,
+                                  reception_id: userData._id,
+                                };
+                                generateReport(data);
+                              }}
+                              style={{
+                                alignSelf: 'center',
+                                borderColor: 'green',
+                                borderWidth: 1,
+                                borderRadius: 8,
+                                padding: 8,
+                              }}>
+                              <FontAwesome6
+                                name="file-pdf"
+                                color="#1669f0"
+                                size={18}
+                              />
                             </TouchableOpacity>
                           </View>,
                         ];

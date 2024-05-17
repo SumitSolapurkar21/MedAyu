@@ -212,6 +212,16 @@ const EpatientDetails = () => {
               />
               <Text style={styles.uName}>History</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.selectDiv}
+              onPress={() => navigation.navigate('EpatientLogs')}>
+              <Image
+                source={billHistory}
+                alt="billHistory"
+                style={styles.img}
+              />
+              <Text style={styles.uName}>Logs</Text>
+            </TouchableOpacity>
           </View>
         </>
         {/* )} */}
@@ -219,7 +229,7 @@ const EpatientDetails = () => {
         {/* patientSelection value is discharge or 3 */}
         {/* <PatientDischargeSelection /> */}
 
-        <HomeButton />
+        {/* <HomeButton /> */}
       </SafeAreaView>
     </>
   );
