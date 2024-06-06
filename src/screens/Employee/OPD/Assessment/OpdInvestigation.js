@@ -2,7 +2,7 @@ import {BackHandler, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Appbar, Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const OpdInvestigation = () => {
   const navigation = useNavigation();

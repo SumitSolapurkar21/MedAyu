@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Button, Divider, Menu} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 
-const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
+export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
   const navigation = useNavigation();
 
   return (
@@ -158,6 +158,51 @@ const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
           contentStyle={{width: 120}}
           dense
           onPress={() => {
+            navigation.replace('AshtvidhPariksha'), closeMenu();
+          }}
+          title="Ashtvidh Pariksha"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('DashavidhPariksha'), closeMenu();
+          }}
+          title="Dashavidh Pariksha"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('Samprapti'), closeMenu();
+          }}
+          title="Samprapti"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('SrotasPariksha'), closeMenu();
+          }}
+          title="Srotas Pariksha"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('Prakruti'), closeMenu();
+          }}
+          title="Prakruti"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
             navigation.replace('OpdAdvice'), closeMenu();
           }}
           title="Advice"
@@ -167,10 +212,69 @@ const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
   );
 };
 
-export default OpdpageNavigation;
+export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
+  const navigation = useNavigation();
 
-const styles = StyleSheet.create({
-  //   menuItem: {
-  //     flexDirection: 'row',
-  //   },
-});
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        right: 35,
+        top: 60,
+      }}>
+      <Menu
+        contentStyle={{flexDirection: 'row', flexWrap: 'wrap', width: '105%'}}
+        style={styles.menuItem}
+        visible={visible}
+        onDismiss={closeMenu}
+        anchor={<Button onPress={openMenu}></Button>}>
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('AshtvidhPariksha'), closeMenu();
+          }}
+          title="Ashtvidh Pariksha"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('DashavidhPariksha'), closeMenu();
+          }}
+          title="Dashavidh Pariksha"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('Samprapti'), closeMenu();
+          }}
+          title="Samprapti"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('SrotasPariksha'), closeMenu();
+          }}
+          title="Srotas Pariksha"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('Prakruti'), closeMenu();
+          }}
+          title="Prakruti"
+        />
+      </Menu>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({});

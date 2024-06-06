@@ -11,15 +11,8 @@ import {
 } from 'react-native';
 import React, {useContext, useEffect} from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
-// import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
-//images
-// import doctorImg from '../../images/doctor.png';
-// import medImg from '../../images/medicines.png';
-// import healthImg from '../../images/medical-record.png';
-// import labtestsImg from '../../images/labtests.png';
-
 //images
 import pr from '../../images/pr.png';
 import ss from '../../images/sss.png';
@@ -29,6 +22,7 @@ import UserContext from '../../components/Context/Context';
 import Ehome from '../Employee/Ehome';
 import {Appbar, Button, Menu} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BottomnavigationComponent from '../../components/BottomNavigation';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -78,8 +72,10 @@ const Home = () => {
 
     return () => backHandler.remove();
   }, []);
+
   return (
     <>
+      {/* header section */}
       <Appbar.Header
         style={{
           backgroundColor: 'white',
@@ -138,34 +134,6 @@ const Home = () => {
                 placeholderTextColor="#127359"
               />
             </View>
-            {/* <View style={styles.contentDiv}>
-            <TouchableOpacity
-              style={styles.contentItem}
-              onPress={() => navigation.navigate('Consult')}>
-              <Image source={doctorImg} style={styles.img} />
-              <Text style={styles.contentText}>Doctor Consult</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.contentItem}
-              onPress={() => navigation.navigate('Medicines')}>
-              <Image source={medImg} style={styles.img} />
-              <Text style={styles.contentText}>Medicines</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.contentDiv}>
-            <TouchableOpacity
-              style={styles.contentItem}
-              onPress={() => navigation.navigate('Tests')}>
-              <Image source={labtestsImg} style={styles.img} />
-              <Text style={styles.contentText}>Lab Tests</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.contentItem}
-              onPress={() => navigation.navigate('HealthRecords')}>
-              <Image source={healthImg} style={styles.img} />
-              <Text style={styles.contentText}>Health Records</Text>
-            </TouchableOpacity>
-          </View> */}
             <View style={styles.contentDiv}>
               <TouchableOpacity
                 style={styles.contentItem}
@@ -234,6 +202,8 @@ const Home = () => {
           <Ehome />
         ) : null}
       </SafeAreaView>
+      {/* footer section */}
+      {/* <BottomnavigationComponent /> */}
     </>
   );
 };

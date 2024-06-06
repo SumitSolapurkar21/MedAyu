@@ -23,7 +23,7 @@ import UserContext from '../../../../components/Context/Context';
 import {Table, Row, Rows} from 'react-native-table-component';
 import {useNavigation} from '@react-navigation/native';
 import {IconButton, MD3Colors} from 'react-native-paper';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const OpdDiagnosis = () => {
   const navigation = useNavigation();

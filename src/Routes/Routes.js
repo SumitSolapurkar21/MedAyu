@@ -98,6 +98,12 @@ import DischargeScanner from '../screens/Employee/Discharge/DischargeScanner';
 import Dashboardpatientslist from '../screens/Employee/Dashboard/Dashboardpatientslist';
 import OpdAdvice from '../screens/Employee/OPD/Assessment/OpdAdvice';
 import EpatientLogs from '../screens/Employee/EpatientLogs';
+import AshtvidhPariksha from '../screens/Employee/OPD/Assessment/AshtvidhPariksha';
+import DashavidhPariksha from '../screens/Employee/OPD/Assessment/DashavidhPariksha';
+import Samprapti from '../screens/Employee/OPD/Assessment/Samprapti';
+import SrotasPariksha from '../screens/Employee/OPD/Assessment/SrotasPariksha';
+import Prakruti from '../screens/Employee/OPD/Assessment/Prakruti';
+import OpdHomePage2 from '../screens/Employee/OPD/OpdHomePage2';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -1037,6 +1043,31 @@ const Routes = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="AshtvidhPariksha"
+          component={AshtvidhPariksha}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="DashavidhPariksha"
+          component={DashavidhPariksha}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Samprapti"
+          component={Samprapti}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SrotasPariksha"
+          component={SrotasPariksha}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Prakruti"
+          component={Prakruti}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="OpdAdvice"
           component={OpdAdvice}
           options={{headerShown: false}}
@@ -1044,6 +1075,11 @@ const Routes = () => {
         <Stack.Screen
           name="EpatientLogs"
           component={EpatientLogs}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OpdHomePage2"
+          component={OpdHomePage2}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

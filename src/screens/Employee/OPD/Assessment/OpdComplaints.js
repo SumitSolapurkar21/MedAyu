@@ -23,7 +23,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import {IconButton, MD3Colors} from 'react-native-paper';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const OpdComplaints = () => {
   // comming from dashboard.....
@@ -101,11 +101,7 @@ const OpdComplaints = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      if (waitingListData) {
-        navigation.replace('Listofpatients');
-      } else {
-        navigation.replace('OpdHomePage');
-      }
+      navigation.goBack();
       return true;
     };
 
@@ -147,9 +143,6 @@ const OpdComplaints = () => {
   useEffect(() => {
     if (selectionValue || userData?.hospital_id || hospital_id) {
       FetchMobileComplaintsCategory();
-      // setRowData([]);
-      // setSelectedCategoryData([]);
-      // setP_category('');
     }
   }, [selectionValue]);
 
@@ -336,11 +329,7 @@ const OpdComplaints = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            if (waitingListData) {
-              navigation.replace('Listofpatients');
-            } else {
-              navigation.replace('OpdHomePage');
-            }
+            navigation.goBack();
           }}
         />
         <Appbar.Content title="Complaints" />

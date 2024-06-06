@@ -8,21 +8,24 @@ import {
   ScrollView,
   BackHandler,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import UserContext from '../../components/Context/Context';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../../api.json';
 import axios from 'axios';
-import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {ToastAndroid} from 'react-native';
-import HomeButton from '../../components/HomeButton/HomeButton';
+import {Appbar, Button, Menu} from 'react-native-paper';
 
 const Edoctors = ({route}) => {
-  const {userData} = useContext(UserContext);
   const {department_id, patient_id} = route.params;
   const navigation = useNavigation();
   const [doctorData, setDoctorData] = useState([]);
+  const [visible, setVisible] = React.useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const _handleMore = () => {
+    setVisible(true);
+  };
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -58,116 +61,139 @@ const Edoctors = ({route}) => {
   }, [department_id]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.outerHeader}>
-        <View style={styles.hlcontent}>
-          <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>{userData.name}</Text>
-        </View>
-        <View style={styles.hrcontent}>
-          <TouchableOpacity>
-            <FontAwesome6 name="bell" size={22} color="#127359" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
-            <FontAwesome6 name="user" size={22} color="#127359" />
-          </TouchableOpacity>
-        </View>
+    <>
+      <Appbar.Header
+        style={{
+          backgroundColor: 'white',
+          borderBottomWidth: 2,
+          borderBottomColor: '#ebebeb',
+        }}>
+        <Appbar.BackAction
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <Appbar.Content
+          title="Doctor"
+          titleStyle={{fontSize: 18, marginLeft: 10}}
+        />
+        <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+      </Appbar.Header>
+      <View
+        style={{
+          position: 'absolute',
+          right: 3,
+          top: 60,
+        }}>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={<Button onPress={openMenu}></Button>}>
+          <Menu.Item
+            dense
+            leadingIcon="home"
+            onPress={() => {
+              navigation.navigate('Home'), closeMenu();
+            }}
+            title="Home"
+          />
+        </Menu>
       </View>
-      <View style={styles.main}>
-        <View style={styles.selection}>
-          <Text
-            style={{
-              marginVertical: 8,
-              fontWeight: '600',
-              fontSize: 18,
-              color: 'black',
-              textAlign: 'center',
-            }}>
-            Select Doctor
-          </Text>
-        </View>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {doctorData?.map(res => (
-          <View style={styles.card} key={res._id}>
-            <View style={styles.innerCard}>
-              <View style={styles.cardItem1}>
-                <Image
-                  src={res.profilephoto}
-                  alt="doctorPic"
-                  style={[
-                    styles.img,
-                    {resizeMode: 'contain', width: 85, height: 100},
-                  ]}
-                />
-              </View>
-              <View style={styles.cardItem2}>
-                <Text style={styles.doctorName}>{res.name}</Text>
-                <Text style={styles.doctorEdu}>{res.education}</Text>
-                <Text style={styles.doctorExp}>{res.experience}</Text>
-                <Text style={styles.doctorDeg}>{res.specialization}</Text>
-                <Text style={styles.doctorAmt}>
-                  You pay &nbsp;
-                  <Text style={{color: '#127359'}}>{res.fees}</Text>
-                </Text>
-              </View>
-            </View>
-            <View>
-              <Text style={styles.doctorLan}>
-                <FontAwesome6 name="video" size={14} color="#127359" />
-                &nbsp;&nbsp;{res.language}
-              </Text>
-              <Text style={styles.doctorAdd}>
-                <FontAwesome6 name="location-dot" color="#127359" size={14} />
-                &nbsp;&nbsp;{res.address}
-              </Text>
-            </View>
-            <View style={styles.cardButton}>
-              <TouchableOpacity
-                style={styles.btnO}
-                onPress={() =>
-                  ToastAndroid.show(
-                    'Comming Soon',
-                    ToastAndroid.SHORT,
-                    ToastAndroid.BOTTOM,
-                  )
-                }>
-                <Text
-                  style={[
-                    styles.btn,
-                    {color: 'white', backgroundColor: 'orange'},
-                  ]}>
-                  <FontAwesome6 name="video" color="#ffffff" size={14} />
-                  &nbsp;&nbsp;Digital Consult
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.btnO}
-                onPress={() =>
-                  navigation.navigate('Eappointment', {
-                    department_id,
-                    patient_id,
-                    doctor_id: res._id,
-                  })
-                }>
-                <Text
-                  style={[
-                    styles.btn,
-                    {
-                      backgroundColor: '#127359',
-                      color: '#ffffff',
-                    },
-                  ]}>
-                  <FontAwesome6 name="hospital" color="#ffffff" size={14} />
-                  &nbsp;&nbsp;Book Hospital Visit
-                </Text>
-              </TouchableOpacity>
-            </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.main}>
+          <View style={styles.selection}>
+            <Text
+              style={{
+                marginVertical: 2,
+                fontWeight: '600',
+                fontSize: 16,
+                color: 'black',
+              }}>
+              Select Doctor
+            </Text>
           </View>
-        ))}
-      </ScrollView>
-      <HomeButton />
-    </SafeAreaView>
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {doctorData?.map(res => (
+            <View style={styles.card} key={res._id}>
+              <View style={styles.innerCard}>
+                <View style={styles.cardItem1}>
+                  <Image
+                    src={res.profilephoto}
+                    alt="doctorPic"
+                    style={[
+                      styles.img,
+                      {resizeMode: 'contain', width: 85, height: 100},
+                    ]}
+                  />
+                </View>
+                <View style={styles.cardItem2}>
+                  <Text style={styles.doctorName}>{res.name}</Text>
+                  <Text style={styles.doctorEdu}>{res.education}</Text>
+                  <Text style={styles.doctorExp}>{res.experience}</Text>
+                  <Text style={styles.doctorDeg}>{res.specialization}</Text>
+                  <Text style={styles.doctorAmt}>
+                    You pay &nbsp;
+                    <Text style={{color: '#127359'}}>{res.fees}</Text>
+                  </Text>
+                </View>
+              </View>
+              <View>
+                <Text style={styles.doctorLan}>
+                  <FontAwesome6 name="video" size={14} color="#127359" />
+                  &nbsp;&nbsp;{res.language}
+                </Text>
+                <Text style={styles.doctorAdd}>
+                  <FontAwesome6 name="location-dot" color="#127359" size={14} />
+                  &nbsp;&nbsp;{res.address}
+                </Text>
+              </View>
+              <View style={styles.cardButton}>
+                <TouchableOpacity
+                  style={styles.btnO}
+                  onPress={() =>
+                    ToastAndroid.show(
+                      'Comming Soon',
+                      ToastAndroid.SHORT,
+                      ToastAndroid.BOTTOM,
+                    )
+                  }>
+                  <Text
+                    style={[
+                      styles.btn,
+                      {color: 'white', backgroundColor: 'orange'},
+                    ]}>
+                    <FontAwesome6 name="video" color="#ffffff" size={14} />
+                    &nbsp;&nbsp;Digital Consult
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.btnO}
+                  onPress={() =>
+                    navigation.navigate('Eappointment', {
+                      department_id,
+                      patient_id,
+                      doctor_id: res._id,
+                    })
+                  }>
+                  <Text
+                    style={[
+                      styles.btn,
+                      {
+                        backgroundColor: '#127359',
+                        color: '#ffffff',
+                      },
+                    ]}>
+                    <FontAwesome6 name="hospital" color="#ffffff" size={14} />
+                    &nbsp;&nbsp;Book Hospital Visit
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 };
 

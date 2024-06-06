@@ -12,7 +12,7 @@ import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import {Appbar, RadioButton, Button, Card} from 'react-native-paper';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const GeneralExamination = () => {
   const navigation = useNavigation();

@@ -7,7 +7,7 @@ import DateTimePicker from 'react-native-ui-datepicker';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import {IconButton, MD3Colors} from 'react-native-paper';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const MedicineHistory = () => {
   const navigation = useNavigation();

@@ -6,7 +6,7 @@ import UserContext from '../../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import {Appbar, Checkbox, Button, Card} from 'react-native-paper';
 import {Table, Row, Rows} from 'react-native-table-component';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const OpdPlanOfCare = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =

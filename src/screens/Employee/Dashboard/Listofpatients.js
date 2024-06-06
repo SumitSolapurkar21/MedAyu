@@ -443,10 +443,10 @@ export const Listofpatients = () => {
       reception_id: userData._id,
       role: userData.role,
     };
-    MobileChangeWaitingToConsult(data);
+    // MobileChangeWaitingToConsult(data);
 
     setWaitingListData(data);
-    navigation.navigate('OpdComplaints');
+    navigation.navigate('OpdHomePage2');
   };
 
   const generateReport = data => {

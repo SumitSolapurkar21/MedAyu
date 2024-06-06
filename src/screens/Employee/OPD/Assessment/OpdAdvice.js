@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {Appbar, Button, Card, TextInput} from 'react-native-paper';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 import {useNavigation} from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';

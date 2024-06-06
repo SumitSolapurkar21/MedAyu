@@ -1,21 +1,9 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-  BackHandler,
-} from 'react-native';
-import medayuLogo from '../../images/medayu.jpeg';
+import {StyleSheet, Text, View, SafeAreaView, BackHandler} from 'react-native';
 
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import React, {useContext, useEffect, useState} from 'react';
 import DateTimeAppointment from '../../components/DateTimeAppointment';
-import {SelectList} from 'react-native-dropdown-select-list';
 import {useNavigation} from '@react-navigation/native';
 import {Appbar, Button, Menu} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import successIcon from '../../images/success.gif';
 
@@ -23,7 +11,6 @@ import MsgPopup from '../../components/MsgPopup/MsgPopup';
 import UserContext from '../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../api.json';
-import HomeButton from '../../components/HomeButton/HomeButton';
 
 const Eappointment = ({route}) => {
   //backHandler ...
@@ -40,20 +27,22 @@ const Eappointment = ({route}) => {
 
     return () => backHandler.remove();
   }, []);
-  const {scannedPatientsData, userData} = useContext(UserContext);
+  const {userData} = useContext(UserContext);
   const [backdropOpacity, setBackdropOpacity] = useState(0);
   const navigation = useNavigation();
 
   let reception_id = userData._id;
   const {department_id, patient_id, doctor_id} = route.params;
 
-  const [formData, setFormData] = useState({
-    department: '',
-    doctor: '',
-  });
   const [msgPopup, setMsgPopup] = useState(false);
-
   const [dateArray, setDateArray] = useState([]);
+
+  const [visible, setVisible] = React.useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const _handleMore = () => {
+    setVisible(true);
+  };
 
   useEffect(() => {
     if (doctor_id) dateData();
@@ -86,54 +75,70 @@ const Eappointment = ({route}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.outerHeader}>
-        <View style={styles.hlcontent}>
-          <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>{userData.name}</Text>
-        </View>
-        <View style={styles.hrcontent}>
-          <TouchableOpacity>
-            <FontAwesome name="bell" size={22} color="#127359" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
-            <FontAwesome name="user" size={22} color="#127359" />
-          </TouchableOpacity>
-        </View>
+    <>
+      <Appbar.Header
+        style={{
+          backgroundColor: 'white',
+          borderBottomWidth: 2,
+          borderBottomColor: '#ebebeb',
+        }}>
+        <Appbar.BackAction
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <Appbar.Content
+          title="Appointments"
+          titleStyle={{fontSize: 18, marginLeft: 10}}
+        />
+        <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+      </Appbar.Header>
+      <View
+        style={{
+          position: 'absolute',
+          right: 3,
+          top: 60,
+        }}>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={<Button onPress={openMenu}></Button>}>
+          <Menu.Item
+            dense
+            leadingIcon="home"
+            onPress={() => {
+              navigation.navigate('Home'), closeMenu();
+            }}
+            title="Home"
+          />
+        </Menu>
       </View>
-
-      <MsgPopup
-        msgPopup={msgPopup}
-        setMsgPopup={setMsgPopup}
-        backdropOpacity={backdropOpacity}
-      />
-
-      <View style={styles.main}>
-        <View style={styles.selection}>
-          <Text
-            style={{
-              marginVertical: 8,
-              fontWeight: '600',
-              fontSize: 18,
-              color: 'black',
-              textAlign: 'center',
-            }}>
-            Add Appointments
-          </Text>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.main}>
+          <View style={styles.selection}>
+            <Text
+              style={{
+                marginVertical: 6,
+                fontWeight: '600',
+                fontSize: 16,
+                color: 'black',
+              }}>
+              Add Appointments
+            </Text>
+          </View>
         </View>
-      </View>
 
-      <DateTimeAppointment
-        dateArray={dateArray}
-        doctor_id={doctor_id}
-        patient_id={patient_id}
-        reception_id={reception_id}
-        department_id={department_id}
-        setMsgPopup={setMsgPopup}
-        setBackdropOpacity={setBackdropOpacity}
-      />
-      <HomeButton />
-    </SafeAreaView>
+        <DateTimeAppointment
+          dateArray={dateArray}
+          doctor_id={doctor_id}
+          patient_id={patient_id}
+          reception_id={reception_id}
+          department_id={department_id}
+          setMsgPopup={setMsgPopup}
+          setBackdropOpacity={setBackdropOpacity}
+        />
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -141,7 +146,6 @@ export default Eappointment;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
     flex: 1,
   },
   outerHeader: {

@@ -305,7 +305,7 @@ const Expenses = () => {
   return (
     <>
       {/* Appbar header */}
-      <Appbar.Header>
+      <Appbar.Header mode="small">
         <Appbar.BackAction
           onPress={() => {
             _navigationTabs(role);

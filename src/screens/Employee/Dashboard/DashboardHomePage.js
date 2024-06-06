@@ -38,7 +38,7 @@ const DashboardHomePage = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.navigate('Home');
+      navigation.navigate('Tabs');
       return true;
     };
 
@@ -271,7 +271,7 @@ const DashboardHomePage = () => {
   return (
     <>
       <Appbar.Header mode="small">
-        <Appbar.BackAction onPress={() => navigation.navigate('Home')} />
+        <Appbar.BackAction onPress={() => navigation.navigate('Tabs')} />
         <Appbar.Content title={'Dashboard'} />
       </Appbar.Header>
       <SafeAreaView style={styles.container}>

@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  ScrollView,
   BackHandler,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
@@ -13,12 +12,10 @@ import UserContext from '../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../../api.json';
 import axios from 'axios';
-import medayuLogo from '../../images/medayu.jpeg';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome';
 import ayu from '../../images/ayurveda.png';
-import HomeButton from '../../components/HomeButton/HomeButton';
+import {Appbar, Button, Menu} from 'react-native-paper';
 
-const Edepartment = ({route}) => {
+const Edepartment = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -33,6 +30,13 @@ const Edepartment = ({route}) => {
 
     return () => backHandler.remove();
   }, []);
+
+  const [visible, setVisible] = React.useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const _handleMore = () => {
+    setVisible(true);
+  };
   const {userData, scannedPatientsData} = useContext(UserContext);
   const {patient_id} = scannedPatientsData;
   const navigation = useNavigation();
@@ -59,67 +63,79 @@ const Edepartment = ({route}) => {
   }, [reception_id]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.outerHeader}>
-        <View style={styles.hlcontent}>
-          <Image source={medayuLogo} alt="MedAyu" style={styles.img} />
-          <Text style={styles.uName}>{userData.name}</Text>
-        </View>
-        <View style={styles.hrcontent}>
-          <TouchableOpacity>
-            <FontAwesome6 name="bell" size={22} color="#127359" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
-            <FontAwesome6 name="user" size={22} color="#127359" />
-          </TouchableOpacity>
-        </View>
+    <>
+      <Appbar.Header
+        style={{
+          backgroundColor: 'white',
+          borderBottomWidth: 2,
+          borderBottomColor: '#ebebeb',
+        }}>
+        <Appbar.BackAction
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <Appbar.Content
+          title="Department"
+          titleStyle={{fontSize: 18, marginLeft: 10}}
+        />
+        <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+      </Appbar.Header>
+      <View
+        style={{
+          position: 'absolute',
+          right: 3,
+          top: 60,
+        }}>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={<Button onPress={openMenu}></Button>}>
+          <Menu.Item
+            dense
+            leadingIcon="home"
+            onPress={() => {
+              navigation.navigate('Home'), closeMenu();
+            }}
+            title="Home"
+          />
+        </Menu>
       </View>
-      <View style={styles.main}>
-        <View style={styles.selection}>
-          <Text
-            style={{
-              marginVertical: 8,
-              fontWeight: '600',
-              fontSize: 18,
-              color: 'black',
-              textAlign: 'center',
-            }}>
-            Select Department
-          </Text>
-        </View>
-        <View style={styles.selection}>
-          {/* Departments ... */}
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={styles.content}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.main}>
+          <View style={styles.selection}>
+            <Text
+              style={{
+                fontWeight: '600',
+                fontSize: 14,
+                color: 'black',
+              }}>
+              Select Department
+            </Text>
+          </View>
+          <View style={styles.selection}>
             <View style={styles.contentItem}>
               {departmentData?.map(res => (
-                <TouchableOpacity
-                  key={res.depart_id}
-                  style={styles.innercontentItem}
-                  onPress={() =>
-                    navigation.navigate('Edoctors', {
-                      department_id: res.depart_id,
-                      patient_id: patient_id,
-                    })
-                  }>
-                  <Image
-                    source={ayu}
-                    alt="DepartImg"
-                    style={[
-                      styles.img,
-                      {resizeMode: 'contain', width: 30, height: 30},
-                    ]}
-                  />
-                  <Text style={styles.itemText}>{res.deptname}</Text>
-                </TouchableOpacity>
+                <>
+                  <TouchableOpacity
+                    key={res.depart_id}
+                    style={styles.selectDiv}
+                    onPress={() =>
+                      navigation.navigate('Edoctors', {
+                        department_id: res.depart_id,
+                        patient_id: patient_id,
+                      })
+                    }>
+                    <Image source={ayu} alt="DoctorImg" style={styles.img} />
+                    <Text style={styles.uName}>{res.deptname}</Text>
+                  </TouchableOpacity>
+                </>
               ))}
             </View>
-          </ScrollView>
+          </View>
         </View>
-      </View>
-      <HomeButton />
-    </SafeAreaView>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -153,8 +169,8 @@ const styles = StyleSheet.create({
   },
   img: {
     resizeMode: 'contain',
-    width: 50,
-    height: 50,
+    width: 35,
+    height: 35,
   },
   selection: {
     marginHorizontal: 16,
@@ -165,26 +181,29 @@ const styles = StyleSheet.create({
   },
   contentItem: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    marginVertical: 10,
     flexWrap: 'wrap',
     gap: 6,
     alignItems: 'center',
-    alignContent: 'center',
   },
-  innercontentItem: {
-    borderColor: '#127359',
-    borderWidth: 1,
+
+  selectDiv: {
+    flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 8,
-    width: '30%',
-    height: 'auto',
-    padding: 5,
+    gap: 6,
+    backgroundColor: 'white',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 0,
+    elevation: 5,
+    borderRadius: 6,
+    padding: 10,
+    width: '49%',
   },
-  itemText: {
-    color: 'black',
-    fontWeight: '600',
-    textAlign: 'center',
+  uName: {
     fontSize: 12,
+    fontWeight: '600',
+    color: '#127359',
+    flexWrap: 'wrap',
+    width: 100,
   },
 });

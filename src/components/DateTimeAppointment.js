@@ -9,21 +9,21 @@ import React, {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import api from '../../api.json';
 import UserContext from './Context/Context';
+import {Alert} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const DateTimeAppointment = ({
   dateArray,
   doctor_id,
   patient_id,
-  reception_id,
   department_id,
-  setMsgPopup,
-  setBackdropOpacity,
 }) => {
   const {userData} = useContext(UserContext);
   const {_id, hospital_id} = userData;
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [timeslotArray, setTimeSlotArray] = useState([]);
+  const navigation = useNavigation();
 
   //current date
 
@@ -91,10 +91,17 @@ const DateTimeAppointment = ({
           hospital_id: hospital_id,
         })
         .then(res => {
+          const {message, status} = res.data;
+          if (status === true) {
+            Alert.alert('Success', `${message}`, [
+              {
+                text: 'OK',
+                onPress: () => navigation.navigate('EpatientDetails'),
+              },
+            ]);
+          }
           return res.data;
         });
-      setMsgPopup(true);
-      setBackdropOpacity(0.5);
     } catch (error) {
       console.error(error);
     }
@@ -183,32 +190,7 @@ export default DateTimeAppointment;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    marginHorizontal: 10,
-    marginVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  doctDetail: {
-    backgroundColor: '#ebe8e8',
-  },
-  innerCard: {
-    flexDirection: 'row',
-    gap: 16,
-    marginHorizontal: 15,
-  },
-  cardItem2: {
-    width: '75%',
-    justifyContent: 'center',
-  },
-  img: {
-    resizeMode: 'contain',
-    width: 65,
-    height: 100,
   },
 
   slotsD: {
@@ -216,11 +198,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   dateSlots: {
-    marginVertical: 14,
+    marginVertical: 2,
     height: 100,
   },
   datess: {
-    height: 50,
+    height: 40,
     width: 100,
     justifyContent: 'center',
     borderRadius: 6,
@@ -229,8 +211,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   datess1: {
-    height: 50,
-    width: 95,
+    height: 40,
+    width: 80,
     justifyContent: 'center',
     borderRadius: 6,
     borderColor: '#03b1fc',
@@ -239,7 +221,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#03b1fc',
   },
@@ -257,12 +239,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginHorizontal: 12,
-  },
-  timeBtn: {
-    textAlign: 'center',
-    color: '#ffffff',
-    fontWeight: '600',
-    fontSize: 18,
   },
   formSubmit: {
     backgroundColor: 'orange',

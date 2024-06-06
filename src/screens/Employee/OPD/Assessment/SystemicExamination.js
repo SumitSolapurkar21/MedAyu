@@ -14,7 +14,8 @@ import {BackHandler} from 'react-native';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../../api.json';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
+
 const SystemicExamination = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
@@ -1637,7 +1638,6 @@ const SystemicExamination = () => {
 
   const closeMenu = () => setVisible(false);
 
-  
   return (
     <>
       {/* Appbar header */}

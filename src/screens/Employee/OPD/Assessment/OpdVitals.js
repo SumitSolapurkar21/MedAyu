@@ -16,7 +16,7 @@ import sysbp from '../../../../images/sysbp.png';
 import diabp from '../../../../images/diabp.png';
 import DropDown from 'react-native-paper-dropdown';
 import {BackHandler} from 'react-native';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const OpdVitals = () => {
   //backHandler ...

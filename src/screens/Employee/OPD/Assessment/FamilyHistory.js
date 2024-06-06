@@ -9,7 +9,7 @@ import UserContext from '../../../../components/Context/Context';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Card} from 'react-native-paper';
 import {IconButton, MD3Colors} from 'react-native-paper';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const FamilyHistory = () => {
   const navigation = useNavigation();

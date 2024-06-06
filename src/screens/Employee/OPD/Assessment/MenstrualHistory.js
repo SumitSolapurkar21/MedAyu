@@ -16,7 +16,7 @@ import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const MenstrualHistory = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =

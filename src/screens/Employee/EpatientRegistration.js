@@ -40,7 +40,6 @@ const EpatientRegistration = () => {
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [datePicker, setDatePicker] = useState(false);
-  const [appTimePicker, setAppTimePicker] = useState(false);
   const [msgPopup, setMsgPopup] = useState(false);
   const [backdropOpacity, setBackdropOpacity] = useState(0);
 
@@ -264,11 +263,6 @@ const EpatientRegistration = () => {
     setDatePicker(!datePicker);
   };
 
-  //appointment time picker
-  const appTimePickerHandler = () => {
-    setAppTimePicker(true);
-  };
-
   // Function for handling DOB
   const handleDOB = date => {
     const dt = new Date(date);
@@ -326,27 +320,6 @@ const EpatientRegistration = () => {
     date: '',
     appointmentTime: '',
   });
-  // const formSubmitedData = {
-  //   reception_id: userData?._id,
-  //   patientcategory: 'New',
-  //   firstname: formData?.firstname,
-  //   patientgender: formData?.patientgender,
-  //   patientmartial: 'Single',
-  //   mobilenumber: formData?.mobilenumber,
-  //   patientdob: formData?.patientdob,
-  //   patientage: formData?.patientage,
-  //   country: selectedCountry[1],
-  //   state: selectedState[1],
-  //   cityname: formData?.city,
-  //   patientnationality: formData?.patientnationality,
-  //   patientlanguage: formData?.patientlanguage,
-  //   patientaddress: formData?.patientaddress,
-  //   depart_id: formData?.depart_id,
-  //   doctor_id: formData?.doctor_id,
-  //   app_date: formData?.app_date,
-  //   slot_id: formData?.slot_id,
-  //   roomno: doctorRoomData,
-  // };
 
   const handleSubmit = async () => {
     const errors = {};
@@ -479,57 +452,59 @@ const EpatientRegistration = () => {
                   marginHorizontal: 10,
                   marginBottom: 10,
                 }}>
-                <Text style={{color: 'black', fontWeight: '600', fontSize: 20}}>
+                <Text style={{color: 'black', fontWeight: '600', fontSize: 16}}>
                   Select Time Slot
                 </Text>
                 <FontAwesome6
                   name="xmark"
                   color="red"
-                  size={28}
+                  size={24}
                   onPress={closeTimeSlotPopup}
                 />
               </View>
-              <ScrollView Vertical showsVerticalScrollIndicator={false}>
-                {timeslotRows.map((row, rowIndex) => (
-                  <View key={rowIndex} style={styles.timeSlotBox}>
-                    {row.map((timeslot, index) => (
-                      <TouchableOpacity
-                        key={index}
-                        style={[
-                          styles.datess1,
-                          {
-                            backgroundColor:
-                              timeslot.timestatus === 'true' ||
-                              timeslot.timeSlot === selectedTime
-                                ? '#03b1fc'
-                                : 'white',
-                            borderColor:
-                              timeslot.timestatus === 'true'
-                                ? '#03b1fc'
-                                : '#03b1fc',
-                          },
-                        ]}
-                        onPress={() => {
-                          setSelectedTime(timeslot.timeSlot),
-                            closeTimeSlotPopup();
-                        }}>
-                        <Text
+              <ScrollView vertical showsVerticalScrollIndicator={false}>
+                <View style={styles.div}>
+                  {timeslotRows.map((row, rowIndex) => (
+                    <View key={rowIndex} style={styles.timeSlotBox}>
+                      {row.map((timeslot, index) => (
+                        <TouchableOpacity
+                          key={index}
                           style={[
-                            styles.dateText,
+                            styles.datess1,
                             {
-                              color:
+                              backgroundColor:
                                 timeslot.timestatus === 'true' ||
                                 timeslot.timeSlot === selectedTime
-                                  ? 'white'
+                                  ? '#03b1fc'
+                                  : 'white',
+                              borderColor:
+                                timeslot.timestatus === 'true'
+                                  ? '#03b1fc'
                                   : '#03b1fc',
                             },
-                          ]}>
-                          {timeslot.timeSlot}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                ))}
+                          ]}
+                          onPress={() => {
+                            setSelectedTime(timeslot.timeSlot),
+                              closeTimeSlotPopup();
+                          }}>
+                          <Text
+                            style={[
+                              styles.dateText,
+                              {
+                                color:
+                                  timeslot.timestatus === 'true' ||
+                                  timeslot.timeSlot === selectedTime
+                                    ? 'white'
+                                    : '#03b1fc',
+                              },
+                            ]}>
+                            {timeslot.timeSlot}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  ))}
+                </View>
               </ScrollView>
             </View>
           </View>
@@ -771,46 +746,7 @@ const EpatientRegistration = () => {
             </Text>
             <FontAwesome6 name="clock" color="red" size={22} />
           </TouchableOpacity>
-          {/* <DateTimePickerModal
-            isVisible={appTimePicker}
-            mode="time"
-            onConfirm={handleTime}
-            onCancel={hideDatePicker}
-          />
-          {validationErrors.appointmentTime && (
-            <Text style={styles.validationError}>
-              {validationErrors.appointmentTime}
-            </Text>
-          )} */}
         </View>
-
-        {/* <View style={styles.fields}>
-          <Text style={styles.fieldText}>PERPOSE</Text>
-          <TextInput
-            style={styles.fieldInput}
-            placeholder="PERPOSE"
-            value={formData.perpose}
-            onChangeText={text => handleInputChange('perpose', text)}
-          />
-        </View>
-        <View style={styles.fields}>
-          <Text style={styles.fieldText}>REFERAL</Text>
-          <TextInput
-            style={styles.fieldInput}
-            placeholder="REFERAL"
-            value={formData.referal}
-            onChangeText={text => handleInputChange('referal', text)}
-          />
-        </View>
-        <View style={styles.fields}>
-          <Text style={styles.fieldText}>REMARKS</Text>
-          <TextInput
-            style={styles.fieldInput}
-            placeholder="REMARKS"
-            value={formData.remarks}
-            onChangeText={text => handleInputChange('remarks', text)}
-          />
-        </View> */}
       </ScrollView>
 
       <TouchableOpacity style={styles.formSubmit} onPress={handleSubmit}>
@@ -823,8 +759,12 @@ const EpatientRegistration = () => {
 export default EpatientRegistration;
 
 const styles = StyleSheet.create({
+  div: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+  },
   container: {
-    // backgroundColor: '#ffffff',
     flex: 1,
   },
   header: {
@@ -833,9 +773,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
-    //     borderBottomWidth: 2,
     paddingBottom: 16,
-    //     borderBottomColor: '#127359',
   },
   content: {
     marginHorizontal: 20,
@@ -926,8 +864,8 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   timeSlotBox: {
-    flexDirection: 'row',
-    gap: 23,
+    // flexDirection: 'row',
+    // gap: 10,
     padding: 2,
   },
   centeredView: {
@@ -956,8 +894,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   datess1: {
-    height: 50,
-    width: 100,
+    height: 40,
+    width: 80,
     justifyContent: 'center',
     borderRadius: 6,
     borderColor: '#03b1fc',
@@ -966,14 +904,14 @@ const styles = StyleSheet.create({
   },
   dateText: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#03b1fc',
   },
 
   timeHeading: {
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 12,
     // textAlign: 'center',
   },
 });

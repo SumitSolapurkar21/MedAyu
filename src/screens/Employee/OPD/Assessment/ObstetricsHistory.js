@@ -14,7 +14,7 @@ import {BackHandler} from 'react-native';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
-import OpdpageNavigation from './OpdpageNavigation';
+import {OpdpageNavigation} from './OpdpageNavigation';
 
 const ObstetricsHistory = () => {
   const {patientsData, scannedPatientsData, waitingListData, userData} =
