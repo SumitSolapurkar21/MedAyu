@@ -13,7 +13,6 @@ import {OpdAyurvedicNavigation} from './OpdpageNavigation';
 import {Appbar, Checkbox, Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {Table, Row, Rows} from 'react-native-table-component';
 import axios from 'axios';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
@@ -549,7 +548,7 @@ const AshtvidhPariksha = () => {
               {!collapsedSections.mala ? icon_up : icon_down}
             </Text>
           </TouchableOpacity>
-          {!collapsedSections.nadi && (
+          {!collapsedSections.mala && (
             <>
               <Text style={styles.label}>Vega</Text>
               <View style={styles.body}>
@@ -848,7 +847,7 @@ const AshtvidhPariksha = () => {
               {!collapsedSections.jivha ? icon_up : icon_down}
             </Text>
           </TouchableOpacity>
-          {!collapsedSections.nadi && (
+          {!collapsedSections.jivha && (
             <>
               <Text style={styles.label}>Varna</Text>
               <View style={styles.body}>
@@ -1099,7 +1098,7 @@ const AshtvidhPariksha = () => {
             </Text>
           </TouchableOpacity>
 
-          {!collapsedSections.nadi && (
+          {!collapsedSections.netra && (
             <>
               <Text style={styles.label}>Prakashsangya</Text>
               <View style={styles.body}></View>
@@ -1449,7 +1448,12 @@ const AshtvidhPariksha = () => {
       </ScrollView>
       <View style={styles.divbutton}>
         <Button title="Submit" color="#841584" style={styles.button} />
-        <Button title="Skip / Next" color="#841584" style={styles.button} />
+        <Button
+          title="Skip / Next"
+          color="#841584"
+          style={styles.button}
+          onPress={() => navigation.navigate('DashavidhPariksha')}
+        />
       </View>
     </>
   );
@@ -1462,14 +1466,19 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
-  containerDiv: {borderColor: 'black', borderWidth: 1, marginBottom: 10},
+  containerDiv: {
+    borderColor: '#c4c4c4',
+    borderWidth: 1,
+    marginBottom: 10,
+    borderRadius: 8,
+  },
   title: {
     backgroundColor: '#80aaff',
     padding: 8,
-    borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderRadius: 8,
   },
   text: {textAlign: 'left', color: '#ffffff', fontSize: 18},
   checkboxDiv: {
