@@ -51,7 +51,7 @@ const OpdHomePage2 = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.selectDiv}
-            onPress={() => navigation.navigate('AshtvidhPariksha')}>
+            onPress={() => navigation.navigate('Prakruti')}>
             <Image source={billHistory} alt="billHistory" style={styles.img} />
             <Text style={styles.uName}>Ayurvedic Assessment</Text>
           </TouchableOpacity>

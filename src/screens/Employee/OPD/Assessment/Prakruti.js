@@ -7,6 +7,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {OpdAyurvedicNavigation} from './OpdpageNavigation';
@@ -19,10 +20,10 @@ import UserContext from '../../../../components/Context/Context';
 
 const Prakruti = () => {
   //
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const {scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const {appoint_id} = scannedPatientsData;
+
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -34,7 +35,7 @@ const Prakruti = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      navigation.replace('OpdHomePage2');
       return true;
     };
 
@@ -47,25 +48,26 @@ const Prakruti = () => {
   }, []);
 
   const [checkedValues, setCheckedValues] = useState({
-    body_weight_and_frame: '',
-    skin: '',
-    fingernails: '',
-    hair: '',
-    forehead: '',
-    eyes: '',
-    lips: '',
-    thirst: '',
-    excretions: '',
-    voice_and_speech: '',
-    working_style: '',
-    mental_makeup: '',
-    temperament: '',
-    relationships: '',
-    weather_preferences: '',
-    money_matters: '',
-    memory: '',
-    sleep: '',
-    vatta_pitta_kapha: '',
+    body_weight_and_frame: [],
+    skin: [],
+    fingernails: [],
+    hair: [],
+    forehead: [],
+    eyes: [],
+    lips: [],
+    thirst: [],
+    excretions: [],
+    voice_and_speech: [],
+    working_style: [],
+    mental_makeup: [],
+    temperament: [],
+    relationships: [],
+    weather_preferences: [],
+    money_matters: [],
+    memory: [],
+    sleep: [],
+    vatta_pitta_kapha: [],
+    dreams: [],
   });
 
   const [collapsedSections, setCollapsedSections] = useState({
@@ -87,7 +89,8 @@ const Prakruti = () => {
     money_matters: true,
     memory: true,
     sleep: true,
-    vatta_pitta_kapha: true,
+
+    dreams: true,
   });
 
   //
@@ -126,17 +129,65 @@ const Prakruti = () => {
       style={styles.searchIcon}
     />
   );
-
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: userData?.hospital_id,
+      patient_id: waitingListData?.newpatient_id,
+      mobilenumber: waitingListData?.mobilenumber,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
+      uhid: waitingListData?.uhid,
+      api_type: 'Prakruti',
+      opdprakrutihistoryarray: [checkedValues],
+    };
+    console.log('_body', _body);
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            Alert.alert('Success', `${message}`);
+            setCheckedValues({
+              body_weight_and_frame: [],
+              skin: [],
+              fingernails: [],
+              hair: [],
+              forehead: [],
+              eyes: [],
+              lips: [],
+              thirst: [],
+              excretions: [],
+              voice_and_speech: [],
+              working_style: [],
+              mental_makeup: [],
+              temperament: [],
+              relationships: [],
+              weather_preferences: [],
+              money_matters: [],
+              memory: [],
+              sleep: [],
+              vatta_pitta_kapha: [],
+              dreams: [],
+            });
+          } else {
+            Alert.alert('Error', `${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.goBack();
+            navigation.replace('OpdHomePage2');
             return true;
           }}
         />
-        <Appbar.Content title="Srotas Pariksha" titleStyle={{fontSize: 20}} />
+        <Appbar.Content title="Prakruti" titleStyle={{fontSize: 20}} />
         <Appbar.Action
           icon="account-details"
           size={30}
@@ -175,7 +226,7 @@ const Prakruti = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('body_weight_and_frame ', 'lean')
+                      handleCheckboxToggle('body_weight_and_frame', 'lean')
                     }
                   />
                   <Text>Lean</Text>
@@ -192,7 +243,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         'light weight',
                       )
                     }
@@ -212,7 +263,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         ' can not gain weight easily but can shed it rapidly',
                       )
                     }
@@ -234,7 +285,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         'VATA PRAKRUTI',
                       )
                     }
@@ -257,7 +308,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         ' well proportioned frame',
                       )
                     }
@@ -276,7 +327,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         'average weight',
                       )
                     }
@@ -296,7 +347,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         ' can gain as well as shed weight easily',
                       )
                     }
@@ -315,7 +366,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         'PITTA PRAKRUTI',
                       )
                     }
@@ -338,7 +389,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         'board and robust frame',
                       )
                     }
@@ -357,7 +408,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         'heavy bodied',
                       )
                     }
@@ -377,7 +428,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         'can gain weight easily but can not shed it as fast',
                       )
                     }
@@ -398,7 +449,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'body_weight_and_frame ',
+                        'body_weight_and_frame',
                         'KAPHA PRAKRUTI',
                       )
                     }
@@ -415,7 +466,7 @@ const Prakruti = () => {
           <TouchableOpacity
             style={styles.title}
             onPress={() => toggleSection('skin')}>
-            <Text style={styles.text}>skin</Text>
+            <Text style={styles.text}>Skin</Text>
             <Text style={styles.text}>
               {!collapsedSections.skin ? icon_up : icon_down}
             </Text>
@@ -536,7 +587,7 @@ const Prakruti = () => {
           <TouchableOpacity
             style={styles.title}
             onPress={() => toggleSection('fingernails')}>
-            <Text style={styles.text}>fingernails</Text>
+            <Text style={styles.text}>Fingernails</Text>
             <Text style={styles.text}>
               {!collapsedSections.fingernails ? icon_up : icon_down}
             </Text>
@@ -685,7 +736,7 @@ const Prakruti = () => {
           <TouchableOpacity
             style={styles.title}
             onPress={() => toggleSection('hair')}>
-            <Text style={styles.text}>hair</Text>
+            <Text style={styles.text}>Hair</Text>
             <Text style={styles.text}>
               {!collapsedSections.hair ? icon_up : icon_down}
             </Text>
@@ -755,103 +806,6 @@ const Prakruti = () => {
                   />
                   <Text>dark brown to black</Text>
                 </View>
-
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="hrillhas"
-                    status={
-                      checkedValues.hair.includes('hrillhas')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'hrillhas')}
-                  />
-                  <Text>Hrillhas</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="avasada"
-                    status={
-                      checkedValues.hair.includes('avasada')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'avasada')}
-                  />
-                  <Text>Avasada</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="klaibya"
-                    status={
-                      checkedValues.hair.includes('klaibya')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'klaibya')}
-                  />
-                  <Text>Klaibya</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="tandra"
-                    status={
-                      checkedValues.hair.includes('tandra')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'tandra')}
-                  />
-                  <Text>Tandra</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="angamarda"
-                    status={
-                      checkedValues.hair.includes('angamarda')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'angamarda')}
-                  />
-                  <Text>Angamarda</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="agnimandya"
-                    status={
-                      checkedValues.hair.includes('agnimandya')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'agnimandya')}
-                  />
-                  <Text>Agnimandya</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="valaya"
-                    status={
-                      checkedValues.hair.includes('valaya')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'valaya')}
-                  />
-                  <Text>Valaya</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="palitya"
-                    status={
-                      checkedValues.hair.includes('palitya')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'palitya')}
-                  />
-                  <Text>Palitya</Text>
-                </View>
               </View>
               <Divider />
               <Text style={styles.label}>Pitta (fire and water)</Text>
@@ -917,103 +871,6 @@ const Prakruti = () => {
                   />
                   <Text>dark brown to black</Text>
                 </View>
-
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="hrillhas"
-                    status={
-                      checkedValues.hair.includes('hrillhas')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'hrillhas')}
-                  />
-                  <Text>Hrillhas</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="avasada"
-                    status={
-                      checkedValues.hair.includes('avasada')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'avasada')}
-                  />
-                  <Text>Avasada</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="klaibya"
-                    status={
-                      checkedValues.hair.includes('klaibya')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'klaibya')}
-                  />
-                  <Text>Klaibya</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="tandra"
-                    status={
-                      checkedValues.hair.includes('tandra')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'tandra')}
-                  />
-                  <Text>Tandra</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="angamarda"
-                    status={
-                      checkedValues.hair.includes('angamarda')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'angamarda')}
-                  />
-                  <Text>Angamarda</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="agnimandya"
-                    status={
-                      checkedValues.hair.includes('agnimandya')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'agnimandya')}
-                  />
-                  <Text>Agnimandya</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="valaya"
-                    status={
-                      checkedValues.hair.includes('valaya')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'valaya')}
-                  />
-                  <Text>Valaya</Text>
-                </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="palitya"
-                    status={
-                      checkedValues.hair.includes('palitya')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('hair', 'palitya')}
-                  />
-                  <Text>Palitya</Text>
-                </View>
               </View>
               <Divider />
               <Text style={styles.label}>Kapha (water and earth)</Text>
@@ -1068,7 +925,7 @@ const Prakruti = () => {
           <TouchableOpacity
             style={styles.title}
             onPress={() => toggleSection('forehead')}>
-            <Text style={styles.text}>forehead</Text>
+            <Text style={styles.text}>Forehead</Text>
             <Text style={styles.text}>
               {!collapsedSections.forehead ? icon_up : icon_down}
             </Text>
@@ -1132,7 +989,7 @@ const Prakruti = () => {
           <TouchableOpacity
             style={styles.title}
             onPress={() => toggleSection('eyes')}>
-            <Text style={styles.text}>eyes</Text>
+            <Text style={styles.text}>Eyes</Text>
             <Text style={styles.text}>
               {!collapsedSections.eyes ? icon_up : icon_down}
             </Text>
@@ -1335,7 +1192,7 @@ const Prakruti = () => {
           <TouchableOpacity
             style={styles.title}
             onPress={() => toggleSection('lips')}>
-            <Text style={styles.text}>lips</Text>
+            <Text style={styles.text}>Lips</Text>
             <Text style={styles.text}>
               {!collapsedSections.lips ? icon_up : icon_down}
             </Text>
@@ -2270,7 +2127,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'relationships ',
+                        'relationships',
                         'forgive and forget easily',
                       )
                     }
@@ -2289,7 +2146,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'relationships ',
+                        'relationships',
                         'frequently in and out of love',
                       )
                     }
@@ -2312,7 +2169,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'relationships ',
+                        'relationships',
                         'hold grudges for long',
                       )
                     }
@@ -2331,7 +2188,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'relationships ',
+                        'relationships',
                         'enter into intense relationship',
                       )
                     }
@@ -2354,7 +2211,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'relationships ',
+                        'relationships',
                         'forgive,but never forget',
                       )
                     }
@@ -2373,7 +2230,7 @@ const Prakruti = () => {
                     }
                     onPress={() =>
                       handleCheckboxToggle(
-                        'relationships ',
+                        'relationships',
                         'deeply attached in love and grounded in family tip',
                       )
                     }
@@ -2647,7 +2504,7 @@ const Prakruti = () => {
           <TouchableOpacity
             style={styles.title}
             onPress={() => toggleSection('dreams')}>
-            <Text style={styles.text}>dreams</Text>
+            <Text style={styles.text}>Dreams</Text>
             <Text style={styles.text}>
               {!collapsedSections.dreams ? icon_up : icon_down}
             </Text>
@@ -2843,12 +2700,17 @@ const Prakruti = () => {
       </ScrollView>
       <View style={styles.divbutton}>
         <Button
-          title="Previous"
+          title="Submit"
           color="#841584"
           style={styles.button}
-          onPress={() => navigation.navigate('SrotasPariksha')}
+          onPress={() => submitTreatmenthandler()}
         />
-        <Button title="Submit" color="#841584" style={styles.button} />
+        <Button
+          title="Next / Skip"
+          color="#841584"
+          style={styles.button}
+          onPress={() => navigation.navigate('AshtvidhPariksha')}
+        />
       </View>
     </>
   );

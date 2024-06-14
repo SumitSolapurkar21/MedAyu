@@ -7,10 +7,11 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {OpdAyurvedicNavigation} from './OpdpageNavigation';
-import {Appbar, Checkbox, Divider} from 'react-native-paper';
+import {Appbar, Checkbox} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
@@ -19,10 +20,10 @@ import UserContext from '../../../../components/Context/Context';
 
 const Samprapti = () => {
   //
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const {scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const {appoint_id} = scannedPatientsData;
+
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -99,6 +100,53 @@ const Samprapti = () => {
       style={styles.searchIcon}
     />
   );
+
+  // reset handler ...
+  const _resetHandler = () => {
+    setCheckedValues({
+      dosha: '',
+      dusya: '',
+      srotas: '',
+      mala: '',
+      adhistana: '',
+      srotodusthi: '',
+      sadhyasadhyatwa: '',
+    });
+  };
+  // submit handler .....
+
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: userData?.hospital_id,
+      patient_id: waitingListData?.newpatient_id,
+      mobilenumber: waitingListData?.mobilenumber,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
+      uhid: waitingListData?.uhid,
+      api_type: 'Samprapti',
+      opdsampraptihistoryarray: [checkedValues],
+    };
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            _resetHandler();
+            Alert.alert('Success', `${message}`, [
+              {
+                text: 'OK',
+                onPress: () => navigation.replace('Listofpatients'),
+              },
+            ]);
+          } else {
+            Alert.alert('Error', `${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <Appbar.Header>
@@ -815,14 +863,13 @@ const Samprapti = () => {
           title="Previous"
           color="#841584"
           style={styles.button}
-          onPress={() => navigation.navigate('DashavidhPariksha')}
+          onPress={() => navigation.navigate('SrotasPariksha')}
         />
-        <Button title="Submit" color="#841584" style={styles.button} />
         <Button
-          title="Skip / Next"
+          title="Submit"
           color="#841584"
           style={styles.button}
-          onPress={() => navigation.navigate('SrotasPariksha')}
+          onPress={() => submitTreatmenthandler()}
         />
       </View>
     </>

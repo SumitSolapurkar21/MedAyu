@@ -7,6 +7,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {OpdAyurvedicNavigation} from './OpdpageNavigation';
@@ -19,10 +20,10 @@ import UserContext from '../../../../components/Context/Context';
 
 const AshtvidhPariksha = () => {
   //
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const {scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const {appoint_id} = scannedPatientsData;
+
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -36,7 +37,7 @@ const AshtvidhPariksha = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      navigation.replace('Prakruti');
       return true;
     };
 
@@ -49,7 +50,6 @@ const AshtvidhPariksha = () => {
   }, []);
 
   //
-
   const [checkedValues, setCheckedValues] = useState({
     nadi_vega: '',
     character: '',
@@ -92,6 +92,7 @@ const AshtvidhPariksha = () => {
       [section]: !prevState[section],
     }));
   };
+
   const handleCheckboxToggle = (key, value) => {
     setCheckedValues(prevState => {
       const newValue = prevState[key].includes(value)
@@ -119,13 +120,69 @@ const AshtvidhPariksha = () => {
       style={styles.searchIcon}
     />
   );
-  //
+
+  // reset handler ...
+  const _resetHandler = () => {
+    setCheckedValues({
+      nadi_vega: '',
+      character: '',
+      bala: '',
+      gati: '',
+      mutra_vega: '',
+      varna: '',
+      sparsha: '',
+      matra: '',
+      gandha: '',
+      mala_vega: '',
+      samhanan: '',
+      mala_varna: '',
+      jivha_varna: '',
+      jivha_sparsh: '',
+      jivha_mukhaswada: '',
+      prakashsangya: '',
+      netra_drishtimandala: '',
+      netra_mukhaswada: '',
+      shabda: '',
+      drishtimandala: '',
+      mukhaswada: '',
+    });
+  };
+  // submit handler .....
+
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: userData?.hospital_id,
+      patient_id: waitingListData?.newpatient_id,
+      mobilenumber: waitingListData?.mobilenumber,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
+      uhid: waitingListData?.uhid,
+      api_type: 'AshtvidhPariksha',
+      opdashtvidhparikshahistoryarray: [checkedValues],
+    };
+    console.log(_body);
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            _resetHandler();
+            Alert.alert('Success', `${message}`);
+          } else {
+            console.error(`${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.goBack();
+            navigation.replace('Prakruti');
             return true;
           }}
         />
@@ -1031,7 +1088,9 @@ const AshtvidhPariksha = () => {
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('jivha_sparsh', 'katu')}
+                    onPress={() =>
+                      handleCheckboxToggle('jivha_mukhaswada', 'katu')
+                    }
                   />
                   <Text>Katu</Text>
                 </View>
@@ -1447,7 +1506,18 @@ const AshtvidhPariksha = () => {
         </View>
       </ScrollView>
       <View style={styles.divbutton}>
-        <Button title="Submit" color="#841584" style={styles.button} />
+        <Button
+          title="Previous"
+          color="#841584"
+          style={styles.button}
+          onPress={() => navigation.navigate('Prakruti')}
+        />
+        <Button
+          title="Submit"
+          color="#841584"
+          style={styles.button}
+          onPress={() => submitTreatmenthandler()}
+        />
         <Button
           title="Skip / Next"
           color="#841584"

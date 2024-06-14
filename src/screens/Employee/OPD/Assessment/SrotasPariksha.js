@@ -7,6 +7,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {OpdAyurvedicNavigation} from './OpdpageNavigation';
@@ -19,10 +20,11 @@ import UserContext from '../../../../components/Context/Context';
 
 const SrotasPariksha = () => {
   //
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const {scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const {appoint_id} = scannedPatientsData;
+
+  console.log(waitingListData);
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -113,6 +115,52 @@ const SrotasPariksha = () => {
       style={styles.searchIcon}
     />
   );
+  const _resetHandler = () => {
+    setCheckedValues({
+      pranavahasrotas: '',
+      udakvahasrotas: '',
+      annavahasrotas: '',
+      rasavahasrotas: '',
+      raktavahasrotas: '',
+      mansavahasrotas: '',
+      medovahasrotas: '',
+      asthivahasrotas: '',
+      majjavahasrotas: '',
+      shukravahasrotas: '',
+      artavavahasrotas: '',
+      mutravahasrotas: '',
+      purishvahasrotas: '',
+      swedavahasrotas: '',
+    });
+  };
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: userData?.hospital_id,
+      patient_id: waitingListData?.newpatient_id,
+      mobilenumber: waitingListData?.mobilenumber,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
+      uhid: waitingListData?.uhid,
+      api_type: 'SrotasPariksha',
+      opdsrotasparikshahistoryarray: [checkedValues],
+    };
+
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            _resetHandler();
+            Alert.alert('Success', `${message}`);
+          } else {
+            Alert.alert('Error', `${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <Appbar.Header>
@@ -160,7 +208,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('pranavahasrotas ', 'alpaswasa')
+                      handleCheckboxToggle('pranavahasrotas', 'alpaswasa')
                     }
                   />
                   <Text>Alpaswasa</Text>
@@ -174,7 +222,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('pranavahasrotas ', 'kupitswasa')
+                      handleCheckboxToggle('pranavahasrotas', 'kupitswasa')
                     }
                   />
                   <Text>Kupitswasa</Text>
@@ -189,7 +237,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('pranavahasrotas ', 'atisaranaswasa')
+                      handleCheckboxToggle('pranavahasrotas', 'atisaranaswasa')
                     }
                   />
                   <Text>Atisaranaswasa</Text>
@@ -203,7 +251,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('pranavahasrotas ', 'sashulswasa')
+                      handleCheckboxToggle('pranavahasrotas', 'sashulswasa')
                     }
                   />
                   <Text>Sashulswasa</Text>
@@ -217,7 +265,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('pranavahasrotas ', 'abhikshnaswasa')
+                      handleCheckboxToggle('pranavahasrotas', 'abhikshnaswasa')
                     }
                   />
                   <Text>Abhikshnaswasa</Text>
@@ -249,7 +297,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('udakvahasrotas ', 'jivhashosha')
+                      handleCheckboxToggle('udakvahasrotas', 'jivhashosha')
                     }
                   />
                   <Text>Jivhashosha</Text>
@@ -263,7 +311,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('udakvahasrotas ', 'kanthashosha')
+                      handleCheckboxToggle('udakvahasrotas', 'kanthashosha')
                     }
                   />
                   <Text>Kanthashosha</Text>
@@ -277,7 +325,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('udakvahasrotas ', 'aushtashosha')
+                      handleCheckboxToggle('udakvahasrotas', 'aushtashosha')
                     }
                   />
                   <Text>Aushtashosha</Text>
@@ -291,7 +339,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('udakvahasrotas ', 'trishna')
+                      handleCheckboxToggle('udakvahasrotas', 'trishna')
                     }
                   />
                   <Text>Trishna</Text>
@@ -305,7 +353,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('udakvahasrotas ', 'talushosha')
+                      handleCheckboxToggle('udakvahasrotas', 'talushosha')
                     }
                   />
                   <Text>Talushosha</Text>
@@ -1428,7 +1476,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('swedavahasrotas ', 'Asweda')
+                      handleCheckboxToggle('swedavahasrotas', 'Asweda')
                     }
                   />
                   <Text>Asweda</Text>
@@ -1442,7 +1490,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('swedavahasrotas ', 'Lomaharsha')
+                      handleCheckboxToggle('swedavahasrotas', 'Lomaharsha')
                     }
                   />
                   <Text>Lomaharsha</Text>
@@ -1456,7 +1504,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('swedavahasrotas ', 'Atisweda')
+                      handleCheckboxToggle('swedavahasrotas', 'Atisweda')
                     }
                   />
                   <Text>Atisweda</Text>
@@ -1470,7 +1518,7 @@ const SrotasPariksha = () => {
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('swedavahasrotas ', 'Angaparidaha')
+                      handleCheckboxToggle('swedavahasrotas', 'Angaparidaha')
                     }
                   />
                   <Text>Angaparidaha</Text>
@@ -1485,14 +1533,19 @@ const SrotasPariksha = () => {
           title="Previous"
           color="#841584"
           style={styles.button}
-          onPress={() => navigation.navigate('Samprapti')}
+          onPress={() => navigation.navigate('DashavidhPariksha')}
         />
-        <Button title="Submit" color="#841584" style={styles.button} />
+        <Button
+          title="Submit"
+          color="#841584"
+          style={styles.button}
+          onPress={() => submitTreatmenthandler()}
+        />
         <Button
           title="Skip / Next"
           color="#841584"
           style={styles.button}
-          onPress={() => navigation.navigate('Prakruti')}
+          onPress={() => navigation.navigate('Samprapti')}
         />
       </View>
     </>

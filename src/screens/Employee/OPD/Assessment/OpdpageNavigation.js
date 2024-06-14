@@ -232,9 +232,18 @@ export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
           contentStyle={{width: 120}}
           dense
           onPress={() => {
+            navigation.replace('Prakruti'), closeMenu();
+          }}
+          title="Prakruti"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
             navigation.replace('AshtvidhPariksha'), closeMenu();
           }}
-          title="Ashtvidh Pariksha"
+          title="Ashtvidh"
         />
         <Divider />
         <Menu.Item
@@ -243,7 +252,16 @@ export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
           onPress={() => {
             navigation.replace('DashavidhPariksha'), closeMenu();
           }}
-          title="Dashavidh Pariksha"
+          title="Dashavidh"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('SrotasPariksha'), closeMenu();
+          }}
+          title="Srotas"
         />
         <Divider />
         <Menu.Item
@@ -253,24 +271,6 @@ export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
             navigation.replace('Samprapti'), closeMenu();
           }}
           title="Samprapti"
-        />
-        <Divider />
-        <Menu.Item
-          contentStyle={{width: 120}}
-          dense
-          onPress={() => {
-            navigation.replace('SrotasPariksha'), closeMenu();
-          }}
-          title="Srotas Pariksha"
-        />
-        <Divider />
-        <Menu.Item
-          contentStyle={{width: 120}}
-          dense
-          onPress={() => {
-            navigation.replace('Prakruti'), closeMenu();
-          }}
-          title="Prakruti"
         />
       </Menu>
     </View>

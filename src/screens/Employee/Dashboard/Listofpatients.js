@@ -443,7 +443,7 @@ export const Listofpatients = () => {
       reception_id: userData._id,
       role: userData.role,
     };
-    // MobileChangeWaitingToConsult(data);
+    MobileChangeWaitingToConsult(data);
 
     setWaitingListData(data);
     navigation.navigate('OpdHomePage2');
@@ -596,7 +596,7 @@ export const Listofpatients = () => {
                               </TouchableOpacity>
                             ) : null}
                             <TouchableOpacity
-                              onPress={() =>
+                              onPress={() => {
                                 navigationPage(
                                   item.appointment_id,
                                   item.appoint_id,
@@ -606,8 +606,8 @@ export const Listofpatients = () => {
                                   item.mobilenumber,
                                   'NewAssessment',
                                   item.patientuniqueno,
-                                )
-                              }
+                                );
+                              }}
                               style={{
                                 alignSelf: 'center',
                                 borderColor: 'green',

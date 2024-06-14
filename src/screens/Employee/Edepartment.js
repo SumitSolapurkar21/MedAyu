@@ -61,7 +61,6 @@ const Edepartment = () => {
     };
     if (reception_id !== '') departmentData();
   }, [reception_id]);
-
   return (
     <>
       <Appbar.Header
@@ -115,21 +114,19 @@ const Edepartment = () => {
           </View>
           <View style={styles.selection}>
             <View style={styles.contentItem}>
-              {departmentData?.map(res => (
-                <>
-                  <TouchableOpacity
-                    key={res.depart_id}
-                    style={styles.selectDiv}
-                    onPress={() =>
-                      navigation.navigate('Edoctors', {
-                        department_id: res.depart_id,
-                        patient_id: patient_id,
-                      })
-                    }>
-                    <Image source={ayu} alt="DoctorImg" style={styles.img} />
-                    <Text style={styles.uName}>{res.deptname}</Text>
-                  </TouchableOpacity>
-                </>
+              {departmentData?.map((res, index) => (
+                <TouchableOpacity
+                  key={index + 1}
+                  style={styles.selectDiv}
+                  onPress={() =>
+                    navigation.navigate('Edoctors', {
+                      department_id: res.depart_id,
+                      patient_id: patient_id,
+                    })
+                  }>
+                  <Image source={ayu} alt="DoctorImg" style={styles.img} />
+                  <Text style={styles.uName}>{res.deptname}</Text>
+                </TouchableOpacity>
               ))}
             </View>
           </View>

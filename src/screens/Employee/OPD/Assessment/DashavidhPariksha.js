@@ -7,6 +7,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {OpdAyurvedicNavigation} from './OpdpageNavigation';
@@ -19,10 +20,10 @@ import UserContext from '../../../../components/Context/Context';
 
 const DashavidhPariksha = () => {
   //
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  //
+  const {scannedPatientsData, waitingListData, userData} =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const {appoint_id} = scannedPatientsData;
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -109,12 +110,61 @@ const DashavidhPariksha = () => {
       style={styles.searchIcon}
     />
   );
+
+  // reset handler ...
+  const _resetHandler = () => {
+    setCheckedValues({
+      prakriti: '',
+      satmyata: '',
+      sarha: '',
+      vayas: '',
+      desham: '',
+      kalatha: '',
+      satwa: '',
+      sahanan: '',
+      pramanata: '',
+      shareerbalam: '',
+      manasaprakrit: '',
+      satmyata_abhyavaharan: '',
+      satmyata_jarana: '',
+    });
+  };
+  // submit handler .....
+
+  const submitTreatmenthandler = async () => {
+    const _body = {
+      hospital_id: userData?.hospital_id,
+      patient_id: waitingListData?.newpatient_id,
+      mobilenumber: waitingListData?.mobilenumber,
+      reception_id: userData?._id,
+      appoint_id: appoint_id || waitingListData?.appoint_id,
+      uhid: waitingListData?.uhid,
+      api_type: 'DashavidhPariksha',
+      opddashavidhparikshahistoryarray: [checkedValues],
+    };
+    console.log(_body);
+    try {
+      await axios
+        .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
+        .then(res => {
+          const {status, message} = res.data;
+          if (status === true) {
+            _resetHandler();
+            Alert.alert('Success', `${message}`);
+          } else {
+            Alert.alert('Error', `${message}`);
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.goBack();
+            navigation.replace('AshtvidhPariksha');
             return true;
           }}
         />
@@ -321,20 +371,7 @@ const DashavidhPariksha = () => {
                   />
                   <Text>Manda</Text>
                 </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="visham"
-                    status={
-                      checkedValues.satmyata_jarana.includes('visham')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() =>
-                      handleCheckboxToggle('satmyata_jarana', 'visham')
-                    }
-                  />
-                  <Text>Visham</Text>
-                </View>
+
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="visham"
@@ -1003,12 +1040,17 @@ const DashavidhPariksha = () => {
           style={styles.button}
           onPress={() => navigation.navigate('AshtvidhPariksha')}
         />
-        <Button title="Submit" color="#841584" style={styles.button} />
+        <Button
+          title="Submit"
+          color="#841584"
+          style={styles.button}
+          onPress={() => submitTreatmenthandler()}
+        />
         <Button
           title="Skip / Next"
           color="#841584"
           style={styles.button}
-          onPress={() => navigation.navigate('Samprapti')}
+          onPress={() => navigation.navigate('SrotasPariksha')}
         />
       </View>
     </>
