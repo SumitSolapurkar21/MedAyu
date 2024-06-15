@@ -101,7 +101,10 @@ const OpdComplaints = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      if (userData?.role === 'Doctor') navigation.navigate('OpdHomePage2');
+      else if (userData?.role === 'Receptionist')
+        navigation.navigate('OpdHomePage');
+      else navigation.navigate('OpdHomePage');
       return true;
     };
 

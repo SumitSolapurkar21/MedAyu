@@ -95,13 +95,22 @@ const AshtvidhPariksha = () => {
 
   const handleCheckboxToggle = (key, value) => {
     setCheckedValues(prevState => {
-      const newValue = prevState[key].includes(value)
-        ? prevState[key].filter(item => item !== value) // Remove value if already selected
-        : [...prevState[key], value]; // Add value if not selected
-      return {
-        ...prevState,
-        [key]: newValue,
-      };
+      if (typeof prevState[key] === 'string') {
+        // For text input updates
+        return {
+          ...prevState,
+          [key]: value,
+        };
+      } else {
+        // For checkbox toggling
+        const newValue = prevState[key].includes(value)
+          ? prevState[key].filter(item => item !== value) // Remove value if already selected
+          : [...prevState[key], value]; // Add value if not selected
+        return {
+          ...prevState,
+          [key]: newValue,
+        };
+      }
     });
   };
   const icon_up = (
@@ -160,7 +169,6 @@ const AshtvidhPariksha = () => {
       api_type: 'AshtvidhPariksha',
       opdashtvidhparikshahistoryarray: [checkedValues],
     };
-    console.log(_body);
     try {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)

@@ -102,13 +102,22 @@ const Prakruti = () => {
   };
   const handleCheckboxToggle = (key, value) => {
     setCheckedValues(prevState => {
-      const newValue = prevState[key].includes(value)
-        ? prevState[key].filter(item => item !== value) // Remove value if already selected
-        : [...prevState[key], value]; // Add value if not selected
-      return {
-        ...prevState,
-        [key]: newValue,
-      };
+      if (typeof prevState[key] === 'string') {
+        // For text input updates
+        return {
+          ...prevState,
+          [key]: value,
+        };
+      } else {
+        // For checkbox toggling
+        const newValue = prevState[key].includes(value)
+          ? prevState[key].filter(item => item !== value) // Remove value if already selected
+          : [...prevState[key], value]; // Add value if not selected
+        return {
+          ...prevState,
+          [key]: newValue,
+        };
+      }
     });
   };
 
@@ -149,26 +158,26 @@ const Prakruti = () => {
           if (status === true) {
             Alert.alert('Success', `${message}`);
             setCheckedValues({
-              body_weight_and_frame: [],
-              skin: [],
-              fingernails: [],
-              hair: [],
-              forehead: [],
-              eyes: [],
-              lips: [],
-              thirst: [],
-              excretions: [],
-              voice_and_speech: [],
-              working_style: [],
-              mental_makeup: [],
-              temperament: [],
-              relationships: [],
-              weather_preferences: [],
-              money_matters: [],
-              memory: [],
-              sleep: [],
-              vatta_pitta_kapha: [],
-              dreams: [],
+              body_weight_and_frame: '',
+              skin: '',
+              fingernails: '',
+              hair: '',
+              forehead: '',
+              eyes: '',
+              lips: '',
+              thirst: '',
+              excretions: '',
+              voice_and_speech: '',
+              working_style: '',
+              mental_makeup: '',
+              temperament: '',
+              relationships: '',
+              weather_preferences: '',
+              money_matters: '',
+              memory: '',
+              sleep: '',
+              vatta_pitta_kapha: '',
+              dreams: '',
             });
           } else {
             Alert.alert('Error', `${message}`);
@@ -2697,6 +2706,21 @@ const Prakruti = () => {
             </>
           )}
         </View>
+
+        <View style={styles.containerDiv}>
+          <Text style={styles.label}>Vatta Pitta Kapha</Text>
+          <View style={styles.body}>
+            <View style={styles.inputDiv}>
+              <TextInput
+                style={styles.input}
+                onChangeText={text =>
+                  handleCheckboxToggle('vatta_pitta_kapha', text)
+                }
+                value={checkedValues.vatta_pitta_kapha}
+              />
+            </View>
+          </View>
+        </View>
       </ScrollView>
       <View style={styles.divbutton}>
         <Button
@@ -2763,6 +2787,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     width: 200,
+    marginBottom: 10,
   },
   inputDiv: {
     marginHorizontal: 12,

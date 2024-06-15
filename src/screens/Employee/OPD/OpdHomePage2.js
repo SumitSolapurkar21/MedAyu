@@ -17,7 +17,7 @@ const OpdHomePage2 = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.replace('EpatientDetails');
+      navigation.replace('Listofpatients');
       return true;
     };
 
