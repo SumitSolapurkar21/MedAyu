@@ -44,25 +44,17 @@ export const GeneratePdf = async data => {
                   </div>
 
                   <div class="main-part12">
-                       <table style="border-collapse: collapse;">
-                            <thead>
-                                 <th>SYMPTOMS</th>
-                                 <th>DURATION</th>
-                                 <th>TIME</th>
-                                 <th>FREQUENCY</th>
-                            </thead>
-                            <tbody>
-                               ${data?.opdcomplaintArray?.map((res, i) => {
-                                 return `
-                                        <tr key=${i}>
-                                        <td>${res.symptoms}</td>
-                                        <td>${res.duration}</td>
-                                        <td>${res.frequency}</td>
-                                        <td>${res.time}</td>
-                                        </tr>`;
-                               })}
-                            </tbody>
-                       </table>
+                     
+                    ${data?.opdcomplaintArray?.map((res, i) => {
+                      return `
+                         <div key=${i} class="divdata" style="margin-left:20px">
+                         <p>${i + 1}. ${res.symptoms} since ${res.duration} ${
+                        res.time
+                      }, ${res.frequency}</p>
+                         
+                         </div>`;
+                    })}
+                           
                   </div>`;
 
     const pastHistoryData = `
@@ -75,31 +67,26 @@ export const GeneratePdf = async data => {
                                 </div>
               
                                 <div class="main-part12">
-                                     <table style="border-collapse: collapse;">
-                                          <thead>
-                                               <th>ILLNESS</th>
-                                               <th>DAYS</th>
-                                               <th>MONTH</th>
-                                               <th>YEAR</th>
-                                               <th>STATUS</th>
-                                               <th>DATE</th>
-                                          </thead>
-                                          <tbody>
+                                     
                                              ${data?.opdpasthistoryarray?.map(
                                                (res, i) => {
                                                  return `
-                                                      <tr key=${i}>
-                                                      <td>${res.illnessname}</td>
-                                                      <td>${res.days}</td>
-                                                      <td>${res.months}</td>
-                                                      <td>${res.years}</td>
-                                                      <td>${res.treatment_status}</td>
-                                                      <td>${res.dateValues}</td>
-                                                      </tr>`;
+                                                      <div key=${i} class="divdata" style="margin-left:20px">
+                                                       <p>${i + 1}. 
+                                                       ${
+                                                         res.illnessname
+                                                       } since ${
+                                                   res.days
+                                                 } days ${res.months} months ${
+                                                   res.years
+                                                 } years and is ${
+                                                   res.treatment_status
+                                                 } since ${res.dateValues} </p>
+                                                      
+                                                      </div>`;
                                                },
                                              )}
-                                          </tbody>
-                                     </table>
+                                        
                                 </div>`;
 
     const familyHistoryData = `
@@ -112,31 +99,27 @@ export const GeneratePdf = async data => {
                                 </div>
               
                                 <div class="main-part12">
-                                     <table style="border-collapse: collapse;">
-                                          <thead>
-                                               <th>ILLNESS</th>
-                                               <th>DAYS</th>
-                                               <th>MONTH</th>
-                                               <th>YEAR</th>
-                                               <th>RELATION</th>
-                                               <th>FROM DATE</th>
-                                          </thead>
-                                          <tbody>
+                                    
                                              ${data?.opdfamilyhistoryarray?.map(
                                                (res, i) => {
                                                  return `
-                                                      <tr key=${i}>
-                                                      <td>${res.illnessname}</td>
-                                                      <td>${res.days}</td>
-                                                      <td>${res.months}</td>
-                                                      <td>${res.years}</td>
-                                                      <td>${res.treatment_status}</td>
-                                                      <td>${res.dateValues}</td>
-                                                      </tr>`;
+                                                     <div key=${i} class="divdata" style="margin-left:20px">
+                                                       <p>${i + 1}. ${
+                                                   res.illnessname
+                                                 } since ${res.days} days ${
+                                                   res.months
+                                                 } months ${
+                                                   res.years
+                                                 } years and is ${
+                                                   res.treatment_status
+                                                 } 
+                                                       since ${
+                                                         res.dateValues
+                                                       } </p>
+                                                      </div>`;
                                                },
                                              )}
-                                          </tbody>
-                                     </table>
+                                         
                                 </div>`;
 
     const medicineHistoryData = `
@@ -149,39 +132,25 @@ export const GeneratePdf = async data => {
                                               </div>
                             
                                               <div class="main-part12">
-                                                   <table style="border-collapse: collapse;">
-                                                        <thead>
-                                                             <th>DRUG NAME</th>
-                                                             <th>DRUG CODE</th>
-                                                             <th>DOSE</th>
-                                                             <th>ROUTE</th>
-                                                             <th>SCHEDULE</th>
-                                                             <th>DURATION</th>
-                                                             <th>DAYS</th>
-                                                             <th>MONTH</th>
-                                                             <th>YEAR</th>
-                                                             <th>FROM DATE</th>
-                                                        </thead>
-                                                        <tbody>
-                                                           ${data?.opdmedicinehistoryarray?.map(
-                                                             (res, i) => {
-                                                               return `
-                                                                    <tr key=${i}>
-                                                                      <td>${res.drugname}</td>
-                                                                      <td>${res.drugcode}</td>
-                                                                      <td>${res.dose}</td>
-                                                                      <td>${res.route}</td>
-                                                                      <td>${res.schedule}</td>
-                                                                      <td>${res.duration}</td>
-                                                                      <td>${res.days}</td>
-                                                                      <td>${res.months}</td>
-                                                                      <td>${res.years}</td>
-                                                                      <td>${res.dateValues}</td>
-                                                                    </tr>`;
-                                                             },
-                                                           )}
-                                                        </tbody>
-                                                   </table>
+                                                 
+                                                  ${data?.opdmedicinehistoryarray?.map(
+                                                    (res, i) => {
+                                                      return `
+                                                            <div key=${i} class="divdata" style="margin-left:20px">
+                                                                 <p>${i + 1}. ${
+                                                        res.drugname
+                                                      } ${res.dose} since ${
+                                                        res.days
+                                                      } days ${
+                                                        res.months
+                                                      } months ${
+                                                        res.years
+                                                      } years </p>
+                                                            </div>
+                                                            `;
+                                                    },
+                                                  )}
+                                                      
                                               </div>`;
     const personalHistoryData = `
                                 <div class="head-content2">
@@ -193,115 +162,115 @@ export const GeneratePdf = async data => {
                                               </div>
                             
                                               <div class="main-part12">
-                                                   <table style="border-collapse: collapse;">
-                                                        <thead>
-                                                             <th>TEA</th>
-                                                             <th>COFFEE</th>
-                                                             <th>TOBACCO</th>
-                                                             <th>SMOKING</th>
-                                                             <th>ALCOHOL</th>
-                                                             <th>DRUGS</th>
-                                                             <th>EXERCISE</th>
-                                                             <th>SOFT DRINK</th>
-                                                             <th>SALTY FOOD</th>
-                                                        </thead>
-                                                        <tbody>
+                                                
                                                            ${data?.opdpersonalhistoryarray?.map(
                                                              (res, i) => {
                                                                return `
-                                                                    <tr key=${i}>
-                                                                      <td>${res.Tea}</td>
-                                                                      <td>${res.Coffee}</td>
-                                                                      <td>${res.Tobacco}</td>
-                                                                      <td>${res.Smoking}</td>
-                                                                      <td>${res.Alcohol}</td>
-                                                                      <td>${res.Drugs}</td>
-                                                                      <td>${res.Exercise}</td>
-                                                                      <td>${res.SoftDrink}</td>
-                                                                      <td>${res.Saltyfood}</td>
-                                                                      
-                                                                    </tr>`;
+                                                                      <div key=${i} class="divdata" style="margin-left:20px">
+                                                                           <p>${
+                                                                             i +
+                                                                             1
+                                                                           }. H/o of consuming amount of tea (${
+                                                                 res.Tea
+                                                               }) , coffee (${
+                                                                 res.Coffee
+                                                               }) daily ,  H/o of consuming amount of Tobacco (${
+                                                                 res.Tobacco
+                                                               }) , Smoking (${
+                                                                 res.Smoking
+                                                               }),Alcohol (${
+                                                                 res.Alcohol
+                                                               }) , Drugs (${
+                                                                 res.Drugs
+                                                               }),SoftDrink (${
+                                                                 res.SoftDrink
+                                                               }) , Saltyfood (${
+                                                                 res.Saltyfood
+                                                               }), ${
+                                                                 res.Exercise
+                                                               } Exercise daily   </p>
+                                                                      </div>`;
                                                              },
                                                            )}
-                                                        </tbody>
-                                                   </table>
+                                                       
                                               </div>`;
-    const obstetricsHistoryData = `
-                                              <div class="head-content2">
-                                                                 <div class="head-content2-part1">
-                                                                      <h3 style="margin: 0;
-                                                                           padding: 16px 20px;text-align: left;">OBSTETRIC</h3>
-                                                                 </div>
-                                          
-                                                            </div>
-                                          
-                                                            <div class="main-part12">
-                                                                 <table style="border-collapse: collapse;">
-                                                                      <thead>
-                                                                           <th>G  P  L  A  D</th>
-                                                                           <th>PREGNANT</th>
-                                                                           <th>BREAST FEEDING</th>
-                                                                           <th>PLANNING OF CONCEIVE</th>
-                                                                           <th>CONTRACEPTION</th>
-                                                                           <th>PILLS</th>
-                                                                           <th>INJECTION</th>
-                                                                           <th>OTHER</th>
-                                                                      </thead>
-                                                                      <tbody>
-                                                                         ${data?.opdobstetricshistoryarray?.map(
-                                                                           (
-                                                                             res,
-                                                                             i,
-                                                                           ) => {
-                                                                             return `
-                                                                                  <tr key=${i}>
-                                                                                    <td>G${
-                                                                                      res.g
-                                                                                    }P${
-                                                                               res.p
-                                                                             }L${
-                                                                               res.l
-                                                                             }A${
-                                                                               res.a
-                                                                             }D${
-                                                                               res.d
-                                                                             }</td>
-                                                                                    <td>${
-                                                                                      res.pregnant
-                                                                                    }</td>
-                                                                                    <td>${
-                                                                                      res.breastFeeding
-                                                                                    }</td>
-                                                                                    <td>${
-                                                                                      res.conception
-                                                                                    }</td>
-                                                                                    <td>${
-                                                                                      res.contraception
-                                                                                    }</td>
-                                                                                    <td>${
-                                                                                      res.pillsChecked ===
-                                                                                      true
-                                                                                        ? 'yes'
-                                                                                        : 'no'
-                                                                                    }</td>
-                                                                                    <td>${
-                                                                                      res.injuctionChecked ===
-                                                                                      true
-                                                                                        ? 'yes'
-                                                                                        : 'no'
-                                                                                    }</td>
-                                                                                    <td>${
-                                                                                      res.otherChecked ===
-                                                                                      true
-                                                                                        ? 'yes'
-                                                                                        : 'no'
-                                                                                    }</td>
-                                                                                  </tr>`;
-                                                                           },
-                                                                         )}
-                                                                      </tbody>
-                                                                 </table>
-                                                            </div>`;
+    // const obstetricsHistoryData = `
+    //                                           <div class="head-content2">
+    //                                                              <div class="head-content2-part1">
+    //                                                                   <h3 style="margin: 0;
+    //                                                                        padding: 16px 20px;text-align: left;">OBSTETRIC</h3>
+    //                                                              </div>
+
+    //                                                         </div>
+
+    //                                                         <div class="main-part12">
+    //                                                              <table style="border-collapse: collapse;">
+    //                                                                   <thead>
+    //                                                                        <th>G  P  L  A  D</th>
+    //                                                                        <th>PREGNANT</th>
+    //                                                                        <th>BREAST FEEDING</th>
+    //                                                                        <th>PLANNING OF CONCEIVE</th>
+    //                                                                        <th>CONTRACEPTION</th>
+    //                                                                        <th>PILLS</th>
+    //                                                                        <th>INJECTION</th>
+    //                                                                        <th>OTHER</th>
+    //                                                                   </thead>
+    //                                                                   <tbody>
+    //                                                                      ${data?.opdobstetricshistoryarray?.map(
+    //                                                                        (
+    //                                                                          res,
+    //                                                                          i,
+    //                                                                        ) => {
+    //                                                                          return `
+    //                                                                               <tr key=${i}>
+    //                                                                                 <td>G${
+    //                                                                                   res.g
+    //                                                                                 }P${
+    //                                                                            res.p
+    //                                                                          }L${
+    //                                                                            res.l
+    //                                                                          }A${
+    //                                                                            res.a
+    //                                                                          }D${
+    //                                                                            res.d
+    //                                                                          }</td>
+    //                                                                                 <td>${
+    //                                                                                   res.pregnant
+    //                                                                                 }</td>
+    //                                                                                 <td>${
+    //                                                                                   res.breastFeeding
+    //                                                                                 }</td>
+    //                                                                                 <td>${
+    //                                                                                   res.conception
+    //                                                                                 }</td>
+    //                                                                                 <td>${
+    //                                                                                   res.contraception
+    //                                                                                 }</td>
+    //                                                                                 <td>${
+    //                                                                                   res.pillsChecked ===
+    //                                                                                   true
+    //                                                                                     ? 'yes'
+    //                                                                                     : 'no'
+    //                                                                                 }</td>
+    //                                                                                 <td>${
+    //                                                                                   res.injuctionChecked ===
+    //                                                                                   true
+    //                                                                                     ? 'yes'
+    //                                                                                     : 'no'
+    //                                                                                 }</td>
+    //                                                                                 <td>${
+    //                                                                                   res.otherChecked ===
+    //                                                                                   true
+    //                                                                                     ? 'yes'
+    //                                                                                     : 'no'
+    //                                                                                 }</td>
+    //                                                                               </tr>`;
+    //                                                                        },
+    //                                                                      )}
+    //                                                                   </tbody>
+    //                                                              </table>
+    //                                                         </div>`;
+
     const menstrualHistoryData = `
                                         <div class="head-content2">
                                                             <div class="head-content2-part1">
@@ -312,33 +281,30 @@ export const GeneratePdf = async data => {
                                                        </div>
                                         
                                                        <div class="main-part12">
-                                                            <table style="border-collapse: collapse;">
-                                                                 <thead>
-                                                                      <th>MENARCH AGE</th>
-                                                                      <th>PERIOD</th>
-                                                                      <th>QUALITY OF BLOOD FLOW</th>
-                                                                      <th>PAIN DURING CYCLE</th>
-                                                                      <th>MENOPAUSE</th>
-                                                                      <th>LMP</th>
-                                                                      <th>DURATION</th>
-                                                                    
-                                                                 </thead>
-                                                                 <tbody>
+                                                           
                                                                       ${data?.opdmenstrualhistoryarray?.map(
                                                                         (
                                                                           res,
                                                                           i,
                                                                         ) => {
                                                                           return `
-                                                                                <tr key=${i}>
-                                                                                     <td>${res.menarche_age}</td>
-                                                                                     <td>${res.periods}</td>
-                                                                                     <td>${res.qualityofbloodflow}</td>
-                                                                                     <td>${res.painduringcycle}</td>
-                                                                                     <td>${res.menopause}</td>
-                                                                                     <td>${res.lmp}</td>
-                                                                                     <td>${res.durations}</td>
-                                                                                </tr>`;
+                                                                                <div key=${i} class="divdata" style="margin-left:20px">
+                                                                                    <p key=${
+                                                                                      i +
+                                                                                      1
+                                                                                    }>She started menses in 12/03/2010. Periods are ${
+                                                                            res.periods
+                                                                          } , blood flow is ${
+                                                                            res.qualityofbloodflow
+                                                                          }, ${
+                                                                            res.painduringcycle
+                                                                          }-pain during periods. LMP: ${
+                                                                            res.lmp
+                                                                          } today is day ${
+                                                                            res.durations
+                                                                          }. </p>
+                                                                                </div>
+                                                                                    `;
                                                                         },
                                                                       )}
                                                                  </tbody>
@@ -383,41 +349,46 @@ export const GeneratePdf = async data => {
                                         </div>`;
     const generalexaminationHistoryData = `
                                         <div class="head-content2">
-                                                            <div class="head-content2-part1">
-                                                                 <h3 style="margin: 0;
-                                                                      padding: 16px 20px;text-align: left;">GENERAL EXAMINATION</h3>
-                                                            </div>
-                                        
-                                                       </div>
-                                        
-                                                       <div class="main-part12">
-                                                            <table style="border-collapse: collapse;">
-                                                                 <thead>
-                                                                      <th>PALLOR</th>
-                                                                      <th>CYANOSIS</th>
-                                                                      <th>LCTERUS</th>
-                                                                      <th>LN</th>
-                                                                      <th>ODEMA</th>
-                                                                 </thead>
-                                                                 <tbody>
-                                                                      ${data?.opdgeneralexaminationhistoryarray?.map(
-                                                                        (
-                                                                          res,
-                                                                          i,
-                                                                        ) => {
-                                                                          return `
-                                                                                <tr key=${i}>
-                                                                                     <td>${res.pallor}</td>
-                                                                                     <td>${res.cyanosis}</td>
-                                                                                     <td>${res.icterus}</td>
-                                                                                     <td>${res.ln}</td>
-                                                                                     <td>${res.odema}</td>
-                                                                                </tr>`;
-                                                                        },
-                                                                      )}
-                                                                 </tbody>
-                                                            </table>
-                                                       </div>`;
+                                            <div class="head-content2-part1">
+                                                <h3 style="margin: 0; padding: 16px 20px; text-align: left;">GENERAL EXAMINATION</h3>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="main-part12">
+                                            ${data?.opdgeneralexaminationhistoryarray
+                                              ?.map((res, i) => {
+                                                const presentKeys = [];
+                                                const absentKeys = [];
+
+                                                for (const [
+                                                  key,
+                                                  value,
+                                                ] of Object.entries(res)) {
+                                                  if (value === 'present') {
+                                                    presentKeys.push(
+                                                      key.toUpperCase(),
+                                                    );
+                                                  } else if (
+                                                    value === 'absent'
+                                                  ) {
+                                                    absentKeys.push(
+                                                      key.toUpperCase(),
+                                                    );
+                                                  }
+                                                }
+
+                                                return `
+                                                        <div key=${i} class="divdata" style="margin-left:20px">
+                                                            <p><strong>Present:</strong> ${presentKeys.join(
+                                                              ', ',
+                                                            )}</p>
+                                                            <p><strong>Absent:</strong> ${absentKeys.join(
+                                                              ', ',
+                                                            )}</p>
+                                                        </div>`;
+                                              })
+                                              .join('')}
+                                        </div>`;
     const diagnosisHistoryData = `
                                         <div class="head-content2">
                                                             <div class="head-content2-part1">
@@ -428,56 +399,53 @@ export const GeneratePdf = async data => {
                                                        </div>
                                         
                                                        <div class="main-part12">
-                                                            <table style="border-collapse: collapse;">
-                                                                 <thead>
-                                                                      <th>ICD CODE</th>
-                                                                      <th>DIAGNOSIS</th>
-                                                                      <th>DIAGNOSIS TYPE</th>
-                                                                      <th>DATE / TIME </th>
-                                                                 </thead>
-                                                                 <tbody>
+                                                           
                                                                       ${data?.opddiagnosishistoryarray?.map(
                                                                         (
                                                                           res,
                                                                           i,
                                                                         ) => {
                                                                           return `
-                                                                                <tr key=${i}>
-                                                                                     <td>${res.icdcode}</td>
-                                                                                     <td>${res.illnessname}</td>
-                                                                                     <td>${res.diagnosis_type}</td>
-                                                                                     <td>${res.adddate} / ${res.addtime}</td>
-                                                                                </tr>`;
+                                                                           <div key=${i} class="divdata" style="margin-left:20px">
+                                                                              <p key=${
+                                                                                i +
+                                                                                1
+                                                                              }>${
+                                                                            res.illnessname
+                                                                          } (${
+                                                                            res.icdcode
+                                                                          })</p>
+                                                                            </div>`;
                                                                         },
                                                                       )}
-                                                                 </tbody>
-                                                            </table>
+                                                               
                                                        </div>`;
-    const planofcareHistoryData = `
-                                                       <div class="head-content2">
-                                                                           <div class="head-content2-part1">
-                                                                                <h3 style="margin: 0;
-                                                                                     padding: 16px 20px;text-align: left;display: flex;flex-wrap : wrap;text-transform: capitalize;">PLAN OF CARE : ${
-                                                                                       data
-                                                                                         ?.opdplanofcarehistoryarray
-                                                                                         ?.length >
-                                                                                       0
-                                                                                         ? Object.keys(
-                                                                                             data
-                                                                                               .opdplanofcarehistoryarray[0],
-                                                                                           ).join(
-                                                                                             ' , ',
-                                                                                           )
-                                                                                         : ''
-                                                                                     }</h3>
-                                                                           </div>
-                                                       
-                                                                      </div>`;
+    // const planofcareHistoryData = `
+    //                                                    <div class="head-content2">
+    //                                                                        <div class="head-content2-part1">
+    //                                                                             <h3 style="margin: 0;
+    //                                                                                  padding: 16px 20px;text-align: left;display: flex;flex-wrap : wrap;text-transform: capitalize;">PLAN OF CARE : ${
+    //                                                                                    data
+    //                                                                                      ?.opdplanofcarehistoryarray
+    //                                                                                      ?.length >
+    //                                                                                    0
+    //                                                                                      ? Object.keys(
+    //                                                                                          data
+    //                                                                                            .opdplanofcarehistoryarray[0],
+    //                                                                                        ).join(
+    //                                                                                          ' , ',
+    //                                                                                        )
+    //                                                                                      : ''
+    //                                                                                  }</h3>
+    //                                                                        </div>
+
+    //                                                                   </div>`;
+
     const treatmentHistoryData = `
                                    <div class="head-content2">
                                                        <div class="head-content2-part1">
                                                             <h3 style="margin: 0;
-                                                                 padding: 16px 20px;text-align: left;">TREATMENT</h3>
+                                                                 padding: 16px 20px;text-align: left;">Prescription</h3>
                                                        </div>
                                    
                                                   </div>
@@ -485,28 +453,24 @@ export const GeneratePdf = async data => {
                                                   <div class="main-part12">
                                                        <table style="border-collapse: collapse;">
                                                             <thead>
-                                                            <th>DRUG CODE</th>
-                                                            <th>DRUG NAME</th>
-                                                            <th>BRAND NAME</th>
+                                                            <th>MEDECINE NAME</th>
                                                             <th>DOSE</th>
                                                             <th>ROUTE</th>
-                                                            <th>AUNPAN</th>
                                                             <th>SCHEDULE</th>
-                                                            <th>DATE</th>
+                                                            <th>INSTRUCTION</th>
+                                                            <th>DURATION</th>
                                                             </thead>
                                                             <tbody>
                                                                  ${data?.opdtreatmenthistoryarray?.map(
                                                                    (res, i) => {
                                                                      return `
                                                                            <tr key=${i}>
-                                                                           <td>${res.drugcode}</td>
                                                                            <td>${res.drugname}</td>
-                                                                           <td>${res.brandname}</td>
                                                                            <td>${res.dose}</td>
                                                                            <td>${res.route}</td>
-                                                                           <td>${res.anupan}</td>
                                                                            <td>${res.schedule}</td>
-                                                                           <td>${res.dateValues}</td>
+                                                                           <td>${res.anupan}</td>
+                                                                           <td>${res.duration}</td>
                                                                          
                                                                            </tr>`;
                                                                    },
@@ -514,44 +478,45 @@ export const GeneratePdf = async data => {
                                                             </tbody>
                                                        </table>
                                                   </div>`;
-    const procedureHistoryData = `
-                                                  <div class="head-content2">
-                                                                      <div class="head-content2-part1">
-                                                                           <h3 style="margin: 0;
-                                                                                padding: 16px 20px;text-align: left;">PROCEDURE</h3>
-                                                                      </div>
-                                                  
-                                                                 </div>
-                                                  
-                                                                 <div class="main-part12">
-                                                                      <table style="border-collapse: collapse;">
-                                                                           <thead>
-                                                                           <th>NAME</th>
-                                                                           <th>TIME</th>
-                                                                           <th>KIT</th>
-                                                                           <th>PROCEDURE TYPE</th>
-                                                                           <th>DAYS</th>
-                                                                           </thead>
-                                                                           <tbody>
-                                                                                ${data?.opdprocedurehistoryarray?.map(
-                                                                                  (
-                                                                                    res,
-                                                                                    i,
-                                                                                  ) => {
-                                                                                    return `
-                                                                                          <tr key=${i}>
-                                                                                          <td>${res.procedurename}</td>
-                                                                                          <td>${res.proceduretime}</td>
-                                                                                          <td>${res.procedurekit}</td>
-                                                                                          <td>${res.proceduretype}</td>
-                                                                                          <td>${res.proceduredays}</td>
-                                                                                        
-                                                                                          </tr>`;
-                                                                                  },
-                                                                                )}
-                                                                           </tbody>
-                                                                      </table>
-                                                                 </div>`;
+    // const procedureHistoryData = `
+    //                                               <div class="head-content2">
+    //                                                                   <div class="head-content2-part1">
+    //                                                                        <h3 style="margin: 0;
+    //                                                                             padding: 16px 20px;text-align: left;">PROCEDURE</h3>
+    //                                                                   </div>
+
+    //                                                              </div>
+
+    //                                                              <div class="main-part12">
+    //                                                                   <table style="border-collapse: collapse;">
+    //                                                                        <thead>
+    //                                                                        <th>NAME</th>
+    //                                                                        <th>TIME</th>
+    //                                                                        <th>KIT</th>
+    //                                                                        <th>PROCEDURE TYPE</th>
+    //                                                                        <th>DAYS</th>
+    //                                                                        </thead>
+    //                                                                        <tbody>
+    //                                                                             ${data?.opdprocedurehistoryarray?.map(
+    //                                                                               (
+    //                                                                                 res,
+    //                                                                                 i,
+    //                                                                               ) => {
+    //                                                                                 return `
+    //                                                                                       <tr key=${i}>
+    //                                                                                       <td>${res.procedurename}</td>
+    //                                                                                       <td>${res.proceduretime}</td>
+    //                                                                                       <td>${res.procedurekit}</td>
+    //                                                                                       <td>${res.proceduretype}</td>
+    //                                                                                       <td>${res.proceduredays}</td>
+
+    //                                                                                       </tr>`;
+    //                                                                               },
+    //                                                                             )}
+    //                                                                        </tbody>
+    //                                                                   </table>
+    //                                                              </div>`;
+
     const adviceHistoryData = `
                                                                  <div class="head-content2">
                                                                                      <div class="head-content2-part1">
@@ -711,6 +676,16 @@ border-top: 2px solid green;
 span{
 color: black;
 }
+.divdata p{
+line-height:30px;
+margin-top: 0px; 
+margin-bottom: 0px; 
+text-align: left;
+padding:0px 20px;
+}
+.main-part12{
+margin-bottom: 10px;
+}
 </style>
 </head>
 
@@ -758,22 +733,19 @@ padding: 8px;">TIME : <span>${data?.AppArray[0].slot_id}</span></h3>
 </div>
 
 ${data?.opdcomplaintArray?.length > 0 ? _complainttableRows : ''}
-${data?.opddiagnosishistoryarray?.length > 0 ? diagnosisHistoryData : ''}
-${data?.opdtreatmenthistoryarray?.length > 0 ? treatmentHistoryData : ''}
-${data?.opdvitalshistoryarray?.length > 0 ? vitalHistoryData : ''}
 ${data?.opdpasthistoryarray?.length > 0 ? pastHistoryData : ''}
 ${data?.opdfamilyhistoryarray?.length > 0 ? familyHistoryData : ''}
 ${data?.opdmedicinehistoryarray?.length > 0 ? medicineHistoryData : ''}
 ${data?.opdpersonalhistoryarray?.length > 0 ? personalHistoryData : ''}
-${data?.opdobstetricshistoryarray?.length > 0 ? obstetricsHistoryData : ''}
 ${data?.opdmenstrualhistoryarray?.length > 0 ? menstrualHistoryData : ''}
+${data?.opdvitalshistoryarray?.length > 0 ? vitalHistoryData : ''}
 ${
   data?.opdgeneralexaminationhistoryarray?.length > 0
     ? generalexaminationHistoryData
     : ''
 }
-${data?.opdplanofcarehistoryarray?.length > 0 ? planofcareHistoryData : ''}
-${data?.opdprocedurehistoryarray?.length > 0 ? procedureHistoryData : ''}
+${data?.opddiagnosishistoryarray?.length > 0 ? diagnosisHistoryData : ''}
+${data?.opdtreatmenthistoryarray?.length > 0 ? treatmentHistoryData : ''}
 ${data?.opdadvicehistoryarray?.length > 0 ? adviceHistoryData : ''}
 
 <br />

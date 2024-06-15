@@ -153,51 +153,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
           }}
           title="Procedure"
         />
-        <Divider />
-        <Menu.Item
-          contentStyle={{width: 120}}
-          dense
-          onPress={() => {
-            navigation.replace('AshtvidhPariksha'), closeMenu();
-          }}
-          title="Ashtvidh Pariksha"
-        />
-        <Divider />
-        <Menu.Item
-          contentStyle={{width: 120}}
-          dense
-          onPress={() => {
-            navigation.replace('DashavidhPariksha'), closeMenu();
-          }}
-          title="Dashavidh Pariksha"
-        />
-        <Divider />
-        <Menu.Item
-          contentStyle={{width: 120}}
-          dense
-          onPress={() => {
-            navigation.replace('Samprapti'), closeMenu();
-          }}
-          title="Samprapti"
-        />
-        <Divider />
-        <Menu.Item
-          contentStyle={{width: 120}}
-          dense
-          onPress={() => {
-            navigation.replace('SrotasPariksha'), closeMenu();
-          }}
-          title="Srotas Pariksha"
-        />
-        <Divider />
-        <Menu.Item
-          contentStyle={{width: 120}}
-          dense
-          onPress={() => {
-            navigation.replace('Prakruti'), closeMenu();
-          }}
-          title="Prakruti"
-        />
+
         <Divider />
         <Menu.Item
           contentStyle={{width: 120}}
