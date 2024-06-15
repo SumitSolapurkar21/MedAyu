@@ -139,7 +139,7 @@ const SrotasPariksha = () => {
       patient_id: waitingListData?.newpatient_id,
       mobilenumber: waitingListData?.mobilenumber,
       reception_id: userData?._id,
-      appoint_id: appoint_id || waitingListData?.appoint_id,
+      appoint_id: waitingListData?.appoint_id || appoint_id,
       uhid: waitingListData?.uhid,
       api_type: 'SrotasPariksha',
       opdsrotasparikshahistoryarray: [checkedValues],

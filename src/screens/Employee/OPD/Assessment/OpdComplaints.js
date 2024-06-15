@@ -211,7 +211,7 @@ const OpdComplaints = () => {
           hospital_id: userData?.hospital_id || hospital_id,
           reception_id: userData?._id || reception_id,
           patient_id: patient_id,
-          appoint_id: appoint_id || waitingListData?.appoint_id,
+          appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-COMPLAINTS',
           uhid: uhid,
           mobilenumber: mobilenumber || waitingListData?.mobilenumber,
