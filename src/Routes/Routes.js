@@ -104,6 +104,7 @@ import Samprapti from '../screens/Employee/OPD/Assessment/Samprapti';
 import SrotasPariksha from '../screens/Employee/OPD/Assessment/SrotasPariksha';
 import Prakruti from '../screens/Employee/OPD/Assessment/Prakruti';
 import OpdHomePage2 from '../screens/Employee/OPD/OpdHomePage2';
+import ConsultantPdf from '../screens/Employee/OPD/Assessment/ConsultantPdf';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -1082,6 +1083,11 @@ const Routes = () => {
           component={OpdHomePage2}
           options={{headerShown: false}}
         />
+        {/* <Stack.Screen
+          name="ConsultantPdf"
+          component={ConsultantPdf}
+          options={{headerShown: false}}
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

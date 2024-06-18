@@ -6,13 +6,28 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import billHistory from '../../../images/billHistory.png';
+import consultPdf from '../../../images/pdf.png';
+import UserContext from '../../../components/Context/Context';
+import {GeneratePdf} from '../Dashboard/PdfReport';
 
 const OpdHomePage = () => {
+  const {scannedPatientsData, userData} = useContext(UserContext);
+
   const navigation = useNavigation();
+
+  const consultPdfData = {
+    appoint_id: scannedPatientsData?.appoint_id,
+    mobilenumber: scannedPatientsData?.mobilenumber,
+    uhid: scannedPatientsData?.uhid,
+    patient_id: scannedPatientsData?.patient_id,
+    role: userData?.role,
+    hospital_id: userData?.hospital_id,
+    reception_id: userData?._id,
+  };
 
   //backHandler ...
   useEffect(() => {
@@ -29,6 +44,10 @@ const OpdHomePage = () => {
     return () => backHandler.remove();
   }, []);
 
+  // generate pdf handler ...
+  const generatePdfHandler = () => {
+    GeneratePdf(consultPdfData);
+  };
   return (
     <>
       {/* Appbar header */}
@@ -47,7 +66,19 @@ const OpdHomePage = () => {
             style={styles.selectDiv}
             onPress={() => navigation.navigate('OpdComplaints')}>
             <Image source={billHistory} alt="billHistory" style={styles.img} />
-            <Text style={styles.uName}>Assessment</Text>
+            <Text style={styles.uName}>Initial Assessment</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.selectDiv}
+            onPress={() => navigation.navigate('Prakruti')}>
+            <Image source={billHistory} alt="billHistory" style={styles.img} />
+            <Text style={styles.uName}>Ayurvedic Assessment</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.selectDiv}
+            onPress={() => generatePdfHandler()}>
+            <Image source={consultPdf} alt="billHistory" style={styles.img} />
+            <Text style={styles.uName}>Consultant PDF</Text>
           </TouchableOpacity>
         </View>
       </View>

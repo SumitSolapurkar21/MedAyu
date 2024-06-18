@@ -24,6 +24,9 @@ export const UserProvider = ({children}) => {
   const updateSharedData = data => {
     setPatientEditArray(prevData => [...prevData, data]);
   };
+
+  const [selectedFlow, setSelectedFlow] = useState('');
+
   const contextValue = {
     userData,
     setUserData,
@@ -60,6 +63,8 @@ export const UserProvider = ({children}) => {
     setDashboardpatientListData,
     patientList,
     setPatientList,
+    selectedFlow,
+    setSelectedFlow,
   };
 
   return (

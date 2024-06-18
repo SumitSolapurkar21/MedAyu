@@ -14,7 +14,7 @@ import UserContext from '../Context/Context';
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
-
+// 
 import successIcon from '../../images/success.gif';
 import axios from 'axios';
 import api from '../../../api.json';
@@ -43,10 +43,8 @@ export default function Scanner() {
   useEffect(() => {
     const backAction = () => {
       if (patientSelectedValue == '3') {
-        console.log('3');
         navigation.replace('Eipdoptions');
       } else if (patientSelectedValue == '1') {
-        console.log('1');
         navigation.navigate('Home');
       }
       return true;

@@ -35,7 +35,7 @@ const Prakruti = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.replace('OpdHomePage2');
+      navigation.goBack();
       return true;
     };
 
@@ -149,7 +149,6 @@ const Prakruti = () => {
       api_type: 'Prakruti',
       opdprakrutihistoryarray: [checkedValues],
     };
-    console.log('_body', _body);
     try {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
@@ -192,7 +191,7 @@ const Prakruti = () => {
       <Appbar.Header>
         <Appbar.BackAction
           onPress={() => {
-            navigation.replace('OpdHomePage2');
+            navigation.goBack();
             return true;
           }}
         />

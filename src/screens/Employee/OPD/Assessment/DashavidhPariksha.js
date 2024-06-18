@@ -142,7 +142,6 @@ const DashavidhPariksha = () => {
       api_type: 'DashavidhPariksha',
       opddashavidhparikshahistoryarray: [checkedValues],
     };
-    console.log(_body);
     try {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)

@@ -24,7 +24,6 @@ const SrotasPariksha = () => {
     useContext(UserContext);
   const {appoint_id} = scannedPatientsData;
 
-  console.log(waitingListData);
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);

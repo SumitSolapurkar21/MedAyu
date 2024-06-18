@@ -23,6 +23,8 @@ const OpdAdvice = () => {
     userData,
     patientsData,
     scannedPatientsData,
+    selectedFlow,
+    setSelectedFlow,
   } = useContext(UserContext);
   const {patient_id, uhid} = patientsData;
   const {appoint_id, mobilenumber} = scannedPatientsData;
@@ -125,7 +127,7 @@ const OpdAdvice = () => {
     if (waitingListData?.assessmenttype === 'NewAssessment') {
       setWaitingListData([]);
       navigation.replace('Listofpatients');
-    } else {
+    } else if (selectedFlow === 'scanned') {
       navigation.replace('EpatientDetails');
     }
   };
@@ -149,7 +151,6 @@ const OpdAdvice = () => {
         })
         .then(res => {
           setOpdAssessment(res.data.data);
-          console.log('res.data.data : ', res.data.data);
         });
     } catch (error) {
       console.error(error);

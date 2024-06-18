@@ -225,7 +225,6 @@ const OpdProcedure = () => {
         })
         .then(res => {
           setOpdAssessment(res.data.data);
-          // console.log('res.data.data : ', res.data.data);
         });
     } catch (error) {
       console.error(error);
@@ -359,7 +358,6 @@ const OpdProcedure = () => {
           showsVerticalScrollIndicator={false}
           style={styles.inputGroup}>
           {temp.map((res, index) => {
-            // console.log('temp : ', temp);
             return (
               <View style={styles.card} key={index}>
                 <View style={styles.cardContentDiv}>

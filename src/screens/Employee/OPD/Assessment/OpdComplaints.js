@@ -36,11 +36,15 @@ const OpdComplaints = () => {
   const [widthArr, setWidthArr] = useState([]);
   const [widthArr1, setWidthArr1] = useState([]);
 
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
-    useContext(UserContext);
+  const {
+    patientsData,
+    scannedPatientsData,
+    waitingListData,
+    userData,
+    selectedFlow,
+  } = useContext(UserContext);
   const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
-
+  const {appoint_id, mobilenumber, appointment_id} = scannedPatientsData;
   //popup msg....
 
   const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Action'];
@@ -101,10 +105,7 @@ const OpdComplaints = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      if (userData?.role === 'Doctor') navigation.navigate('OpdHomePage2');
-      else if (userData?.role === 'Receptionist')
-        navigation.navigate('OpdHomePage');
-      else navigation.navigate('OpdHomePage');
+      navigation.goBack();
       return true;
     };
 
@@ -286,7 +287,6 @@ const OpdComplaints = () => {
       reception_id: reception_id || userData?._id,
       patient_id: patient_id,
       appoint_id: waitingListData?.appoint_id || appoint_id,
-      appointment_id: waitingListData?.appointment_id,
       complaintArray: selectedRow,
       api_type: 'OPD-COMPLAINTS',
       uhid: uhid,

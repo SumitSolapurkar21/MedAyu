@@ -57,7 +57,6 @@ const RegularizationPending = () => {
           const {message, status} = response.data;
           if (status === true) {
             setRegPendingData(response.data.data);
-            //   console.log(response.data.data);
           } else {
             Alert.alert('Error !!', message);
           }

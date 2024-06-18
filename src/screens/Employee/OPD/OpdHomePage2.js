@@ -55,6 +55,7 @@ const OpdHomePage2 = () => {
             <Image source={billHistory} alt="billHistory" style={styles.img} />
             <Text style={styles.uName}>Ayurvedic Assessment</Text>
           </TouchableOpacity>
+          
         </View>
       </View>
     </>

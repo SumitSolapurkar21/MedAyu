@@ -34,7 +34,6 @@ export const GeneratePdf = async data => {
     );
 
     const data = patientTreatmentPrescriptionDataRes.data.data[0];
-    console.log('data : ', data);
 
     const _complainttableRows = `
     <div class="head-content2">

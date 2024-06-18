@@ -21,8 +21,14 @@ import {Appbar, Menu, Button, Divider} from 'react-native-paper';
 
 const EpatientDetails = () => {
   const navigation = useNavigation();
-  const {setPatientsData, scannedPatientsData, userData, setIsLoggedIn} =
-    useContext(UserContext);
+  const {
+    setPatientsData,
+    scannedPatientsData,
+    userData,
+    setIsLoggedIn,
+    selectedFlow,
+    setSelectedFlow,
+  } = useContext(UserContext);
 
   const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
     scannedPatientsData;
@@ -154,7 +160,9 @@ const EpatientDetails = () => {
 
           <TouchableOpacity
             style={styles.selectDiv}
-            onPress={() => navigation.navigate('OpdHomePage')}>
+            onPress={() => {
+              navigation.navigate('OpdHomePage'), setSelectedFlow('scanned');
+            }}>
             <Image source={ipd} alt="OPD" style={styles.img} />
             <Text style={[styles.uName, {marginLeft: 10}]}>OPD</Text>
           </TouchableOpacity>

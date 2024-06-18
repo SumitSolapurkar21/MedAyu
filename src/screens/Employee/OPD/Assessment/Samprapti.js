@@ -20,7 +20,7 @@ import UserContext from '../../../../components/Context/Context';
 
 const Samprapti = () => {
   //
-  const {scannedPatientsData, waitingListData, userData} =
+  const {scannedPatientsData, waitingListData, userData, selectedFlow} =
     useContext(UserContext);
   const {appoint_id} = scannedPatientsData;
 
@@ -136,7 +136,13 @@ const Samprapti = () => {
             Alert.alert('Success', `${message}`, [
               {
                 text: 'OK',
-                onPress: () => navigation.replace('Listofpatients'),
+                onPress: () => {
+                  if (selectedFlow === 'scanned') {
+                    navigation.replace('OpdHomePage2');
+                  } else {
+                    navigation.replace('Listofpatients');
+                  }
+                },
               },
             ]);
           } else {

@@ -283,7 +283,6 @@ const Expenses = () => {
           const {status, message, data} = res.data;
           if (status === true) {
             setCategoryArray(data);
-            // console.log(data);
           } else {
             Alert.alert('Error !!', message);
           }
@@ -294,7 +293,6 @@ const Expenses = () => {
   };
 
   // const selectedCategoryData = submittedformData?.category;
-  // console.log('categoryArray : ', submittedformData);
 
   const [value, setValue] = useState('Apply');
   const theme = {

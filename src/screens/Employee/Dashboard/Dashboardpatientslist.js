@@ -133,7 +133,6 @@ const Dashboardpatientslist = ({route}) => {
           const {data, status, message} = response.data;
           if (status === true) {
             setPatientsList(data);
-            console.log('data : ', response.data);
           } else {
             Alert.alert('Info !!', `${message}`);
           }
