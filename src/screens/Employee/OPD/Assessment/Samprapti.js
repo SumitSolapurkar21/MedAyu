@@ -138,7 +138,7 @@ const Samprapti = () => {
                 text: 'OK',
                 onPress: () => {
                   if (selectedFlow === 'scanned') {
-                    navigation.replace('OpdHomePage2');
+                    navigation.replace('OpdHomePage');
                   } else {
                     navigation.replace('Listofpatients');
                   }
