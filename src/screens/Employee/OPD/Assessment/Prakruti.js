@@ -48,26 +48,140 @@ const Prakruti = () => {
   }, []);
 
   const [checkedValues, setCheckedValues] = useState({
-    body_weight_and_frame: [],
-    skin: [],
-    fingernails: [],
-    hair: [],
-    forehead: [],
-    eyes: [],
-    lips: [],
-    thirst: [],
-    excretions: [],
-    voice_and_speech: [],
-    working_style: [],
-    mental_makeup: [],
-    temperament: [],
-    relationships: [],
-    weather_preferences: [],
-    money_matters: [],
-    memory: [],
-    sleep: [],
+    body_weight_and_frame: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    skin: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    fingernails: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    hair: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    forehead: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    eyes: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    lips: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    thirst: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    excretions: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    voice_and_speech: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    working_style: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    mental_makeup: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    temperament: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    relationships: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    weather_preferences: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    money_matters: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    memory: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
+    sleep: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
     vatta_pitta_kapha: [],
-    dreams: [],
+    dreams: [
+      {
+        vatta: [],
+        pitta: [],
+        kapha: [],
+      },
+    ],
   });
 
   const [collapsedSections, setCollapsedSections] = useState({
@@ -100,7 +214,30 @@ const Prakruti = () => {
       [section]: !prevState[section],
     }));
   };
-  const handleCheckboxToggle = (key, value) => {
+  // const handleCheckboxToggle = (key, value) => {
+  //   setCheckedValues(prevState => {
+  //     if (typeof prevState[key] === 'string') {
+  //       // For text input updates
+  //       return {
+  //         ...prevState,
+  //         [key]: value,
+  //       };
+  //     } else {
+  //       // For checkbox toggling
+  //       const newValue = prevState[key].includes(value)
+  //         ? prevState[key].filter(item => item !== value) // Remove value if already selected
+  //         : [...prevState[key], value]; // Add value if not selected
+  //       return {
+  //         ...prevState,
+  //         [key]: newValue,
+  //       };
+  //     }
+  //   });
+  // };
+
+  //
+
+  const handleCheckboxToggle = (key, dosha, value) => {
     setCheckedValues(prevState => {
       if (typeof prevState[key] === 'string') {
         // For text input updates
@@ -109,19 +246,22 @@ const Prakruti = () => {
           [key]: value,
         };
       } else {
-        // For checkbox toggling
-        const newValue = prevState[key].includes(value)
-          ? prevState[key].filter(item => item !== value) // Remove value if already selected
-          : [...prevState[key], value]; // Add value if not selected
-        return {
-          ...prevState,
-          [key]: newValue,
-        };
+        const newState = {...prevState};
+        const itemIndex = 0; // Assuming you always modify the first item in the array
+
+        if (newState[key] && newState[key][itemIndex]) {
+          const currentDoshaValues = newState[key][itemIndex][dosha] || [];
+          const newDoshaValues = currentDoshaValues.includes(value)
+            ? currentDoshaValues.filter(item => item !== value) // Remove value if already selected
+            : [...currentDoshaValues, value]; // Add value if not selected
+
+          newState[key][itemIndex][dosha] = newDoshaValues;
+        }
+
+        return newState;
       }
     });
   };
-
-  //
   const icon_up = (
     <FontAwesome6
       name="caret-up"
@@ -138,6 +278,152 @@ const Prakruti = () => {
       style={styles.searchIcon}
     />
   );
+
+  const resetHandler = () => {
+    setCheckedValues({
+      body_weight_and_frame: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      skin: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      fingernails: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      hair: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      forehead: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      eyes: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      lips: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      thirst: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      excretions: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      voice_and_speech: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      working_style: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      mental_makeup: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      temperament: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      relationships: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      weather_preferences: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      money_matters: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      memory: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      sleep: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      vatta_pitta_kapha: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+      dreams: [
+        {
+          vatta: [],
+          pitta: [],
+          kapha: [],
+        },
+      ],
+    });
+  };
+
   const submitTreatmenthandler = async () => {
     const _body = {
       hospital_id: userData?.hospital_id,
@@ -149,35 +435,16 @@ const Prakruti = () => {
       api_type: 'Prakruti',
       opdprakrutihistoryarray: [checkedValues],
     };
+
     try {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
           const {status, message} = res.data;
           if (status === true) {
+            console.log(res);
+            resetHandler();
             Alert.alert('Success', `${message}`);
-            setCheckedValues({
-              body_weight_and_frame: '',
-              skin: '',
-              fingernails: '',
-              hair: '',
-              forehead: '',
-              eyes: '',
-              lips: '',
-              thirst: '',
-              excretions: '',
-              voice_and_speech: '',
-              working_style: '',
-              mental_makeup: '',
-              temperament: '',
-              relationships: '',
-              weather_preferences: '',
-              money_matters: '',
-              memory: '',
-              sleep: '',
-              vatta_pitta_kapha: '',
-              dreams: '',
-            });
           } else {
             Alert.alert('Error', `${message}`);
           }
@@ -186,6 +453,53 @@ const Prakruti = () => {
       console.error(error);
     }
   };
+  //
+  // Function to calculate counts dynamically
+  const getDoshaCounts = () => {
+    // Initialize counts
+    let doshaCounts = [
+      {dosha: 'vatta', count: 0},
+      {dosha: 'pitta', count: 0},
+      {dosha: 'kapha', count: 0},
+    ];
+
+    // Iterate over each key in checkedValues
+    Object.keys(checkedValues).forEach(key => {
+      checkedValues[key].forEach(item => {
+        doshaCounts[0].count += item.vatta.length;
+        doshaCounts[1].count += item.pitta.length;
+        doshaCounts[2].count += item.kapha.length;
+      });
+    });
+
+    // Sort doshaCounts array in ascending order based on count
+    doshaCounts.sort((a, b) => b.count - a.count);
+    // Return counts as an object
+    return doshaCounts;
+  };
+
+  // Usage:
+  const doshaCounts = getDoshaCounts();
+  // doshaCounts.forEach(({dosha, count}) => {
+  //   console.log(`${dosha}: ${count}`);
+  // });
+
+  const DisplayDoshaCounts = () => {
+    // Format doshaCounts into the desired string format
+    const filteredCounts = doshaCounts.filter(dosha => dosha.count !== 0);
+    const displayText = filteredCounts?.map(dosha => dosha.dosha).join(' - ');
+
+    return (
+      <View style={styles.containerDiv}>
+        <View style={styles.body}>
+          <View style={[styles.inputDiv, {marginVertical: 10, padding: 10}]}>
+            <Text style={styles.countText}>{displayText}</Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <>
       <Appbar.Header>
@@ -223,18 +537,23 @@ const Prakruti = () => {
           </TouchableOpacity>
           {!collapsedSections.body_weight_and_frame && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="lean"
                     status={
-                      checkedValues.body_weight_and_frame.includes('lean')
+                      checkedValues.body_weight_and_frame[0]?.vatta.includes(
+                        'lean',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('body_weight_and_frame', 'lean')
+                      handleCheckboxToggle(
+                        'body_weight_and_frame',
+                        'vatta',
+                        'lean',
+                      )
                     }
                   />
                   <Text>Lean</Text>
@@ -243,7 +562,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="light weight"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.vatta.includes(
                         'light weight',
                       )
                         ? 'checked'
@@ -252,6 +571,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'vatta',
                         'light weight',
                       )
                     }
@@ -263,7 +583,7 @@ const Prakruti = () => {
                   <Checkbox
                     value=" can not gain weight easily but can shed it rapidly"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.vatta.includes(
                         ' can not gain weight easily but can shed it rapidly',
                       )
                         ? 'checked'
@@ -272,12 +592,12 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'vatta',
                         ' can not gain weight easily but can shed it rapidly',
                       )
                     }
                   />
                   <Text>
-                    {' '}
                     can not gain weight easily but can shed it rapidly
                   </Text>
                 </View>
@@ -285,7 +605,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="VATA PRAKRUTI"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.vatta.includes(
                         'VATA PRAKRUTI',
                       )
                         ? 'checked'
@@ -294,6 +614,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'vatta',
                         'VATA PRAKRUTI',
                       )
                     }
@@ -302,14 +623,13 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value=" well proportioned frame"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
-                        ' well proportioned frame',
+                      checkedValues.body_weight_and_frame[0]?.pitta.includes(
+                        'well proportioned frame',
                       )
                         ? 'checked'
                         : 'unchecked'
@@ -317,7 +637,8 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
-                        ' well proportioned frame',
+                        'pitta',
+                        'well proportioned frame',
                       )
                     }
                   />
@@ -327,7 +648,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="average weight"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.pitta.includes(
                         'average weight',
                       )
                         ? 'checked'
@@ -336,6 +657,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'pitta',
                         'average weight',
                       )
                     }
@@ -347,7 +669,7 @@ const Prakruti = () => {
                   <Checkbox
                     value=" can gain as well as shed weight easily"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.pitta.includes(
                         ' can gain as well as shed weight easily',
                       )
                         ? 'checked'
@@ -356,6 +678,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'pitta',
                         ' can gain as well as shed weight easily',
                       )
                     }
@@ -366,7 +689,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="PITTA PRAKRUTI"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.pitta.includes(
                         'PITTA PRAKRUTI',
                       )
                         ? 'checked'
@@ -375,6 +698,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'pitta',
                         'PITTA PRAKRUTI',
                       )
                     }
@@ -383,13 +707,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="board and robust frame"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.kapha.includes(
                         'board and robust frame',
                       )
                         ? 'checked'
@@ -398,6 +721,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'kapha',
                         'board and robust frame',
                       )
                     }
@@ -408,7 +732,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="heavy bodied"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.kapha.includes(
                         'heavy bodied',
                       )
                         ? 'checked'
@@ -417,6 +741,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'kapha',
                         'heavy bodied',
                       )
                     }
@@ -428,7 +753,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="can gain weight easily but can not shed it as fast"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.kapha.includes(
                         'can gain weight easily but can not shed it as fast',
                       )
                         ? 'checked'
@@ -437,6 +762,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'kapha',
                         'can gain weight easily but can not shed it as fast',
                       )
                     }
@@ -449,7 +775,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="KAPHA PRAKRUTI"
                     status={
-                      checkedValues.body_weight_and_frame.includes(
+                      checkedValues.body_weight_and_frame[0]?.kapha.includes(
                         'KAPHA PRAKRUTI',
                       )
                         ? 'checked'
@@ -458,6 +784,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'body_weight_and_frame',
+                        'kapha',
                         'KAPHA PRAKRUTI',
                       )
                     }
@@ -481,18 +808,21 @@ const Prakruti = () => {
           </TouchableOpacity>
           {!collapsedSections.skin && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="dry,rough to touch"
                     status={
-                      checkedValues.skin.includes('dry,rough to touch')
+                      checkedValues.skin[0].vatta.includes('dry,rough to touch')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('skin', 'dry,rough to touch')
+                      handleCheckboxToggle(
+                        'skin',
+                        'vatta',
+                        'dry,rough to touch',
+                      )
                     }
                   />
                   <Text>dry,rough to touch</Text>
@@ -501,30 +831,35 @@ const Prakruti = () => {
                   <Checkbox
                     value="dull,darkish skin"
                     status={
-                      checkedValues.skin.includes('dull,darkish skin')
+                      checkedValues.skin[0].vatta.includes('dull,darkish skin')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('skin', 'dull,darkish skin')
+                      handleCheckboxToggle('skin', 'vatta', 'dull,darkish skin')
                     }
                   />
                   <Text>dull,darkish skin</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="soft,oily,warm to touch"
                     status={
-                      checkedValues.skin.includes('soft,oily,warm to touch')
+                      checkedValues.skin[0].pitta.includes(
+                        'soft,oily,warm to touch',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('skin', 'soft,oily,warm to touch')
+                      handleCheckboxToggle(
+                        'skin',
+                        'pitta',
+                        'soft,oily,warm to touch',
+                      )
                     }
                   />
                   <Text>soft,oily,warm to touch</Text>
@@ -533,7 +868,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="golwing skin ,wether fair or dark"
                     status={
-                      checkedValues.skin.includes(
+                      checkedValues.skin[0].pitta.includes(
                         'golwing skin ,wether fair or dark',
                       )
                         ? 'checked'
@@ -542,6 +877,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'skin',
+                        'pitta',
                         'golwing skin ,wether fair or dark',
                       )
                     }
@@ -550,18 +886,23 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="thick,supple,cool to touch"
                     status={
-                      checkedValues.skin.includes('thick,supple,cool to touch')
+                      checkedValues.skin[0].kapha.includes(
+                        'thick,supple,cool to touch',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('skin', 'thick,supple,cool to touch')
+                      handleCheckboxToggle(
+                        'skin',
+                        'kapha',
+                        'thick,supple,cool to touch',
+                      )
                     }
                   />
                   <Text>thick,supple,cool to touch</Text>
@@ -570,7 +911,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="pale skin, whitish complexion"
                     status={
-                      checkedValues.skin.includes(
+                      checkedValues.skin[0].kapha.includes(
                         'pale skin, whitish complexion',
                       )
                         ? 'checked'
@@ -579,6 +920,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'skin',
+                        'kapha',
                         'pale skin, whitish complexion',
                       )
                     }
@@ -602,18 +944,23 @@ const Prakruti = () => {
           </TouchableOpacity>
           {!collapsedSections.fingernails && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="rough and brittle"
                     status={
-                      checkedValues.fingernails.includes('rough and brittle')
+                      checkedValues.fingernails[0].vatta.includes(
+                        'rough and brittle',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('fingernails', 'rough and brittle')
+                      handleCheckboxToggle(
+                        'fingernails',
+                        'vatta',
+                        'rough and brittle',
+                      )
                     }
                   />
                   <Text>rough and brittle</Text>
@@ -622,11 +969,13 @@ const Prakruti = () => {
                   <Checkbox
                     value="small"
                     status={
-                      checkedValues.fingernails.includes('small')
+                      checkedValues.fingernails[0].vatta.includes('small')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('fingernails', 'small')}
+                    onPress={() =>
+                      handleCheckboxToggle('fingernails', 'vatta', 'small')
+                    }
                   />
                   <Text>small</Text>
                 </View>
@@ -634,29 +983,36 @@ const Prakruti = () => {
                   <Checkbox
                     value="dull in colour"
                     status={
-                      checkedValues.fingernails.includes('dull in colour')
+                      checkedValues.fingernails[0].vatta.includes(
+                        'dull in colour',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('fingernails', 'dull in colour')
+                      handleCheckboxToggle(
+                        'fingernails',
+                        'vatta',
+                        'dull in colour',
+                      )
                     }
                   />
                   <Text>dull in colour</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="tough"
                     status={
-                      checkedValues.fingernails.includes('tough')
+                      checkedValues.fingernails[0].pitta.includes('tough')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('fingernails', 'tough')}
+                    onPress={() =>
+                      handleCheckboxToggle('fingernails', 'pitta', 'tough')
+                    }
                   />
                   <Text>tough</Text>
                 </View>
@@ -664,12 +1020,12 @@ const Prakruti = () => {
                   <Checkbox
                     value="medium"
                     status={
-                      checkedValues.fingernails.includes('medium')
+                      checkedValues.fingernails[0].pitta.includes('medium')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('fingernails', 'medium')
+                      handleCheckboxToggle('fingernails', 'pitta', 'medium')
                     }
                   />
                   <Text>medium</Text>
@@ -678,30 +1034,35 @@ const Prakruti = () => {
                   <Checkbox
                     value="pinkish in colour"
                     status={
-                      checkedValues.fingernails.includes('pinkish in colour')
+                      checkedValues.fingernails[0].pitta.includes(
+                        'pinkish in colour',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('fingernails', 'pinkish in colour')
+                      handleCheckboxToggle(
+                        'fingernails',
+                        'pitta',
+                        'pinkish in colour',
+                      )
                     }
                   />
                   <Text>pinkish in colour</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="smooth"
                     status={
-                      checkedValues.fingernails.includes('smooth')
+                      checkedValues.fingernails[0].kapha.includes('smooth')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('fingernails', 'smooth')
+                      handleCheckboxToggle('fingernails', 'kapha', 'smooth')
                     }
                   />
                   <Text>smooth</Text>
@@ -710,12 +1071,18 @@ const Prakruti = () => {
                   <Checkbox
                     value="large and wide"
                     status={
-                      checkedValues.fingernails.includes('large and wide')
+                      checkedValues.fingernails[0].kapha.includes(
+                        'large and wide',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('fingernails', 'large and wide')
+                      handleCheckboxToggle(
+                        'fingernails',
+                        'kapha',
+                        'large and wide',
+                      )
                     }
                   />
                   <Text>large and wide</Text>
@@ -724,12 +1091,18 @@ const Prakruti = () => {
                   <Checkbox
                     value="Whitish in color"
                     status={
-                      checkedValues.fingernails.includes('Whitish in color')
+                      checkedValues.fingernails[0].kapha.includes(
+                        'Whitish in color',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('fingernails', 'Whitish in color')
+                      handleCheckboxToggle(
+                        'fingernails',
+                        'kapha',
+                        'Whitish in color',
+                      )
                     }
                   />
                   <Text>Whitish in color</Text>
@@ -751,18 +1124,17 @@ const Prakruti = () => {
           </TouchableOpacity>
           {!collapsedSections.hair && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="dry and coarse"
                     status={
-                      checkedValues.hair.includes('dry and coarse')
+                      checkedValues.hair[0].vatta.includes('dry and coarse')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('hair', 'dry and coarse')
+                      handleCheckboxToggle('hair', 'vatta', 'dry and coarse')
                     }
                   />
                   <Text>dry and coarse</Text>
@@ -771,11 +1143,13 @@ const Prakruti = () => {
                   <Checkbox
                     value="jwara"
                     status={
-                      checkedValues.hair.includes('jwara')
+                      checkedValues.hair[0].vatta.includes('jwara')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('hair', 'jwara')}
+                    onPress={() =>
+                      handleCheckboxToggle('hair', 'vatta', 'jwara')
+                    }
                   />
                   <Text>Jwara</Text>
                 </View>
@@ -783,7 +1157,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="curly or difficult to manage , prone to split ends"
                     status={
-                      checkedValues.hair.includes(
+                      checkedValues.hair[0].vatta.includes(
                         'curly or difficult to manage , prone to split ends',
                       )
                         ? 'checked'
@@ -792,6 +1166,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'hair',
+                        'vatta',
                         'curly or difficult to manage , prone to split ends',
                       )
                     }
@@ -804,30 +1179,35 @@ const Prakruti = () => {
                   <Checkbox
                     value="dark brown to black"
                     status={
-                      checkedValues.hair.includes('dark brown to black')
+                      checkedValues.hair[0].vatta.includes(
+                        'dark brown to black',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('hair', 'dark brown to black')
+                      handleCheckboxToggle(
+                        'hair',
+                        'vatta',
+                        'dark brown to black',
+                      )
                     }
                   />
                   <Text>dark brown to black</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="smooth and fine"
                     status={
-                      checkedValues.hair.includes('smooth and fine')
+                      checkedValues.hair[0].pitta.includes('smooth and fine')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('hair', 'smooth and fine')
+                      handleCheckboxToggle('hair', 'pitta', 'smooth and fine')
                     }
                   />
                   <Text>smooth and fine</Text>
@@ -836,7 +1216,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="spare,lending towards early greying or balding"
                     status={
-                      checkedValues.hair.includes(
+                      checkedValues.hair[0].pitta.includes(
                         'spare,lending towards early greying or balding',
                       )
                         ? 'checked'
@@ -845,6 +1225,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'hair',
+                        'pitta',
                         'spare,lending towards early greying or balding',
                       )
                     }
@@ -855,12 +1236,12 @@ const Prakruti = () => {
                   <Checkbox
                     value="light to auburn"
                     status={
-                      checkedValues.hair.includes('light to auburn')
+                      checkedValues.hair[0].pitta.includes('light to auburn')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('hair', 'light to auburn')
+                      handleCheckboxToggle('hair', 'pitta', 'light to auburn')
                     }
                   />
                   <Text>light to auburn</Text>
@@ -869,30 +1250,39 @@ const Prakruti = () => {
                   <Checkbox
                     value="dark brown to black"
                     status={
-                      checkedValues.hair.includes('dark brown to black')
+                      checkedValues.hair[0].pitta.includes(
+                        'dark brown to black',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('hair', 'dark brown to black')
+                      handleCheckboxToggle(
+                        'hair',
+                        'pitta',
+                        'dark brown to black',
+                      )
                     }
                   />
                   <Text>dark brown to black</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="silky and lustrous"
                     status={
-                      checkedValues.hair.includes('silky and lustrous')
+                      checkedValues.hair[0].kapha.includes('silky and lustrous')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('hair', 'silky and lustrous')
+                      handleCheckboxToggle(
+                        'hair',
+                        'kapha',
+                        'silky and lustrous',
+                      )
                     }
                   />
                   <Text>silky and lustrous</Text>
@@ -901,11 +1291,13 @@ const Prakruti = () => {
                   <Checkbox
                     value="thick"
                     status={
-                      checkedValues.hair.includes('thick')
+                      checkedValues.hair[0].kapha.includes('thick')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('hair', 'thick')}
+                    onPress={() =>
+                      handleCheckboxToggle('hair', 'kapha', 'thick')
+                    }
                   />
                   <Text>thick</Text>
                 </View>
@@ -913,12 +1305,12 @@ const Prakruti = () => {
                   <Checkbox
                     value="medium to brown"
                     status={
-                      checkedValues.hair.includes('medium to brown')
+                      checkedValues.hair[0].kapha.includes('medium to brown')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('hair', 'medium to brown')
+                      handleCheckboxToggle('hair', 'kapha', 'medium to brown')
                     }
                   />
                   <Text>medium to brown</Text>
@@ -941,49 +1333,52 @@ const Prakruti = () => {
 
           {!collapsedSections.forehead && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="small"
                     status={
-                      checkedValues.forehead.includes('small')
+                      checkedValues.forehead[0].vatta.includes('small')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('forehead', 'small')}
+                    onPress={() =>
+                      handleCheckboxToggle('forehead', 'vatta', 'small')
+                    }
                   />
                   <Text>small</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="medium"
                     status={
-                      checkedValues.forehead.includes('medium')
+                      checkedValues.forehead[0].pitta.includes('medium')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('forehead', 'medium')}
+                    onPress={() =>
+                      handleCheckboxToggle('forehead', 'pitta', 'medium')
+                    }
                   />
                   <Text>medium</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="large"
                     status={
-                      checkedValues.forehead.includes('large')
+                      checkedValues.forehead[0].kapha.includes('large')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('forehead', 'large')}
+                    onPress={() =>
+                      handleCheckboxToggle('forehead', 'kapha', 'large')
+                    }
                   />
                   <Text>large</Text>
                 </View>
@@ -1005,18 +1400,17 @@ const Prakruti = () => {
 
           {!collapsedSections.eyes && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="small and active"
                     status={
-                      checkedValues.eyes.includes('small and active')
+                      checkedValues.eyes[0].vatta.includes('small and active')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('eyes', 'small and active')
+                      handleCheckboxToggle('eyes', 'vatta', 'small and active')
                     }
                   />
                   <Text>small and active</Text>
@@ -1025,12 +1419,18 @@ const Prakruti = () => {
                   <Checkbox
                     value="brown to dark brown pupils"
                     status={
-                      checkedValues.eyes.includes('brown to dark brown pupils')
+                      checkedValues.eyes[0].vatta.includes(
+                        'brown to dark brown pupils',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('eyes', 'brown to dark brown pupils')
+                      handleCheckboxToggle(
+                        'eyes',
+                        'vatta',
+                        'brown to dark brown pupils',
+                      )
                     }
                   />
                   <Text>brown to dark brown pupils</Text>
@@ -1039,11 +1439,13 @@ const Prakruti = () => {
                   <Checkbox
                     value="dull sclerae"
                     status={
-                      checkedValues.eyes.includes('dull sclerae')
+                      checkedValues.eyes[0].vatta.includes('dull sclerae')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('eyes', 'dull sclerae')}
+                    onPress={() =>
+                      handleCheckboxToggle('eyes', 'vatta', 'dull sclerae')
+                    }
                   />
                   <Text>dull sclerae</Text>
                 </View>
@@ -1051,28 +1453,33 @@ const Prakruti = () => {
                   <Checkbox
                     value="dry"
                     status={
-                      checkedValues.eyes.includes('dry')
+                      checkedValues.eyes[0].vatta.includes('dry')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('eyes', 'dry')}
+                    onPress={() => handleCheckboxToggle('eyes', 'vatta', 'dry')}
                   />
                   <Text>dry</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="sharp and penetrating"
                     status={
-                      checkedValues.eyes.includes('sharp and penetrating')
+                      checkedValues.eyes[0].pitta.includes(
+                        'sharp and penetrating',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('eyes', 'sharp and penetrating')
+                      handleCheckboxToggle(
+                        'eyes',
+                        'pitta',
+                        'sharp and penetrating',
+                      )
                     }
                   />
                   <Text>sharp and penetrating</Text>
@@ -1081,7 +1488,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="light pupils could be brown,green or gray"
                     status={
-                      checkedValues.eyes.includes(
+                      checkedValues.eyes[0].pitta.includes(
                         'light pupils could be brown,green or gray',
                       )
                         ? 'checked'
@@ -1090,6 +1497,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'eyes',
+                        'pitta',
                         'light pupils could be brown,green or gray',
                       )
                     }
@@ -1100,12 +1508,12 @@ const Prakruti = () => {
                   <Checkbox
                     value="yellowish sclerae"
                     status={
-                      checkedValues.eyes.includes('yellowish sclerae')
+                      checkedValues.eyes[0].pitta.includes('yellowish sclerae')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('eyes', 'yellowish sclerae')
+                      handleCheckboxToggle('eyes', 'pitta', 'yellowish sclerae')
                     }
                   />
                   <Text>yellowish sclerae</Text>
@@ -1114,29 +1522,30 @@ const Prakruti = () => {
                   <Checkbox
                     value="medium in size"
                     status={
-                      checkedValues.eyes.includes('medium in size')
+                      checkedValues.eyes[0].pitta.includes('medium in size')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('eyes', 'medium in size')
+                      handleCheckboxToggle('eyes', 'pitta', 'medium in size')
                     }
                   />
                   <Text>medium in size</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="moist"
                     status={
-                      checkedValues.eyes.includes('moist')
+                      checkedValues.eyes[0].kapha.includes('moist')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('eyes', 'moist')}
+                    onPress={() =>
+                      handleCheckboxToggle('eyes', 'kapha', 'moist')
+                    }
                   />
                   <Text>moist</Text>
                 </View>
@@ -1144,7 +1553,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="large and attractive with thick lashes"
                     status={
-                      checkedValues.eyes.includes(
+                      checkedValues.eyes[0].kapha.includes(
                         'large and attractive with thick lashes',
                       )
                         ? 'checked'
@@ -1153,6 +1562,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'eyes',
+                        'kapha',
                         'large and attractive with thick lashes',
                       )
                     }
@@ -1163,13 +1573,16 @@ const Prakruti = () => {
                   <Checkbox
                     value="bright blue or black pupils"
                     status={
-                      checkedValues.eyes.includes('bright blue or black pupils')
+                      checkedValues.eyes[0].kapha.includes(
+                        'bright blue or black pupils',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
                       handleCheckboxToggle(
                         'eyes',
+                        'kapha',
                         'bright blue or black pupils',
                       )
                     }
@@ -1180,12 +1593,18 @@ const Prakruti = () => {
                   <Checkbox
                     value="clear white sclerae"
                     status={
-                      checkedValues.eyes.includes('clear white sclerae')
+                      checkedValues.eyes[0].kapha.includes(
+                        'clear white sclerae',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('eyes', 'clear white sclerae')
+                      handleCheckboxToggle(
+                        'eyes',
+                        'kapha',
+                        'clear white sclerae',
+                      )
                     }
                   />
                   <Text>dry</Text>
@@ -1208,17 +1627,18 @@ const Prakruti = () => {
 
           {!collapsedSections.lips && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="thin"
                     status={
-                      checkedValues.lips.includes('thin')
+                      checkedValues.lips[0].vatta.includes('thin')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('lips', 'thin')}
+                    onPress={() =>
+                      handleCheckboxToggle('lips', 'vatta', 'thin')
+                    }
                   />
                   <Text>thin</Text>
                 </View>
@@ -1226,29 +1646,30 @@ const Prakruti = () => {
                   <Checkbox
                     value="darkish in colour"
                     status={
-                      checkedValues.lips.includes('darkish in colour')
+                      checkedValues.lips[0].vatta.includes('darkish in colour')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('lips', 'darkish in colour')
+                      handleCheckboxToggle('lips', 'vatta', 'darkish in colour')
                     }
                   />
                   <Text>darkish in colour</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="medium"
                     status={
-                      checkedValues.lips.includes('medium')
+                      checkedValues.lips[0].pitta.includes('medium')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('lips', 'medium')}
+                    onPress={() =>
+                      handleCheckboxToggle('lips', 'pitta', 'medium')
+                    }
                   />
                   <Text>medium</Text>
                 </View>
@@ -1256,29 +1677,30 @@ const Prakruti = () => {
                   <Checkbox
                     value="pinkish in colour"
                     status={
-                      checkedValues.lips.includes('pinkish in colour')
+                      checkedValues.lips[0].pitta.includes('pinkish in colour')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('lips', 'pinkish in colour')
+                      handleCheckboxToggle('lips', 'pitta', 'pinkish in colour')
                     }
                   />
                   <Text>pinkish in colour</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="large"
                     status={
-                      checkedValues.lips.includes('large')
+                      checkedValues.lips[0].kapha.includes('large')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('lips', 'large')}
+                    onPress={() =>
+                      handleCheckboxToggle('lips', 'kapha', 'large')
+                    }
                   />
                   <Text>large</Text>
                 </View>
@@ -1286,12 +1708,12 @@ const Prakruti = () => {
                   <Checkbox
                     value="pale in colur"
                     status={
-                      checkedValues.lips.includes('pale in colur')
+                      checkedValues.lips[0].kapha.includes('pale in colur')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('lips', 'pale in colur')
+                      handleCheckboxToggle('lips', 'kapha', 'pale in colur')
                     }
                   />
                   <Text>pale in colur</Text>
@@ -1314,13 +1736,12 @@ const Prakruti = () => {
 
           {!collapsedSections.temperament && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="Insecure and impatient"
                     status={
-                      checkedValues.temperament.includes(
+                      checkedValues.temperament[0].vatta.includes(
                         'Insecure and impatient',
                       )
                         ? 'checked'
@@ -1329,6 +1750,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'temperament',
+                        'vatta',
                         'Insecure and impatient',
                       )
                     }
@@ -1339,7 +1761,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="hardly ever content,always searching"
                     status={
-                      checkedValues.temperament.includes(
+                      checkedValues.temperament[0].vatta.includes(
                         'hardly ever content,always searching',
                       )
                         ? 'checked'
@@ -1348,6 +1770,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'temperament',
+                        'vatta',
                         'hardly ever content,always searching',
                       )
                     }
@@ -1358,7 +1781,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="quick in emotional reactions and outbursts"
                     status={
-                      checkedValues.temperament.includes(
+                      checkedValues.temperament[0].vatta.includes(
                         'quick in emotional reactions and outbursts',
                       )
                         ? 'checked'
@@ -1367,6 +1790,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'temperament',
+                        'vatta',
                         'quick in emotional reactions and outbursts',
                       )
                     }
@@ -1375,13 +1799,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="aggressive and impatient"
                     status={
-                      checkedValues.temperament.includes(
+                      checkedValues.temperament[0].pitta.includes(
                         'aggressive and impatient',
                       )
                         ? 'checked'
@@ -1390,6 +1813,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'temperament',
+                        'pitta',
                         'aggressive and impatient',
                       )
                     }
@@ -1400,7 +1824,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="dominating and cynical"
                     status={
-                      checkedValues.temperament.includes(
+                      checkedValues.temperament[0].pitta.includes(
                         'dominating and cynical',
                       )
                         ? 'checked'
@@ -1409,6 +1833,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'temperament',
+                        'pitta',
                         'dominating and cynical',
                       )
                     }
@@ -1419,7 +1844,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="intense emotions of like or dislike,love or hate"
                     status={
-                      checkedValues.temperament.includes(
+                      checkedValues.temperament[0].pitta.includes(
                         'intense emotions of like or dislike,love or hate',
                       )
                         ? 'checked'
@@ -1428,6 +1853,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'temperament',
+                        'pitta',
                         'intense emotions of like or dislike,love or hate',
                       )
                     }
@@ -1436,13 +1862,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="comfortable and patient"
                     status={
-                      checkedValues.temperament.includes(
+                      checkedValues.temperament[0].kapha.includes(
                         'comfortable and patient',
                       )
                         ? 'checked'
@@ -1451,6 +1876,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'temperament',
+                        'kapha',
                         'comfortable and patient',
                       )
                     }
@@ -1461,12 +1887,12 @@ const Prakruti = () => {
                   <Checkbox
                     value="laid back"
                     status={
-                      checkedValues.temperament.includes('laid back')
+                      checkedValues.temperament[0].kapha.includes('laid back')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('temperament', 'laid back')
+                      handleCheckboxToggle('temperament', 'kapha', 'laid back')
                     }
                   />
                   <Text>laid back</Text>
@@ -1475,12 +1901,18 @@ const Prakruti = () => {
                   <Checkbox
                     value="show to change"
                     status={
-                      checkedValues.temperament.includes('show to change')
+                      checkedValues.temperament[0].kapha.includes(
+                        'show to change',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('temperament', 'show to change')
+                      handleCheckboxToggle(
+                        'temperament',
+                        'kapha',
+                        'show to change',
+                      )
                     }
                   />
                   <Text>show to change</Text>
@@ -1489,7 +1921,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="do not get angry,have calm endurence"
                     status={
-                      checkedValues.temperament.includes(
+                      checkedValues.temperament[0].kapha.includes(
                         'do not get angry,have calm endurence',
                       )
                         ? 'checked'
@@ -1498,6 +1930,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'temperament',
+                        'kapha',
                         'do not get angry,have calm endurence',
                       )
                     }
@@ -1522,13 +1955,12 @@ const Prakruti = () => {
 
           {!collapsedSections.mental_makeup && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="restless and easily distracted"
                     status={
-                      checkedValues.mental_makeup.includes(
+                      checkedValues.mental_makeup[0].vatta.includes(
                         'restless and easily distracted',
                       )
                         ? 'checked'
@@ -1537,6 +1969,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'mental_makeup',
+                        'vatta',
                         'restless and easily distracted',
                       )
                     }
@@ -1547,25 +1980,30 @@ const Prakruti = () => {
                   <Checkbox
                     value="curious mind"
                     status={
-                      checkedValues.mental_makeup.includes('curious mind')
+                      checkedValues.mental_makeup[0].vatta.includes(
+                        'curious mind',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('mental_makeup', 'curious mind')
+                      handleCheckboxToggle(
+                        'mental_makeup',
+                        'vatta',
+                        'curious mind',
+                      )
                     }
                   />
                   <Text>curious mind</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="passionate and generative"
                     status={
-                      checkedValues.mental_makeup.includes(
+                      checkedValues.mental_makeup[0].pitta.includes(
                         'passionate and generative',
                       )
                         ? 'checked'
@@ -1574,6 +2012,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'mental_makeup',
+                        'pitta',
                         'passionate and generative',
                       )
                     }
@@ -1584,30 +2023,41 @@ const Prakruti = () => {
                   <Checkbox
                     value="assertive mind"
                     status={
-                      checkedValues.mental_makeup.includes('assertive mind')
+                      checkedValues.mental_makeup[0].pitta.includes(
+                        'assertive mind',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('mental_makeup', 'assertive mind')
+                      handleCheckboxToggle(
+                        'mental_makeup',
+                        'pitta',
+                        'assertive mind',
+                      )
                     }
                   />
                   <Text>assertive mind</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="calm and stable"
                     status={
-                      checkedValues.mental_makeup.includes('calm and stable')
+                      checkedValues.mental_makeup[0].kapha.includes(
+                        'calm and stable',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('mental_makeup', 'calm and stable')
+                      handleCheckboxToggle(
+                        'mental_makeup',
+                        'kapha',
+                        'calm and stable',
+                      )
                     }
                   />
                   <Text>calm and stable</Text>
@@ -1616,12 +2066,18 @@ const Prakruti = () => {
                   <Checkbox
                     value="logical mind"
                     status={
-                      checkedValues.mental_makeup.includes('logical mind')
+                      checkedValues.mental_makeup[0].kapha.includes(
+                        'logical mind',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('mental_makeup', 'logical mind')
+                      handleCheckboxToggle(
+                        'mental_makeup',
+                        'kapha',
+                        'logical mind',
+                      )
                     }
                   />
                   <Text>logical mind</Text>
@@ -1644,18 +2100,21 @@ const Prakruti = () => {
 
           {!collapsedSections.working_style && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="fast work"
                     status={
-                      checkedValues.working_style.includes('fast work')
+                      checkedValues.working_style[0].vatta.includes('fast work')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('working_style', 'fast work')
+                      handleCheckboxToggle(
+                        'working_style',
+                        'vatta',
+                        'fast work',
+                      )
                     }
                   />
                   <Text>fast work</Text>
@@ -1664,7 +2123,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="starts impulsively, but do not necessarily complete"
                     status={
-                      checkedValues.working_style.includes(
+                      checkedValues.working_style[0].vatta.includes(
                         'starts impulsively, but do not necessarily complete',
                       )
                         ? 'checked'
@@ -1673,6 +2132,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'working_style',
+                        'vatta',
                         'starts impulsively, but do not necessarily complete',
                       )
                     }
@@ -1683,18 +2143,23 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="Determined worker"
                     status={
-                      checkedValues.working_style.includes('Determined worker')
+                      checkedValues.working_style[0].pitta.includes(
+                        'Determined worker',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('working_style', 'Determined worker')
+                      handleCheckboxToggle(
+                        'working_style',
+                        'pitta',
+                        'Determined worker',
+                      )
                     }
                   />
                   <Text> Determined Worker</Text>
@@ -1703,7 +2168,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="highly task and goal oriented"
                     status={
-                      checkedValues.working_style.includes(
+                      checkedValues.working_style[0].pitta.includes(
                         'highly task and goal oriented',
                       )
                         ? 'checked'
@@ -1712,6 +2177,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'working_style',
+                        'pitta',
                         'highly task and goal oriented',
                       )
                     }
@@ -1720,18 +2186,23 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="methodical worker"
                     status={
-                      checkedValues.working_style.includes('methodical worker')
+                      checkedValues.working_style[0].kapha.includes(
+                        'methodical worker',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('working_style', 'methodical worker')
+                      handleCheckboxToggle(
+                        'working_style',
+                        'kapha',
+                        'methodical worker',
+                      )
                     }
                   />
                   <Text>methodical worker</Text>
@@ -1740,7 +2211,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="slow to being,but always see a task to completion"
                     status={
-                      checkedValues.working_style.includes(
+                      checkedValues.working_style[0].kapha.includes(
                         'slow to being,but always see a task to completion',
                       )
                         ? 'checked'
@@ -1749,6 +2220,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'working_style',
+                        'kapha',
                         'slow to being,but always see a task to completion',
                       )
                     }
@@ -1773,13 +2245,12 @@ const Prakruti = () => {
 
           {!collapsedSections.voice_and_speech && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="weak, hoarse or shrill voice"
                     status={
-                      checkedValues.voice_and_speech.includes(
+                      checkedValues.voice_and_speech[0].vatta.includes(
                         'weak, hoarse or shrill voice',
                       )
                         ? 'checked'
@@ -1788,6 +2259,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'voice_and_speech',
+                        'vatta',
                         'weak, hoarse or shrill voice',
                       )
                     }
@@ -1798,7 +2270,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="talk rapidly rather than clearly"
                     status={
-                      checkedValues.voice_and_speech.includes(
+                      checkedValues.voice_and_speech[0].vatta.includes(
                         'talk rapidly rather than clearly',
                       )
                         ? 'checked'
@@ -1807,6 +2279,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'voice_and_speech',
+                        'vatta',
                         'talk rapidly rather than clearly',
                       )
                     }
@@ -1814,13 +2287,12 @@ const Prakruti = () => {
                   <Text>talk rapidly rather than clearly</Text>
                 </View>
                 <Divider />
-                <Text style={styles.label}>Pitta (fire and water)</Text>
                 <View style={styles.body}>
                   <View style={styles.checkboxDiv}>
                     <Checkbox
                       value="commanding and sharp voice"
                       status={
-                        checkedValues.voice_and_speech.includes(
+                        checkedValues.voice_and_speech[0].pitta.includes(
                           'commanding and sharp voice',
                         )
                           ? 'checked'
@@ -1829,6 +2301,7 @@ const Prakruti = () => {
                       onPress={() =>
                         handleCheckboxToggle(
                           'voice_and_speech',
+                          'pitta',
                           'commanding and sharp voice',
                         )
                       }
@@ -1839,7 +2312,7 @@ const Prakruti = () => {
                     <Checkbox
                       value="persuasive and motivating"
                       status={
-                        checkedValues.voice_and_speech.includes(
+                        checkedValues.voice_and_speech[0].pitta.includes(
                           'persuasive and motivating',
                         )
                           ? 'checked'
@@ -1848,6 +2321,7 @@ const Prakruti = () => {
                       onPress={() =>
                         handleCheckboxToggle(
                           'voice_and_speech',
+                          'pitta',
                           'persuasive and motivating',
                         )
                       }
@@ -1856,13 +2330,12 @@ const Prakruti = () => {
                   </View>
                 </View>
                 <Divider />
-                <Text style={styles.label}>Kapha (water and earth)</Text>
                 <View style={styles.body}>
                   <View style={styles.checkboxDiv}>
                     <Checkbox
                       value="gentle and pleasing voice"
                       status={
-                        checkedValues.voice_and_speech.includes(
+                        checkedValues.voice_and_speech[0].kapha.includes(
                           'gentle and pleasing voice',
                         )
                           ? 'checked'
@@ -1871,6 +2344,7 @@ const Prakruti = () => {
                       onPress={() =>
                         handleCheckboxToggle(
                           'voice_and_speech',
+                          'kapha',
                           'gentle and pleasing voice',
                         )
                       }
@@ -1881,7 +2355,7 @@ const Prakruti = () => {
                     <Checkbox
                       value="talk less keep secrets within"
                       status={
-                        checkedValues.voice_and_speech.includes(
+                        checkedValues.voice_and_speech[0].kapha.includes(
                           'talk less keep secrets within',
                         )
                           ? 'checked'
@@ -1890,6 +2364,7 @@ const Prakruti = () => {
                       onPress={() =>
                         handleCheckboxToggle(
                           'voice_and_speech',
+                          'kapha',
                           'talk less keep secrets within',
                         )
                       }
@@ -1915,13 +2390,12 @@ const Prakruti = () => {
 
           {!collapsedSections.excretions && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="frequently constipated hard and gaseous stools"
                     status={
-                      checkedValues.excretions.includes(
+                      checkedValues.excretions[0].vatta.includes(
                         'frequently constipated hard and gaseous stools',
                       )
                         ? 'checked'
@@ -1930,6 +2404,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'excretions',
+                        'vatta',
                         'frequently constipated hard and gaseous stools',
                       )
                     }
@@ -1940,7 +2415,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="less sweating and arination"
                     status={
-                      checkedValues.excretions.includes(
+                      checkedValues.excretions[0].vatta.includes(
                         'less sweating and arination',
                       )
                         ? 'checked'
@@ -1949,6 +2424,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'excretions',
+                        'vatta',
                         'less sweating and arination',
                       )
                     }
@@ -1957,13 +2433,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="regular ,soft and loose often buring stools"
                     status={
-                      checkedValues.excretions.includes(
+                      checkedValues.excretions[0].pitta.includes(
                         'regular ,soft and loose often buring stools',
                       )
                         ? 'checked'
@@ -1972,6 +2447,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'excretions',
+                        'pitta',
                         'regular ,soft and loose often buring stools',
                       )
                     }
@@ -1982,7 +2458,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="profuse sweating and urination,strong body odour"
                     status={
-                      checkedValues.excretions.includes(
+                      checkedValues.excretions[0].pitta.includes(
                         'profuse sweating and urination,strong body odour',
                       )
                         ? 'checked'
@@ -1991,6 +2467,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'excretions',
+                        'pitta',
                         'profuse sweating and urination,strong body odour',
                       )
                     }
@@ -1999,13 +2476,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="regular ,thick and oily stools"
                     status={
-                      checkedValues.excretions.includes(
+                      checkedValues.excretions[0].kapha.includes(
                         'regular ,thick and oily stools',
                       )
                         ? 'checked'
@@ -2014,6 +2490,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'excretions',
+                        'kapha',
                         'regular ,thick and oily stools',
                       )
                     }
@@ -2024,7 +2501,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="moderate sweating and urination"
                     status={
-                      checkedValues.excretions.includes(
+                      checkedValues.excretions[0].kapha.includes(
                         'moderate sweating and urination',
                       )
                         ? 'checked'
@@ -2033,6 +2510,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'excretions',
+                        'kapha',
                         'moderate sweating and urination',
                       )
                     }
@@ -2057,49 +2535,52 @@ const Prakruti = () => {
 
           {!collapsedSections.thirst && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="variables"
                     status={
-                      checkedValues.thirst.includes('variables')
+                      checkedValues.thirst[0].vatta.includes('variables')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('thirst', 'variables')}
+                    onPress={() =>
+                      handleCheckboxToggle('thirst', 'vatta', 'variables')
+                    }
                   />
                   <Text>variables</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="excessive"
                     status={
-                      checkedValues.thirst.includes('excessive')
+                      checkedValues.thirst[0].pitta.includes('excessive')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('thirst', 'excessive')}
+                    onPress={() =>
+                      handleCheckboxToggle('thirst', 'pitta', 'excessive')
+                    }
                   />
                   <Text>excessive</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="scanty"
                     status={
-                      checkedValues.thirst.includes('scanty')
+                      checkedValues.thirst[0].kapha.includes('scanty')
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleCheckboxToggle('thirst', 'scanty')}
+                    onPress={() =>
+                      handleCheckboxToggle('thirst', 'kapha', 'scanty')
+                    }
                   />
                   <Text>scanty</Text>
                 </View>
@@ -2121,13 +2602,12 @@ const Prakruti = () => {
 
           {!collapsedSections.relationships && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="forgive and forget easily"
                     status={
-                      checkedValues.relationships.includes(
+                      checkedValues.relationships[0].vatta.includes(
                         'forgive and forget easily',
                       )
                         ? 'checked'
@@ -2136,6 +2616,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'relationships',
+                        'vatta',
                         'forgive and forget easily',
                       )
                     }
@@ -2146,7 +2627,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="frequently in and out of love"
                     status={
-                      checkedValues.relationships.includes(
+                      checkedValues.relationships[0].vatta.includes(
                         'frequently in and out of love',
                       )
                         ? 'checked'
@@ -2155,6 +2636,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'relationships',
+                        'vatta',
                         'frequently in and out of love',
                       )
                     }
@@ -2163,13 +2645,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="hold grudges for long"
                     status={
-                      checkedValues.relationships.includes(
+                      checkedValues.relationships[0].pitta.includes(
                         'hold grudges for long',
                       )
                         ? 'checked'
@@ -2178,6 +2659,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'relationships',
+                        'pitta',
                         'hold grudges for long',
                       )
                     }
@@ -2188,7 +2670,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="enter into intense relationship"
                     status={
-                      checkedValues.relationships.includes(
+                      checkedValues.relationships[0].pitta.includes(
                         'enter into intense relationship',
                       )
                         ? 'checked'
@@ -2197,6 +2679,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'relationships',
+                        'pitta',
                         'enter into intense relationship',
                       )
                     }
@@ -2205,13 +2688,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="forgive,but never forget"
                     status={
-                      checkedValues.relationships.includes(
+                      checkedValues.relationships[0].kapha.includes(
                         'forgive,but never forget',
                       )
                         ? 'checked'
@@ -2220,6 +2702,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'relationships',
+                        'kapha',
                         'forgive,but never forget',
                       )
                     }
@@ -2230,7 +2713,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="deeply attached in love and grounded in family tip"
                     status={
-                      checkedValues.relationships.includes(
+                      checkedValues.relationships[0].kapha.includes(
                         'deeply attached in love and grounded in family tip',
                       )
                         ? 'checked'
@@ -2239,6 +2722,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'relationships',
+                        'kapha',
                         'deeply attached in love and grounded in family tip',
                       )
                     }
@@ -2265,13 +2749,12 @@ const Prakruti = () => {
 
           {!collapsedSections.weather_preferences && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="sunny, warm and rainy climate"
                     status={
-                      checkedValues.weather_preferences.includes(
+                      checkedValues.weather_preferences[0].vatta.includes(
                         'sunny, warm and rainy climate',
                       )
                         ? 'checked'
@@ -2280,6 +2763,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'weather_preferences',
+                        'vatta',
                         'sunny, warm and rainy climate',
                       )
                     }
@@ -2288,13 +2772,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="cool, pleasant climate"
                     status={
-                      checkedValues.weather_preferences.includes(
+                      checkedValues.weather_preferences[0].pitta.includes(
                         'cool, pleasant climate',
                       )
                         ? 'checked'
@@ -2303,6 +2786,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'weather_preferences',
+                        'pitta',
                         'cool, pleasant climate',
                       )
                     }
@@ -2311,13 +2795,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="comfortable anywhere except in humid climate"
                     status={
-                      checkedValues.weather_preferences.includes(
+                      checkedValues.weather_preferences[0].kapha.includes(
                         'comfortable anywhere except in humid climate',
                       )
                         ? 'checked'
@@ -2326,6 +2809,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'weather_preferences',
+                        'kapha',
                         'comfortable anywhere except in humid climate',
                       )
                     }
@@ -2350,13 +2834,12 @@ const Prakruti = () => {
 
           {!collapsedSections.money_matters && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="spend easily,don#39;t care to earn or save much"
                     status={
-                      checkedValues.money_matters.includes(
+                      checkedValues.money_matters[0].vatta.includes(
                         'spend easily,don#39;t care to earn or save much',
                       )
                         ? 'checked'
@@ -2365,6 +2848,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'money_matters',
+                        'vatta',
                         'spend easily,don#39;t care to earn or save much',
                       )
                     }
@@ -2373,13 +2857,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="plan well before spending"
                     status={
-                      checkedValues.money_matters.includes(
+                      checkedValues.money_matters[0].pitta.includes(
                         'plan well before spending',
                       )
                         ? 'checked'
@@ -2388,6 +2871,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'money_matters',
+                        'pitta',
                         'plan well before spending',
                       )
                     }
@@ -2396,13 +2880,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="do not spend easily ,like to accumulate"
                     status={
-                      checkedValues.money_matters.includes(
+                      checkedValues.money_matters[0].kapha.includes(
                         'do not spend easily ,like to accumulate',
                       )
                         ? 'checked'
@@ -2411,6 +2894,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'money_matters',
+                        'kapha',
                         'do not spend easily ,like to accumulate',
                       )
                     }
@@ -2435,13 +2919,12 @@ const Prakruti = () => {
 
           {!collapsedSections.memory && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="quick grasp hut poor retention"
                     status={
-                      checkedValues.memory.includes(
+                      checkedValues.memory[0].vatta.includes(
                         'quick grasp hut poor retention',
                       )
                         ? 'checked'
@@ -2450,6 +2933,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'memory',
+                        'vatta',
                         'quick grasp hut poor retention',
                       )
                     }
@@ -2458,13 +2942,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="quick grasp and strong retention"
                     status={
-                      checkedValues.memory.includes(
+                      checkedValues.memory[0].pitta.includes(
                         'quick grasp and strong retention',
                       )
                         ? 'checked'
@@ -2473,6 +2956,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'memory',
+                        'pitta',
                         'quick grasp and strong retention',
                       )
                     }
@@ -2481,13 +2965,12 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="slow grap but strong retention"
                     status={
-                      checkedValues.memory.includes(
+                      checkedValues.memory[0].kapha.includes(
                         'slow grap but strong retention',
                       )
                         ? 'checked'
@@ -2496,6 +2979,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'memory',
+                        'kapha',
                         'slow grap but strong retention',
                       )
                     }
@@ -2520,18 +3004,21 @@ const Prakruti = () => {
 
           {!collapsedSections.dreams && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="anxious and many"
                     status={
-                      checkedValues.dreams.includes('anxious and many')
+                      checkedValues.dreams[0].vatta.includes('anxious and many')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('dreams', 'anxious and many')
+                      handleCheckboxToggle(
+                        'dreams',
+                        'vatta',
+                        'anxious and many',
+                      )
                     }
                   />
                   <Text>anxious and many</Text>
@@ -2540,7 +3027,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="dreams relate to flying jumping climbing,runing an"
                     status={
-                      checkedValues.dreams.includes(
+                      checkedValues.dreams[0].vatta.includes(
                         'dreams relate to flying jumping climbing,runing an',
                       )
                         ? 'checked'
@@ -2549,6 +3036,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'dreams',
+                        'vatta',
                         'dreams relate to flying jumping climbing,runing an',
                       )
                     }
@@ -2559,18 +3047,23 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="moderate in number"
                     status={
-                      checkedValues.dreams.includes('moderate in number')
+                      checkedValues.dreams[0].pitta.includes(
+                        'moderate in number',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('dreams', 'moderate in number')
+                      handleCheckboxToggle(
+                        'dreams',
+                        'pitta',
+                        'moderate in number',
+                      )
                     }
                   />
                   <Text>moderate in number</Text>
@@ -2579,7 +3072,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="dreams relate to anger, conflict"
                     status={
-                      checkedValues.dreams.includes(
+                      checkedValues.dreams[0].pitta.includes(
                         'dreams relate to anger, conflict',
                       )
                         ? 'checked'
@@ -2588,6 +3081,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'dreams',
+                        'pitta',
                         'dreams relate to anger, conflict',
                       )
                     }
@@ -2596,18 +3090,17 @@ const Prakruti = () => {
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="fewer in number"
                     status={
-                      checkedValues.dreams.includes('fewer in number')
+                      checkedValues.dreams[0].kapha.includes('fewer in number')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('dreams', 'fewer in number')
+                      handleCheckboxToggle('dreams', 'kapha', 'fewer in number')
                     }
                   />
                   <Text>fewer in number</Text>
@@ -2616,7 +3109,7 @@ const Prakruti = () => {
                   <Checkbox
                     value="dreams relate to romance,water pathos or empathy"
                     status={
-                      checkedValues.dreams.includes(
+                      checkedValues.dreams[0].kapha.includes(
                         'dreams relate to romance,water pathos or empathy',
                       )
                         ? 'checked'
@@ -2625,6 +3118,7 @@ const Prakruti = () => {
                     onPress={() =>
                       handleCheckboxToggle(
                         'dreams',
+                        'kapha',
                         'dreams relate to romance,water pathos or empathy',
                       )
                     }
@@ -2649,54 +3143,63 @@ const Prakruti = () => {
 
           {!collapsedSections.sleep && (
             <>
-              <Text style={styles.label}>Vata (ether and air)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="less and disturbed"
                     status={
-                      checkedValues.sleep.includes('less and disturbed')
+                      checkedValues.sleep[0].vatta.includes(
+                        'less and disturbed',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('sleep', 'less and disturbed')
+                      handleCheckboxToggle(
+                        'sleep',
+                        'vatta',
+                        'less and disturbed',
+                      )
                     }
                   />
                   <Text>less and disturbed</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Pitta (fire and water)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="less but sound"
                     status={
-                      checkedValues.sleep.includes('less but sound')
+                      checkedValues.sleep[0].pitta.includes('less but sound')
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('sleep', 'less but sound')
+                      handleCheckboxToggle('sleep', 'pitta', 'less but sound')
                     }
                   />
                   <Text>less but sound</Text>
                 </View>
               </View>
               <Divider />
-              <Text style={styles.label}>Kapha (water and earth)</Text>
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="deep and prolonged"
                     status={
-                      checkedValues.sleep.includes('deep and prolonged')
+                      checkedValues.sleep[0].kapha.includes(
+                        'deep and prolonged',
+                      )
                         ? 'checked'
                         : 'unchecked'
                     }
                     onPress={() =>
-                      handleCheckboxToggle('sleep', 'deep and prolonged')
+                      handleCheckboxToggle(
+                        'sleep',
+                        'kapha',
+                        'deep and prolonged',
+                      )
                     }
                   />
                   <Text>deep and prolonged</Text>
@@ -2705,22 +3208,13 @@ const Prakruti = () => {
             </>
           )}
         </View>
-
-        <View style={styles.containerDiv}>
-          <Text style={styles.label}>Vatta Pitta Kapha</Text>
-          <View style={styles.body}>
-            <View style={styles.inputDiv}>
-              <TextInput
-                style={styles.input}
-                onChangeText={text =>
-                  handleCheckboxToggle('vatta_pitta_kapha', text)
-                }
-                value={checkedValues.vatta_pitta_kapha}
-              />
-            </View>
-          </View>
-        </View>
       </ScrollView>
+
+      {/* show result ..... */}
+      {DisplayDoshaCounts()}
+      {/* show result end ..... */}
+
+      <Divider />
       <View style={styles.divbutton}>
         <Button
           title="Submit"
@@ -2745,6 +3239,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    marginBottom: 10,
   },
   containerDiv: {
     borderColor: '#c4c4c4',
@@ -2785,7 +3280,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     padding: 10,
-    width: 200,
+    width: '100%',
     marginBottom: 10,
   },
   inputDiv: {
@@ -2797,5 +3292,11 @@ const styles = StyleSheet.create({
   text2: {
     fontSize: 18,
     color: 'black',
+  },
+  body2: {
+    padding: 10,
+  },
+  countText: {
+    textTransform: 'uppercase',
   },
 });
