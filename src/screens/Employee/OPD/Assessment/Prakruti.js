@@ -214,28 +214,6 @@ const Prakruti = () => {
       [section]: !prevState[section],
     }));
   };
-  // const handleCheckboxToggle = (key, value) => {
-  //   setCheckedValues(prevState => {
-  //     if (typeof prevState[key] === 'string') {
-  //       // For text input updates
-  //       return {
-  //         ...prevState,
-  //         [key]: value,
-  //       };
-  //     } else {
-  //       // For checkbox toggling
-  //       const newValue = prevState[key].includes(value)
-  //         ? prevState[key].filter(item => item !== value) // Remove value if already selected
-  //         : [...prevState[key], value]; // Add value if not selected
-  //       return {
-  //         ...prevState,
-  //         [key]: newValue,
-  //       };
-  //     }
-  //   });
-  // };
-
-  //
 
   const handleCheckboxToggle = (key, dosha, value) => {
     setCheckedValues(prevState => {
@@ -480,9 +458,6 @@ const Prakruti = () => {
 
   // Usage:
   const doshaCounts = getDoshaCounts();
-  // doshaCounts.forEach(({dosha, count}) => {
-  //   console.log(`${dosha}: ${count}`);
-  // });
 
   const DisplayDoshaCounts = () => {
     // Format doshaCounts into the desired string format

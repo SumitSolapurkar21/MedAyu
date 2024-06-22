@@ -6,6 +6,8 @@ import {
   ToastAndroid,
   BackHandler,
   Alert,
+  Modal,
+  Pressable,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {
@@ -30,11 +32,14 @@ const OpdComplaints = () => {
   // const {appointment_id, newpatient_id, depart_id, doctor_id} = route.params;
   const navigation = useNavigation();
   const [p_category, setP_category] = useState('');
+  const [p_category2, setP_category2] = useState('');
   const [selectedCategoryData, setSelectedCategoryData] = useState('');
+  const [selectedCategoryData2, setSelectedCategoryData2] = useState('');
   const [selectedRow, setSelectedRow] = useState([]);
   //table content ....
   const [widthArr, setWidthArr] = useState([]);
   const [widthArr1, setWidthArr1] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const {
     patientsData,
@@ -125,6 +130,10 @@ const OpdComplaints = () => {
 
   const updateSelectedCategoryData = selectedValue => {
     setSelectedCategoryData(selectedValue);
+  };
+
+  const updateSelectedCategoryData2 = selectedValue => {
+    setSelectedCategoryData2(selectedValue);
   };
   const [dropdownValues, setDropdownValues] = useState([]);
   const [dropdownValues2, setDropdownValues2] = useState([]);
@@ -326,8 +335,110 @@ const OpdComplaints = () => {
   const openMenu = () => setVisible(true);
 
   const closeMenu = () => setVisible(false);
+
+  const [addSymptomName, setAddSymptomsName] = useState('');
+
+  const addsymptomsHandler = text => {
+    setAddSymptomsName(text);
+  };
+
+  const AddSymptomsHandler = async () => {
+    if (selectedCategoryData2) {
+      try {
+        await axios
+          .post(`${api.baseurl}/AddMobileSymptomsDirectly`, {
+            hospital_id: hospital_id,
+            maincategory: selectionValue,
+            category: selectedCategoryData2,
+            illnessname: addSymptomName,
+          })
+          .then(res => {
+            const {status, message} = res.data;
+            if (status === true) {
+              setModalVisible(!modalVisible);
+              setAddSymptomsName('');
+              setP_category2('');
+              Alert.alert('Success', message);
+            } else {
+              Alert.alert('Info', message);
+            }
+          });
+      } catch (error) {
+        Alert.alert('Error', error);
+      }
+    } else {
+      Alert.alert('Warning', 'Select Category First');
+    }
+  };
+  const showAlert = () => (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        setModalVisible(!modalVisible);
+      }}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={{color: 'black', fontWeight: '600', marginBottom: 6}}>
+            Select Category
+          </Text>
+          <Dropdown
+            mode={'outlined'}
+            style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={selectionCategory?.map(res => ({
+              label: res.categoryname,
+              value: res.categoryvalue,
+            }))}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus2 ? 'Select' : '...'}
+            searchPlaceholder="Search..."
+            value={p_category2}
+            onFocus={() => setIsFocus2(true)}
+            onBlur={() => setIsFocus2(false)}
+            onChange={item => {
+              setP_category2(item.value);
+              updateSelectedCategoryData2(item.value);
+
+              setIsFocus2(false);
+            }}
+          />
+          <Text style={{color: 'black', fontWeight: '600', marginVertical: 6}}>
+            Enter Symptoms Name
+          </Text>
+          <TextInput
+            style={{backgroundColor: '#ffffff', borderWidth: 1}}
+            value={addSymptomName}
+            onChangeText={text => addsymptomsHandler(text)}
+          />
+          <View style={{flexDirection: 'row', gap: 6}}>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {
+                AddSymptomsHandler();
+              }}>
+              <Text style={styles.textStyle}>Add</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
   return (
     <>
+      {showAlert()}
       {/* Appbar header */}
       <Appbar.Header>
         <Appbar.BackAction
@@ -371,34 +482,39 @@ const OpdComplaints = () => {
         />
         <View style={styles.formGroup}>
           <Text style={styles.tableWrapper3TXT}>Category</Text>
-          <View style={{width: '70%'}}>
-            <Dropdown
-              mode={'outlined'}
-              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={selectionCategory?.map(res => ({
-                label: res.categoryname,
-                value: res.categoryvalue,
-              }))}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!isFocus2 ? 'Select' : '...'}
-              searchPlaceholder="Search..."
-              value={p_category}
-              onFocus={() => setIsFocus2(true)}
-              onBlur={() => setIsFocus2(false)}
-              onChange={item => {
-                setP_category(item.value);
-                updateSelectedCategoryData(item.value);
+          <View style={styles.grpDiv}>
+            <View style={{width: '70%'}}>
+              <Dropdown
+                mode={'outlined'}
+                style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={selectionCategory?.map(res => ({
+                  label: res.categoryname,
+                  value: res.categoryvalue,
+                }))}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus2 ? 'Select' : '...'}
+                searchPlaceholder="Search..."
+                value={p_category}
+                onFocus={() => setIsFocus2(true)}
+                onBlur={() => setIsFocus2(false)}
+                onChange={item => {
+                  setP_category(item.value);
+                  updateSelectedCategoryData(item.value);
 
-                setIsFocus2(false);
-              }}
-            />
+                  setIsFocus2(false);
+                }}
+              />
+            </View>
+            <Button mode="contained" onPress={() => setModalVisible(true)}>
+              Add
+            </Button>
           </View>
         </View>
         <View style={[styles.categorySelection]}>
@@ -692,5 +808,51 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+  },
+  grpDiv: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    // alignItems: 'center',
+    marginTop: 22,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 0,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
+    marginVertical: 6,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
