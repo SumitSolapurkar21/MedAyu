@@ -3,6 +3,7 @@ import {createContext, useState} from 'react';
 const UserContext = createContext();
 
 export const UserProvider = ({children}) => {
+  // ....... //
   const [userData, setUserData] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
   const [scannedPatientsData, setScannedPatientsData] = useState([]);
@@ -21,6 +22,8 @@ export const UserProvider = ({children}) => {
   const [waitingListData, setWaitingListData] = useState([]);
   const [dashboardpatientListData, setDashboardpatientListData] = useState([]);
   const [patientList, setPatientList] = useState([]);
+  const [hospitalName, setHospitalName] = useState([]);
+
   const updateSharedData = data => {
     setPatientEditArray(prevData => [...prevData, data]);
   };
@@ -65,6 +68,8 @@ export const UserProvider = ({children}) => {
     setPatientList,
     selectedFlow,
     setSelectedFlow,
+    hospitalName,
+    setHospitalName,
   };
 
   return (

@@ -23,7 +23,9 @@ const Ehome = () => {
   // ........ //
   const navigation = useNavigation();
 
-  const {setPatientSelectedValue} = useContext(UserContext);
+  const {setPatientSelectedValue, userData} = useContext(UserContext);
+
+  console.log(userData);
 
   //backHandler ...
   useEffect(() => {
@@ -133,6 +135,14 @@ const Ehome = () => {
             }}>
             <Image source={expenses} style={styles.img} />
             <Text style={styles.contentText}>Expenses</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.contentItem}
+            onPress={() => {
+              navigation.navigate('CalenderComponent');
+            }}>
+            <Image source={expenses} style={styles.img} />
+            <Text style={styles.contentText}>Calender</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

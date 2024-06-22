@@ -16,6 +16,11 @@ import {SelectList} from 'react-native-dropdown-select-list';
 import axios from 'axios';
 import api from '../../../../api.json';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Appbar} from 'react-native-paper';
+import {
+  IpdRegistrationNavigation,
+  OpdAyurvedicNavigation,
+} from '../OPD/Assessment/OpdpageNavigation';
 // import {TextInput} from 'react-native-paper';
 
 const EipregistrationProfile = () => {
@@ -44,7 +49,10 @@ const EipregistrationProfile = () => {
   const [selectedState, setSelectedState] = useState('');
 
   const [cityData, setCityData] = useState([]);
+
   const [datePicker, setDatePicker] = useState(false);
+  const [datePicker2, setDatePicker2] = useState(false);
+  const [datePicker3, setDatePicker3] = useState(false);
 
   //backHandler ...
   useEffect(() => {
@@ -61,12 +69,11 @@ const EipregistrationProfile = () => {
     return () => backHandler.remove();
   }, []);
   // current data ...
-  let today = new Date();
-
-  let currentDate =
-    today.getFullYear() +
-    (today.getMonth() + 1).toString().padStart(2, '0') +
-    today.getDate().toString().padStart(2, '0');
+  const _dt = new Date();
+  const year = _dt.getFullYear();
+  const month = (_dt.getMonth() + 1).toString().padStart(2, '0');
+  const day = _dt.getDate().toString().padStart(2, '0');
+  const currentDate = `${day}-${month}-${year}`;
 
   //current time ...
   const dt = new Date();
@@ -158,6 +165,9 @@ const EipregistrationProfile = () => {
 
   //form data ....
   const [formData, setFormData] = useState({
+    registerdate: registerdate,
+    admissiondata: currentDate,
+    admissiontime: admissiontime,
     firstname: firstname,
     patientgender: patientgender,
     patientmartial: patientmartial,
@@ -185,6 +195,20 @@ const EipregistrationProfile = () => {
   const hideDatePicker = () => {
     setDatePicker(!datePicker);
   };
+
+  const datePickerHandler2 = () => {
+    setDatePicker2(!datePicker2);
+  };
+  const hideDatePicker2 = () => {
+    setDatePicker2(!datePicker2);
+  };
+
+  const datePickerHandler3 = () => {
+    setDatePicker3(!datePicker3);
+  };
+  const hideDatePicker3 = () => {
+    setDatePicker3(!datePicker3);
+  };
   // Function for handling Date
   const handleDate = date => {
     const dt = new Date(date);
@@ -197,6 +221,32 @@ const EipregistrationProfile = () => {
       patientdob: Dateformat,
     });
     hideDatePicker();
+  };
+
+  const handleDate2 = date => {
+    const dt = new Date(date);
+    const year = dt.getFullYear();
+    const month = (dt.getMonth() + 1).toString().padStart(2, '0');
+    const day = dt.getDate().toString().padStart(2, '0');
+    const Dateformat = `${day}-${month}-${year}`;
+    setFormData({
+      ...formData,
+      registerdate: Dateformat,
+    });
+    hideDatePicker2();
+  };
+
+  const handleDate3 = date => {
+    const dt = new Date(date);
+    const year = dt.getFullYear();
+    const month = (dt.getMonth() + 1).toString().padStart(2, '0');
+    const day = dt.getDate().toString().padStart(2, '0');
+    const Dateformat = `${day}-${month}-${year}`;
+    setFormData({
+      ...formData,
+      admissiondata: Dateformat,
+    });
+    hideDatePicker3();
   };
   //input handler ....
   const handleInputChange = (fieldName, value) => {
@@ -211,9 +261,9 @@ const EipregistrationProfile = () => {
       await axios
         .post(`${api.baseurl}/AddMobileIPD`, {
           role: 'Profile',
-          registerdate: registerdate,
-          admissiondata: currentDate,
-          admissiontime: admissiontime,
+          registerdate: formData.registerdate,
+          admissiondata: formData.admissiondata,
+          admissiontime: formData.admissiontime,
           uhidno: uhid,
           opno: appoint_id,
           firstname: formData.firstname,
@@ -248,86 +298,147 @@ const EipregistrationProfile = () => {
       console.error(error);
     }
   };
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView vertical>
-        <View style={styles.main}>
-          <View style={styles.mainHead}>
-            <Text style={styles.mainHeadText}>Profile</Text>
-          </View>
-          <View style={styles.form}>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Registered Date</Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Registered Date"
-                value={registerdate}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Admission Date </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Admission Date"
-                value={currentDate}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Admission Time </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Admission Time"
-                value={admissiontime}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>UHID No </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="UHID"
-                value={uhid}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>OP No </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="OP"
-                value={appoint_id}
-              />
-            </View>
 
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Full Name </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Full Name"
-                value={formData.firstname}
-                onChangeText={text => handleInputChange('firstname', text)}
-              />
+  const [visible, setVisible] = useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const _handleMore = () => {
+    setVisible(true);
+  };
+  return (
+    <>
+      <Appbar.Header>
+        <Appbar.BackAction
+          onPress={() => {
+            navigation.replace('Eipdoptions');
+            return true;
+          }}
+        />
+        <Appbar.Content title="Profile" titleStyle={{fontSize: 20}} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
+      </Appbar.Header>
+      <IpdRegistrationNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
+      <SafeAreaView style={styles.container}>
+        <ScrollView vertical>
+          <View style={styles.main}>
+            <View style={styles.mainHead}>
+              <Text style={styles.mainHeadText}>Profile</Text>
             </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Gender </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Gender"
-                value={formData.patientgender}
-                onChangeText={text => handleInputChange('patientgender', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Mobile Number </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Mobile Number"
-                value={formData.mobilenumber}
-                maxLength={10}
-                onChangeText={text => handleInputChange('mobilenumber', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <View style={styles.fields}>
-                <Text style={styles.fieldText}>DATE</Text>
+            <View style={styles.form}>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Registered Date</Text>
+                <TouchableOpacity onPress={datePickerHandler2}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      borderBottomColor: 'green',
+                      borderBottomWidth: 2,
+                    }}>
+                    <Text style={{padding: 10, flex: 1}}>
+                      {formData.registerdate}
+                    </Text>
+                    <FontAwesome6 name="calendar-days" color="red" size={22} />
+                  </View>
+
+                  <DateTimePickerModal
+                    isVisible={datePicker2}
+                    mode="date"
+                    onConfirm={handleDate2}
+                    onCancel={hideDatePicker2}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Admission Date </Text>
+                <TouchableOpacity onPress={datePickerHandler3}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      borderBottomColor: 'green',
+                      borderBottomWidth: 2,
+                    }}>
+                    <Text style={{padding: 10, flex: 1}}>
+                      {formData.admissiondata}
+                    </Text>
+                    <FontAwesome6 name="calendar-days" color="red" size={22} />
+                  </View>
+
+                  <DateTimePickerModal
+                    isVisible={datePicker3}
+                    mode="date"
+                    onConfirm={handleDate3}
+                    onCancel={hideDatePicker3}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Admission Time </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Admission Time"
+                  value={admissiontime}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>UHID No </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="UHID"
+                  value={uhid}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>OP No </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="OP"
+                  value={appoint_id}
+                />
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Full Name </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Full Name"
+                  value={formData.firstname}
+                  onChangeText={text => handleInputChange('firstname', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Gender </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Gender"
+                  value={formData.patientgender}
+                  onChangeText={text =>
+                    handleInputChange('patientgender', text)
+                  }
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Mobile Number </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Mobile Number"
+                  value={formData.mobilenumber}
+                  maxLength={10}
+                  onChangeText={text => handleInputChange('mobilenumber', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Date Of Birth</Text>
                 <TouchableOpacity onPress={datePickerHandler}>
                   <View
                     style={{
@@ -350,204 +461,219 @@ const EipregistrationProfile = () => {
                   onCancel={hideDatePicker}
                 />
               </View>
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Age </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Age"
-                value={formData.patientage}
-                onChangeText={text => handleInputChange('patientage', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Martial Status </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Martial Status"
-                value={formData.patientmartial}
-                onChangeText={text => handleInputChange('patientmartial', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <View style={styles.fields}>
-                <Text style={styles.fieldText}>COUNTRY</Text>
-                <SelectList
-                  setSelected={val => {
-                    setSelectedCountry(val);
-                    handleInputChange('country', val);
-                  }}
-                  data={countryData.map(res => ({
-                    key: [res.code, res.name],
-                    value: res.name,
-                  }))}
-                  search={false}
-                  boxStyles={styles.selectBox}
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Age </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Age"
+                  value={formData.patientage}
+                  onChangeText={text => handleInputChange('patientage', text)}
                 />
               </View>
-            </View>
-            <View style={styles.formGroup}>
-              <View style={styles.fields}>
-                <Text style={styles.fieldText}>STATE</Text>
-                <SelectList
-                  setSelected={value => {
-                    handleInputChange('state', value), setSelectedState(value);
-                  }}
-                  data={stateData.map(res => ({
-                    key: [res.iso, res.statename],
-                    value: res.statename,
-                  }))}
-                  search={false}
-                  boxStyles={styles.selectBox}
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Martial Status </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Martial Status"
+                  value={formData.patientmartial}
+                  onChangeText={text =>
+                    handleInputChange('patientmartial', text)
+                  }
                 />
               </View>
-            </View>
-            <View style={styles.formGroup}>
-              <View style={styles.fields}>
-                <Text style={styles.fieldText}>CITY</Text>
-                <SelectList
-                  setSelected={val => handleInputChange('city', val)}
-                  data={cityData.map(res => ({
-                    value: res.cityname,
-                  }))}
-                  search={false}
-                  boxStyles={styles.selectBox}
+              <View style={styles.formGroup}>
+                <View style={styles.fields}>
+                  <Text style={styles.fieldText}>COUNTRY</Text>
+                  <SelectList
+                    setSelected={val => {
+                      setSelectedCountry(val);
+                      handleInputChange('country', val);
+                    }}
+                    data={countryData.map(res => ({
+                      key: [res.code, res.name],
+                      value: res.name,
+                    }))}
+                    search={false}
+                    boxStyles={styles.selectBox}
+                  />
+                </View>
+              </View>
+              <View style={styles.formGroup}>
+                <View style={styles.fields}>
+                  <Text style={styles.fieldText}>STATE</Text>
+                  <SelectList
+                    setSelected={value => {
+                      handleInputChange('state', value),
+                        setSelectedState(value);
+                    }}
+                    data={stateData.map(res => ({
+                      key: [res.iso, res.statename],
+                      value: res.statename,
+                    }))}
+                    search={false}
+                    boxStyles={styles.selectBox}
+                  />
+                </View>
+              </View>
+              <View style={styles.formGroup}>
+                <View style={styles.fields}>
+                  <Text style={styles.fieldText}>CITY</Text>
+                  <SelectList
+                    setSelected={val => handleInputChange('city', val)}
+                    data={cityData.map(res => ({
+                      value: res.cityname,
+                    }))}
+                    search={false}
+                    boxStyles={styles.selectBox}
+                  />
+                </View>
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Nationality </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Nationality"
+                  value={formData.patientnationality}
+                  onChangeText={text =>
+                    handleInputChange('patientnationality', text)
+                  }
                 />
               </View>
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Nationality </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Nationality"
-                value={formData.patientnationality}
-                onChangeText={text =>
-                  handleInputChange('patientnationality', text)
-                }
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Mother Tounge </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Mother Tounge"
-                value={formData.patientlanguage}
-                onChangeText={text =>
-                  handleInputChange('patientlanguage', text)
-                }
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Email </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Email"
-                value={formData.patientemail}
-                onChangeText={text => handleInputChange('patientemail', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Address </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Address"
-                value={formData.patientaddress}
-                onChangeText={text => handleInputChange('patientaddress', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Profession </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Profession"
-                value={formData.patientprofession}
-                onChangeText={text =>
-                  handleInputChange('patientprofession', text)
-                }
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Flat / Door / Block No. </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Flat / Door / Block No."
-                value={formData.flatno}
-                onChangeText={text => handleInputChange('flatno', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>
-                Name of Primises / Building / Village{' '}
-              </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Name of Primises / Building / Village"
-                value={formData.building_village}
-                onChangeText={text =>
-                  handleInputChange('building_village', text)
-                }
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Road / Street / Post-Office </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Road / Street / Post-Office"
-                value={formData.road_street}
-                onChangeText={text => handleInputChange('road_street', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Area / Locality </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Area / Locality"
-                value={formData.area}
-                onChangeText={text => handleInputChange('area', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Pin Code </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Pin Code"
-                value={formData.pincode}
-                onChangeText={text => handleInputChange('pincode', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>LandLine No. </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Landline No."
-                value={formData.landlineno}
-                onChangeText={text => handleInputChange('landlineno', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Whatsapp No </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Whatsapp"
-                value={formData.whatsappno}
-                onChangeText={text => handleInputChange('whatsappno', text)}
-              />
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Mother Tounge </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Mother Tounge"
+                  value={formData.patientlanguage}
+                  onChangeText={text =>
+                    handleInputChange('patientlanguage', text)
+                  }
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Email </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Email"
+                  value={formData.patientemail}
+                  onChangeText={text => handleInputChange('patientemail', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Address </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Address"
+                  value={formData.patientaddress}
+                  onChangeText={text =>
+                    handleInputChange('patientaddress', text)
+                  }
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Profession </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Profession"
+                  value={formData.patientprofession}
+                  onChangeText={text =>
+                    handleInputChange('patientprofession', text)
+                  }
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Flat / Door / Block No. </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Flat / Door / Block No."
+                  value={formData.flatno}
+                  onChangeText={text => handleInputChange('flatno', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>
+                  Name of Primises / Building / Village{' '}
+                </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Name of Primises / Building / Village"
+                  value={formData.building_village}
+                  onChangeText={text =>
+                    handleInputChange('building_village', text)
+                  }
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>
+                  Road / Street / Post-Office{' '}
+                </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Road / Street / Post-Office"
+                  value={formData.road_street}
+                  onChangeText={text => handleInputChange('road_street', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Area / Locality </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Area / Locality"
+                  value={formData.area}
+                  onChangeText={text => handleInputChange('area', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Pin Code </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Pin Code"
+                  value={formData.pincode}
+                  onChangeText={text => handleInputChange('pincode', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>LandLine No. </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Landline No."
+                  value={formData.landlineno}
+                  onChangeText={text => handleInputChange('landlineno', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Whatsapp No </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Whatsapp"
+                  value={formData.whatsappno}
+                  onChangeText={text => handleInputChange('whatsappno', text)}
+                />
+              </View>
             </View>
           </View>
+        </ScrollView>
+        <View style={styles.formGrpButton}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('EipdregistrationSocioeconomics'),
+                addProfileData();
+            }}>
+            <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
+              Save & Next
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('EipdregistrationSocioeconomics');
+            }}>
+            <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
+              Skip
+            </Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-      <View style={styles.formGrpButton}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('EipdregistrationSocioeconomics'),
-              addProfileData();
-          }}>
-          <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
-            Save & Next
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -555,7 +681,6 @@ export default EipregistrationProfile;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
     flex: 1,
   },
   header: {

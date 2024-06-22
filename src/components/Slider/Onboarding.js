@@ -53,7 +53,8 @@ const Slide = ({item}) => {
 };
 
 const Onboarding = () => {
-  const {setUserData, isLoggedIn, setIsLoggedIn} = useContext(UserContext);
+  const {setUserData, isLoggedIn, setIsLoggedIn, setHospitalName} =
+    useContext(UserContext);
 
   const [username, setMobilenumber] = useState('');
   const [password, setPassword] = useState('');
@@ -116,8 +117,14 @@ const Onboarding = () => {
           'userToken',
           JSON.stringify({res: res?.data[0]}),
         );
+
         setIsLoggedIn(true);
         setUserData(res.data[0]);
+        setHospitalName({
+          hospital_id: res?.hospital_id,
+          hospital_name: res?.hospital_name,
+        });
+
         setMobilenumber('');
         setPassword('');
 

@@ -7,6 +7,7 @@ import {
   TextInput,
   Portal,
   Dialog,
+  Appbar,
 } from 'react-native-paper';
 import SignatureScreen from 'react-native-signature-canvas';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -16,16 +17,15 @@ import UserContext from '../../../components/Context/Context';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BackHandler} from 'react-native';
+import {IpdRegistrationNavigation} from '../OPD/Assessment/OpdpageNavigation';
 
 const Epatientconsentform = () => {
   const navigation = useNavigation();
-  const {scannedPatientsData, userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData
+  const {scannedPatientsData, userData, hospitalName} = useContext(UserContext);
+  const {_id, hospital_id, hospital_name} = userData;
+
   const {patient_id} = scannedPatientsData;
   const ref = useRef();
-  const [isBloodTransfusionChecked, setBloodTransfusionChecked] =
-    useState(true);
-  const [patientName, setPatientName] = useState('');
 
   const [consent1Checked, setConsent1Checked] = useState(true);
   const [consent2Checked, setConsent2Checked] = useState(true);
@@ -128,8 +128,35 @@ const Epatientconsentform = () => {
       console.error(error);
     }
   };
+  const [visible1, setVisible1] = useState(false);
+  const openMenu = () => setVisible1(true);
+  const closeMenu = () => setVisible1(false);
+  const _handleMore = () => {
+    setVisible1(true);
+  };
   return (
     <>
+      <Appbar.Header>
+        <Appbar.BackAction
+          onPress={() => {
+            navigation.replace('EipdregistrationEmergencyContact');
+            return true;
+          }}
+        />
+        <Appbar.Content title="Consent Form" titleStyle={{fontSize: 20}} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
+      </Appbar.Header>
+      <IpdRegistrationNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible1}
+      />
+
       <ScrollView style={styles.container}>
         <Text style={styles.header}>General Consent Form</Text>
 
@@ -142,7 +169,7 @@ const Epatientconsentform = () => {
 
         <Checkbox.Item
           status={consent1Checked ? 'checked' : 'unchecked'}
-          label={`I or __________________________________ (acting on my behalf) recognise that I have a condition requiring health care services and do hereby give consent to the rendering of such care and services, which may include medical treatment, routine diagnostic procedures, laboratory testing or any other procedure or services as doctors or staff of SAMADHAN hospital/clinic consider to be necessary and appropriate.`}
+          label={`I or __________________________________ (acting on my behalf) recognise that I have a condition requiring health care services and do hereby give consent to the rendering of such care and services, which may include medical treatment, routine diagnostic procedures, laboratory testing or any other procedure or services as doctors or staff of ${hospital_name} / clinic consider to be necessary and appropriate.`}
           onPress={() => setConsent1Checked(!consent1Checked)}
           style={styles.checkboxItem}
         />
@@ -204,9 +231,9 @@ const Epatientconsentform = () => {
 
         <Text style={[styles.txt]}>
           I______________________________________________gender________aged________years,here
-          by consent to undergo treatment at MedAyu HOSPITAL, Bhopal, for my
-          ailment. I agree to undergo the treatment and abide by the
-          instructions given to me by the treating doctor.
+          by consent to undergo treatment at {hospital_name}, for my ailment. I
+          agree to undergo the treatment and abide by the instructions given to
+          me by the treating doctor.
         </Text>
 
         <View style={styles.grpTxt}>

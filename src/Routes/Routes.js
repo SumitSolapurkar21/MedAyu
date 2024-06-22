@@ -105,6 +105,7 @@ import SrotasPariksha from '../screens/Employee/OPD/Assessment/SrotasPariksha';
 import Prakruti from '../screens/Employee/OPD/Assessment/Prakruti';
 import OpdHomePage2 from '../screens/Employee/OPD/OpdHomePage2';
 import ConsultantPdf from '../screens/Employee/OPD/Assessment/ConsultantPdf';
+import CalenderComponent from '../components/Calender/CalenderComponent';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -204,107 +205,27 @@ const Routes = () => {
         <Stack.Screen
           name="EipdregistrationProfile"
           component={EipregistrationProfile}
-          options={() => ({
-            title: 'IPD',
-            headerRight: () => (
-              <>
-                <FontAwesome6
-                  name="location-dot"
-                  color="#127359"
-                  size={18}
-                  marginRight={6}
-                />
-                <Text style={{color: 'black', fontWeight: '600', fontSize: 14}}>
-                  Nagpur
-                </Text>
-              </>
-            ),
-            headerTitleStyle: {fontSize: 16},
-          })}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="EipdregistrationSocioeconomics"
           component={EipdregistrationSocioeconomics}
-          options={() => ({
-            title: 'IPD',
-            headerRight: () => (
-              <>
-                <FontAwesome6
-                  name="location-dot"
-                  color="#127359"
-                  size={18}
-                  marginRight={6}
-                />
-                <Text style={{color: 'black', fontWeight: '600', fontSize: 14}}>
-                  Nagpur
-                </Text>
-              </>
-            ),
-            headerTitleStyle: {fontSize: 16},
-          })}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="EipdregistrationIdentification"
           component={EipdregistrationIdentification}
-          options={() => ({
-            title: 'IPD',
-            headerRight: () => (
-              <>
-                <FontAwesome6
-                  name="location-dot"
-                  color="#127359"
-                  size={18}
-                  marginRight={6}
-                />
-                <Text style={{color: 'black', fontWeight: '600', fontSize: 14}}>
-                  Nagpur
-                </Text>
-              </>
-            ),
-            headerTitleStyle: {fontSize: 16},
-          })}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="EipdregistrationInsurance"
           component={EipdregistrationInsurance}
-          options={() => ({
-            title: 'IPD',
-            headerRight: () => (
-              <>
-                <FontAwesome6
-                  name="location-dot"
-                  color="#127359"
-                  size={18}
-                  marginRight={6}
-                />
-                <Text style={{color: 'black', fontWeight: '600', fontSize: 14}}>
-                  Nagpur
-                </Text>
-              </>
-            ),
-            headerTitleStyle: {fontSize: 16},
-          })}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="EipdregistrationEmergencyContact"
           component={EipdregistrationEmergencyContact}
-          options={() => ({
-            title: 'IPD',
-            headerRight: () => (
-              <>
-                <FontAwesome6
-                  name="location-dot"
-                  color="#127359"
-                  size={18}
-                  marginRight={6}
-                />
-                <Text style={{color: 'black', fontWeight: '600', fontSize: 14}}>
-                  Nagpur
-                </Text>
-              </>
-            ),
-            headerTitleStyle: {fontSize: 16},
-          })}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Edepartment"
@@ -464,22 +385,7 @@ const Routes = () => {
         <Stack.Screen
           name="Epatientconsentform"
           component={Epatientconsentform}
-          options={({navigation}) => ({
-            title: 'Consent Form',
-            headerRight: () => (
-              <FontAwesome
-                name="sign-out"
-                size={22}
-                color="#127359"
-                style={{marginLeft: 20}}
-                onPress={() => {
-                  navigation.navigate('LoginPage'), logoutHandler();
-                }}
-              />
-            ),
-
-            headerTitleStyle: {fontSize: 16},
-          })}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Epatientadt"
@@ -1083,11 +989,11 @@ const Routes = () => {
           component={OpdHomePage2}
           options={{headerShown: false}}
         />
-        {/* <Stack.Screen
-          name="ConsultantPdf"
-          component={ConsultantPdf}
+        <Stack.Screen
+          name="CalenderComponent"
+          component={CalenderComponent}
           options={{headerShown: false}}
-        /> */}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

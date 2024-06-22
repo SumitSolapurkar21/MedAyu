@@ -15,10 +15,12 @@ import api from '../../../../api.json';
 import axios from 'axios';
 import DropDown from 'react-native-paper-dropdown';
 import UserContext from '../../../components/Context/Context';
+import {IpdRegistrationNavigation} from '../OPD/Assessment/OpdpageNavigation';
+import {Appbar} from 'react-native-paper';
 
 const EipdregistrationEmergencyContact = () => {
   const {scannedPatientsData, userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData
+  const {_id, hospital_id} = userData;
   const {
     firstname,
     mobilenumber,
@@ -40,7 +42,7 @@ const EipdregistrationEmergencyContact = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      navigation.replace('EipdregistrationInsurance');
       return true;
     };
 
@@ -119,100 +121,128 @@ const EipdregistrationEmergencyContact = () => {
       console.error(error);
     }
   };
+  const [visible, setVisible] = useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const _handleMore = () => {
+    setVisible(true);
+  };
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView vertical>
-        <View style={styles.main}>
-          <View style={styles.mainHead}>
-            <Text style={styles.mainHeadText}>EmergencyContact</Text>
-          </View>
-          <View style={styles.form}>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Name of Relatives</Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Name of Relatives"
-                value={formData.nameofrelatives}
-                onChangeText={text =>
-                  handleInputChange('nameofrelatives', text)
-                }
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <DropDown
-                label={'Relation'}
-                mode={'outlined'}
-                visible={showRelation}
-                showDropDown={() => setShowRelation(true)}
-                onDismiss={() => setShowRelation(false)}
-                value={p_relation}
-                setValue={setP_relation}
-                list={relation?.map(res => ({
-                  label: res.label,
-                  value: res.value,
-                }))}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Mobile Number </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Mobile Number"
-                value={formData.mobilenumber}
-                onChangeText={text => handleInputChange('mobilenumber', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Alternate Mobile Number </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Alternate Mobile Number"
-                value={formData.altmobilenumber}
-                onChangeText={text =>
-                  handleInputChange('altmobilenumber', text)
-                }
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Email ID </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Email ID"
-                value={formData.emailid}
-                onChangeText={text => handleInputChange('emailid', text)}
-              />
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-      <View style={styles.formGrpButton}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationInsurance')}>
-          <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
-            Previous
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+    <>
+      <Appbar.Header>
+        <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('Epatientconsentform'),
-              addEmergencyContactData();
-          }}>
-          <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
-            Save & Next
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Epatientconsentform')}>
-          <Text
-            style={[
-              styles.formButton,
-              {backgroundColor: '#049be0', width: 100},
-            ]}>
-            Skip
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+            navigation.replace('EipdregistrationIdentification');
+            return true;
+          }}
+        />
+        <Appbar.Content title="Emergency Contact" titleStyle={{fontSize: 20}} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
+      </Appbar.Header>
+      <IpdRegistrationNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
+      <SafeAreaView style={styles.container}>
+        <ScrollView vertical>
+          <View style={styles.main}>
+            <View style={styles.mainHead}>
+              <Text style={styles.mainHeadText}>EmergencyContact</Text>
+            </View>
+            <View style={styles.form}>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Name of Relatives</Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Name of Relatives"
+                  value={formData.nameofrelatives}
+                  onChangeText={text =>
+                    handleInputChange('nameofrelatives', text)
+                  }
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <DropDown
+                  label={'Relation'}
+                  mode={'outlined'}
+                  visible={showRelation}
+                  showDropDown={() => setShowRelation(true)}
+                  onDismiss={() => setShowRelation(false)}
+                  value={p_relation}
+                  setValue={setP_relation}
+                  list={relation?.map(res => ({
+                    label: res.label,
+                    value: res.value,
+                  }))}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Mobile Number </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Mobile Number"
+                  value={formData.mobilenumber}
+                  onChangeText={text => handleInputChange('mobilenumber', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Alternate Mobile Number </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Alternate Mobile Number"
+                  value={formData.altmobilenumber}
+                  onChangeText={text =>
+                    handleInputChange('altmobilenumber', text)
+                  }
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Email ID </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Email ID"
+                  value={formData.emailid}
+                  onChangeText={text => handleInputChange('emailid', text)}
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+        <View style={styles.formGrpButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('EipdregistrationInsurance')}>
+            <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
+              Previous
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Epatientconsentform'),
+                addEmergencyContactData();
+            }}>
+            <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
+              Save & Next
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Epatientconsentform')}>
+            <Text
+              style={[
+                styles.formButton,
+                {backgroundColor: '#049be0', width: 100},
+              ]}>
+              Skip
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 

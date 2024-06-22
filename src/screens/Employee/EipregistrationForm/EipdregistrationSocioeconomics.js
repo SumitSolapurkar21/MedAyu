@@ -15,6 +15,8 @@ import axios from 'axios';
 import api from '../../../../api.json';
 import DropDown from 'react-native-paper-dropdown';
 import UserContext from '../../../components/Context/Context';
+import {Appbar} from 'react-native-paper';
+import {IpdRegistrationNavigation} from '../OPD/Assessment/OpdpageNavigation';
 
 const EipdregistrationSocioeconomics = () => {
   const {scannedPatientsData, userData} = useContext(UserContext);
@@ -145,7 +147,7 @@ const EipdregistrationSocioeconomics = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      navigation.replace('EipdregistrationProfile');
       return true;
     };
 
@@ -171,108 +173,137 @@ const EipdregistrationSocioeconomics = () => {
     if (p_income != '') calculate_kpsHandler();
   }, [p_income]);
 
-  // const {kps_value, kps_class} = kpscal?.data;
+  const [visible, setVisible] = useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const _handleMore = () => {
+    setVisible(true);
+  };
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView vertical>
-        <View style={styles.main}>
-          <View style={styles.mainHead}>
-            <Text style={styles.mainHeadText}>Socioeconomics</Text>
-          </View>
-          <View style={styles.form}>
-            <View style={styles.formGroup}>
-              <DropDown
-                label={'Education'}
-                mode={'outlined'}
-                visible={showDropDown3}
-                showDropDown={() => setShowDropDown3(true)}
-                onDismiss={() => setShowDropDown3(false)}
-                value={p_education}
-                setValue={set_Education}
-                list={education?.map(res => ({
-                  label: res.label,
-                  value: res.value,
-                }))}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <DropDown
-                label={'Occupation'}
-                mode={'outlined'}
-                visible={showDropDown2}
-                showDropDown={() => setShowDropDown2(true)}
-                onDismiss={() => setShowDropDown2(false)}
-                value={p_occupation}
-                setValue={set_Occupation}
-                list={occupation?.map(res => ({
-                  label: res.label,
-                  value: res.value,
-                }))}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <DropDown
-                label={'Family Income'}
-                mode={'outlined'}
-                visible={showDropDown4}
-                showDropDown={() => setShowDropDown4(true)}
-                onDismiss={() => setShowDropDown4(false)}
-                value={p_income}
-                setValue={set_Income}
-                list={familyincome?.map(res => ({
-                  label: res.label,
-                  value: res.value,
-                }))}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>KPS Score </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="KPS Score"
-                value={kpscal?.data.kps_value1 || ''}
-                // keyboardType="numeric"
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>KPS Class </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="OP"
-                value={kpscal?.data.kps_class || ''}
-              />
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-      <View style={styles.formGrpButton}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationProfile')}>
-          <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
-            Previous
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+    <>
+      <Appbar.Header>
+        <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('EipdregistrationIdentification'),
-              addSocioeconomicsData();
-          }}>
-          <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
-            Save & Next
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationIdentification')}>
-          <Text
-            style={[
-              styles.formButton,
-              {backgroundColor: '#049be0', width: 100},
-            ]}>
-            Skip
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+            navigation.replace('EipdregistrationProfile');
+            return true;
+          }}
+        />
+        <Appbar.Content title="Socioeconomics" titleStyle={{fontSize: 20}} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
+      </Appbar.Header>
+      <IpdRegistrationNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
+      <SafeAreaView style={styles.container}>
+        <ScrollView vertical>
+          <View style={styles.main}>
+            <View style={styles.mainHead}>
+              <Text style={styles.mainHeadText}>Socioeconomics</Text>
+            </View>
+            <View style={styles.form}>
+              <View style={styles.formGroup}>
+                <DropDown
+                  label={'Education'}
+                  mode={'outlined'}
+                  visible={showDropDown3}
+                  showDropDown={() => setShowDropDown3(true)}
+                  onDismiss={() => setShowDropDown3(false)}
+                  value={p_education}
+                  setValue={set_Education}
+                  list={education?.map(res => ({
+                    label: res.label,
+                    value: res.value,
+                  }))}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <DropDown
+                  label={'Occupation'}
+                  mode={'outlined'}
+                  visible={showDropDown2}
+                  showDropDown={() => setShowDropDown2(true)}
+                  onDismiss={() => setShowDropDown2(false)}
+                  value={p_occupation}
+                  setValue={set_Occupation}
+                  list={occupation?.map(res => ({
+                    label: res.label,
+                    value: res.value,
+                  }))}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <DropDown
+                  label={'Family Income'}
+                  mode={'outlined'}
+                  visible={showDropDown4}
+                  showDropDown={() => setShowDropDown4(true)}
+                  onDismiss={() => setShowDropDown4(false)}
+                  value={p_income}
+                  setValue={set_Income}
+                  list={familyincome?.map(res => ({
+                    label: res.label,
+                    value: res.value,
+                  }))}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>KPS Score </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="KPS Score"
+                  value={kpscal?.data.kps_value1 || ''}
+                  // keyboardType="numeric"
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>KPS Class </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="OP"
+                  value={kpscal?.data.kps_class || ''}
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+        <View style={styles.formGrpButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('EipdregistrationProfile')}>
+            <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
+              Previous
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('EipdregistrationIdentification'),
+                addSocioeconomicsData();
+            }}>
+            <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
+              Save & Next
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('EipdregistrationIdentification')
+            }>
+            <Text
+              style={[
+                styles.formButton,
+                {backgroundColor: '#049be0', width: 100},
+              ]}>
+              Skip
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 

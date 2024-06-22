@@ -24,6 +24,7 @@
     "react": "18.2.0",
     "react-native": "0.72.4",
     "react-native-blob-util": "^0.19.6",
+    "react-native-calendars": "^1.1305.0",
     "react-native-camera": "^4.2.1",
     "react-native-document-picker": "^9.1.2",
     "react-native-dropdown-select-list": "^2.0.5",

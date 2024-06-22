@@ -15,6 +15,8 @@ import axios from 'axios';
 import api from '../../../../api.json';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import UserContext from '../../../components/Context/Context';
+import {Appbar} from 'react-native-paper';
+import {IpdRegistrationNavigation} from '../OPD/Assessment/OpdpageNavigation';
 
 const EipdregistrationInsurance = () => {
   const {scannedPatientsData, userData} = useContext(UserContext);
@@ -27,7 +29,7 @@ const EipdregistrationInsurance = () => {
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
-      navigation.goBack();
+      navigation.replace('EipdregistrationIdentification');
       return true;
     };
 
@@ -120,142 +122,174 @@ const EipdregistrationInsurance = () => {
       console.error(error);
     }
   };
+  const [visible, setVisible] = useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const _handleMore = () => {
+    setVisible(true);
+  };
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView vertical>
-        <View style={styles.main}>
-          <View style={styles.mainHead}>
-            <Text style={styles.mainHeadText}>Insurance</Text>
-          </View>
-          <View style={styles.form}>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Insurance Company</Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Insurance Company"
-                value={formData.insurancecompany}
-                onChangeText={text =>
-                  handleInputChange('insurancecompany', text)
-                }
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>TPA Company </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="TPA Company"
-                value={formData.tpacompany}
-                onChangeText={text => handleInputChange('tpacompany', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Name of Policy Holder </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Name of Policy Holder"
-                value={formData.nameofpolicyholder}
-                onChangeText={text =>
-                  handleInputChange('nameofpolicyholder', text)
-                }
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Policy Number </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Policy Number"
-                value={formData.policynumber}
-                onChangeText={text => handleInputChange('policynumber', text)}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Valid From </Text>
-              <TouchableOpacity onPress={datePickerHandler}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    borderBottomColor: 'green',
-                    borderBottomWidth: 2,
-                  }}>
-                  <Text style={{padding: 10, flex: 1}}>
-                    {formData.validfrom}
-                  </Text>
-                  <FontAwesome6 name="calendar-days" color="red" size={22} />
-                </View>
-              </TouchableOpacity>
-
-              <DateTimePickerModal
-                isVisible={datePicker}
-                mode="date"
-                onConfirm={handleDate}
-                onCancel={hideDatePicker}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Valid To </Text>
-              <TouchableOpacity onPress={datePickerHandler2}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    borderBottomColor: 'green',
-                    borderBottomWidth: 2,
-                  }}>
-                  <Text style={{padding: 10, flex: 1}}>{formData.validto}</Text>
-                  <FontAwesome6 name="calendar-days" color="red" size={22} />
-                </View>
-              </TouchableOpacity>
-
-              <DateTimePickerModal
-                isVisible={datePicker2}
-                mode="date"
-                onConfirm={handleDate2}
-                onCancel={hideDatePicker2}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Sum Insured </Text>
-              <TextInput
-                style={styles.fieldInput}
-                placeholder="Sum Insured"
-                value={formData.suminsured}
-                onChangeText={text => handleInputChange('suminsured', text)}
-              />
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-      <View style={styles.formGrpButton}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EipdregistrationIdentification')}>
-          <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
-            Previous
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+    <>
+      <Appbar.Header>
+        <Appbar.BackAction
           onPress={() => {
-            navigation.navigate('EipdregistrationEmergencyContact'),
-              addInsuranceData();
-          }}>
-          <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
-            Save & Next
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('EipdregistrationEmergencyContact')
-          }>
-          <Text
-            style={[
-              styles.formButton,
-              {backgroundColor: '#049be0', width: 100},
-            ]}>
-            Skip
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+            navigation.replace('EipdregistrationIdentification');
+            return true;
+          }}
+        />
+        <Appbar.Content title="Insurance" titleStyle={{fontSize: 20}} />
+        <Appbar.Action
+          icon="account-details"
+          size={30}
+          onPress={() => openMenu()}
+        />
+      </Appbar.Header>
+      <IpdRegistrationNavigation
+        closeMenu={closeMenu}
+        openMenu={openMenu}
+        _handleMore={_handleMore}
+        visible={visible}
+      />
+      <SafeAreaView style={styles.container}>
+        <ScrollView vertical>
+          <View style={styles.main}>
+            <View style={styles.mainHead}>
+              <Text style={styles.mainHeadText}>Insurance</Text>
+            </View>
+            <View style={styles.form}>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Insurance Company</Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Insurance Company"
+                  value={formData.insurancecompany}
+                  onChangeText={text =>
+                    handleInputChange('insurancecompany', text)
+                  }
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>TPA Company </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="TPA Company"
+                  value={formData.tpacompany}
+                  onChangeText={text => handleInputChange('tpacompany', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Name of Policy Holder </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Name of Policy Holder"
+                  value={formData.nameofpolicyholder}
+                  onChangeText={text =>
+                    handleInputChange('nameofpolicyholder', text)
+                  }
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Policy Number </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Policy Number"
+                  value={formData.policynumber}
+                  onChangeText={text => handleInputChange('policynumber', text)}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Valid From </Text>
+                <TouchableOpacity onPress={datePickerHandler}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      borderBottomColor: 'green',
+                      borderBottomWidth: 2,
+                    }}>
+                    <Text style={{padding: 10, flex: 1}}>
+                      {formData.validfrom}
+                    </Text>
+                    <FontAwesome6 name="calendar-days" color="red" size={22} />
+                  </View>
+                </TouchableOpacity>
+
+                <DateTimePickerModal
+                  isVisible={datePicker}
+                  mode="date"
+                  onConfirm={handleDate}
+                  onCancel={hideDatePicker}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Valid To </Text>
+                <TouchableOpacity onPress={datePickerHandler2}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      borderBottomColor: 'green',
+                      borderBottomWidth: 2,
+                    }}>
+                    <Text style={{padding: 10, flex: 1}}>
+                      {formData.validto}
+                    </Text>
+                    <FontAwesome6 name="calendar-days" color="red" size={22} />
+                  </View>
+                </TouchableOpacity>
+
+                <DateTimePickerModal
+                  isVisible={datePicker2}
+                  mode="date"
+                  onConfirm={handleDate2}
+                  onCancel={hideDatePicker2}
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Sum Insured </Text>
+                <TextInput
+                  style={styles.fieldInput}
+                  placeholder="Sum Insured"
+                  value={formData.suminsured}
+                  onChangeText={text => handleInputChange('suminsured', text)}
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+        <View style={styles.formGrpButton}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('EipdregistrationIdentification')
+            }>
+            <Text style={[styles.formButton, {backgroundColor: '#ebc934'}]}>
+              Previous
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('EipdregistrationEmergencyContact'),
+                addInsuranceData();
+            }}>
+            <Text style={[styles.formButton, {backgroundColor: '#04e004'}]}>
+              Save & Next
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('EipdregistrationEmergencyContact')
+            }>
+            <Text
+              style={[
+                styles.formButton,
+                {backgroundColor: '#049be0', width: 100},
+              ]}>
+              Skip
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -263,7 +297,6 @@ export default EipdregistrationInsurance;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
     flex: 1,
   },
   header: {

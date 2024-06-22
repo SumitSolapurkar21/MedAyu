@@ -233,4 +233,78 @@ export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
   );
 };
 
+export const IpdRegistrationNavigation = ({visible, openMenu, closeMenu}) => {
+  const navigation = useNavigation();
+
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        right: 35,
+        top: 60,
+      }}>
+      <Menu
+        contentStyle={{flexDirection: 'row', flexWrap: 'wrap', width: '105%'}}
+        style={styles.menuItem}
+        visible={visible}
+        onDismiss={closeMenu}
+        anchor={<Button onPress={openMenu}></Button>}>
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('EipdregistrationProfile'), closeMenu();
+          }}
+          title="Profile"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('EipdregistrationSocioeconomics'), closeMenu();
+          }}
+          title="Socioeconomics"
+        />
+        <Divider />
+
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('EipdregistrationIdentification'), closeMenu();
+          }}
+          title="Identification"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('EipdregistrationInsurance'), closeMenu();
+          }}
+          title="Insurance"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('EipdregistrationEmergencyContact'), closeMenu();
+          }}
+          title="EmergencyContact"
+        />
+        <Menu.Item
+          contentStyle={{width: 120}}
+          dense
+          onPress={() => {
+            navigation.replace('Epatientconsentform'), closeMenu();
+          }}
+          title="Consent Form"
+        />
+      </Menu>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({});
