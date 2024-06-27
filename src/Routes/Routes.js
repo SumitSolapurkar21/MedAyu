@@ -1,8 +1,8 @@
-import {Text} from 'react-native';
-import React, {useContext} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { Text } from 'react-native';
+import React, { useContext } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from '../screens/Patients/Login';
 import Otp from '../screens/Patients/Otp';
 import DoctorList from '../screens/Patients/DoctorList';
@@ -93,7 +93,7 @@ import Regularization from '../screens/HRModal/Regularization/Regularization';
 import LeaveHomePage from '../screens/HRModal/Leave/LeaveHomePage';
 import Expenses from '../components/Expenses/Expenses';
 import DashboardHomePage from '../screens/Employee/Dashboard/DashboardHomePage';
-import {Listofpatients} from '../screens/Employee/Dashboard/Listofpatients';
+import { Listofpatients } from '../screens/Employee/Dashboard/Listofpatients';
 import DischargeScanner from '../screens/Employee/Discharge/DischargeScanner';
 import Dashboardpatientslist from '../screens/Employee/Dashboard/Dashboardpatientslist';
 import OpdAdvice from '../screens/Employee/OPD/Assessment/OpdAdvice';
@@ -111,7 +111,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Routes = () => {
-  const {setIsLoggedIn, selectCategory} = useContext(UserContext);
+  const { setIsLoggedIn, selectCategory } = useContext(UserContext);
 
   const logoutHandler = async () => {
     // Clear user token from AsyncStorage
@@ -124,32 +124,32 @@ const Routes = () => {
         <Stack.Screen
           name="LoginPage"
           component={Login}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OtpPage"
           component={Otp}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Tabs"
           component={Tabs}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="DoctorList"
           component={DoctorList}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="TimeSlot"
           component={TimeSlot}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Ehome"
           component={Ehome}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EpatientRegistration"
@@ -164,33 +164,33 @@ const Routes = () => {
                   size={18}
                   marginRight={6}
                 />
-                <Text style={{color: 'black', fontWeight: '600', fontSize: 14}}>
+                <Text style={{ color: 'black', fontWeight: '600', fontSize: 14 }}>
                   Nagpur
                 </Text>
               </>
             ),
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="QRScanner"
           component={Scanner}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="DischargeScanner"
           component={DischargeScanner}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EpatientDetails"
           component={EpatientDetails}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Eappointment"
           component={Eappointment}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         {/* <Stack.Screen
               name="Eipdregistration"
@@ -200,47 +200,47 @@ const Routes = () => {
         <Stack.Screen
           name="DTAppointment"
           component={DateTimeAppointment}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EipdregistrationProfile"
           component={EipregistrationProfile}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EipdregistrationSocioeconomics"
           component={EipdregistrationSocioeconomics}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EipdregistrationIdentification"
           component={EipdregistrationIdentification}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EipdregistrationInsurance"
           component={EipdregistrationInsurance}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EipdregistrationEmergencyContact"
           component={EipdregistrationEmergencyContact}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Edepartment"
           component={Edepartment}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Edoctors"
           component={Edoctors}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="BillLayout"
           component={BillLayout}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             headerShown: false,
             title: 'Patient Bill',
             headerRight: () => (
@@ -248,423 +248,423 @@ const Routes = () => {
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="BillHistory"
           component={BillHistory}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Patient Bill History',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="BillAddItems"
           component={BillAddItems}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Add Items to Sale',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="BillEditItems"
           component={BillEditItems}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Edit Items',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="ExportPdf"
           component={Pdf}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Eipdoptions"
           component={Eipdoptions}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Select IPD Option',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="Epatientvital"
           component={Epatientvital}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Add Vitals',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="Signature"
           component={Signature}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Add Signature',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="Epatientconsentform"
           component={Epatientconsentform}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Epatientadt"
           component={Epatientadt}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'A-D-T',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="Epatientvitalhistory"
           component={Epatientvitalhistory}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Vitals History',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="Eipdbeds"
           component={Eipdbeds}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Add Room and Bed',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="EpatientDiagnosis"
           component={EpatientDiagnosis}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Diagnosis',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="EpatientPresentComplaint"
           component={EpatientPresentComplaint}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Complaint',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="EpatientTreatment"
           component={EpatientTreatment}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Treatments',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="EpatientTreatmentHistory"
           component={EpatientTreatmentHistory}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Treatment History',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="EpatientTreatmentPrescription"
           component={EpatientTreatmentPrescription}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Treatment Prescription',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="BillEditItemForm"
           component={BillEditItemForm}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Edit Bill Details',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="EpatientTreatmentPrescriptionEdit"
           component={EpatientTreatmentPrescriptionEdit}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Edit Treatment Prescription',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="EpatientProcedure"
           component={EpatientProcedure}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Procedure',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="ProcedureContent"
           component={ProcedureContent}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: 'Select Procedure',
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="ProcedureServiceType"
           component={ProcedureServiceType}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: `${selectCategory}`,
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="Procedurehistory"
           component={Procedurehistory}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: `${selectCategory} HISTORY`,
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
@@ -686,313 +686,313 @@ const Routes = () => {
 
           //   headerTitleStyle: {fontSize: 16},
           // })}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Prepostprocedure"
           component={Prepostprocedure}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: `Procedures`,
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="Editprocedure"
           component={Editprocedure}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: `Edit Post-Procedure`,
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         <Stack.Screen
           name="EditPreprocedure"
           component={EditPreprocedure}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             title: `Edit Pre-Procedure`,
             headerRight: () => (
               <FontAwesome
                 name="sign-out"
                 size={22}
                 color="#127359"
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   navigation.navigate('LoginPage'), logoutHandler();
                 }}
               />
             ),
 
-            headerTitleStyle: {fontSize: 16},
+            headerTitleStyle: { fontSize: 16 },
           })}
         />
         {/* discharge */}
         <Stack.Screen
           name="DischargeInitiation"
           component={DischargeInitiation}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PatientDischargeSummary"
           component={PatientDischargeSummary}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PatientDischargeHistory"
           component={PatientDischargeHistory}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PatientDischargeDiagnosis"
           component={PatientDischargeDiagnosis}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PatientDischargeTreatment"
           component={PatientDischargeTreatment}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PatientDischargeInvestigation"
           component={PatientDischargeInvestigation}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ConditionAtAdmission"
           component={ConditionAtAdmission}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ConditionAtDischarge"
           component={ConditionAtDischarge}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdHomePage"
           component={OpdHomePage}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdComplaints"
           component={OpdComplaints}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdPastHistory"
           component={OpdPastHistory}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="FamilyHistory"
           component={FamilyHistory}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="MedicineHistory"
           component={MedicineHistory}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PersonalHistory"
           component={PersonalHistory}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ObstetricsHistory"
           component={ObstetricsHistory}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="MenstrualHistory"
           component={MenstrualHistory}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdVitals"
           component={OpdVitals}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="GeneralExamination"
           component={GeneralExamination}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="SystemicExamination"
           component={SystemicExamination}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdDiagnosis"
           component={OpdDiagnosis}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdInvestigation"
           component={OpdInvestigation}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdPlanOfCare"
           component={OpdPlanOfCare}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdTreatment"
           component={OpdTreatment}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdProcedure"
           component={OpdProcedure}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AttendantHome"
           component={AttendantHome}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="HouseKeepingHome"
           component={HouseKeepingHome}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="NurseHome"
           component={NurseHome}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PExecutiveHome"
           component={PExecutiveHome}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="SecurityHome"
           component={SecurityHome}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PharmacyHome"
           component={PharmacyHome}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="KitchenHome"
           component={KitchenHome}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="HRHome"
           component={HRHome}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="HrModal"
           component={HrModal}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Regularization"
           component={Regularization}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="LeaveHomePage"
           component={LeaveHomePage}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Expenses"
           component={Expenses}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="DashboardHomePage"
           component={DashboardHomePage}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Listofpatients"
           component={Listofpatients}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Dashboardpatientslist"
           component={Dashboardpatientslist}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AshtvidhPariksha"
           component={AshtvidhPariksha}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="DashavidhPariksha"
           component={DashavidhPariksha}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Samprapti"
           component={Samprapti}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="SrotasPariksha"
           component={SrotasPariksha}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Prakruti"
           component={Prakruti}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdAdvice"
           component={OpdAdvice}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EpatientLogs"
           component={EpatientLogs}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OpdHomePage2"
           component={OpdHomePage2}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="CalenderComponent"
           component={CalenderComponent}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -1005,14 +1005,14 @@ function Tabs() {
         screenOptions={() => ({
           tabBarActiveTintColor: '#FFA500',
           tabBarInactiveTintColor: '#127359',
-          tabBarLabelStyle: {fontSize: 11, fontWeight: '600'},
+          tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
         })}>
         <Tab.Screen
           name="Home"
           component={Home}
           options={{
             headerShown: false,
-            tabBarIcon: ({focused, color, size}) => (
+            tabBarIcon: ({ focused, color, size }) => (
               <FontAwesome6
                 name="house"
                 color={focused ? '#FFA500' : color}
@@ -1027,7 +1027,7 @@ function Tabs() {
           component={Consult}
           options={{
             headerShown: false,
-            tabBarIcon: ({focused, color, size}) => (
+            tabBarIcon: ({ focused, color, size }) => (
               <FontAwesome6
                 name="user-doctor"
                 color={focused ? '#FFA500' : color}
@@ -1041,7 +1041,7 @@ function Tabs() {
           component={Medicines}
           options={{
             headerShown: false,
-            tabBarIcon: ({focused, color, size}) => (
+            tabBarIcon: ({ focused, color, size }) => (
               <FontAwesome6
                 name="capsules"
                 color={focused ? '#FFA500' : color}
@@ -1055,7 +1055,7 @@ function Tabs() {
           component={Tests}
           options={{
             headerShown: false,
-            tabBarIcon: ({focused, color, size}) => (
+            tabBarIcon: ({ focused, color, size }) => (
               <FontAwesome6
                 name="microscope"
                 color={focused ? '#FFA500' : color}
@@ -1069,7 +1069,7 @@ function Tabs() {
           component={HealthRecords}
           options={{
             headerShown: false,
-            tabBarIcon: ({focused, color, size}) => (
+            tabBarIcon: ({ focused, color, size }) => (
               <FontAwesome6
                 name="table-list"
                 color={focused ? '#FFA500' : color}

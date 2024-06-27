@@ -40,32 +40,16 @@ const OpdComplaints = () => {
   const [widthArr, setWidthArr] = useState([]);
   const [widthArr1, setWidthArr1] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [filterData, setFilterData] = React.useState([]);
-
-  const [visible, setVisible] = useState(false);
-  const openMenu = () => setVisible(true);
-  const closeMenu = () => setVisible(false);
-  const [addSymptomName, setAddSymptomsName] = useState('');
-
-  const [dropdownValues, setDropdownValues] = useState([]);
-  const [dropdownValues2, setDropdownValues2] = useState([]);
-  const [isFocus, setIsFocus] = useState(false);
-  const [isFocus2, setIsFocus2] = useState(false);
-  const [selectionValue, setSelectionValue] = useState('Medical');
-  const [selectionCategory, setSelectionCategory] = useState([]);
-
-  const [rowData, setRowData] = useState([]);
-  const [opdAssessment, setOpdAssessment] = useState([]);
 
   const {
     patientsData,
     scannedPatientsData,
     waitingListData,
     userData,
+    selectedFlow,
   } = useContext(UserContext);
   const { hospital_id, patient_id, reception_id, uhid } = patientsData;
-  const { appoint_id, mobilenumber } = scannedPatientsData;
+  const { appoint_id, mobilenumber, appointment_id } = scannedPatientsData;
   //popup msg....
 
   const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Remark', 'Action'];
@@ -140,8 +124,8 @@ const OpdComplaints = () => {
 
   // to set width of table ......
   useEffect(() => {
-    setWidthArr([120, 80, 120, 150, 150, 150, ...Array(keys.length).fill(1)]);
-    setWidthArr1([100, 80, 70, 90, 90, 90, 90, ...Array(keys2.length).fill(2)]);
+    setWidthArr([110, 80, 120, 150, 130, 140, ...Array(keys.length).fill(2)]);
+    setWidthArr1([90, 90, 70, 80, 90, 100, 60, ...Array(keys2.length).fill(2)]);
   }, []);
 
   const updateSelectedCategoryData = selectedValue => {
@@ -151,17 +135,25 @@ const OpdComplaints = () => {
   const updateSelectedCategoryData2 = selectedValue => {
     setSelectedCategoryData2(selectedValue);
   };
+  const [dropdownValues, setDropdownValues] = useState([]);
+  const [dropdownValues2, setDropdownValues2] = useState([]);
+  const [isFocus, setIsFocus] = useState(false);
+  const [isFocus2, setIsFocus2] = useState(false);
+  const [selectionValue, setSelectionValue] = useState('Medical');
+  const [selectionCategory, setSelectionCategory] = useState([]);
 
+  const [rowData, setRowData] = useState([]);
+  const [opdAssessment, setOpdAssessment] = useState([]);
 
-  const inputChangeHandler = (rowIndex, field, text) => {
-    const newData = [...rowData];
-    newData[rowIndex] = {
-      ...newData[rowIndex],
-      [field]: text,
-    };
+  //  search input ....
 
-    console.log(newData)
-    setRowData(newData);
+  const [searchInput, setSearchInput] = useState('')
+
+  const inputChangeHandler = (id, field, value) => {
+    // Update the corresponding row's data in rowData
+    setRowData(prevData => prevData.map(row =>
+      row.id === id ? { ...row, [field]: value } : row
+    ));
   };
   useEffect(() => {
     if (selectionValue || userData?.hospital_id || hospital_id) {
@@ -209,7 +201,6 @@ const OpdComplaints = () => {
             duration: '',
             time: '',
             frequency: '',
-            remark: '',
             id: res._id,
           }));
 
@@ -254,7 +245,7 @@ const OpdComplaints = () => {
     }
   };
 
-  const displayData = opdAssessment?.map((item, index) => (
+  const displayData = opdAssessment.map((item, index) => (
     <View key={index}>
       {Object.entries(item).map(([key, value]) => (
         <Card key={key} style={styles.card}>
@@ -265,8 +256,6 @@ const OpdComplaints = () => {
       ))}
     </View>
   ));
-
-
 
   // fetch FetchSysmptomsAccCategory .......
   useEffect(() => {
@@ -290,10 +279,11 @@ const OpdComplaints = () => {
   };
 
   // Add selected data handler
-  const _addSelectedDataHandler = (_selectedData, _id) => {
-    // Filter out data with the specified id
-    const uniqueData = _selectedData.filter(item => item.id === _id);
-    setSelectedRow(prev => [...prev, ...uniqueData]);
+  const _addSelectedDataHandler = (data, _id) => {
+    const selectedRow = data.find(row => row.id === _id);
+    setSelectedRow(prevSelectedRows => [...prevSelectedRows, selectedRow]);
+
+    console.log(selectedRow)
   };
 
   // remove selected data handler ....
@@ -327,6 +317,7 @@ const OpdComplaints = () => {
             setP_category('');
             setSelectedRow([]);
             FetchMobileOpdAssessment();
+            setSearchInput('')
           } else {
             ToastAndroid.show(
               `${message}`,
@@ -343,7 +334,13 @@ const OpdComplaints = () => {
   const _handleMore = () => {
     setVisible(true);
   };
+  const [visible, setVisible] = useState(false);
 
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
+
+  const [addSymptomName, setAddSymptomsName] = useState('');
 
   const addsymptomsHandler = text => {
     setAddSymptomsName(text);
@@ -444,20 +441,12 @@ const OpdComplaints = () => {
     </Modal>
   );
 
-  const handleSearchChange = (query) => {
-    setSearchQuery(query);
-
-    // setRowData(filtered);
-
-  };
-  const filtered = rowData?.filter(row => {
-    return row.symptoms && row.symptoms.toLowerCase().includes(searchQuery.toLowerCase())
+  // filter data....
+  const filterData = rowData?.filter(row => {
+    return row.symptoms && row.symptoms.toLowerCase().includes(searchInput.toLowerCase())
   });
-  const resetSearchHandler = () => {
-    setSearchQuery('');
-    // FetchSysmptomsAccCategory();
-  }
-  console.log(selectedRow)
+
+
   return (
     <>
       {showAlert()}
@@ -484,15 +473,22 @@ const OpdComplaints = () => {
       />
 
       {/* after submit Msg... */}
-      <ScrollView vertical={true} style={styles.container}>
+
+      <ScrollView vertical style={styles.container}>
         <SegmentedButtons
           theme={theme}
           style={styles.segmentBtn}
           value={selectionValue}
           onValueChange={setSelectionValue}
           buttons={[
-            { value: 'Medical', label: 'Medical' },
-            { value: 'Ayurvedic', label: 'Ayurvedic' },
+            {
+              value: 'Medical',
+              label: 'Medical',
+            },
+            {
+              value: 'Ayurvedic',
+              label: 'Ayurvedic',
+            },
           ]}
         />
         <View style={styles.formGroup}>
@@ -522,6 +518,7 @@ const OpdComplaints = () => {
                 onChange={item => {
                   setP_category(item.value);
                   updateSelectedCategoryData(item.value);
+
                   setIsFocus2(false);
                 }}
               />
@@ -531,108 +528,147 @@ const OpdComplaints = () => {
             </Button>
           </View>
         </View>
-        <TextInput value={searchQuery} onChangeText={handleSearchChange} style={styles.searchInput} placeholder='Symptoms'
-          right={<TextInput.Icon icon="filter-variant" onPress={() => resetSearchHandler()} />} />
-        <View style={styles.categorySelection}>
+        <View style={[styles.categorySelection]}>
+
+          {/* search filter input .... */}
+          <TextInput value={searchInput} placeholder='Search Symptoms' onChangeText={(text) => setSearchInput(text)} style={{ marginHorizontal: 6 }} right={<TextInput.Icon icon="filter-variant" onPress={() => setSearchInput('')} />} />
+
+
+          {/* category details.... */}
           <Text style={styles.tableWrapper3TXT}>Category Details</Text>
+
           <ScrollView horizontal={true} style={{ padding: 10 }}>
-            <View style={{ height: 'auto', maxHeight: 250 }}>
-              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
-                <Row data={keys} widthArr={widthArr} style={styles.head} textStyle={styles.text} />
+            <View style={{ height: 'auto', maxHeight: 300 }}>
+              <Table
+                borderStyle={{
+                  borderWidth: 1,
+                  borderColor: 'gray',
+                }}>
+                <Row
+                  data={keys}
+                  widthArr={widthArr}
+                  style={styles.head}
+                  textStyle={styles.text}
+                />
               </Table>
-              <ScrollView vertical={true} showsVerticalScrollIndicator style={styles.dataWrapper}>
-                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
-                  <Rows
-                    data={rowData?.length > 0 && filtered?.map((row) => [
-                      row.symptoms,
-                      <TextInput
-                        key={`${row.id}-duration`}
-                        style={styles.tableInput}
-                        keyboardType="numeric"
-                        onChangeText={text => inputChangeHandler(row.id, 'duration', text)}
-                      />,
-                      <Dropdown
-                        key={`${row.id}-time`}
-                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        data={data2}
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        placeholder={!isFocus2 ? 'Select' : '...'}
-                        value={dropdownValues2[row.id] || ''}
-                        onFocus={() => setIsFocus2(true)}
-                        onBlur={() => setIsFocus2(false)}
-                        onChange={item => {
-                          setDropdownValues2(prevValues => ({
-                            ...prevValues,
-                            [row.id]: item.value,
-                          }));
-                          setIsFocus2(false);
-                          inputChangeHandler(row.id, 'time', item.value);
-                        }}
-                      />,
-                      <Dropdown
-                        key={`${row.id}-frequency`}
-                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        data={data}
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        placeholder={!isFocus ? 'Select' : '...'}
-                        value={dropdownValues[row.id] || ''}
-                        onFocus={() => setIsFocus(true)}
-                        onBlur={() => setIsFocus(false)}
-                        onChange={item => {
-                          setDropdownValues(prevValues => ({
-                            ...prevValues,
-                            [row.id]: item.value,
-                          }));
-                          setIsFocus(false);
-                          inputChangeHandler(row.id, 'frequency', item.value);
-                        }}
-                      />,
-                      <TextInput
-                        key={`${row.id}-remark`}
-                        style={styles.tableInput}
-                        onChangeText={text => inputChangeHandler(row.id, 'remark', text)}
-                      />,
-                      <Button
-                        key={`${row.id}-submitbutton`}
-                        style={{ width: 'auto', marginHorizontal: 30 }}
-                        mode="contained"
-                        onPress={() => _addSelectedDataHandler([...rowData], row.id, row.category)}
-                      >
-                        Add
-                      </Button>,
-                    ])}
-                    widthArr={widthArr}
-                    style={styles.row}
-                    textStyle={styles.text}
-                  />
-                </Table>
-              </ScrollView>
+              {/* <ScrollView vertical={true} style={styles.dataWrapper}> */}
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
+                <Rows
+                  // data={tableData}
+                  data={filterData.length > 0 && filterData.map((row) => [
+                    row.symptoms,
+                    <TextInput
+                      key={row.id}
+                      style={styles.tableInput}
+                      keyboardType="numeric"
+                      onChangeText={text =>
+                        inputChangeHandler(row.id, 'duration', text)
+                      }
+                    />,
+                    <Dropdown
+                      key={row.id}
+                      style={[
+                        styles.dropdown,
+                        isFocus && { borderColor: 'blue' },
+                      ]}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      iconStyle={styles.iconStyle}
+                      data={data2}
+                      maxHeight={300}
+                      labelField="label"
+                      valueField="value"
+                      placeholder={!isFocus2 ? 'Select' : '...'}
+                      value={dropdownValues2[row.id] || ''}
+                      onFocus={() => setIsFocus2(true)}
+                      onBlur={() => setIsFocus2(false)}
+                      onChange={item => {
+                        setDropdownValues2(prevValues => ({
+                          ...prevValues,
+                          [row.id]: item.value,
+                        }));
+                        setIsFocus2(false);
+                        inputChangeHandler(row.id, 'time', item.value);
+                      }}
+                    />,
+                    <Dropdown
+                      key={row.id}
+                      style={[
+                        styles.dropdown,
+                        isFocus && { borderColor: 'blue' },
+                      ]}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      iconStyle={styles.iconStyle}
+                      data={data}
+                      maxHeight={300}
+                      labelField="label"
+                      valueField="value"
+                      placeholder={!isFocus ? 'Select' : '...'}
+                      value={dropdownValues[row.id] || ''}
+                      onFocus={() => setIsFocus(true)}
+                      onBlur={() => setIsFocus(false)}
+                      onChange={item => {
+                        setDropdownValues(prevValues => ({
+                          ...prevValues,
+                          [row.id]: item.value,
+                        }));
+                        setIsFocus(false);
+                        inputChangeHandler(row.id, 'frequency', item.value);
+                      }}
+                    />,
+                    <TextInput
+                      key={row.id}
+                      style={styles.tableInput}
+                      onChangeText={text =>
+                        inputChangeHandler(row.id, 'remark', text)
+                      }
+                    />,
+                    <Button
+                      key={row.id}
+                      style={{ width: 'auto', marginHorizontal: 30 }}
+                      mode="contained"
+                      onPress={() =>
+                        _addSelectedDataHandler(
+                          [...rowData],
+                          row.id,
+                          row.category,
+                        )
+                      }>
+                      Add
+                    </Button>,
+                  ])}
+                  widthArr={widthArr}
+                  style={styles.row}
+                  textStyle={styles.text}
+                />
+              </Table>
+              {/* </ScrollView> */}
             </View>
           </ScrollView>
         </View>
-
         {selectedRow?.length > 0 && (
-          <View style={styles.categorySelection}>
+          <View style={[styles.categorySelection]}>
             <ScrollView horizontal={true} style={{ padding: 10 }}>
               <View style={{ height: 'auto', maxHeight: 400 }}>
-                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
-                  <Row data={keys2} widthArr={widthArr1} style={styles.head} textStyle={styles.text} />
+                <Table
+                  borderStyle={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                  }}>
+                  <Row
+                    data={keys2}
+                    widthArr={widthArr1}
+                    style={styles.head}
+                    textStyle={styles.text}
+                  />
                 </Table>
                 <ScrollView vertical={true} style={styles.dataWrapper}>
                   <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                     <Rows
+                      // data={tableData}
                       data={selectedRow.map(row => [
                         row.category,
                         row.symptoms,
@@ -659,11 +695,17 @@ const OpdComplaints = () => {
           </View>
         )}
         <View style={styles.btn}>
-          <Button style={styles.submitBtn} mode="contained" onPress={() => _buttonHandler('Save')}>
+          <Button
+            style={styles.submitBtn}
+            mode="contained"
+            onPress={() => _buttonHandler('Save')}>
             Submit
           </Button>
 
-          <Button style={styles.submitBtn} mode="contained" onPress={() => _buttonHandler('Skip')}>
+          <Button
+            style={styles.submitBtn}
+            mode="contained"
+            onPress={() => _buttonHandler('Skip')}>
             Next / Skip
           </Button>
         </View>
@@ -693,6 +735,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: 'black',
     fontSize: 18,
+    marginTop: 6
   },
   categorySelection: {
     marginHorizontal: 16,
@@ -838,8 +881,4 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
-  searchInput: {
-    marginHorizontal: 14,
-    marginBottom: 6
-  }
 });
