@@ -1,5 +1,5 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Appbar,
   Button,
@@ -9,18 +9,18 @@ import {
   Checkbox,
   Card,
 } from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {BackHandler} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { BackHandler } from 'react-native';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const ObstetricsHistory = () => {
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   const navigation = useNavigation();
   const [temp, setTemp] = useState([]);
@@ -82,7 +82,7 @@ const ObstetricsHistory = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             _resetHandler();
             FetchMobileOpdAssessment();
@@ -142,14 +142,14 @@ const ObstetricsHistory = () => {
     }
   };
 
-  
+
   const displayData = opdAssessment.map((item, index) => (
     <>
       <View key={index + 1}>
         {Object.entries(item).map(([key, value], index) => (
           <Card key={index + 1} style={styles.card}>
             {Array.isArray(value) ? (
-              <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
+              <Text style={{ lineHeight: 20 }}>{value.join('\n')}</Text>
             ) : null}
           </Card>
         ))}
@@ -280,7 +280,7 @@ const ObstetricsHistory = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={[styles.label, {width: 200}]}>Pregnant : </Text>
+              <Text style={[styles.label, { width: 200 }]}>Pregnant : </Text>
               <View style={styles.radioBtn}>
                 <View style={styles.radioBtn}>
                   <Text>Yes</Text>
@@ -302,7 +302,7 @@ const ObstetricsHistory = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={[styles.label, {width: 200}]}>Breast Feeding :</Text>
+              <Text style={[styles.label, { width: 200 }]}>Breast Feeding :</Text>
               <View style={styles.radioBtn}>
                 <View style={styles.radioBtn}>
                   <Text>Yes</Text>
@@ -324,7 +324,7 @@ const ObstetricsHistory = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={[styles.label, {width: 200}]}>
+              <Text style={[styles.label, { width: 200 }]}>
                 Planing to Conceive :
               </Text>
               <View style={styles.radioBtn}>
@@ -349,7 +349,7 @@ const ObstetricsHistory = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={[styles.label, {width: 200}]}>Contraception :</Text>
+              <Text style={[styles.label, { width: 200 }]}>Contraception :</Text>
               <View style={styles.radioBtn}>
                 <View style={styles.radioBtn}>
                   <Text>Yes</Text>
@@ -361,7 +361,7 @@ const ObstetricsHistory = () => {
                 </View>
               </View>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -428,7 +428,7 @@ const ObstetricsHistory = () => {
             Next / Skip
           </Button>
         </View>
-        <View style={{padding: 8, marginBottom: 10}}>{displayData}</View>
+        <View style={{ padding: 8, marginBottom: 10 }}>{displayData}</View>
       </ScrollView>
     </>
   );
@@ -471,9 +471,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black', padding: 2},
-  row: {height: 'auto'},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black', padding: 2 },
+  row: { height: 'auto' },
   card3: {
     marginTop: 10,
     marginHorizontal: 14,

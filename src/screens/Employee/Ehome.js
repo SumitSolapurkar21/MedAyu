@@ -25,7 +25,6 @@ const Ehome = () => {
 
   const {setPatientSelectedValue, userData} = useContext(UserContext);
 
-  console.log(userData);
 
   //backHandler ...
   useEffect(() => {

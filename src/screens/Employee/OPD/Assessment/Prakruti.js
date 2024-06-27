@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {OpdAyurvedicNavigation} from './OpdpageNavigation';
-import {Appbar, Checkbox, Divider} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { OpdAyurvedicNavigation } from './OpdpageNavigation';
+import { Appbar, Checkbox, Divider } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import api from '../../../../../api.json';
@@ -20,9 +20,9 @@ import UserContext from '../../../../components/Context/Context';
 
 const Prakruti = () => {
   //
-  const {scannedPatientsData, waitingListData, userData} =
+  const { scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {appoint_id} = scannedPatientsData;
+  const { appoint_id } = scannedPatientsData;
 
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
@@ -224,7 +224,7 @@ const Prakruti = () => {
           [key]: value,
         };
       } else {
-        const newState = {...prevState};
+        const newState = { ...prevState };
         const itemIndex = 0; // Assuming you always modify the first item in the array
 
         if (newState[key] && newState[key][itemIndex]) {
@@ -418,9 +418,8 @@ const Prakruti = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
-            console.log(res);
             resetHandler();
             Alert.alert('Success', `${message}`);
           } else {
@@ -436,9 +435,9 @@ const Prakruti = () => {
   const getDoshaCounts = () => {
     // Initialize counts
     let doshaCounts = [
-      {dosha: 'vatta', count: 0},
-      {dosha: 'pitta', count: 0},
-      {dosha: 'kapha', count: 0},
+      { dosha: 'vata', count: 0 },
+      { dosha: 'pitta', count: 0 },
+      { dosha: 'kapha', count: 0 },
     ];
 
     // Iterate over each key in checkedValues
@@ -467,7 +466,7 @@ const Prakruti = () => {
     return (
       <View style={styles.containerDiv}>
         <View style={styles.body}>
-          <View style={[styles.inputDiv, {marginVertical: 10, padding: 10}]}>
+          <View style={[styles.inputDiv, { marginVertical: 10, padding: 10 }]}>
             <Text style={styles.countText}>{displayText}</Text>
           </View>
         </View>
@@ -484,7 +483,7 @@ const Prakruti = () => {
             return true;
           }}
         />
-        <Appbar.Content title="Prakruti" titleStyle={{fontSize: 20}} />
+        <Appbar.Content title="Prakruti" titleStyle={{ fontSize: 20 }} />
         <Appbar.Action
           icon="account-details"
           size={30}
@@ -841,10 +840,10 @@ const Prakruti = () => {
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
-                    value="golwing skin ,wether fair or dark"
+                    value="glowing skin ,wether fair or dark"
                     status={
                       checkedValues.skin[0].pitta.includes(
-                        'golwing skin ,wether fair or dark',
+                        'glowing skin ,wether fair or dark',
                       )
                         ? 'checked'
                         : 'unchecked'
@@ -853,7 +852,7 @@ const Prakruti = () => {
                       handleCheckboxToggle(
                         'skin',
                         'pitta',
-                        'golwing skin ,wether fair or dark',
+                        'glowing skin ,wether fair or dark',
                       )
                     }
                   />
@@ -1114,20 +1113,7 @@ const Prakruti = () => {
                   />
                   <Text>dry and coarse</Text>
                 </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="jwara"
-                    status={
-                      checkedValues.hair[0].vatta.includes('jwara')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() =>
-                      handleCheckboxToggle('hair', 'vatta', 'jwara')
-                    }
-                  />
-                  <Text>Jwara</Text>
-                </View>
+
                 <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="curly or difficult to manage , prone to split ends"
@@ -1424,18 +1410,7 @@ const Prakruti = () => {
                   />
                   <Text>dull sclerae</Text>
                 </View>
-                <View style={styles.checkboxDiv}>
-                  <Checkbox
-                    value="dry"
-                    status={
-                      checkedValues.eyes[0].vatta.includes('dry')
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                    onPress={() => handleCheckboxToggle('eyes', 'vatta', 'dry')}
-                  />
-                  <Text>dry</Text>
-                </View>
+
               </View>
               <Divider />
               <View style={styles.body}>
@@ -2184,10 +2159,10 @@ const Prakruti = () => {
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
-                    value="slow to being,but always see a task to completion"
+                    value="slow to start,but always see a task to completion"
                     status={
                       checkedValues.working_style[0].kapha.includes(
-                        'slow to being,but always see a task to completion',
+                        'slow to start,but always see a task to completion',
                       )
                         ? 'checked'
                         : 'unchecked'
@@ -2196,11 +2171,11 @@ const Prakruti = () => {
                       handleCheckboxToggle(
                         'working_style',
                         'kapha',
-                        'slow to being,but always see a task to completion',
+                        'slow to start,but always see a task to completion',
                       )
                     }
                   />
-                  <Text>slow to being,but always see a task to completion</Text>
+                  <Text>slow to start,but always see a task to completion</Text>
                 </View>
               </View>
             </>
@@ -2388,10 +2363,10 @@ const Prakruti = () => {
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
-                    value="less sweating and arination"
+                    value="less sweating and urination"
                     status={
                       checkedValues.excretions[0].vatta.includes(
-                        'less sweating and arination',
+                        'less sweating and urination',
                       )
                         ? 'checked'
                         : 'unchecked'
@@ -2400,21 +2375,21 @@ const Prakruti = () => {
                       handleCheckboxToggle(
                         'excretions',
                         'vatta',
-                        'less sweating and arination',
+                        'less sweating and urination',
                       )
                     }
                   />
-                  <Text>less sweating and arination</Text>
+                  <Text>less sweating and urination</Text>
                 </View>
               </View>
               <Divider />
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
-                    value="regular ,soft and loose often buring stools"
+                    value="regular ,soft and loose often burning stools"
                     status={
                       checkedValues.excretions[0].pitta.includes(
-                        'regular ,soft and loose often buring stools',
+                        'regular ,soft and loose often burning stools',
                       )
                         ? 'checked'
                         : 'unchecked'
@@ -2423,7 +2398,7 @@ const Prakruti = () => {
                       handleCheckboxToggle(
                         'excretions',
                         'pitta',
-                        'regular ,soft and loose often buring stools',
+                        'regular ,soft and loose often burning stools',
                       )
                     }
                   />
@@ -2812,10 +2787,10 @@ const Prakruti = () => {
               <View style={styles.body}>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
-                    value="spend easily,don#39;t care to earn or save much"
+                    value="spend easily,don't care to earn or save much"
                     status={
                       checkedValues.money_matters[0].vatta.includes(
-                        'spend easily,don#39;t care to earn or save much',
+                        `spend easily,don't care to earn or save much`,
                       )
                         ? 'checked'
                         : 'unchecked'
@@ -2824,11 +2799,11 @@ const Prakruti = () => {
                       handleCheckboxToggle(
                         'money_matters',
                         'vatta',
-                        'spend easily,don#39;t care to earn or save much',
+                        `spend easily,don't care to earn or save much`,
                       )
                     }
                   />
-                  <Text>spend easily,don#39;t care to earn or save much</Text>
+                  <Text>spend easily,don't care to earn or save much</Text>
                 </View>
               </View>
               <Divider />
@@ -2913,7 +2888,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>quick grasp hut poor retention</Text>
+                  <Text>quick grasp but poor retention</Text>
                 </View>
               </View>
               <Divider />
@@ -3230,7 +3205,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 8,
   },
-  text: {textAlign: 'left', color: '#ffffff', fontSize: 18},
+  text: { textAlign: 'left', color: '#ffffff', fontSize: 18 },
   checkboxDiv: {
     flexDirection: 'row',
     alignItems: 'center',

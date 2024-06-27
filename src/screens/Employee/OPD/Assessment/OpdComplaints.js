@@ -9,7 +9,7 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Button,
   TextInput,
@@ -18,14 +18,14 @@ import {
   Appbar,
   Card,
 } from 'react-native-paper';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 import axios from 'axios';
 import api from '../../../../../api.json';
-import {Dropdown} from 'react-native-element-dropdown';
-import {useNavigation} from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
-import {IconButton, MD3Colors} from 'react-native-paper';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { IconButton, MD3Colors } from 'react-native-paper';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const OpdComplaints = () => {
   // comming from dashboard.....
@@ -40,25 +40,41 @@ const OpdComplaints = () => {
   const [widthArr, setWidthArr] = useState([]);
   const [widthArr1, setWidthArr1] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [filterData, setFilterData] = React.useState([]);
+
+  const [visible, setVisible] = useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+  const [addSymptomName, setAddSymptomsName] = useState('');
+
+  const [dropdownValues, setDropdownValues] = useState([]);
+  const [dropdownValues2, setDropdownValues2] = useState([]);
+  const [isFocus, setIsFocus] = useState(false);
+  const [isFocus2, setIsFocus2] = useState(false);
+  const [selectionValue, setSelectionValue] = useState('Medical');
+  const [selectionCategory, setSelectionCategory] = useState([]);
+
+  const [rowData, setRowData] = useState([]);
+  const [opdAssessment, setOpdAssessment] = useState([]);
 
   const {
     patientsData,
     scannedPatientsData,
     waitingListData,
     userData,
-    selectedFlow,
   } = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber, appointment_id} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
   //popup msg....
 
-  const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Action'];
+  const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Remark', 'Action'];
   const keys2 = [
     'Category',
     'Symptoms',
     'Duration',
     'Time',
-    'Frequency',
+    'Frequency', 'Remark',
     'Action',
   ];
 
@@ -124,8 +140,8 @@ const OpdComplaints = () => {
 
   // to set width of table ......
   useEffect(() => {
-    setWidthArr([120, 80, 120, 150, 150, ...Array(keys.length).fill(2)]);
-    setWidthArr1([120, 120, 80, 120, 110, 110, ...Array(keys2.length).fill(2)]);
+    setWidthArr([120, 80, 120, 150, 150, 150, ...Array(keys.length).fill(1)]);
+    setWidthArr1([100, 80, 70, 90, 90, 90, 90, ...Array(keys2.length).fill(2)]);
   }, []);
 
   const updateSelectedCategoryData = selectedValue => {
@@ -135,15 +151,7 @@ const OpdComplaints = () => {
   const updateSelectedCategoryData2 = selectedValue => {
     setSelectedCategoryData2(selectedValue);
   };
-  const [dropdownValues, setDropdownValues] = useState([]);
-  const [dropdownValues2, setDropdownValues2] = useState([]);
-  const [isFocus, setIsFocus] = useState(false);
-  const [isFocus2, setIsFocus2] = useState(false);
-  const [selectionValue, setSelectionValue] = useState('Medical');
-  const [selectionCategory, setSelectionCategory] = useState([]);
 
-  const [rowData, setRowData] = useState([]);
-  const [opdAssessment, setOpdAssessment] = useState([]);
 
   const inputChangeHandler = (rowIndex, field, text) => {
     const newData = [...rowData];
@@ -151,6 +159,8 @@ const OpdComplaints = () => {
       ...newData[rowIndex],
       [field]: text,
     };
+
+    console.log(newData)
     setRowData(newData);
   };
   useEffect(() => {
@@ -169,7 +179,7 @@ const OpdComplaints = () => {
         type: selectionValue,
       })
       .then(res => {
-        const {status, message} = res.data;
+        const { status, message } = res.data;
         if (status === false) {
           ToastAndroid.show(
             `${message}`,
@@ -199,6 +209,7 @@ const OpdComplaints = () => {
             duration: '',
             time: '',
             frequency: '',
+            remark: '',
             id: res._id,
           }));
 
@@ -243,17 +254,19 @@ const OpdComplaints = () => {
     }
   };
 
-  const displayData = opdAssessment.map((item, index) => (
+  const displayData = opdAssessment?.map((item, index) => (
     <View key={index}>
       {Object.entries(item).map(([key, value]) => (
         <Card key={key} style={styles.card}>
           {Array.isArray(value) ? (
-            <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
+            <Text style={{ lineHeight: 20 }}>{value.join('\n')}</Text>
           ) : null}
         </Card>
       ))}
     </View>
   ));
+
+
 
   // fetch FetchSysmptomsAccCategory .......
   useEffect(() => {
@@ -305,7 +318,7 @@ const OpdComplaints = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setRowData([]);
             setSelectedCategoryData([]);
@@ -330,13 +343,7 @@ const OpdComplaints = () => {
   const _handleMore = () => {
     setVisible(true);
   };
-  const [visible, setVisible] = useState(false);
 
-  const openMenu = () => setVisible(true);
-
-  const closeMenu = () => setVisible(false);
-
-  const [addSymptomName, setAddSymptomsName] = useState('');
 
   const addsymptomsHandler = text => {
     setAddSymptomsName(text);
@@ -353,7 +360,7 @@ const OpdComplaints = () => {
             illnessname: addSymptomName,
           })
           .then(res => {
-            const {status, message} = res.data;
+            const { status, message } = res.data;
             if (status === true) {
               setModalVisible(!modalVisible);
               setAddSymptomsName('');
@@ -380,12 +387,12 @@ const OpdComplaints = () => {
       }}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={{color: 'black', fontWeight: '600', marginBottom: 6}}>
+          <Text style={{ color: 'black', fontWeight: '600', marginBottom: 6 }}>
             Select Category
           </Text>
           <Dropdown
             mode={'outlined'}
-            style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -410,15 +417,15 @@ const OpdComplaints = () => {
               setIsFocus2(false);
             }}
           />
-          <Text style={{color: 'black', fontWeight: '600', marginVertical: 6}}>
+          <Text style={{ color: 'black', fontWeight: '600', marginVertical: 6 }}>
             Enter Symptoms Name
           </Text>
           <TextInput
-            style={{backgroundColor: '#ffffff', borderWidth: 1}}
+            style={{ backgroundColor: '#ffffff', borderWidth: 1 }}
             value={addSymptomName}
             onChangeText={text => addsymptomsHandler(text)}
           />
-          <View style={{flexDirection: 'row', gap: 6}}>
+          <View style={{ flexDirection: 'row', gap: 6 }}>
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => {
@@ -436,6 +443,21 @@ const OpdComplaints = () => {
       </View>
     </Modal>
   );
+
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+
+    // setRowData(filtered);
+
+  };
+  const filtered = rowData?.filter(row => {
+    return row.symptoms && row.symptoms.toLowerCase().includes(searchQuery.toLowerCase())
+  });
+  const resetSearchHandler = () => {
+    setSearchQuery('');
+    // FetchSysmptomsAccCategory();
+  }
+  console.log(selectedRow)
   return (
     <>
       {showAlert()}
@@ -462,31 +484,24 @@ const OpdComplaints = () => {
       />
 
       {/* after submit Msg... */}
-
-      <ScrollView vertical style={styles.container}>
+      <ScrollView vertical={true} style={styles.container}>
         <SegmentedButtons
           theme={theme}
           style={styles.segmentBtn}
           value={selectionValue}
           onValueChange={setSelectionValue}
           buttons={[
-            {
-              value: 'Medical',
-              label: 'Medical',
-            },
-            {
-              value: 'Ayurvedic',
-              label: 'Ayurvedic',
-            },
+            { value: 'Medical', label: 'Medical' },
+            { value: 'Ayurvedic', label: 'Ayurvedic' },
           ]}
         />
         <View style={styles.formGroup}>
           <Text style={styles.tableWrapper3TXT}>Category</Text>
           <View style={styles.grpDiv}>
-            <View style={{width: '70%'}}>
+            <View style={{ width: '70%' }}>
               <Dropdown
                 mode={'outlined'}
-                style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
@@ -507,7 +522,6 @@ const OpdComplaints = () => {
                 onChange={item => {
                   setP_category(item.value);
                   updateSelectedCategoryData(item.value);
-
                   setIsFocus2(false);
                 }}
               />
@@ -517,43 +531,29 @@ const OpdComplaints = () => {
             </Button>
           </View>
         </View>
-        <View style={[styles.categorySelection]}>
+        <TextInput value={searchQuery} onChangeText={handleSearchChange} style={styles.searchInput} placeholder='Symptoms'
+          right={<TextInput.Icon icon="filter-variant" onPress={() => resetSearchHandler()} />} />
+        <View style={styles.categorySelection}>
           <Text style={styles.tableWrapper3TXT}>Category Details</Text>
-
-          <ScrollView horizontal={true} style={{padding: 10}}>
-            <View style={{height: 'auto', maxHeight: 400}}>
-              <Table
-                borderStyle={{
-                  borderWidth: 1,
-                  borderColor: 'gray',
-                }}>
-                <Row
-                  data={keys}
-                  widthArr={widthArr}
-                  style={styles.head}
-                  textStyle={styles.text}
-                />
+          <ScrollView horizontal={true} style={{ padding: 10 }}>
+            <View style={{ height: 'auto', maxHeight: 250 }}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
+                <Row data={keys} widthArr={widthArr} style={styles.head} textStyle={styles.text} />
               </Table>
-              <ScrollView vertical={true} style={styles.dataWrapper}>
-                <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <ScrollView vertical={true} showsVerticalScrollIndicator style={styles.dataWrapper}>
+                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                   <Rows
-                    // data={tableData}
-                    data={rowData.map((row, rowIndex) => [
+                    data={rowData?.length > 0 && filtered?.map((row) => [
                       row.symptoms,
                       <TextInput
-                        key={row.id}
+                        key={`${row.id}-duration`}
                         style={styles.tableInput}
                         keyboardType="numeric"
-                        onChangeText={text =>
-                          inputChangeHandler(rowIndex, 'duration', text)
-                        }
+                        onChangeText={text => inputChangeHandler(row.id, 'duration', text)}
                       />,
                       <Dropdown
-                        key={row.id}
-                        style={[
-                          styles.dropdown,
-                          isFocus && {borderColor: 'blue'},
-                        ]}
+                        key={`${row.id}-time`}
+                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                         placeholderStyle={styles.placeholderStyle}
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
@@ -572,15 +572,12 @@ const OpdComplaints = () => {
                             [row.id]: item.value,
                           }));
                           setIsFocus2(false);
-                          inputChangeHandler(rowIndex, 'time', item.value);
+                          inputChangeHandler(row.id, 'time', item.value);
                         }}
                       />,
                       <Dropdown
-                        key={row.id}
-                        style={[
-                          styles.dropdown,
-                          isFocus && {borderColor: 'blue'},
-                        ]}
+                        key={`${row.id}-frequency`}
+                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                         placeholderStyle={styles.placeholderStyle}
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
@@ -599,20 +596,20 @@ const OpdComplaints = () => {
                             [row.id]: item.value,
                           }));
                           setIsFocus(false);
-                          inputChangeHandler(rowIndex, 'frequency', item.value);
+                          inputChangeHandler(row.id, 'frequency', item.value);
                         }}
                       />,
+                      <TextInput
+                        key={`${row.id}-remark`}
+                        style={styles.tableInput}
+                        onChangeText={text => inputChangeHandler(row.id, 'remark', text)}
+                      />,
                       <Button
-                        key={row.id}
-                        style={{width: 'auto', marginHorizontal: 30}}
+                        key={`${row.id}-submitbutton`}
+                        style={{ width: 'auto', marginHorizontal: 30 }}
                         mode="contained"
-                        onPress={() =>
-                          _addSelectedDataHandler(
-                            [...rowData],
-                            row.id,
-                            row.category,
-                          )
-                        }>
+                        onPress={() => _addSelectedDataHandler([...rowData], row.id, row.category)}
+                      >
                         Add
                       </Button>,
                     ])}
@@ -625,32 +622,24 @@ const OpdComplaints = () => {
             </View>
           </ScrollView>
         </View>
+
         {selectedRow?.length > 0 && (
-          <View style={[styles.categorySelection]}>
-            <ScrollView horizontal={true} style={{padding: 10}}>
-              <View style={{height: 'auto', maxHeight: 400}}>
-                <Table
-                  borderStyle={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                  }}>
-                  <Row
-                    data={keys2}
-                    widthArr={widthArr1}
-                    style={styles.head}
-                    textStyle={styles.text}
-                  />
+          <View style={styles.categorySelection}>
+            <ScrollView horizontal={true} style={{ padding: 10 }}>
+              <View style={{ height: 'auto', maxHeight: 400 }}>
+                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
+                  <Row data={keys2} widthArr={widthArr1} style={styles.head} textStyle={styles.text} />
                 </Table>
                 <ScrollView vertical={true} style={styles.dataWrapper}>
-                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                  <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                     <Rows
-                      // data={tableData}
                       data={selectedRow.map(row => [
                         row.category,
                         row.symptoms,
                         row.duration,
                         row.time,
                         row.frequency,
+                        row.remark,
                         <IconButton
                           key={row.id}
                           icon="trash-can"
@@ -670,17 +659,11 @@ const OpdComplaints = () => {
           </View>
         )}
         <View style={styles.btn}>
-          <Button
-            style={styles.submitBtn}
-            mode="contained"
-            onPress={() => _buttonHandler('Save')}>
+          <Button style={styles.submitBtn} mode="contained" onPress={() => _buttonHandler('Save')}>
             Submit
           </Button>
 
-          <Button
-            style={styles.submitBtn}
-            mode="contained"
-            onPress={() => _buttonHandler('Skip')}>
+          <Button style={styles.submitBtn} mode="contained" onPress={() => _buttonHandler('Skip')}>
             Next / Skip
           </Button>
         </View>
@@ -747,9 +730,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: 150,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black', padding: 2},
-  row: {height: 'auto'},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black', padding: 2 },
+  row: { height: 'auto' },
   tableInput: {
     height: 40,
     marginHorizontal: 6,
@@ -855,4 +838,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
+  searchInput: {
+    marginHorizontal: 14,
+    marginBottom: 6
+  }
 });
