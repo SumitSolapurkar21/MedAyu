@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {OpdAyurvedicNavigation} from './OpdpageNavigation';
-import {Appbar, Checkbox} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { OpdAyurvedicNavigation } from './OpdpageNavigation';
+import { Appbar, Checkbox } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import api from '../../../../../api.json';
@@ -20,9 +20,9 @@ import UserContext from '../../../../components/Context/Context';
 
 const Samprapti = () => {
   //
-  const {scannedPatientsData, waitingListData, userData, selectedFlow} =
+  const { scannedPatientsData, waitingListData, userData, selectedFlow } =
     useContext(UserContext);
-  const {appoint_id} = scannedPatientsData;
+  const { appoint_id } = scannedPatientsData;
 
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
@@ -130,7 +130,7 @@ const Samprapti = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             _resetHandler();
             Alert.alert('Success', `${message}`, [
@@ -162,7 +162,7 @@ const Samprapti = () => {
             return true;
           }}
         />
-        <Appbar.Content title="Samprapti" titleStyle={{fontSize: 20}} />
+        <Appbar.Content title="Samprapti" titleStyle={{ fontSize: 20 }} />
         <Appbar.Action
           icon="account-details"
           size={30}
@@ -201,7 +201,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dosha', 'vata')}
                   />
-                  <Text>Vata</Text>
+                  <Text style={styles.text3}>Vata</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -213,7 +213,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dosha', 'pitta')}
                   />
-                  <Text>Pitta</Text>
+                  <Text style={styles.text3}>Pitta</Text>
                 </View>
 
                 <View style={styles.checkboxDiv}>
@@ -226,7 +226,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dosha', 'kapha')}
                   />
-                  <Text>Kapha</Text>
+                  <Text style={styles.text3}>Kapha</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -238,7 +238,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dosha', 'vatapitta')}
                   />
-                  <Text>Vatapitta</Text>
+                  <Text style={styles.text3}>Vatapitta</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -250,7 +250,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dosha', 'vatakapha')}
                   />
-                  <Text>Vatakapha</Text>
+                  <Text style={styles.text3}>Vatakapha</Text>
                 </View>
 
                 <View style={styles.checkboxDiv}>
@@ -263,7 +263,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dosha', 'pittakapha')}
                   />
-                  <Text>Pittakapha</Text>
+                  <Text style={styles.text3}>Pittakapha</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -275,7 +275,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dosha', 'tridosha')}
                   />
-                  <Text>Tridosha</Text>
+                  <Text style={styles.text3}>Tridosha</Text>
                 </View>
               </View>
             </>
@@ -306,7 +306,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dusya', 'rasa')}
                   />
-                  <Text>Rasa</Text>
+                  <Text style={styles.text3}>Rasa</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -318,7 +318,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dusya', 'rakta')}
                   />
-                  <Text>Rakta</Text>
+                  <Text style={styles.text3}>Rakta</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -330,7 +330,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dusya', 'mansa')}
                   />
-                  <Text>Mansa</Text>
+                  <Text style={styles.text3}>Mansa</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -342,7 +342,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dusya', 'meda')}
                   />
-                  <Text>Meda</Text>
+                  <Text style={styles.text3}>Meda</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -354,7 +354,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dusya', 'asthi')}
                   />
-                  <Text>Asthi</Text>
+                  <Text style={styles.text3}>Asthi</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -366,7 +366,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dusya', 'majja')}
                   />
-                  <Text>Majja</Text>
+                  <Text style={styles.text3}>Majja</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -378,7 +378,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('dusya', 'shukra')}
                   />
-                  <Text>Shukra</Text>
+                  <Text style={styles.text3}>Shukra</Text>
                 </View>
               </View>
             </>
@@ -410,7 +410,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'pranavahasrotas')
                     }
                   />
-                  <Text>Pranavahasrotas</Text>
+                  <Text style={styles.text3}>Pranavahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -424,7 +424,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'udakavahasrotas')
                     }
                   />
-                  <Text>Udakavahasrotas</Text>
+                  <Text style={styles.text3}>Udakavahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -438,7 +438,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'annavahasrotas')
                     }
                   />
-                  <Text>Annavahasrotas</Text>
+                  <Text style={styles.text3}>Annavahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -452,7 +452,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'rasavahasrotas')
                     }
                   />
-                  <Text>Rasavahasrotas</Text>
+                  <Text style={styles.text3}>Rasavahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -466,7 +466,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'raktavahasrotas')
                     }
                   />
-                  <Text>Raktavahasrotas</Text>
+                  <Text style={styles.text3}>Raktavahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -480,7 +480,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'mansavahasrotas')
                     }
                   />
-                  <Text>Mansavahasrotas</Text>
+                  <Text style={styles.text3}>Mansavahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -494,7 +494,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'medovahasrotas')
                     }
                   />
-                  <Text>Medovahasrotas</Text>
+                  <Text style={styles.text3}>Medovahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -508,7 +508,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'asthivahasrotas')
                     }
                   />
-                  <Text>Asthivahasrotas</Text>
+                  <Text style={styles.text3}>Asthivahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -522,7 +522,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'majjavahasrotas')
                     }
                   />
-                  <Text>Majjavahasrotas</Text>
+                  <Text style={styles.text3}>Majjavahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -536,7 +536,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'sukravahasrotas')
                     }
                   />
-                  <Text>Sukravahasrotas</Text>
+                  <Text style={styles.text3}>Sukravahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -550,7 +550,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'artavavahasrotas')
                     }
                   />
-                  <Text>Artavavahasrotas</Text>
+                  <Text style={styles.text3}>Artavavahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -564,7 +564,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'mutravahasrotas')
                     }
                   />
-                  <Text>Mutravahasrotas</Text>
+                  <Text style={styles.text3}>Mutravahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -583,7 +583,7 @@ const Samprapti = () => {
                       )
                     }
                   />
-                  <Text>Purishavahasrotas Mutravahasrotas</Text>
+                  <Text style={styles.text3}>Purishavahasrotas Mutravahasrotas</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -597,7 +597,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotas', 'swedavahasrotas')
                     }
                   />
-                  <Text>Swedavahasrotas</Text>
+                  <Text style={styles.text3}>Swedavahasrotas</Text>
                 </View>
               </View>
             </>
@@ -628,7 +628,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('mala', 'purisha')}
                   />
-                  <Text>Purisha</Text>
+                  <Text style={styles.text3}>Purisha</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -640,7 +640,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('mala', 'mutra')}
                   />
-                  <Text>Mutra</Text>
+                  <Text style={styles.text3}>Mutra</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -652,7 +652,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('mala', 'sweda')}
                   />
-                  <Text>Sweda</Text>
+                  <Text style={styles.text3}>Sweda</Text>
                 </View>
               </View>
             </>
@@ -685,7 +685,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('adhistana', 'abhyantar')
                     }
                   />
-                  <Text>Abhyantar</Text>
+                  <Text style={styles.text3}>Abhyantar</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -697,7 +697,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('adhistana', 'madhyam')}
                   />
-                  <Text>Madhyam</Text>
+                  <Text style={styles.text3}>Madhyam</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -709,7 +709,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('adhistana', 'bahya')}
                   />
-                  <Text>Bahya</Text>
+                  <Text style={styles.text3}>Bahya</Text>
                 </View>
               </View>
             </>
@@ -740,7 +740,7 @@ const Samprapti = () => {
                     }
                     onPress={() => handleCheckboxToggle('srotodusthi', 'sanga')}
                   />
-                  <Text>Sanga</Text>
+                  <Text style={styles.text3}>Sanga</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -754,7 +754,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotodusthi', 'granthi')
                     }
                   />
-                  <Text>Granthi</Text>
+                  <Text style={styles.text3}>Granthi</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -768,7 +768,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotodusthi', 'vimargagaman')
                     }
                   />
-                  <Text>Vimargagaman</Text>
+                  <Text style={styles.text3}>Vimargagaman</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -782,7 +782,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('srotodusthi', 'atipravritti')
                     }
                   />
-                  <Text>Atipravritti</Text>
+                  <Text style={styles.text3}>Atipravritti</Text>
                 </View>
               </View>
             </>
@@ -815,7 +815,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('sadhyasadhyatwa', 'sukhasadhya')
                     }
                   />
-                  <Text>Sukhasadhya</Text>
+                  <Text style={styles.text3}>Sukhasadhya</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -829,7 +829,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('sadhyasadhyatwa', 'kastasadhya')
                     }
                   />
-                  <Text>Kastasadhya</Text>
+                  <Text style={styles.text3}>Kastasadhya</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -843,7 +843,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('sadhyasadhyatwa', 'yappya')
                     }
                   />
-                  <Text>Yappya</Text>
+                  <Text style={styles.text3}>Yappya</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -857,7 +857,7 @@ const Samprapti = () => {
                       handleCheckboxToggle('sadhyasadhyatwa', 'asadhya')
                     }
                   />
-                  <Text>Asadhya</Text>
+                  <Text style={styles.text3}>Asadhya</Text>
                 </View>
               </View>
             </>
@@ -903,7 +903,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 8,
   },
-  text: {textAlign: 'left', color: '#ffffff', fontSize: 18},
+  text: { textAlign: 'left', color: '#ffffff', fontSize: 18 },
   checkboxDiv: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -940,4 +940,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'black',
   },
+  text3: {
+    flexWrap: "wrap",
+    width: '80%'
+  }
 });

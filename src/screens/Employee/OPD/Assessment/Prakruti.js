@@ -530,7 +530,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>Lean</Text>
+                  <Text style={styles.text3}>Lean</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -550,7 +550,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>light weight</Text>
+                  <Text style={styles.text3}>light weight</Text>
                 </View>
 
                 <View style={styles.checkboxDiv}>
@@ -571,7 +571,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>
+                  <Text style={styles.text3}>
                     can not gain weight easily but can shed it rapidly
                   </Text>
                 </View>
@@ -593,7 +593,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>VATA PRAKRUTI</Text>
+                  <Text style={styles.text3}>VATA PRAKRUTI</Text>
                 </View> */}
               </View>
               <Divider />
@@ -616,7 +616,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text> well proportioned frame</Text>
+                  <Text style={styles.text3}> well proportioned frame</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -636,7 +636,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>average weight</Text>
+                  <Text style={styles.text3}>average weight</Text>
                 </View>
 
                 <View style={styles.checkboxDiv}>
@@ -657,7 +657,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text> can gain as well as shed weight easily</Text>
+                  <Text style={styles.text3}> can gain as well as shed weight easily</Text>
                 </View>
                 {/* <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -677,7 +677,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>PITTA PRAKRUTI</Text>
+                  <Text style={styles.text3}>PITTA PRAKRUTI</Text>
                 </View> */}
               </View>
               <Divider />
@@ -700,7 +700,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>board and robust frame</Text>
+                  <Text style={styles.text3}>board and robust frame</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -720,7 +720,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>heavy bodied</Text>
+                  <Text style={styles.text3}>heavy bodied</Text>
                 </View>
 
                 <View style={styles.checkboxDiv}>
@@ -741,7 +741,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>
+                  <Text style={styles.text3}>
                     can gain weight easily but can not shed it as fast
                   </Text>
                 </View>
@@ -763,7 +763,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>KAPHA PRAKRUTI</Text>
+                  <Text style={styles.text3}>KAPHA PRAKRUTI</Text>
                 </View> */}
               </View>
             </>
@@ -799,7 +799,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>dry,rough to touch</Text>
+                  <Text style={styles.text3}>dry,rough to touch</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -813,7 +813,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('skin', 'vatta', 'dull,darkish skin')
                     }
                   />
-                  <Text>dull,darkish skin</Text>
+                  <Text style={styles.text3}>dull,darkish skin</Text>
                 </View>
               </View>
               <Divider />
@@ -836,7 +836,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>soft,oily,warm to touch</Text>
+                  <Text style={styles.text3}>soft,oily,warm to touch</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -856,7 +856,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>golwing skin ,wether fair or dark</Text>
+                  <Text style={styles.text3}>golwing skin ,wether fair or dark</Text>
                 </View>
               </View>
               <Divider />
@@ -879,7 +879,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>thick,supple,cool to touch</Text>
+                  <Text style={styles.text3}>thick,supple,cool to touch</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -899,7 +899,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>pale skin, whitish complexion</Text>
+                  <Text style={styles.text3}>pale skin, whitish complexion</Text>
                 </View>
               </View>
             </>
@@ -937,7 +937,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>rough and brittle</Text>
+                  <Text style={styles.text3}>rough and brittle</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -951,7 +951,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('fingernails', 'vatta', 'small')
                     }
                   />
-                  <Text>small</Text>
+                  <Text style={styles.text3}>small</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -971,7 +971,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>dull in colour</Text>
+                  <Text style={styles.text3}>dull in colour</Text>
                 </View>
               </View>
               <Divider />
@@ -988,7 +988,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('fingernails', 'pitta', 'tough')
                     }
                   />
-                  <Text>tough</Text>
+                  <Text style={styles.text3}>tough</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1002,7 +1002,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('fingernails', 'pitta', 'medium')
                     }
                   />
-                  <Text>medium</Text>
+                  <Text style={styles.text3}>medium</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1022,7 +1022,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>pinkish in colour</Text>
+                  <Text style={styles.text3}>pinkish in colour</Text>
                 </View>
               </View>
               <Divider />
@@ -1039,7 +1039,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('fingernails', 'kapha', 'smooth')
                     }
                   />
-                  <Text>smooth</Text>
+                  <Text style={styles.text3}>smooth</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1059,7 +1059,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>large and wide</Text>
+                  <Text style={styles.text3}>large and wide</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1079,7 +1079,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>Whitish in color</Text>
+                  <Text style={styles.text3}>Whitish in color</Text>
                 </View>
               </View>
             </>
@@ -1111,7 +1111,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('hair', 'vatta', 'dry and coarse')
                     }
                   />
-                  <Text>dry and coarse</Text>
+                  <Text style={styles.text3}>dry and coarse</Text>
                 </View>
 
                 <View style={styles.checkboxDiv}>
@@ -1132,7 +1132,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>
+                  <Text style={styles.text3}>
                     curly or difficult to manage , prone to split ends
                   </Text>
                 </View>
@@ -1154,7 +1154,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>dark brown to black</Text>
+                  <Text style={styles.text3}>dark brown to black</Text>
                 </View>
               </View>
               <Divider />
@@ -1171,7 +1171,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('hair', 'pitta', 'smooth and fine')
                     }
                   />
-                  <Text>smooth and fine</Text>
+                  <Text style={styles.text3}>smooth and fine</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1191,7 +1191,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>spare,lending towards early greying or balding</Text>
+                  <Text style={styles.text3}>spare,lending towards early greying or balding</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1205,7 +1205,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('hair', 'pitta', 'light to auburn')
                     }
                   />
-                  <Text>light to auburn</Text>
+                  <Text style={styles.text3}>light to auburn</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1225,7 +1225,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>dark brown to black</Text>
+                  <Text style={styles.text3}>dark brown to black</Text>
                 </View>
               </View>
               <Divider />
@@ -1246,7 +1246,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>silky and lustrous</Text>
+                  <Text style={styles.text3}>silky and lustrous</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1260,7 +1260,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('hair', 'kapha', 'thick')
                     }
                   />
-                  <Text>thick</Text>
+                  <Text style={styles.text3}>thick</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1274,7 +1274,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('hair', 'kapha', 'medium to brown')
                     }
                   />
-                  <Text>medium to brown</Text>
+                  <Text style={styles.text3}>medium to brown</Text>
                 </View>
               </View>
             </>
@@ -1307,7 +1307,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('forehead', 'vatta', 'small')
                     }
                   />
-                  <Text>small</Text>
+                  <Text style={styles.text3}>small</Text>
                 </View>
               </View>
               <Divider />
@@ -1324,7 +1324,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('forehead', 'pitta', 'medium')
                     }
                   />
-                  <Text>medium</Text>
+                  <Text style={styles.text3}>medium</Text>
                 </View>
               </View>
               <Divider />
@@ -1341,7 +1341,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('forehead', 'kapha', 'large')
                     }
                   />
-                  <Text>large</Text>
+                  <Text style={styles.text3}>large</Text>
                 </View>
               </View>
             </>
@@ -1374,7 +1374,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('eyes', 'vatta', 'small and active')
                     }
                   />
-                  <Text>small and active</Text>
+                  <Text style={styles.text3}>small and active</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1394,7 +1394,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>brown to dark brown pupils</Text>
+                  <Text style={styles.text3}>brown to dark brown pupils</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1408,7 +1408,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('eyes', 'vatta', 'dull sclerae')
                     }
                   />
-                  <Text>dull sclerae</Text>
+                  <Text style={styles.text3}>dull sclerae</Text>
                 </View>
 
               </View>
@@ -1432,7 +1432,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>sharp and penetrating</Text>
+                  <Text style={styles.text3}>sharp and penetrating</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1452,7 +1452,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>light pupils could be brown,green or gray</Text>
+                  <Text style={styles.text3}>light pupils could be brown,green or gray</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1466,7 +1466,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('eyes', 'pitta', 'yellowish sclerae')
                     }
                   />
-                  <Text>yellowish sclerae</Text>
+                  <Text style={styles.text3}>yellowish sclerae</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1480,7 +1480,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('eyes', 'pitta', 'medium in size')
                     }
                   />
-                  <Text>medium in size</Text>
+                  <Text style={styles.text3}>medium in size</Text>
                 </View>
               </View>
               <Divider />
@@ -1497,7 +1497,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('eyes', 'kapha', 'moist')
                     }
                   />
-                  <Text>moist</Text>
+                  <Text style={styles.text3}>moist</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1517,7 +1517,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>large and attractive with thick lashes</Text>
+                  <Text style={styles.text3}>large and attractive with thick lashes</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1537,7 +1537,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>bright blue or black pupils</Text>
+                  <Text style={styles.text3}>bright blue or black pupils</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1557,7 +1557,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>dry</Text>
+                  <Text style={styles.text3}>dry</Text>
                 </View>
               </View>
             </>
@@ -1590,7 +1590,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('lips', 'vatta', 'thin')
                     }
                   />
-                  <Text>thin</Text>
+                  <Text style={styles.text3}>thin</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1604,7 +1604,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('lips', 'vatta', 'darkish in colour')
                     }
                   />
-                  <Text>darkish in colour</Text>
+                  <Text style={styles.text3}>darkish in colour</Text>
                 </View>
               </View>
               <Divider />
@@ -1621,7 +1621,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('lips', 'pitta', 'medium')
                     }
                   />
-                  <Text>medium</Text>
+                  <Text style={styles.text3}>medium</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1635,7 +1635,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('lips', 'pitta', 'pinkish in colour')
                     }
                   />
-                  <Text>pinkish in colour</Text>
+                  <Text style={styles.text3}>pinkish in colour</Text>
                 </View>
               </View>
               <Divider />
@@ -1652,7 +1652,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('lips', 'kapha', 'large')
                     }
                   />
-                  <Text>large</Text>
+                  <Text style={styles.text3}>large</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1666,7 +1666,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('lips', 'kapha', 'pale in colur')
                     }
                   />
-                  <Text>pale in colur</Text>
+                  <Text style={styles.text3}>pale in colur</Text>
                 </View>
               </View>
             </>
@@ -1705,7 +1705,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>Insecure and impatient</Text>
+                  <Text style={styles.text3}>Insecure and impatient</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1725,7 +1725,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>hardly ever content,always searching</Text>
+                  <Text style={styles.text3}>hardly ever content,always searching</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1745,7 +1745,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>quick in emotional reactions and outbursts</Text>
+                  <Text style={styles.text3}>quick in emotional reactions and outbursts</Text>
                 </View>
               </View>
               <Divider />
@@ -1768,7 +1768,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>aggressive and impatient</Text>
+                  <Text style={styles.text3}>aggressive and impatient</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1788,7 +1788,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>dominating and cynical</Text>
+                  <Text style={styles.text3}>dominating and cynical</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1808,7 +1808,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>intense emotions of like or dislike,love or hate</Text>
+                  <Text style={styles.text3}>intense emotions of like or dislike,love or hate</Text>
                 </View>
               </View>
               <Divider />
@@ -1831,7 +1831,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>comfortable and patient</Text>
+                  <Text style={styles.text3}>comfortable and patient</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1845,7 +1845,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('temperament', 'kapha', 'laid back')
                     }
                   />
-                  <Text>laid back</Text>
+                  <Text style={styles.text3}>laid back</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1865,7 +1865,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>show to change</Text>
+                  <Text style={styles.text3}>show to change</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1885,7 +1885,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>do not get angry,have calm endurence</Text>
+                  <Text style={styles.text3}>do not get angry,have calm endurence</Text>
                 </View>
               </View>
             </>
@@ -1924,7 +1924,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>restless and easily distracted</Text>
+                  <Text style={styles.text3}>restless and easily distracted</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1944,7 +1944,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>curious mind</Text>
+                  <Text style={styles.text3}>curious mind</Text>
                 </View>
               </View>
               <Divider />
@@ -1967,7 +1967,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>passionate and generative</Text>
+                  <Text style={styles.text3}>passionate and generative</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -1987,7 +1987,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>assertive mind</Text>
+                  <Text style={styles.text3}>assertive mind</Text>
                 </View>
               </View>
               <Divider />
@@ -2010,7 +2010,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>calm and stable</Text>
+                  <Text style={styles.text3}>calm and stable</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2030,7 +2030,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>logical mind</Text>
+                  <Text style={styles.text3}>logical mind</Text>
                 </View>
               </View>
             </>
@@ -2067,7 +2067,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>fast work</Text>
+                  <Text style={styles.text3}>fast work</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2087,7 +2087,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>
+                  <Text style={styles.text3}>
                     starts impulsively, but do not necessarily complet e
                   </Text>
                 </View>
@@ -2112,7 +2112,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text> Determined Worker</Text>
+                  <Text style={styles.text3}> Determined Worker</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2132,7 +2132,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>highly task and goal oriented</Text>
+                  <Text style={styles.text3}>highly task and goal oriented</Text>
                 </View>
               </View>
               <Divider />
@@ -2155,7 +2155,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>methodical worker</Text>
+                  <Text style={styles.text3}>methodical worker</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2175,7 +2175,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>slow to start,but always see a task to completion</Text>
+                  <Text style={styles.text3}>slow to start,but always see a task to completion</Text>
                 </View>
               </View>
             </>
@@ -2214,7 +2214,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>weak, hoarse or shrill voice</Text>
+                  <Text style={styles.text3}>weak, hoarse or shrill voice</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2234,7 +2234,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>talk rapidly rather than clearly</Text>
+                  <Text style={styles.text3}>talk rapidly rather than clearly</Text>
                 </View>
                 <Divider />
                 <View style={styles.body}>
@@ -2256,7 +2256,7 @@ const Prakruti = () => {
                         )
                       }
                     />
-                    <Text>commanding and sharp voice</Text>
+                    <Text style={styles.text3}>commanding and sharp voice</Text>
                   </View>
                   <View style={styles.checkboxDiv}>
                     <Checkbox
@@ -2276,7 +2276,7 @@ const Prakruti = () => {
                         )
                       }
                     />
-                    <Text>persuasive and motivating</Text>
+                    <Text style={styles.text3}>persuasive and motivating</Text>
                   </View>
                 </View>
                 <Divider />
@@ -2299,7 +2299,7 @@ const Prakruti = () => {
                         )
                       }
                     />
-                    <Text>gentle and pleasing voice</Text>
+                    <Text style={styles.text3}>gentle and pleasing voice</Text>
                   </View>
                   <View style={styles.checkboxDiv}>
                     <Checkbox
@@ -2319,7 +2319,7 @@ const Prakruti = () => {
                         )
                       }
                     />
-                    <Text>talk less keep secrets within</Text>
+                    <Text style={styles.text3}>talk less keep secrets within</Text>
                   </View>
                 </View>
               </View>
@@ -2359,7 +2359,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>frequently constipated hard and gaseous stools</Text>
+                  <Text style={styles.text3}>frequently constipated hard and gaseous stools</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2379,7 +2379,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>less sweating and urination</Text>
+                  <Text style={styles.text3}>less sweating and urination</Text>
                 </View>
               </View>
               <Divider />
@@ -2402,7 +2402,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>regular ,soft and loose often buring stools</Text>
+                  <Text style={styles.text3}>regular ,soft and loose often buring stools</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2422,7 +2422,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>profuse sweating and urination,strong body odour</Text>
+                  <Text style={styles.text3}>profuse sweating and urination,strong body odour</Text>
                 </View>
               </View>
               <Divider />
@@ -2445,7 +2445,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>regular ,thick and oily stools</Text>
+                  <Text style={styles.text3}>regular ,thick and oily stools</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2465,7 +2465,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>moderate sweating and urination</Text>
+                  <Text style={styles.text3}>moderate sweating and urination</Text>
                 </View>
               </View>
             </>
@@ -2498,7 +2498,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('thirst', 'vatta', 'variables')
                     }
                   />
-                  <Text>variables</Text>
+                  <Text style={styles.text3}>variables</Text>
                 </View>
               </View>
               <Divider />
@@ -2515,7 +2515,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('thirst', 'pitta', 'excessive')
                     }
                   />
-                  <Text>excessive</Text>
+                  <Text style={styles.text3}>excessive</Text>
                 </View>
               </View>
               <Divider />
@@ -2532,7 +2532,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('thirst', 'kapha', 'scanty')
                     }
                   />
-                  <Text>scanty</Text>
+                  <Text style={styles.text3}>scanty</Text>
                 </View>
               </View>
             </>
@@ -2571,7 +2571,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>forgive and forget easily</Text>
+                  <Text style={styles.text3}>forgive and forget easily</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2591,7 +2591,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>frequently in and out of love</Text>
+                  <Text style={styles.text3}>frequently in and out of love</Text>
                 </View>
               </View>
               <Divider />
@@ -2614,7 +2614,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>hold grudges for long</Text>
+                  <Text style={styles.text3}>hold grudges for long</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2634,7 +2634,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>enter into intense relationship</Text>
+                  <Text style={styles.text3}>enter into intense relationship</Text>
                 </View>
               </View>
               <Divider />
@@ -2657,7 +2657,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>forgive,but never forget</Text>
+                  <Text style={styles.text3}>forgive,but never forget</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2677,7 +2677,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>
+                  <Text style={styles.text3}>
                     deeply attached in love and grounded in family tip
                   </Text>
                 </View>
@@ -2718,7 +2718,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>sunny, warm and rainy climate</Text>
+                  <Text style={styles.text3}>sunny, warm and rainy climate</Text>
                 </View>
               </View>
               <Divider />
@@ -2741,7 +2741,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>cool, pleasant climate</Text>
+                  <Text style={styles.text3}>cool, pleasant climate</Text>
                 </View>
               </View>
               <Divider />
@@ -2764,7 +2764,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>comfortable anywhere except in humid climate</Text>
+                  <Text style={styles.text3}>comfortable anywhere except in humid climate</Text>
                 </View>
               </View>
             </>
@@ -2803,7 +2803,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>spend easily,don't care to earn or save much</Text>
+                  <Text style={styles.text3}>spend easily,don't care to earn or save much</Text>
                 </View>
               </View>
               <Divider />
@@ -2826,7 +2826,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>plan well before spending</Text>
+                  <Text style={styles.text3}>plan well before spending</Text>
                 </View>
               </View>
               <Divider />
@@ -2849,7 +2849,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>do not spend easily ,like to accumulate</Text>
+                  <Text style={styles.text3}>do not spend easily ,like to accumulate</Text>
                 </View>
               </View>
             </>
@@ -2888,7 +2888,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>quick grasp but poor retention</Text>
+                  <Text style={styles.text3}>quick grasp but poor retention</Text>
                 </View>
               </View>
               <Divider />
@@ -2911,7 +2911,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>quick grasp and strong retention</Text>
+                  <Text style={styles.text3}>quick grasp and strong retention</Text>
                 </View>
               </View>
               <Divider />
@@ -2934,7 +2934,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>slow grap but strong retention</Text>
+                  <Text style={styles.text3}>slow grap but strong retention</Text>
                 </View>
               </View>
             </>
@@ -2971,7 +2971,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>anxious and many</Text>
+                  <Text style={styles.text3}>anxious and many</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -2991,7 +2991,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>
+                  <Text style={styles.text3}>
                     dreams relate to flying jumping climbing,runing an
                   </Text>
                 </View>
@@ -3016,7 +3016,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>moderate in number</Text>
+                  <Text style={styles.text3}>moderate in number</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -3036,7 +3036,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>dreams relate to anger, conflict</Text>
+                  <Text style={styles.text3}>dreams relate to anger, conflict</Text>
                 </View>
               </View>
               <Divider />
@@ -3053,7 +3053,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('dreams', 'kapha', 'fewer in number')
                     }
                   />
-                  <Text>fewer in number</Text>
+                  <Text style={styles.text3}>fewer in number</Text>
                 </View>
                 <View style={styles.checkboxDiv}>
                   <Checkbox
@@ -3073,7 +3073,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>dreams relate to romance,water pathos or empathy</Text>
+                  <Text style={styles.text3}>dreams relate to romance,water pathos or empathy</Text>
                 </View>
               </View>
             </>
@@ -3112,7 +3112,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>less and disturbed</Text>
+                  <Text style={styles.text3}>less and disturbed</Text>
                 </View>
               </View>
               <Divider />
@@ -3129,7 +3129,7 @@ const Prakruti = () => {
                       handleCheckboxToggle('sleep', 'pitta', 'less but sound')
                     }
                   />
-                  <Text>less but sound</Text>
+                  <Text style={styles.text3}>less but sound</Text>
                 </View>
               </View>
               <Divider />
@@ -3152,7 +3152,7 @@ const Prakruti = () => {
                       )
                     }
                   />
-                  <Text>deep and prolonged</Text>
+                  <Text style={styles.text3}>deep and prolonged</Text>
                 </View>
               </View>
             </>
@@ -3249,4 +3249,8 @@ const styles = StyleSheet.create({
   countText: {
     textTransform: 'uppercase',
   },
+  text3: {
+    flexWrap: "wrap",
+    width: '80%'
+  }
 });
