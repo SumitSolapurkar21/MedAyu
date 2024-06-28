@@ -575,7 +575,7 @@ const Prakruti = () => {
                     can not gain weight easily but can shed it rapidly
                   </Text>
                 </View>
-                <View style={styles.checkboxDiv}>
+                {/* <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="VATA PRAKRUTI"
                     status={
@@ -594,7 +594,7 @@ const Prakruti = () => {
                     }
                   />
                   <Text>VATA PRAKRUTI</Text>
-                </View>
+                </View> */}
               </View>
               <Divider />
               <View style={styles.body}>
@@ -659,7 +659,7 @@ const Prakruti = () => {
                   />
                   <Text> can gain as well as shed weight easily</Text>
                 </View>
-                <View style={styles.checkboxDiv}>
+                {/* <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="PITTA PRAKRUTI"
                     status={
@@ -678,7 +678,7 @@ const Prakruti = () => {
                     }
                   />
                   <Text>PITTA PRAKRUTI</Text>
-                </View>
+                </View> */}
               </View>
               <Divider />
               <View style={styles.body}>
@@ -745,7 +745,7 @@ const Prakruti = () => {
                     can gain weight easily but can not shed it as fast
                   </Text>
                 </View>
-                <View style={styles.checkboxDiv}>
+                {/* <View style={styles.checkboxDiv}>
                   <Checkbox
                     value="KAPHA PRAKRUTI"
                     status={
@@ -764,7 +764,7 @@ const Prakruti = () => {
                     }
                   />
                   <Text>KAPHA PRAKRUTI</Text>
-                </View>
+                </View> */}
               </View>
             </>
           )}
