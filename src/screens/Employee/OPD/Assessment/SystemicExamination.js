@@ -1,6 +1,6 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Table, Row, Rows } from 'react-native-table-component';
 import {
   Appbar,
   Button,
@@ -9,18 +9,18 @@ import {
   Checkbox,
   Card,
 } from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {BackHandler} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { BackHandler } from 'react-native';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../../api.json';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const SystemicExamination = () => {
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   const [checkedValues, setCheckedValues] = useState({
     eye: '',
@@ -590,7 +590,7 @@ const SystemicExamination = () => {
       label: 'ECG',
       radio1: (
         <>
-          <View style={{padding: 10}}>
+          <View style={{ padding: 10 }}>
             <TextInput
               mode="flat"
               value={checkedValues.ecg_input}
@@ -985,7 +985,7 @@ const SystemicExamination = () => {
           <View style={styles.radioBtn}>
             <View style={styles.radioBtn}>
               <Text style={styles.radioText}>E</Text>
-              <View style={{padding: 10}}>
+              <View style={{ padding: 10 }}>
                 <TextInput
                   mode="flat"
                   value={checkedValues.gcs_e}
@@ -998,7 +998,7 @@ const SystemicExamination = () => {
             </View>
             <View style={styles.radioBtn}>
               <Text style={styles.radioText}>V</Text>
-              <View style={{padding: 10}}>
+              <View style={{ padding: 10 }}>
                 <TextInput
                   mode="flat"
                   value={checkedValues.gcs_v}
@@ -1011,7 +1011,7 @@ const SystemicExamination = () => {
             </View>
             <View style={styles.radioBtn}>
               <Text style={styles.radioText}>V</Text>
-              <View style={{padding: 10}}>
+              <View style={{ padding: 10 }}>
                 <TextInput
                   mode="flat"
                   value={checkedValues.gcs_v2}
@@ -1024,7 +1024,7 @@ const SystemicExamination = () => {
             </View>
             <View style={styles.radioBtn}>
               <Text style={styles.radioText}>Score</Text>
-              <View style={{padding: 10}}>
+              <View style={{ padding: 10 }}>
                 <TextInput
                   mode="flat"
                   value={checkedValues.gcs_score}
@@ -1591,7 +1591,7 @@ const SystemicExamination = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setCheckedValues({});
             FetchMobileOpdAssessment();
@@ -1620,7 +1620,7 @@ const SystemicExamination = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-SYSTEMIC-EXAMINATION',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -1667,7 +1667,7 @@ const SystemicExamination = () => {
       <ScrollView vertical style={styles.container}>
         <ScrollView vertical={true}>
           <View style={styles.tableDiv}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead1}
                 widthArr={headwidthArr}
@@ -1676,7 +1676,7 @@ const SystemicExamination = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={_tableData}
                   widthArr={widthArr}
@@ -1688,7 +1688,7 @@ const SystemicExamination = () => {
           </View>
           {/*  */}
           <View style={styles.tableDiv}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead2}
                 widthArr={headwidthArr}
@@ -1697,7 +1697,7 @@ const SystemicExamination = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={_tableData2}
                   widthArr={widthArr}
@@ -1709,7 +1709,7 @@ const SystemicExamination = () => {
           </View>
           {/*  */}
           <View style={styles.tableDiv}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead3}
                 widthArr={headwidthArr}
@@ -1718,7 +1718,7 @@ const SystemicExamination = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={_tableData3}
                   widthArr={widthArr}
@@ -1736,7 +1736,7 @@ const SystemicExamination = () => {
           </View>
           {/*  */}
           <View style={styles.tableDiv}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead4}
                 widthArr={headwidthArr}
@@ -1745,7 +1745,7 @@ const SystemicExamination = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={_tableData4}
                   widthArr={widthArr}
@@ -1758,7 +1758,7 @@ const SystemicExamination = () => {
           {/*  */}
 
           <View style={styles.tableDiv}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead5}
                 widthArr={headwidthArr}
@@ -1767,7 +1767,7 @@ const SystemicExamination = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={_tableData5}
                   widthArr={widthArr}
@@ -1779,7 +1779,7 @@ const SystemicExamination = () => {
           </View>
           {/*  */}
           <View style={styles.tableDiv}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead6}
                 widthArr={headwidthArr}
@@ -1788,7 +1788,7 @@ const SystemicExamination = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={_tableData6}
                   widthArr={widthArr}
@@ -1800,7 +1800,7 @@ const SystemicExamination = () => {
           </View>
           {/*  */}
           <View style={styles.tableDiv}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead7}
                 widthArr={headwidthArr}
@@ -1809,7 +1809,7 @@ const SystemicExamination = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={_tableData7}
                   widthArr={widthArr}
@@ -1821,7 +1821,7 @@ const SystemicExamination = () => {
           </View>
           {/*  */}
           <View style={styles.tableDiv}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead8}
                 widthArr={headwidthArr}
@@ -1830,7 +1830,7 @@ const SystemicExamination = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={_tableData8}
                   widthArr={widthArr}
@@ -1869,7 +1869,7 @@ const SystemicExamination = () => {
               <Card style={styles.card2} key={index + 1}>
                 <Card.Content>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Eyes :
                       </Text>
@@ -1877,7 +1877,7 @@ const SystemicExamination = () => {
                         {row?.eye}
                       </Text>
                     </View>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Ears :
                       </Text>
@@ -1887,7 +1887,7 @@ const SystemicExamination = () => {
                     </View>
                   </View>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Nose :
                       </Text>
@@ -1895,7 +1895,7 @@ const SystemicExamination = () => {
                         {row?.nose}
                       </Text>
                     </View>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Oral Cavity :
                       </Text>
@@ -1907,7 +1907,7 @@ const SystemicExamination = () => {
 
                   {/* <View style={styles.cardBodyHead}> */}
 
-                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                  <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Date / Time :
                     </Text>
@@ -1932,7 +1932,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
+  head: { height: 40, backgroundColor: '#80aaff' },
   headtext: {
     textAlign: 'left',
     color: 'white',
@@ -1940,8 +1940,8 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontWeight: '600',
   },
-  text: {textAlign: 'left', color: 'black', fontSize: 14, marginLeft: 6},
-  dataWrapper: {marginTop: -1},
+  text: { textAlign: 'left', color: 'black', fontSize: 14, marginLeft: 6 },
+  dataWrapper: { marginTop: -1 },
   row: {
     height: 'auto',
   },

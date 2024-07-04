@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   BackHandler,
@@ -8,14 +8,14 @@ import {
   Text,
   View,
 } from 'react-native';
-import {Appbar, Button, List, TextInput, Card} from 'react-native-paper';
+import { Appbar, Button, List, TextInput, Card } from 'react-native-paper';
 import api from '../../../../../api.json';
 import DateTimePicker from 'react-native-ui-datepicker';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
-import {Dropdown} from 'react-native-element-dropdown';
-import {IconButton, MD3Colors} from 'react-native-paper';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { Dropdown } from 'react-native-element-dropdown';
+import { IconButton, MD3Colors } from 'react-native-paper';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const OpdPastHistory = () => {
   const navigation = useNavigation();
@@ -33,10 +33,10 @@ const OpdPastHistory = () => {
 
   const [p_category, setP_category] = useState('');
 
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -95,7 +95,7 @@ const OpdPastHistory = () => {
     setSearchInput('');
     setSelectedIllnessCode('');
   };
-  const Themes = [{mainColor: '#F5803E', activeTextColor: '#fff'}];
+  const Themes = [{ mainColor: '#F5803E', activeTextColor: '#fff' }];
 
   const calenderHandler = index => {
     setShowCalender(true);
@@ -150,7 +150,7 @@ const OpdPastHistory = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setTemp([]);
             FetchMobileOpdAssessment();
@@ -191,7 +191,7 @@ const OpdPastHistory = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-PAST-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -223,7 +223,7 @@ const OpdPastHistory = () => {
       {Object.entries(item).map(([key, value]) => (
         <Card key={key} style={styles.card}>
           {Array.isArray(value) ? (
-            <Text style={{lineHeight: 20, width: 330}}>{value.join('\n')}</Text>
+            <Text style={{ lineHeight: 20, width: 330 }}>{value.join('\n')}</Text>
           ) : null}
         </Card>
       ))}
@@ -283,7 +283,7 @@ const OpdPastHistory = () => {
           mode="outlined"
           label="Diseases"
           placeholder="Search Diseases ..."
-          style={[styles.input, {marginHorizontal: 14}]}
+          style={[styles.input, { marginHorizontal: 14 }]}
           value={
             selectedIllnessCode?.illnessname
               ? selectedIllnessCode?.illnessname
@@ -327,7 +327,7 @@ const OpdPastHistory = () => {
             return (
               <View style={styles.card} key={index + 1}>
                 <View style={styles.cardContentDiv}>
-                  <Text style={[styles.label, {width: 200}]}>
+                  <Text style={[styles.label, { width: 200 }]}>
                     Illness : &nbsp; {res?.illnessname}
                   </Text>
                   <IconButton
@@ -387,13 +387,13 @@ const OpdPastHistory = () => {
                     />
                   </View>
                   <View style={styles.cardContent}>
-                    <Text style={[styles.label, {width: '200%'}]}>
+                    <Text style={[styles.label, { width: '200%' }]}>
                       Treatment Status
                     </Text>
                     <View>
                       <Dropdown
                         mode={'outlined'}
-                        style={[styles.dropdown, {borderColor: 'blue'}]}
+                        style={[styles.dropdown, { borderColor: 'blue' }]}
                         placeholderStyle={styles.placeholderStyle}
                         selectedTextStyle={styles.selectedTextStyle}
                         inputSearchStyle={styles.inputSearchStyle}
@@ -429,7 +429,7 @@ const OpdPastHistory = () => {
 
           <Button
             mode="contained"
-            style={[styles.btn, {alignSelf: 'flex-start'}]}
+            style={[styles.btn, { alignSelf: 'flex-start' }]}
             onPress={() => resetHandler()}>
             Add More
           </Button>
@@ -457,7 +457,7 @@ const OpdPastHistory = () => {
             Next / Skip
           </Button>
         </View>
-        <View style={{padding: 10}}>{displayData}</View>
+        <View style={{ padding: 10 }}>{displayData}</View>
       </ScrollView>
     </>
   );
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     shadowColor: '#e6e8eb',
     shadowOpacity: 0.2,
-    shadowOffset: {width: 10, height: 10},
+    shadowOffset: { width: 10, height: 10 },
   },
   submitbutton: {
     flexDirection: 'row',
@@ -568,9 +568,9 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: 16,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black', padding: 2},
-  row: {height: 'auto'},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black', padding: 2 },
+  row: { height: 'auto' },
 
   card2: {
     marginTop: 10,

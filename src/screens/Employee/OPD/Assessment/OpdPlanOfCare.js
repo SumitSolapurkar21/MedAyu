@@ -1,18 +1,18 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {BackHandler, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { BackHandler, ScrollView, StyleSheet, Text, View } from 'react-native';
 import axios from 'axios';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
-import {useNavigation} from '@react-navigation/native';
-import {Appbar, Checkbox, Button, Card} from 'react-native-paper';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { useNavigation } from '@react-navigation/native';
+import { Appbar, Checkbox, Button, Card } from 'react-native-paper';
+import { Table, Row, Rows } from 'react-native-table-component';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const OpdPlanOfCare = () => {
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   const navigation = useNavigation();
   const [checkedValues, setCheckedValues] = useState({});
@@ -218,7 +218,7 @@ const OpdPlanOfCare = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setCheckedValues({});
             FetchMobileOpdAssessment();
@@ -244,7 +244,7 @@ const OpdPlanOfCare = () => {
   }, []);
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
+    return () => { };
   }, [hospital_id, patient_id, reception_id]);
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
@@ -257,7 +257,7 @@ const OpdPlanOfCare = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-PLAN-OF-CARE',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -302,7 +302,7 @@ const OpdPlanOfCare = () => {
         style={styles.container}>
         {/*  */}
         <View style={styles.tableDiv}>
-          <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+          <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
             <Row
               data={tableHead8}
               widthArr={headwidthArr}
@@ -311,7 +311,7 @@ const OpdPlanOfCare = () => {
             />
           </Table>
           <ScrollView style={styles.dataWrapper}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Rows
                 data={_tableData8}
                 widthArr={widthArr}
@@ -344,7 +344,7 @@ const OpdPlanOfCare = () => {
               <Card style={styles.card2} key={index + 1}>
                 <Card.Content>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Preventive :
                       </Text>
@@ -352,7 +352,7 @@ const OpdPlanOfCare = () => {
                         {row?.preventive ? 'Yes' : 'No'}
                       </Text>
                     </View>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Medicine :
                       </Text>
@@ -362,7 +362,7 @@ const OpdPlanOfCare = () => {
                     </View>
                   </View>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Physiotherapy :
                       </Text>
@@ -370,7 +370,7 @@ const OpdPlanOfCare = () => {
                         {row?.physiotherapy ? 'Yes' : 'No'}
                       </Text>
                     </View>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Physicaltherapy :
                       </Text>
@@ -382,7 +382,7 @@ const OpdPlanOfCare = () => {
 
                   {/* <View style={styles.cardBodyHead}> */}
 
-                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                  <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Date / Time :
                     </Text>
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
+  head: { height: 40, backgroundColor: '#80aaff' },
   headtext: {
     textAlign: 'left',
     color: 'white',
@@ -423,8 +423,8 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontWeight: '600',
   },
-  text: {textAlign: 'left', color: 'black', fontSize: 14, marginLeft: 6},
-  dataWrapper: {marginTop: -1},
+  text: { textAlign: 'left', color: 'black', fontSize: 14, marginLeft: 6 },
+  dataWrapper: { marginTop: -1 },
   row: {
     height: 'auto',
   },

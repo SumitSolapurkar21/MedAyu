@@ -7,15 +7,15 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {Appbar} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import { Table, Row, Rows } from 'react-native-table-component';
+import { Appbar } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {GeneratePdf} from './PdfReport';
+import { GeneratePdf } from './PdfReport';
 
 export const Listofpatients = () => {
   const navigation = useNavigation();
@@ -55,7 +55,7 @@ export const Listofpatients = () => {
           dashboardpatientListData,
         )
         .then(response => {
-          const {status, message} = response?.data;
+          const { status, message } = response?.data;
           if (status === true) {
             const data = response.data.data;
             setPatientList(data);
@@ -323,7 +323,7 @@ export const Listofpatients = () => {
         })
         .then(response => {
           const data = response?.data;
-          const {status, message} = data;
+          const { status, message } = data;
           if (status === true) {
             Alert.alert('Success !!', `${message}`);
             See_Mobile_Appointment_List();
@@ -359,7 +359,7 @@ export const Listofpatients = () => {
         .post(`${api.baseurl}/ChangeMobileConfirmToWaiting`, body)
         .then(response => {
           const data = response?.data;
-          const {status, message} = data;
+          const { status, message } = data;
           if (status === true) {
             Alert.alert('Success !!', `${message}`);
             See_Mobile_Appointment_List();
@@ -386,7 +386,7 @@ export const Listofpatients = () => {
         })
         .then(response => {
           const data = response?.data;
-          const {status, message} = data;
+          const { status, message } = data;
           if (status === true) {
             Alert.alert('Success !!', `${message}`);
             See_Mobile_Appointment_List();
@@ -401,12 +401,13 @@ export const Listofpatients = () => {
 
   // MobileChangeWaitingToConsult api ....
   const MobileChangeWaitingToConsult = async data => {
+    console.log("waiting to consult:", data)
     try {
       await axios
         .post(`${api.baseurl}/MobileChangeWaitingToConsult`, data)
         .then(response => {
           const data = response?.data;
-          const {status, message} = data;
+          const { status, message } = data;
           if (status === true) {
             Alert.alert('Success !!', `${message}`);
           } else {
@@ -442,6 +443,8 @@ export const Listofpatients = () => {
       reception_id: userData._id,
       role: userData.role,
     };
+
+    console.log("MobileChangeWaitingToConsult", data)
     MobileChangeWaitingToConsult(data);
 
     setWaitingListData(data);
@@ -467,7 +470,7 @@ export const Listofpatients = () => {
       </Appbar.Header>
       <View style={styles.container}>
         <View style={styles.tableDiv}>
-          <View style={{marginVertical: 10}}>
+          <View style={{ marginVertical: 10 }}>
             <Text style={styles.headtext2}>
               {dashboardpatientListData?.status === 'Confirmed'
                 ? 'Appointment'
@@ -476,8 +479,8 @@ export const Listofpatients = () => {
             </Text>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{height: 'auto', maxHeight: 400}}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <View style={{ height: 'auto', maxHeight: 400 }}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Row
                   data={tableHead}
                   widthArr={widthArr2}
@@ -487,9 +490,9 @@ export const Listofpatients = () => {
               </Table>
               <ScrollView
                 vertical
-                showsVerticalScrollIndicator={false}
+
                 style={styles.dataWrapper}>
-                <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                   <Rows
                     data={patientList?.map((item, index) => {
                       if (
@@ -503,8 +506,8 @@ export const Listofpatients = () => {
                           item.patientuniqueno,
                           // item.token,
                           item.appoint_status === 'Waiting' ||
-                          item.appoint_status === 'Called' ||
-                          item.appoint_status === 'Consulted' ? (
+                            item.appoint_status === 'Called' ||
+                            item.appoint_status === 'Consulted' ? (
                             item.fullname || ''
                           ) : (
                             <TouchableOpacity
@@ -517,7 +520,7 @@ export const Listofpatients = () => {
                                   item.patientuniqueno,
                                 );
                               }}>
-                              <Text style={[styles.text, {color: 'blue'}]}>
+                              <Text style={[styles.text, { color: 'blue' }]}>
                                 {item.fullname}
                               </Text>
                             </TouchableOpacity>
@@ -541,8 +544,8 @@ export const Listofpatients = () => {
                           item.patientuniqueno,
                           item.token,
                           item.appoint_status === 'Waiting' ||
-                          item.appoint_status === 'Called' ||
-                          item.appoint_status === 'Consulted' ? (
+                            item.appoint_status === 'Called' ||
+                            item.appoint_status === 'Consulted' ? (
                             item.fullname || ''
                           ) : (
                             <TouchableOpacity
@@ -555,7 +558,7 @@ export const Listofpatients = () => {
                                   item.patientuniqueno,
                                 )
                               }>
-                              <Text style={[styles.text, {color: 'blue'}]}>
+                              <Text style={[styles.text, { color: 'blue' }]}>
                                 {item.fullname}
                               </Text>
                             </TouchableOpacity>
@@ -575,7 +578,7 @@ export const Listofpatients = () => {
                             }}>
                             {(item.appoint_status === 'Waiting' ||
                               item.appoint_status === 'Called') &&
-                            userData?.role === 'Doctor' ? (
+                              userData?.role === 'Doctor' ? (
                               <TouchableOpacity
                                 onPress={() =>
                                   MobileCallToPatients(
@@ -664,7 +667,7 @@ export const Listofpatients = () => {
                                   item.patientuniqueno,
                                 )
                               }>
-                              <Text style={[styles.text, {color: 'blue'}]}>
+                              <Text style={[styles.text, { color: 'blue' }]}>
                                 {item.fullname}
                               </Text>
                             </TouchableOpacity>
@@ -719,7 +722,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  head: {height: 40, backgroundColor: '#80aaff'},
+  head: { height: 40, backgroundColor: '#80aaff' },
   headtext: {
     textAlign: 'left',
     color: 'white',
@@ -730,7 +733,7 @@ const styles = StyleSheet.create({
   tableDiv: {
     padding: 10,
   },
-  text: {textAlign: 'center', color: 'black', fontSize: 13},
+  text: { textAlign: 'center', color: 'black', fontSize: 13 },
   row: {
     height: 50,
   },

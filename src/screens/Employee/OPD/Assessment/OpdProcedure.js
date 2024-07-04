@@ -1,6 +1,6 @@
 import axios from 'axios';
-import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, BackHandler} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View, BackHandler } from 'react-native';
 import {
   Appbar,
   List,
@@ -14,9 +14,9 @@ import {
 } from 'react-native-paper';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
-import {useNavigation} from '@react-navigation/native';
-import {Dropdown} from 'react-native-element-dropdown';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { useNavigation } from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const OpdProcedure = () => {
   //backHandler ...
@@ -35,11 +35,11 @@ const OpdProcedure = () => {
   }, []);
 
   const navigation = useNavigation();
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
 
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
   const [selectionValue, setSelectionValue] = useState(null);
   const [p_category, setP_category] = useState('');
   const [isFocus2, setIsFocus2] = useState(false);
@@ -192,7 +192,7 @@ const OpdProcedure = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setTemp([]);
             // navigation.navigate('EpatientDetails');
@@ -221,7 +221,7 @@ const OpdProcedure = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-PROCEDURE',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -283,10 +283,10 @@ const OpdProcedure = () => {
         </View>
         <View style={styles.dropdownCategory}>
           <Text style={styles.heading}>Procedure Type</Text>
-          <View style={{width: '70%'}}>
+          <View style={{ width: '70%' }}>
             <Dropdown
               mode={'outlined'}
-              style={[styles.dropdown, isFocus2 && {borderColor: 'blue'}]}
+              style={[styles.dropdown, isFocus2 && { borderColor: 'blue' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
@@ -361,7 +361,7 @@ const OpdProcedure = () => {
             return (
               <View style={styles.card} key={index}>
                 <View style={styles.cardContentDiv}>
-                  <Text style={[styles.label, {width: 200, marginLeft: 10}]}>
+                  <Text style={[styles.label, { width: 200, marginLeft: 10 }]}>
                     Name : &nbsp; {res.procedurename}
                   </Text>
                   <IconButton
@@ -465,7 +465,7 @@ const OpdProcedure = () => {
 
           <Button
             mode="contained"
-            style={[styles.btn, {alignSelf: 'flex-start'}]}
+            style={[styles.btn, { alignSelf: 'flex-start' }]}
             onPress={() => resetHandler()}>
             Add More
           </Button>
@@ -491,7 +491,7 @@ const OpdProcedure = () => {
               <Card style={styles.card2} key={index + 1}>
                 <Card.Content>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Name :
                       </Text>
@@ -500,7 +500,7 @@ const OpdProcedure = () => {
                       </Text>
                     </View>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Amount :
                     </Text>
@@ -508,7 +508,7 @@ const OpdProcedure = () => {
                       {row?.procedureamount}
                     </Text>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Time :
                     </Text>
@@ -517,7 +517,7 @@ const OpdProcedure = () => {
                     </Text>
                   </View>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Kit :
                       </Text>
@@ -525,7 +525,7 @@ const OpdProcedure = () => {
                         {row?.procedurekit}
                       </Text>
                     </View>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Instruction :
                       </Text>
@@ -534,7 +534,7 @@ const OpdProcedure = () => {
                       </Text>
                     </View>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Procedure Type :
                     </Text>
@@ -543,7 +543,7 @@ const OpdProcedure = () => {
                     </Text>
                   </View>
 
-                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                  <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Date / Time :
                     </Text>

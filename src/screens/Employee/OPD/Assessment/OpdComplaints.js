@@ -46,10 +46,9 @@ const OpdComplaints = () => {
     scannedPatientsData,
     waitingListData,
     userData,
-    selectedFlow,
   } = useContext(UserContext);
   const { hospital_id, patient_id, reception_id, uhid } = patientsData;
-  const { appoint_id, mobilenumber, appointment_id } = scannedPatientsData;
+  const { appoint_id } = scannedPatientsData;
   //popup msg....
 
   const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Remark', 'Action'];
@@ -226,7 +225,7 @@ const OpdComplaints = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-COMPLAINTS',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -283,7 +282,6 @@ const OpdComplaints = () => {
     const selectedRow = data.find(row => row.id === _id);
     setSelectedRow(prevSelectedRows => [...prevSelectedRows, selectedRow]);
 
-    console.log(selectedRow)
   };
 
   // remove selected data handler ....
@@ -302,7 +300,7 @@ const OpdComplaints = () => {
       complaintArray: selectedRow,
       api_type: 'OPD-COMPLAINTS',
       uhid: uhid,
-      mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+      mobilenumber: waitingListData?.mobilenumber,
     };
     try {
       await axios
@@ -652,7 +650,7 @@ const OpdComplaints = () => {
         {selectedRow?.length > 0 && (
           <View style={[styles.categorySelection]}>
             <ScrollView horizontal={true} style={{ padding: 10 }}>
-              <View style={{ height: 'auto', maxHeight: 400 }}>
+              <View style={{ height: 'auto' }}>
                 <Table
                   borderStyle={{
                     borderWidth: 1,

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   BackHandler,
   FlatList,
@@ -10,16 +10,16 @@ import {
 import axios from 'axios';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
-import {useNavigation} from '@react-navigation/native';
-import {Appbar, RadioButton, Button, Card} from 'react-native-paper';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { useNavigation } from '@react-navigation/native';
+import { Appbar, RadioButton, Button, Card } from 'react-native-paper';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const GeneralExamination = () => {
   const navigation = useNavigation();
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -61,7 +61,7 @@ const GeneralExamination = () => {
           <RadioButton.Group
             onValueChange={newValue => handleRadioChange('pallor', newValue)}
             value={radioValues.pallor}>
-            <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
+            <View style={[styles.radioBtn, { marginHorizontal: 6 }]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
                 <Text>Present</Text>
@@ -83,7 +83,7 @@ const GeneralExamination = () => {
           <RadioButton.Group
             onValueChange={newValue => handleRadioChange('cyanosis', newValue)}
             value={radioValues.cyanosis}>
-            <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
+            <View style={[styles.radioBtn, { marginHorizontal: 6 }]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
                 <Text>Present</Text>
@@ -105,7 +105,7 @@ const GeneralExamination = () => {
           <RadioButton.Group
             onValueChange={newValue => handleRadioChange('icterus', newValue)}
             value={radioValues.icterus}>
-            <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
+            <View style={[styles.radioBtn, { marginHorizontal: 6 }]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
                 <Text>Present</Text>
@@ -127,7 +127,7 @@ const GeneralExamination = () => {
           <RadioButton.Group
             onValueChange={newValue => handleRadioChange('ln', newValue)}
             value={radioValues.ln}>
-            <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
+            <View style={[styles.radioBtn, { marginHorizontal: 6 }]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
                 <Text>Present</Text>
@@ -149,7 +149,7 @@ const GeneralExamination = () => {
           <RadioButton.Group
             onValueChange={newValue => handleRadioChange('odema', newValue)}
             value={radioValues.odema}>
-            <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
+            <View style={[styles.radioBtn, { marginHorizontal: 6 }]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="present" />
                 <Text>Present</Text>
@@ -165,7 +165,7 @@ const GeneralExamination = () => {
     },
   ];
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <ScrollView
       horizontal
       style={{
@@ -210,7 +210,7 @@ const GeneralExamination = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setRadioValues({});
             FetchMobileOpdAssessment();
@@ -227,7 +227,7 @@ const GeneralExamination = () => {
 
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
+    return () => { };
   }, [hospital_id, patient_id, reception_id]);
 
   //list of FetchMobileOpdAssessment....
@@ -241,7 +241,7 @@ const GeneralExamination = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-GENERAL-EXAMINATION',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -264,7 +264,7 @@ const GeneralExamination = () => {
       {Object.entries(item).map(([key, value]) => (
         <Card key={key} style={styles.card2}>
           {Array.isArray(value) ? (
-            <Text style={{lineHeight: 20}}>{value.join('\n')}</Text>
+            <Text style={{ lineHeight: 20 }}>{value.join('\n')}</Text>
           ) : null}
         </Card>
       ))}
@@ -302,7 +302,7 @@ const GeneralExamination = () => {
       />
       <ScrollView vertical>
         <ScrollView horizontal>
-          <View style={{padding: 10}}>
+          <View style={{ padding: 10 }}>
             <FlatList
               data={_data}
               renderItem={renderItem}
@@ -334,7 +334,7 @@ const GeneralExamination = () => {
           </Button>
         </View>
 
-        <View style={{padding: 10}}>{displayData}</View>
+        <View style={{ padding: 10 }}>{displayData}</View>
       </ScrollView>
     </>
   );
@@ -366,9 +366,9 @@ const styles = StyleSheet.create({
     gap: 10,
     marginVertical: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black', padding: 2},
-  row: {height: 'auto'},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black', padding: 2 },
+  row: { height: 'auto' },
 
   card2: {
     marginBottom: 10,

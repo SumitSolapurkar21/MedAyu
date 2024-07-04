@@ -1,11 +1,11 @@
-import {ScrollView, StyleSheet, Text, ToastAndroid, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, TextInput, Appbar, Card} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import { ScrollView, StyleSheet, Text, ToastAndroid, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, TextInput, Appbar, Card } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
-import {Image} from 'react-native';
+import { Image } from 'react-native';
 
 // Images...
 import temperature from '../../../../images/temperature.png';
@@ -15,8 +15,8 @@ import pulse from '../../../../images/pulse.png';
 import sysbp from '../../../../images/sysbp.png';
 import diabp from '../../../../images/diabp.png';
 import DropDown from 'react-native-paper-dropdown';
-import {BackHandler} from 'react-native';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { BackHandler } from 'react-native';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const OpdVitals = () => {
   //backHandler ...
@@ -48,10 +48,10 @@ const OpdVitals = () => {
   const [severeColor, setsevereColor] = useState('');
   const [gcssStatus, setGcssStatus] = useState('');
 
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   const [validationErrors, setValidationErrors] = React.useState({
     p_temp: '',
@@ -304,7 +304,7 @@ const OpdVitals = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-VITALS',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -359,7 +359,7 @@ const OpdVitals = () => {
               onChangeText={text => setP_Temp(text)}
               keyboardType="numeric"
               error={!!validationErrors.p_temp}
-              right={<TextInput.Affix textStyle={{fontSize: 13}} text=" °F" />}
+              right={<TextInput.Affix textStyle={{ fontSize: 13 }} text=" °F" />}
               backgroundColor={'white'}
             />
           </View>
@@ -381,7 +381,7 @@ const OpdVitals = () => {
               onChangeText={text => setP_Pulse(text)}
               error={!!validationErrors.p_pulse}
               right={
-                <TextInput.Affix textStyle={{fontSize: 13}} text=" /min" />
+                <TextInput.Affix textStyle={{ fontSize: 13 }} text=" /min" />
               }
               backgroundColor={'white'}
             />
@@ -403,7 +403,7 @@ const OpdVitals = () => {
               keyboardType="numeric"
               error={!!validationErrors.p_spo2}
               onChangeText={text => setP_SPO2(text)}
-              right={<TextInput.Affix textStyle={{fontSize: 13}} text="  %" />}
+              right={<TextInput.Affix textStyle={{ fontSize: 13 }} text="  %" />}
               backgroundColor={'white'}
             />
           </View>
@@ -425,7 +425,7 @@ const OpdVitals = () => {
               error={!!validationErrors.p_systolicbp}
               onChangeText={text => setP_SystolicBP(text)}
               right={
-                <TextInput.Affix textStyle={{fontSize: 13}} text="  mmHg" />
+                <TextInput.Affix textStyle={{ fontSize: 13 }} text="  mmHg" />
               }
               backgroundColor={'white'}
             />
@@ -450,7 +450,7 @@ const OpdVitals = () => {
               error={!!validationErrors.p_diastolicbp}
               onChangeText={text => setP_DiastolicBP(text)}
               right={
-                <TextInput.Affix textStyle={{fontSize: 13}} text="  mmHg" />
+                <TextInput.Affix textStyle={{ fontSize: 13 }} text="  mmHg" />
               }
               backgroundColor={'white'}
             />
@@ -475,7 +475,7 @@ const OpdVitals = () => {
               error={!!validationErrors.p_rsprate}
               onChangeText={text => setP_Rsprate(text)}
               right={
-                <TextInput.Affix textStyle={{fontSize: 13}} text="  /min" />
+                <TextInput.Affix textStyle={{ fontSize: 13 }} text="  /min" />
               }
               backgroundColor={'white'}
             />
@@ -559,10 +559,10 @@ const OpdVitals = () => {
         <View style={styles.tableWrapper3}>
           <View style={styles.formGroup}>
             <Text style={styles.tableWrapper3TXT}>Eye Opening</Text>
-            <View style={{width: '60%'}}>
+            <View style={{ width: '60%' }}>
               <DropDown
                 mode={'outlined'}
-                dropDownStyle={{backgroundColor: 'white'}}
+                dropDownStyle={{ backgroundColor: 'white' }}
                 visible={showEyeopening}
                 showDropDown={() => setshowEyeopening(true)}
                 onDismiss={() => setshowEyeopening(false)}
@@ -577,7 +577,7 @@ const OpdVitals = () => {
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.tableWrapper3TXT}>Verbal Response</Text>
-            <View style={{width: '60%'}}>
+            <View style={{ width: '60%' }}>
               <DropDown
                 mode={'outlined'}
                 visible={showverbalReaponse}
@@ -595,7 +595,7 @@ const OpdVitals = () => {
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.tableWrapper3TXT}>Motor Response</Text>
-            <View style={{width: '60%'}}>
+            <View style={{ width: '60%' }}>
               <DropDown
                 mode={'outlined'}
                 visible={showMotorResponse}
@@ -679,7 +679,7 @@ const OpdVitals = () => {
           return (
             <Card style={styles.card2} key={index + 1}>
               <Card.Content>
-                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     Date / Time :
                   </Text>
@@ -687,7 +687,7 @@ const OpdVitals = () => {
                     {row.opd_date} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{row.opd_time}
                   </Text>
                 </View>
-                <View style={[styles.cardBody, {gap: 8}]}>
+                <View style={[styles.cardBody, { gap: 8 }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     Temp :
                   </Text>
@@ -695,7 +695,7 @@ const OpdVitals = () => {
                     {row?.p_temp} &#8457;
                   </Text>
                 </View>
-                <View style={[styles.cardBody, {gap: 8}]}>
+                <View style={[styles.cardBody, { gap: 8 }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     Pulse :
                   </Text>
@@ -704,7 +704,7 @@ const OpdVitals = () => {
                   </Text>
                 </View>
 
-                <View style={[styles.cardBody, {gap: 8}]}>
+                <View style={[styles.cardBody, { gap: 8 }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     SPO2 :
                   </Text>
@@ -712,7 +712,7 @@ const OpdVitals = () => {
                     {row?.p_spo2} %
                   </Text>
                 </View>
-                <View style={[styles.cardBody, {gap: 8}]}>
+                <View style={[styles.cardBody, { gap: 8 }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     BP :
                   </Text>
@@ -721,7 +721,7 @@ const OpdVitals = () => {
                   </Text>
                 </View>
 
-                <View style={[styles.cardBody, {gap: 8}]}>
+                <View style={[styles.cardBody, { gap: 8 }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     RR :
                   </Text>
@@ -729,7 +729,7 @@ const OpdVitals = () => {
                     {row?.p_rsprate} /min
                   </Text>
                 </View>
-                <View style={[styles.cardBody, {gap: 10}]}>
+                <View style={[styles.cardBody, { gap: 10 }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     GC :
                   </Text>
@@ -865,9 +865,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black', padding: 2},
-  row: {height: 'auto'},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black', padding: 2 },
+  row: { height: 'auto' },
 
   card2: {
     marginTop: 10,

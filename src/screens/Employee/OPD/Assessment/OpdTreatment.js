@@ -1,19 +1,19 @@
 import axios from 'axios';
-import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, BackHandler} from 'react-native';
-import {Appbar, Button, Card, List, TextInput} from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View, BackHandler } from 'react-native';
+import { Appbar, Button, Card, List, TextInput } from 'react-native-paper';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import DateTimePicker from 'react-native-ui-datepicker';
-import {useNavigation} from '@react-navigation/native';
-import {IconButton, MD3Colors} from 'react-native-paper';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { useNavigation } from '@react-navigation/native';
+import { IconButton, MD3Colors } from 'react-native-paper';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const OpdTreatment = () => {
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -86,7 +86,7 @@ const OpdTreatment = () => {
     //     setTemp([]);
     //     setVisibleList(false);
   };
-  const Themes = [{mainColor: '#F5803E', activeTextColor: '#fff'}];
+  const Themes = [{ mainColor: '#F5803E', activeTextColor: '#fff' }];
 
   const calenderHandler = index => {
     setShowCalender(true);
@@ -117,7 +117,7 @@ const OpdTreatment = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setTemp([]);
             FetchMobileOpdAssessment();
@@ -147,7 +147,7 @@ const OpdTreatment = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-TREATMENT',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -218,7 +218,7 @@ const OpdTreatment = () => {
           mode="outlined"
           label="Drug Code"
           placeholder="Search Drug Code ..."
-          style={[styles.input, {marginHorizontal: 14}]}
+          style={[styles.input, { marginHorizontal: 14 }]}
           value={
             selectedDrugCode?.drugcode
               ? selectedDrugCode?.drugcode
@@ -262,7 +262,7 @@ const OpdTreatment = () => {
             return (
               <View style={styles.card} key={index + 1}>
                 <View style={styles.cardContentDiv}>
-                  <Text style={[styles.label, {width: 200, marginLeft: 10}]}>
+                  <Text style={[styles.label, { width: 200, marginLeft: 10 }]}>
                     Drug Name : &nbsp; {res.drugname}
                   </Text>
                   <IconButton
@@ -408,7 +408,7 @@ const OpdTreatment = () => {
 
           <Button
             mode="contained"
-            style={[styles.btn, {alignSelf: 'flex-start'}]}
+            style={[styles.btn, { alignSelf: 'flex-start' }]}
             onPress={() => resetHandler()}>
             Add More
           </Button>
@@ -440,7 +440,7 @@ const OpdTreatment = () => {
               <Card style={styles.card2} key={index + 1}>
                 <Card.Content>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Drugcode :
                       </Text>
@@ -449,7 +449,7 @@ const OpdTreatment = () => {
                       </Text>
                     </View>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Drugname :
                     </Text>
@@ -457,7 +457,7 @@ const OpdTreatment = () => {
                       {row?.drugname}
                     </Text>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Brandname :
                     </Text>
@@ -466,7 +466,7 @@ const OpdTreatment = () => {
                     </Text>
                   </View>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Dose :
                       </Text>
@@ -474,7 +474,7 @@ const OpdTreatment = () => {
                         {row?.dose}
                       </Text>
                     </View>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Route :
                       </Text>
@@ -483,7 +483,7 @@ const OpdTreatment = () => {
                       </Text>
                     </View>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Anupan :
                     </Text>
@@ -491,7 +491,7 @@ const OpdTreatment = () => {
                       {row?.anupan}
                     </Text>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Schedule :
                     </Text>
@@ -499,7 +499,7 @@ const OpdTreatment = () => {
                       {row?.schedule}
                     </Text>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       From Date :
                     </Text>
@@ -510,7 +510,7 @@ const OpdTreatment = () => {
 
                   {/* <View style={styles.cardBodyHead}> */}
 
-                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                  <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Date / Time :
                     </Text>
@@ -604,16 +604,16 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     shadowColor: '#e6e8eb',
     shadowOpacity: 0.2,
-    shadowOffset: {width: 10, height: 10},
+    shadowOffset: { width: 10, height: 10 },
   },
   submitbutton: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black', padding: 2},
-  row: {height: 'auto'},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black', padding: 2 },
+  row: { height: 'auto' },
 
   card2: {
     marginHorizontal: 14,

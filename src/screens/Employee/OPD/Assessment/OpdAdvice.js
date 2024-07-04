@@ -6,14 +6,14 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {Appbar, Button, Card, TextInput} from 'react-native-paper';
-import {OpdpageNavigation} from './OpdpageNavigation';
-import {useNavigation} from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Appbar, Button, Card, TextInput } from 'react-native-paper';
+import { OpdpageNavigation } from './OpdpageNavigation';
+import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../../api.json';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const OpdAdvice = () => {
   const navigation = useNavigation();
@@ -26,8 +26,8 @@ const OpdAdvice = () => {
     selectedFlow,
     setSelectedFlow,
   } = useContext(UserContext);
-  const {patient_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { patient_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
   const [adviceArray, setAdviceArray] = useState([]);
   const [advice, setAdvice] = useState('');
   const [selectedAdvice, setSelectedAdvice] = useState('');
@@ -74,7 +74,7 @@ const OpdAdvice = () => {
       await axios
         .post(`${api.baseurl}/GetMobileOpdTemplate`, body)
         .then(response => {
-          const {data, status, message} = response.data;
+          const { data, status, message } = response.data;
           if (status === true) {
             setAdviceArray(data);
           } else {
@@ -108,7 +108,7 @@ const OpdAdvice = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             Alert.alert('Success !!', `${message}`);
             setAdviceArray([]);
@@ -147,7 +147,7 @@ const OpdAdvice = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-ADVICE',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -183,10 +183,10 @@ const OpdAdvice = () => {
       <ScrollView style={styles.container}>
         <View style={styles.dropdownCategory}>
           <Text style={styles.heading}>Advice</Text>
-          <View style={{width: '100%'}}>
+          <View style={{ width: '100%' }}>
             <Dropdown
               mode={'outlined'}
-              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
@@ -243,7 +243,7 @@ const OpdAdvice = () => {
               <Card style={styles.card2} key={index + 1}>
                 <Card.Content>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                    <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Date / Time :
                       </Text>
@@ -251,7 +251,7 @@ const OpdAdvice = () => {
                         {row.opd_date} / {row.opd_time}
                       </Text>
                     </View>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Advice :
                       </Text>

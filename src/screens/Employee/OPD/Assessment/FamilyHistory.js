@@ -1,15 +1,15 @@
 import axios from 'axios';
-import React, {useContext, useEffect, useState} from 'react';
-import {BackHandler, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Appbar, Button, List, TextInput} from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import { BackHandler, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Appbar, Button, List, TextInput } from 'react-native-paper';
 import api from '../../../../../api.json';
 import DateTimePicker from 'react-native-ui-datepicker';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
-import {Dropdown} from 'react-native-element-dropdown';
-import {Card} from 'react-native-paper';
-import {IconButton, MD3Colors} from 'react-native-paper';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { Dropdown } from 'react-native-element-dropdown';
+import { Card } from 'react-native-paper';
+import { IconButton, MD3Colors } from 'react-native-paper';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const FamilyHistory = () => {
   const navigation = useNavigation();
@@ -27,10 +27,10 @@ const FamilyHistory = () => {
 
   const [p_category, setP_category] = useState('');
 
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id } = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -91,7 +91,7 @@ const FamilyHistory = () => {
     //     setTemp([]);
     //     setVisibleList(false);
   };
-  const Themes = [{mainColor: '#F5803E', activeTextColor: '#fff'}];
+  const Themes = [{ mainColor: '#F5803E', activeTextColor: '#fff' }];
 
   const calenderHandler = index => {
     setShowCalender(true);
@@ -145,7 +145,8 @@ const FamilyHistory = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
+          console.log(res.data)
           if (status === true) {
             setTemp([]);
             FetchMobileOpdAssessment();
@@ -160,41 +161,41 @@ const FamilyHistory = () => {
 
   // relation data...
   let data = [
-    {label: '--Select--', value: ''},
-    {label: 'Mother', value: 'Mother'},
-    {label: 'Father', value: 'Father'},
-    {label: 'Brother', value: 'Brother'},
-    {label: 'Niece', value: 'Niece'},
-    {label: 'Nephew', value: 'Nephew'},
-    {label: 'Sister', value: 'Sister'},
-    {label: 'Spouse', value: 'Spouse'},
-    {label: 'Elder Brother', value: 'Elder Brother'},
-    {label: 'Elder Sister', value: 'Elder Sister'},
-    {label: 'Younger Brother', value: 'Younger Brother'},
-    {label: 'Younger Sister', value: 'Younger Sister'},
-    {label: 'Son', value: 'Son'},
-    {label: 'Daughter', value: 'Daughter'},
-    {label: 'Husband', value: 'Husband'},
-    {label: 'Wife', value: 'Wife'},
-    {label: 'Fiancé Or Fiancée', value: 'Fiancé Or Fiancée'},
-    {label: 'Aunt', value: 'Aunt'},
-    {label: 'Uncle', value: 'Uncle'},
-    {label: 'Guest', value: 'Guest'},
-    {label: 'Teacher', value: 'Teacher'},
-    {label: 'Step Brother', value: 'Step Brother'},
-    {label: 'Customer', value: 'Customer'},
-    {label: 'Landlord', value: 'Landlord'},
-    {label: 'Friend', value: 'Friend'},
-    {label: 'Lover', value: 'Lover'},
-    {label: 'Girlfriend', value: 'Girlfriend'},
-    {label: 'Boyfriend', value: 'Boyfriend'},
-    {label: 'Client', value: 'Client'},
-    {label: 'Patient', value: 'Patient'},
-    {label: 'Step Sister', value: 'Step Sister'},
-    {label: 'Step Mother', value: 'Step Mother'},
-    {label: 'Step Father', value: 'Step Father'},
-    {label: 'Step Son', value: 'Step Son'},
-    {label: 'Step Daughter', value: 'Step Daughter'},
+    { label: '--Select--', value: '' },
+    { label: 'Mother', value: 'Mother' },
+    { label: 'Father', value: 'Father' },
+    { label: 'Brother', value: 'Brother' },
+    { label: 'Niece', value: 'Niece' },
+    { label: 'Nephew', value: 'Nephew' },
+    { label: 'Sister', value: 'Sister' },
+    { label: 'Spouse', value: 'Spouse' },
+    { label: 'Elder Brother', value: 'Elder Brother' },
+    { label: 'Elder Sister', value: 'Elder Sister' },
+    { label: 'Younger Brother', value: 'Younger Brother' },
+    { label: 'Younger Sister', value: 'Younger Sister' },
+    { label: 'Son', value: 'Son' },
+    { label: 'Daughter', value: 'Daughter' },
+    { label: 'Husband', value: 'Husband' },
+    { label: 'Wife', value: 'Wife' },
+    { label: 'Fiancé Or Fiancée', value: 'Fiancé Or Fiancée' },
+    { label: 'Aunt', value: 'Aunt' },
+    { label: 'Uncle', value: 'Uncle' },
+    { label: 'Guest', value: 'Guest' },
+    { label: 'Teacher', value: 'Teacher' },
+    { label: 'Step Brother', value: 'Step Brother' },
+    { label: 'Customer', value: 'Customer' },
+    { label: 'Landlord', value: 'Landlord' },
+    { label: 'Friend', value: 'Friend' },
+    { label: 'Lover', value: 'Lover' },
+    { label: 'Girlfriend', value: 'Girlfriend' },
+    { label: 'Boyfriend', value: 'Boyfriend' },
+    { label: 'Client', value: 'Client' },
+    { label: 'Patient', value: 'Patient' },
+    { label: 'Step Sister', value: 'Step Sister' },
+    { label: 'Step Mother', value: 'Step Mother' },
+    { label: 'Step Father', value: 'Step Father' },
+    { label: 'Step Son', value: 'Step Son' },
+    { label: 'Step Daughter', value: 'Step Daughter' },
     {
       label: 'Grandfather (Father Of Mother)',
       value: 'Grandfather (Father Of Mother)',
@@ -203,10 +204,10 @@ const FamilyHistory = () => {
       label: 'Grandmother (Mother Of Mother)',
       value: 'Grandmother (Mother Of Mother)',
     },
-    {label: 'Relative', value: 'Relative'},
-    {label: 'Own', value: 'Own'},
-    {label: 'Maternal-Grandfather', value: 'Maternal-Grandfather'},
-    {label: 'Maternal-Grandmother', value: 'Maternal-Grandmother'},
+    { label: 'Relative', value: 'Relative' },
+    { label: 'Own', value: 'Own' },
+    { label: 'Maternal-Grandfather', value: 'Maternal-Grandfather' },
+    { label: 'Maternal-Grandmother', value: 'Maternal-Grandmother' },
     {
       label: 'Grandfather (Father Of Father)',
       value: 'Grandfather (Father Of Father)',
@@ -215,8 +216,8 @@ const FamilyHistory = () => {
       label: 'Grandmother (Mother Of Father)',
       value: 'Grandmother (Mother Of Father)',
     },
-    {label: 'Adopted Daughter', value: 'Adopted Daughter'},
-    {label: 'Adopted Son', value: 'Adopted Son'},
+    { label: 'Adopted Daughter', value: 'Adopted Daughter' },
+    { label: 'Adopted Son', value: 'Adopted Son' },
     {
       label: 'Son’s Wife (Daughter In Law)',
       value: 'Son’s Wife (Daughter In Law)',
@@ -225,42 +226,42 @@ const FamilyHistory = () => {
       label: 'Daughter’s Husband (Son In Law)',
       value: 'Daughter’s Husband (Son In Law)',
     },
-    {label: 'Son’s Son (Grandson)', value: 'Son’s Son (Grandson)'},
+    { label: 'Son’s Son (Grandson)', value: 'Son’s Son (Grandson)' },
     {
       label: 'Son’s Daughter (Grand Daughter)',
       value: 'Son’s Daughter (Grand Daughter)',
     },
-    {label: 'Daughter’s Son', value: 'Daughter’s Son'},
-    {label: 'Daughter’s Daughter', value: 'Daughter’s Daughter'},
+    { label: 'Daughter’s Son', value: 'Daughter’s Son' },
+    { label: 'Daughter’s Daughter', value: 'Daughter’s Daughter' },
     {
       label: 'Husband Sister (sister In Law)',
       value: 'Husband Sister (sister In Law)',
     },
-    {label: 'Father’s Sister', value: 'Father’s Sister'},
-    {label: 'Elder Sister Husband', value: 'Elder Sister Husband'},
-    {label: 'Younger Sister Husband', value: 'Younger Sister Husband'},
+    { label: 'Father’s Sister', value: 'Father’s Sister' },
+    { label: 'Elder Sister Husband', value: 'Elder Sister Husband' },
+    { label: 'Younger Sister Husband', value: 'Younger Sister Husband' },
     {
       label: 'Husband Elder Brother (Brother In Law)',
       value: 'Husband Elder Brother (Brother In Law)',
     },
-    {label: 'Husband Younger Brother', value: 'Husband Younger Brother'},
-    {label: 'Elder Brother’s Wife', value: 'Elder Brother’s Wife'},
-    {label: 'Younger Brothers Wife', value: 'Younger Brothers Wife'},
+    { label: 'Husband Younger Brother', value: 'Husband Younger Brother' },
+    { label: 'Elder Brother’s Wife', value: 'Elder Brother’s Wife' },
+    { label: 'Younger Brothers Wife', value: 'Younger Brothers Wife' },
     {
       label: 'Wife’s Sister (Sister in Law)',
       value: 'Wife’s Sister (Sister in Law)',
     },
-    {label: 'Wife’s Elder Brother', value: 'Wife’s Elder Brother'},
-    {label: 'Wife’s Younger Brother', value: 'Wife’s Younger Brother'},
-    {label: 'Younger Sister Husband', value: 'Younger Sister Husband'},
+    { label: 'Wife’s Elder Brother', value: 'Wife’s Elder Brother' },
+    { label: 'Wife’s Younger Brother', value: 'Wife’s Younger Brother' },
+    { label: 'Younger Sister Husband', value: 'Younger Sister Husband' },
     {
       label: 'Husband’s Elder Brother (Brother In Law)',
       value: 'Husband’s Elder Brother (Brother In Law)',
     },
-    {label: 'Wife’s Brother Wife', value: 'Wife’s Brother Wife'},
-    {label: 'Husband Younger Brother', value: 'Husband Younger Brother'},
-    {label: 'Husband’s Sister’s Husband', value: 'Husband’s Sister’s Husband'},
-    {label: 'Wife’s Sister’s Husband', value: 'Wife’s Sister’s Husband'},
+    { label: 'Wife’s Brother Wife', value: 'Wife’s Brother Wife' },
+    { label: 'Husband Younger Brother', value: 'Husband Younger Brother' },
+    { label: 'Husband’s Sister’s Husband', value: 'Husband’s Sister’s Husband' },
+    { label: 'Wife’s Sister’s Husband', value: 'Wife’s Sister’s Husband' },
     {
       label: 'Husband’s Elder Brother’s Wife',
       value: 'Husband’s Elder Brother’s Wife',
@@ -321,8 +322,8 @@ const FamilyHistory = () => {
       label: 'Father’s Younger Brother’s Wife (Aunt)',
       value: 'Father’s Younger Brother’s Wife (Aunt)',
     },
-    {label: 'Mother’s Brother', value: 'Mother’s Brother'},
-    {label: 'Mother’s Younger Sister', value: 'Mother’s Younger Sister'},
+    { label: 'Mother’s Brother', value: 'Mother’s Brother' },
+    { label: 'Mother’s Younger Sister', value: 'Mother’s Younger Sister' },
     {
       label: 'Mother’s Younger Sister’s Husband',
       value: 'Mother’s Younger Sister’s Husband',
@@ -335,13 +336,13 @@ const FamilyHistory = () => {
       label: 'Mother’s Elder Sister (Aunt)',
       value: 'Mother’s Elder Sister (Aunt)',
     },
-    {label: 'Mother’s Brother Wife', value: 'Mother’s Brother Wife'},
-    {label: 'Mistress', value: 'Mistress'},
-    {label: 'Concubine / Keep Mistress', value: 'Concubine / Keep Mistress'},
-    {label: 'Pupil', value: 'Pupil'},
-    {label: 'Disciple', value: 'Disciple'},
-    {label: 'Preceptor', value: 'Preceptor'},
-    {label: 'Tenant', value: 'Tenant'},
+    { label: 'Mother’s Brother Wife', value: 'Mother’s Brother Wife' },
+    { label: 'Mistress', value: 'Mistress' },
+    { label: 'Concubine / Keep Mistress', value: 'Concubine / Keep Mistress' },
+    { label: 'Pupil', value: 'Pupil' },
+    { label: 'Disciple', value: 'Disciple' },
+    { label: 'Preceptor', value: 'Preceptor' },
+    { label: 'Tenant', value: 'Tenant' },
   ];
 
   const [opdAssessment, setOpdAssessment] = useState([]);
@@ -360,7 +361,7 @@ const FamilyHistory = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-FAMILY-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -390,7 +391,7 @@ const FamilyHistory = () => {
       {Object.entries(item).map(([key, value]) => (
         <Card key={key} style={styles.card}>
           {Array.isArray(value) ? (
-            <Text style={{lineHeight: 20, width: 330}}>{value.join('\n')}</Text>
+            <Text style={{ lineHeight: 20, width: 330 }}>{value.join('\n')}</Text>
           ) : null}
         </Card>
       ))}
@@ -450,7 +451,7 @@ const FamilyHistory = () => {
           mode="outlined"
           label="Diseases"
           placeholder="Search Diseases ..."
-          style={[styles.input, {marginHorizontal: 14}]}
+          style={[styles.input, { marginHorizontal: 14 }]}
           value={
             selectedIllnessCode?.illnessname
               ? selectedIllnessCode?.illnessname
@@ -495,7 +496,7 @@ const FamilyHistory = () => {
               <>
                 <View style={styles.card} key={index + 1}>
                   <View style={styles.cardContentDiv}>
-                    <Text style={[styles.label, {width: 200}]}>
+                    <Text style={[styles.label, { width: 200 }]}>
                       Illness : &nbsp; {res.illnessname}
                     </Text>
                     <IconButton
@@ -551,13 +552,13 @@ const FamilyHistory = () => {
                       />
                     </View>
                     <View style={styles.cardContent}>
-                      <Text style={[styles.label, {width: '200%'}]}>
+                      <Text style={[styles.label, { width: '200%' }]}>
                         Relation
                       </Text>
                       <View>
                         <Dropdown
                           mode={'outlined'}
-                          style={[styles.dropdown, {borderColor: 'blue'}]}
+                          style={[styles.dropdown, { borderColor: 'blue' }]}
                           placeholderStyle={styles.placeholderStyle}
                           selectedTextStyle={styles.selectedTextStyle}
                           inputSearchStyle={styles.inputSearchStyle}
@@ -594,7 +595,7 @@ const FamilyHistory = () => {
 
           <Button
             mode="contained"
-            style={[styles.btn, {alignSelf: 'flex-start'}]}
+            style={[styles.btn, { alignSelf: 'flex-start' }]}
             onPress={() => resetHandler()}>
             Add More
           </Button>
@@ -623,7 +624,7 @@ const FamilyHistory = () => {
           </Button>
         </View>
 
-        <View style={{padding: 10}}>{displayData}</View>
+        <View style={{ padding: 10 }}>{displayData}</View>
       </ScrollView>
     </>
   );
@@ -708,7 +709,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     shadowColor: '#e6e8eb',
     shadowOpacity: 0.2,
-    shadowOffset: {width: 10, height: 10},
+    shadowOffset: { width: 10, height: 10 },
   },
   submitbutton: {
     flexDirection: 'row',
@@ -730,9 +731,9 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: 16,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black', padding: 2},
-  row: {height: 'auto'},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black', padding: 2 },
+  row: { height: 'auto' },
   card2: {
     marginTop: 10,
     marginHorizontal: 14,

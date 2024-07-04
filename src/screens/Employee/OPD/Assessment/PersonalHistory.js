@@ -1,19 +1,19 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {Appbar, Button, Card, RadioButton} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {BackHandler} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Table, Row, Rows } from 'react-native-table-component';
+import { Appbar, Button, Card, RadioButton } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { BackHandler } from 'react-native';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const PersonalHistory = () => {
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -36,10 +36,10 @@ const PersonalHistory = () => {
       id: 1,
       label: 'Tea',
       options: [
-        {value: 'none', label: 'None'},
-        {value: 'light', label: 'Light'},
-        {value: 'moderate', label: 'Moderate'},
-        {value: 'heavy', label: 'Heavy'},
+        { value: 'none', label: 'None' },
+        { value: 'light', label: 'Light' },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'heavy', label: 'Heavy' },
       ],
       checked: 'none',
     },
@@ -47,10 +47,10 @@ const PersonalHistory = () => {
       id: 2,
       label: 'Coffee',
       options: [
-        {value: 'none', label: 'None'},
-        {value: 'light', label: 'Light'},
-        {value: 'moderate', label: 'Moderate'},
-        {value: 'heavy', label: 'Heavy'},
+        { value: 'none', label: 'None' },
+        { value: 'light', label: 'Light' },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'heavy', label: 'Heavy' },
       ],
       checked: 'none',
     },
@@ -58,10 +58,10 @@ const PersonalHistory = () => {
       id: 3,
       label: 'Tobacco',
       options: [
-        {value: 'none', label: 'None'},
-        {value: 'light', label: 'Light'},
-        {value: 'moderate', label: 'Moderate'},
-        {value: 'heavy', label: 'Heavy'},
+        { value: 'none', label: 'None' },
+        { value: 'light', label: 'Light' },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'heavy', label: 'Heavy' },
       ],
       checked: 'none',
     },
@@ -69,10 +69,10 @@ const PersonalHistory = () => {
       id: 4,
       label: 'Smoking',
       options: [
-        {value: 'none', label: 'None'},
-        {value: 'light', label: 'Light'},
-        {value: 'moderate', label: 'Moderate'},
-        {value: 'heavy', label: 'Heavy'},
+        { value: 'none', label: 'None' },
+        { value: 'light', label: 'Light' },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'heavy', label: 'Heavy' },
       ],
       checked: 'none',
     },
@@ -80,10 +80,10 @@ const PersonalHistory = () => {
       id: 5,
       label: 'Alcohol',
       options: [
-        {value: 'none', label: 'None'},
-        {value: 'light', label: 'Light'},
-        {value: 'moderate', label: 'Moderate'},
-        {value: 'heavy', label: 'Heavy'},
+        { value: 'none', label: 'None' },
+        { value: 'light', label: 'Light' },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'heavy', label: 'Heavy' },
       ],
       checked: 'none',
     },
@@ -91,10 +91,10 @@ const PersonalHistory = () => {
       id: 6,
       label: 'Drugs',
       options: [
-        {value: 'none', label: 'None'},
-        {value: 'light', label: 'Light'},
-        {value: 'moderate', label: 'Moderate'},
-        {value: 'heavy', label: 'Heavy'},
+        { value: 'none', label: 'None' },
+        { value: 'light', label: 'Light' },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'heavy', label: 'Heavy' },
       ],
       checked: 'none',
     },
@@ -102,10 +102,10 @@ const PersonalHistory = () => {
       id: 7,
       label: 'Exercise',
       options: [
-        {value: 'none', label: 'None'},
-        {value: 'light', label: 'Light'},
-        {value: 'moderate', label: 'Moderate'},
-        {value: 'heavy', label: 'Heavy'},
+        { value: 'none', label: 'None' },
+        { value: 'light', label: 'Light' },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'heavy', label: 'Heavy' },
       ],
       checked: 'none',
     },
@@ -113,10 +113,10 @@ const PersonalHistory = () => {
       id: 8,
       label: 'SoftDrink',
       options: [
-        {value: 'none', label: 'None'},
-        {value: 'light', label: 'Light'},
-        {value: 'moderate', label: 'Moderate'},
-        {value: 'heavy', label: 'Heavy'},
+        { value: 'none', label: 'None' },
+        { value: 'light', label: 'Light' },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'heavy', label: 'Heavy' },
       ],
       checked: 'none',
     },
@@ -124,10 +124,10 @@ const PersonalHistory = () => {
       id: 9,
       label: 'Saltyfood',
       options: [
-        {value: 'none', label: 'None'},
-        {value: 'light', label: 'Light'},
-        {value: 'moderate', label: 'Moderate'},
-        {value: 'heavy', label: 'Heavy'},
+        { value: 'none', label: 'None' },
+        { value: 'light', label: 'Light' },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'heavy', label: 'Heavy' },
       ],
       checked: 'none',
     },
@@ -136,7 +136,7 @@ const PersonalHistory = () => {
   const handleRadioChange = (itemId, value) => {
     const updatedTableData = tableData.map(item => {
       if (item.id === itemId) {
-        return {...item, checked: value};
+        return { ...item, checked: value };
       }
       return item;
     });
@@ -201,7 +201,7 @@ const PersonalHistory = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             FetchMobileOpdAssessment();
           } else {
@@ -216,7 +216,7 @@ const PersonalHistory = () => {
 
   useEffect(() => {
     FetchMobileOpdAssessment();
-    return () => {};
+    return () => { };
   }, [hospital_id, patient_id, reception_id]);
   //list of FetchMobileOpdAssessment....
   const FetchMobileOpdAssessment = async () => {
@@ -229,7 +229,7 @@ const PersonalHistory = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-PERSONAL-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -273,7 +273,7 @@ const PersonalHistory = () => {
       <ScrollView style={styles.container}>
         <ScrollView horizontal={true}>
           <View>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead}
                 widthArr={widthArr}
@@ -282,7 +282,7 @@ const PersonalHistory = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={_tableData}
                   widthArr={widthArr}
@@ -320,7 +320,7 @@ const PersonalHistory = () => {
               <Card.Content key={index + 1}>
                 <View style={styles.cardBodyHead}>
                   {row.opd_date && row.opd_time && (
-                    <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                    <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Date / Time :
                       </Text>
@@ -330,7 +330,7 @@ const PersonalHistory = () => {
                     </View>
                   )}
                   {row.Alcohol !== 'none' && (
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Alcohol :
                       </Text>
@@ -340,7 +340,7 @@ const PersonalHistory = () => {
                     </View>
                   )}
                   {row.Coffee !== 'none' && (
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Coffee :
                       </Text>
@@ -350,7 +350,7 @@ const PersonalHistory = () => {
                     </View>
                   )}
                   {row.Drugs !== 'none' && (
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Drugs :
                       </Text>
@@ -360,7 +360,7 @@ const PersonalHistory = () => {
                     </View>
                   )}
                   {row.Exercise !== 'none' && (
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Exercise :
                       </Text>
@@ -370,7 +370,7 @@ const PersonalHistory = () => {
                     </View>
                   )}
                   {row.Saltyfood !== 'none' && (
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Salty food :
                       </Text>
@@ -380,7 +380,7 @@ const PersonalHistory = () => {
                     </View>
                   )}
                   {row.SoftDrink !== 'none' && (
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Soft Drink :
                       </Text>
@@ -390,7 +390,7 @@ const PersonalHistory = () => {
                     </View>
                   )}
                   {row.Smoking !== 'none' && (
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Smoking :
                       </Text>
@@ -400,7 +400,7 @@ const PersonalHistory = () => {
                     </View>
                   )}
                   {row.Tea !== 'none' && (
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Tea :
                       </Text>
@@ -410,7 +410,7 @@ const PersonalHistory = () => {
                     </View>
                   )}
                   {row.Tobacco !== 'none' && (
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Tobacco/Kharra :
                       </Text>
@@ -436,9 +436,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'left', color: 'black', fontSize: 11, marginLeft: 6},
-  dataWrapper: {marginTop: -1},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'left', color: 'black', fontSize: 11, marginLeft: 6 },
+  dataWrapper: { marginTop: -1 },
   row: {
     height: 50,
   },

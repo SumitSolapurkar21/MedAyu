@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   Image,
   StyleSheet,
@@ -13,27 +13,28 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
-import {Appbar, Button, TextInput} from 'react-native-paper';
+import { Appbar, Button, TextInput } from 'react-native-paper';
 import question from '../../../images/question.png';
 import ipdopd from '../../../images/ipd.png';
 import medicine from '../../../images/panchakarma.png';
 import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const {width: screenWidth} = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
 const DashboardHomePage = () => {
   const navigation = useNavigation();
-  const {userData, setDashboardpatientListData} = useContext(UserContext);
-  const {hospital_id, _id} = userData;
+  const { userData, setDashboardpatientListData } = useContext(UserContext);
+  const { hospital_id, _id, depart_id } = userData;
   const [count, setCount] = useState([]);
   const [departwiseData, setDepartwiseData] = useState([]);
   const [widthArr2, setWidthArr2] = useState([]);
   const [widthArr3, setWidthArr3] = useState([]);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
 
   //backHandler ...
   useEffect(() => {
@@ -95,7 +96,7 @@ const DashboardHomePage = () => {
         `${api.baseurl}/ShowMobileTodaysOIPECount`,
         body,
       );
-      const {status, message} = response.data;
+      const { status, message } = response.data;
       if (status === true) {
         setCount(response.data);
       } else {
@@ -121,7 +122,7 @@ const DashboardHomePage = () => {
           role: userData?.role,
         },
       );
-      const {status, message, data} = response.data;
+      const { status, message, data } = response.data;
       if (status === true) {
         setDepartwiseData(data);
       } else {
@@ -154,6 +155,7 @@ const DashboardHomePage = () => {
       todate: submittedformData.todate,
       role: role,
       status: status,
+      depart_id: depart_id,
     };
     setDashboardpatientListData(_body2);
     navigation.navigate('Listofpatients');
@@ -161,8 +163,8 @@ const DashboardHomePage = () => {
 
   const item = () => (
     <>
-      <View style={{padding: 14}}>
-        <View style={{flexDirection: 'row'}}>
+      <View style={{ padding: 14 }}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.secTablehead}>
             <Text style={styles.secTableheadText}>CATEGORY</Text>
           </View>
@@ -170,50 +172,50 @@ const DashboardHomePage = () => {
             <Text style={styles.secTableheadText}>NO. OF PATIENTS</Text>
           </View>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.contenthead}>
             <Text style={styles.contentheadText}>APPOINTMENT</Text>
           </View>
           <TouchableOpacity
             style={styles.contenthead}
             onPress={() => pageHandler2(userData?.role, 'Confirmed')}>
-            <Text style={[styles.contentheadText, {textAlign: 'center'}]}>
+            <Text style={[styles.contentheadText, { textAlign: 'center' }]}>
               {departwiseData[0]?.opdcount}
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.contenthead}>
             <Text style={styles.contentheadText}>WAITING</Text>
           </View>
           <TouchableOpacity
             style={styles.contenthead}
             onPress={() => pageHandler2(userData?.role, 'Waiting')}>
-            <Text style={[styles.contentheadText, {textAlign: 'center'}]}>
+            <Text style={[styles.contentheadText, { textAlign: 'center' }]}>
               {departwiseData[0]?.waiting_count}
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.contenthead}>
             <Text style={styles.contentheadText}>CONSULTED</Text>
           </View>
           <TouchableOpacity
             style={styles.contenthead}
             onPress={() => pageHandler2(userData?.role, 'Consulted')}>
-            <Text style={[styles.contentheadText, {textAlign: 'center'}]}>
+            <Text style={[styles.contentheadText, { textAlign: 'center' }]}>
               {departwiseData[0]?.consulted_count}
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.contenthead}>
             <Text style={styles.contentheadText}>CANCELLED</Text>
           </View>
           <TouchableOpacity
             style={styles.contenthead}
             onPress={() => pageHandler2(userData?.role, 'Cancelled')}>
-            <Text style={[styles.contentheadText, {textAlign: 'center'}]}>
+            <Text style={[styles.contentheadText, { textAlign: 'center' }]}>
               {departwiseData[0]?.cancelcount}
             </Text>
           </TouchableOpacity>
@@ -355,13 +357,13 @@ const DashboardHomePage = () => {
         </View>
         {userData?.role === 'Receptionist' ? (
           <View style={styles.tableDiv}>
-            <View style={{marginVertical: 10}}>
+            <View style={{ marginVertical: 10 }}>
               <Text style={styles.headtext2}>Department Wise Patients</Text>
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={{flex: 1}}>
+              <View style={{ flex: 1 }}>
                 <ScrollView horizontal>
-                  <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                  <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                     <Row
                       data={tableHead}
                       widthArr={widthArr2}
@@ -439,7 +441,7 @@ const styles = StyleSheet.create({
   contentItem: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 6,
@@ -457,7 +459,7 @@ const styles = StyleSheet.create({
     color: '#127359',
     fontWeight: '600',
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
+  head: { height: 40, backgroundColor: '#80aaff' },
   headtext: {
     textAlign: 'left',
     color: 'white',
@@ -468,7 +470,7 @@ const styles = StyleSheet.create({
   tableDiv: {
     padding: 10,
   },
-  text: {textAlign: 'center', color: 'black', fontSize: 13},
+  text: { textAlign: 'center', color: 'black', fontSize: 13 },
   row: {
     height: 50,
   },

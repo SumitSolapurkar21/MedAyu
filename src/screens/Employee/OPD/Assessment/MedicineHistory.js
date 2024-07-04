@@ -1,13 +1,13 @@
 import axios from 'axios';
-import React, {useContext, useEffect, useState} from 'react';
-import {BackHandler, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Appbar, Button, Card, List, TextInput} from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import { BackHandler, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Appbar, Button, Card, List, TextInput } from 'react-native-paper';
 import api from '../../../../../api.json';
 import DateTimePicker from 'react-native-ui-datepicker';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
-import {IconButton, MD3Colors} from 'react-native-paper';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { IconButton, MD3Colors } from 'react-native-paper';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const MedicineHistory = () => {
   const navigation = useNavigation();
@@ -21,10 +21,10 @@ const MedicineHistory = () => {
   const [dateValues, setDateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
 
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -86,7 +86,7 @@ const MedicineHistory = () => {
     //     setTemp([]);
     //     setVisibleList(false);
   };
-  const Themes = [{mainColor: '#F5803E', activeTextColor: '#fff'}];
+  const Themes = [{ mainColor: '#F5803E', activeTextColor: '#fff' }];
 
   const calenderHandler = index => {
     setShowCalender(true);
@@ -140,7 +140,7 @@ const MedicineHistory = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setTemp([]);
             FetchMobileOpdAssessment();
@@ -169,7 +169,7 @@ const MedicineHistory = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-MEDICINE-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -199,7 +199,7 @@ const MedicineHistory = () => {
       {Object.entries(item).map(([key, value]) => (
         <Card key={key} style={styles.card}>
           {Array.isArray(value) ? (
-            <Text style={{lineHeight: 20, width: 330}}>{value.join('\n')}</Text>
+            <Text style={{ lineHeight: 20, width: 330 }}>{value.join('\n')}</Text>
           ) : null}
         </Card>
       ))}
@@ -259,7 +259,7 @@ const MedicineHistory = () => {
           mode="outlined"
           label="Medicine Name"
           placeholder="Search Medicine Name ..."
-          style={[styles.input, {marginHorizontal: 14}]}
+          style={[styles.input, { marginHorizontal: 14 }]}
           value={
             selectedDrugCode?.drugcode
               ? selectedDrugCode?.drugcode
@@ -303,7 +303,7 @@ const MedicineHistory = () => {
             return (
               <View style={styles.card} key={index + 1}>
                 <View style={styles.cardContentDiv}>
-                  <Text style={[styles.label, {width: 200}]}>
+                  <Text style={[styles.label, { width: 200 }]}>
                     Drug Name : &nbsp; {res.drugname}
                   </Text>
                   <IconButton
@@ -422,7 +422,7 @@ const MedicineHistory = () => {
 
           <Button
             mode="contained"
-            style={[styles.btn, {alignSelf: 'flex-start'}]}
+            style={[styles.btn, { alignSelf: 'flex-start' }]}
             onPress={() => resetHandler()}>
             Add More
           </Button>
@@ -448,7 +448,7 @@ const MedicineHistory = () => {
           </Button>
         </View>
 
-        <View style={{padding: 10}}>{displayData}</View>
+        <View style={{ padding: 10 }}>{displayData}</View>
       </ScrollView>
     </>
   );
@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     shadowColor: '#e6e8eb',
     shadowOpacity: 0.2,
-    shadowOffset: {width: 10, height: 10},
+    shadowOffset: { width: 10, height: 10 },
   },
   submitbutton: {
     flexDirection: 'row',
@@ -555,9 +555,9 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: 16,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black', padding: 2},
-  row: {height: 'auto'},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black', padding: 2 },
+  row: { height: 'auto' },
 
   card2: {
     marginTop: 10,

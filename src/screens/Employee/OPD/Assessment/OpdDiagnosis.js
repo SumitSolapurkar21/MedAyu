@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   RadioButton,
   List,
@@ -20,10 +20,10 @@ import {
 import axios from 'axios';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {useNavigation} from '@react-navigation/native';
-import {IconButton, MD3Colors} from 'react-native-paper';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { Table, Row, Rows } from 'react-native-table-component';
+import { useNavigation } from '@react-navigation/native';
+import { IconButton, MD3Colors } from 'react-native-paper';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const OpdDiagnosis = () => {
   const navigation = useNavigation();
@@ -52,10 +52,10 @@ const OpdDiagnosis = () => {
     setWidthArr([60, ...Array(keys.length - 1).fill(110)]);
   }, []);
 
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   useEffect(() => {
     if (searchQuery != '') search_Diagnosis_data();
@@ -189,7 +189,7 @@ const OpdDiagnosis = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-DIAGNOSIS',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
           type: value,
         })
         .then(res => {
@@ -244,7 +244,7 @@ const OpdDiagnosis = () => {
         visible={visible}
       />
       <SegmentedButtons
-        style={{padding: 10}}
+        style={{ padding: 10 }}
         theme={theme}
         value={value}
         onValueChange={setValue}
@@ -266,7 +266,7 @@ const OpdDiagnosis = () => {
             <TextInput
               mode="view"
               placeholder="Search"
-              style={{height: 40}}
+              style={{ height: 40 }}
               onChangeText={setSearchQuery}
               value={
                 selectedDiagnosis?.illnessname
@@ -285,7 +285,7 @@ const OpdDiagnosis = () => {
               editable={true} // Set editable to true
             />
             <ScrollView
-              style={{zIndex: 1}} // Set a higher zIndex for the ScrollView
+              style={{ zIndex: 1 }} // Set a higher zIndex for the ScrollView
               vertical={true}>
               {visibleList && (
                 <View>
@@ -334,8 +334,8 @@ const OpdDiagnosis = () => {
               Add
             </Button>
           </View>
-          <ScrollView horizontal={true} style={{padding: 10}}>
-            <View style={{height: 'auto'}}>
+          <ScrollView horizontal={true} style={{ padding: 10 }}>
+            <View style={{ height: 'auto' }}>
               <Table
                 borderStyle={{
                   borderWidth: 1,
@@ -352,7 +352,7 @@ const OpdDiagnosis = () => {
                 vertical
                 style={styles.dataWrapper}
                 nestedScrollEnabled={true}>
-                <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                   <Rows
                     // data={tableData}
                     data={diagnosisArray?.map((row, index) => [
@@ -402,7 +402,7 @@ const OpdDiagnosis = () => {
               <Card style={styles.card2} key={index + 1}>
                 <Card.Content>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         ICD Code :
                       </Text>
@@ -412,7 +412,7 @@ const OpdDiagnosis = () => {
                     </View>
                   </View>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Illness :
                       </Text>
@@ -422,7 +422,7 @@ const OpdDiagnosis = () => {
                     </View>
                   </View>
                   <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, {gap: 8}]}>
+                    <View style={[styles.cardBody, { gap: 8 }]}>
                       <Text variant="titleLarge" style={styles.cardtext}>
                         Diagnosis Type :
                       </Text>
@@ -434,7 +434,7 @@ const OpdDiagnosis = () => {
 
                   {/* <View style={styles.cardBodyHead}> */}
 
-                  <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                  <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Date / Time :
                     </Text>
@@ -487,10 +487,10 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderRadius: 6,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'left', color: 'black', marginLeft: 8},
-  dataWrapper: {marginTop: -1},
-  row: {height: 50},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'left', color: 'black', marginLeft: 8 },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 50 },
   listView: {
     backgroundColor: '#ede8ed',
     overflow: 'visible',

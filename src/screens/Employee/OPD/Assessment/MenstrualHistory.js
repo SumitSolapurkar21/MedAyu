@@ -6,23 +6,23 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {Appbar, Button, Card, RadioButton, TextInput} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {BackHandler} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Table, Row, Rows } from 'react-native-table-component';
+import { Appbar, Button, Card, RadioButton, TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { BackHandler } from 'react-native';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {OpdpageNavigation} from './OpdpageNavigation';
+import { OpdpageNavigation } from './OpdpageNavigation';
 
 const MenstrualHistory = () => {
-  const {patientsData, scannedPatientsData, waitingListData, userData} =
+  const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
-  const {hospital_id, patient_id, reception_id, uhid} = patientsData;
-  const {appoint_id, mobilenumber} = scannedPatientsData;
+  const { hospital_id, patient_id, reception_id, uhid } = patientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   const [temp, setTemp] = useState([]);
   const navigation = useNavigation();
@@ -76,7 +76,7 @@ const MenstrualHistory = () => {
               marginHorizontal: 6,
               alignItems: 'center',
             }}>
-            <Text style={[styles.label, {width: 'auto'}]}>Age : </Text>
+            <Text style={[styles.label, { width: 'auto' }]}>Age : </Text>
             <TextInput
               mode="flat"
               style={[styles.input2]}
@@ -125,7 +125,7 @@ const MenstrualHistory = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <Text style={[styles.input, {padding: 4}]}>{temp['lmp']}</Text>
+              <Text style={[styles.input, { padding: 4 }]}>{temp['lmp']}</Text>
               <FontAwesome6 name="calendar-days" color="red" size={20} />
             </TouchableOpacity>
             <DateTimePickerModal
@@ -151,7 +151,7 @@ const MenstrualHistory = () => {
             <View
               style={[
                 styles.radioBtn,
-                {marginHorizontal: 6, flexWrap: 'wrap'},
+                { marginHorizontal: 6, flexWrap: 'wrap' },
               ]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="regular" />
@@ -180,7 +180,7 @@ const MenstrualHistory = () => {
             }}>
             <TextInput
               mode="flat"
-              style={[styles.input2, {width: '100%'}]}
+              style={[styles.input2, { width: '100%' }]}
               value={temp['durations'] ?? ''}
               onChangeText={text => {
                 setTemp(prevState => ({
@@ -210,7 +210,7 @@ const MenstrualHistory = () => {
             <View
               style={[
                 styles.radioBtn,
-                {flexWrap: 'wrap', marginHorizontal: 6},
+                { flexWrap: 'wrap', marginHorizontal: 6 },
               ]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="Scanty" />
@@ -241,7 +241,7 @@ const MenstrualHistory = () => {
               handleRadioChange('painduringcycle', newValue)
             }
             value={radioValues.painduringcycle}>
-            <View style={[styles.radioBtn, {marginHorizontal: 6}]}>
+            <View style={[styles.radioBtn, { marginHorizontal: 6 }]}>
               <View style={styles.radioBtn}>
                 <RadioButton value="yes" />
                 <Text>Yes</Text>
@@ -269,7 +269,7 @@ const MenstrualHistory = () => {
               marginHorizontal: 6,
               alignItems: 'center',
             }}>
-            <Text style={[styles.label, {width: 'auto'}]}>Age : </Text>
+            <Text style={[styles.label, { width: 'auto' }]}>Age : </Text>
             <TextInput
               mode="flat"
               style={[styles.input2]}
@@ -330,7 +330,7 @@ const MenstrualHistory = () => {
       await axios
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setTemp([]);
             setRadioValues({});
@@ -361,7 +361,7 @@ const MenstrualHistory = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-MENSTRUAL-HISTORY',
           uhid: uhid,
-          mobilenumber: mobilenumber || waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -498,7 +498,7 @@ const MenstrualHistory = () => {
             <Card style={styles.card2} key={index + 1}>
               <Card.Content>
                 <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Menarche Age :
                     </Text>
@@ -506,7 +506,7 @@ const MenstrualHistory = () => {
                       {row?.menarche_age}
                     </Text>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Lmp :
                     </Text>
@@ -516,7 +516,7 @@ const MenstrualHistory = () => {
                   </View>
                 </View>
                 <View style={styles.cardBodyHead}>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Periods :
                     </Text>
@@ -524,7 +524,7 @@ const MenstrualHistory = () => {
                       {row?.periods}
                     </Text>
                   </View>
-                  <View style={[styles.cardBody, {gap: 8}]}>
+                  <View style={[styles.cardBody, { gap: 8 }]}>
                     <Text variant="titleLarge" style={styles.cardtext}>
                       Durations :
                     </Text>
@@ -533,7 +533,7 @@ const MenstrualHistory = () => {
                     </Text>
                   </View>
                 </View>
-                <View style={[styles.cardBody, {gap: 8}]}>
+                <View style={[styles.cardBody, { gap: 8 }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     Quality of Blood Flow :
                   </Text>
@@ -541,7 +541,7 @@ const MenstrualHistory = () => {
                     {row?.qualityofbloodflow}
                   </Text>
                 </View>
-                <View style={[styles.cardBody, {gap: 8}]}>
+                <View style={[styles.cardBody, { gap: 8 }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     Pain during Cycle :
                   </Text>
@@ -550,7 +550,7 @@ const MenstrualHistory = () => {
                   </Text>
                 </View>
                 {/* <View style={styles.cardBodyHead}> */}
-                <View style={[styles.cardBody, {gap: 10}]}>
+                <View style={[styles.cardBody, { gap: 10 }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     Menopause :
                   </Text>
@@ -558,7 +558,7 @@ const MenstrualHistory = () => {
                     {row?.menopause}
                   </Text>
                 </View>
-                <View style={[styles.cardBody, {gap: 10, width: 'auto'}]}>
+                <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                   <Text variant="titleLarge" style={styles.cardtext}>
                     Date / Time :
                   </Text>
@@ -623,7 +623,7 @@ const styles = StyleSheet.create({
     width: '60%',
     backgroundColor: 'white',
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
+  head: { height: 40, backgroundColor: '#80aaff' },
   text: {
     textAlign: 'left',
     color: 'black',
@@ -631,7 +631,7 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     backgroundColor: '#ffffff',
   },
-  dataWrapper: {marginTop: -1},
+  dataWrapper: { marginTop: -1 },
   row: {
     height: 'auto',
     backgroundColor: '#ffffff',
