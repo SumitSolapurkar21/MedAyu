@@ -8,16 +8,16 @@ import {
   ToastAndroid,
   BackHandler,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import doctorImg from '../../images/doctor.png';
 import ipd from '../../images/ipd.png';
 import billHistory from '../../images/billHistory.png';
 import panchakarma from '../../images/panchakarma.png';
 import invoice from '../../images/invoice.png';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Appbar, Menu, Button, Divider} from 'react-native-paper';
+import { Appbar, Menu, Button, Divider } from 'react-native-paper';
 
 const EpatientDetails = () => {
   const navigation = useNavigation();
@@ -30,9 +30,9 @@ const EpatientDetails = () => {
     setSelectedFlow,
   } = useContext(UserContext);
 
-  const {firstname, mobilenumber, patientage, patientgender, uhid, patient_id} =
+  const { firstname, mobilenumber, patientage, patientgender, uhid, patient_id } =
     scannedPatientsData;
-  const {_id, hospital_id, role} = userData;
+  const { _id, hospital_id, role } = userData;
 
   //backHandler ...
   useEffect(() => {
@@ -66,6 +66,7 @@ const EpatientDetails = () => {
       patient_id: patient_id,
       reception_id: _id,
       hospital_id: hospital_id,
+      mobilenumber: mobilenumber
     });
   }, []);
 
@@ -92,7 +93,7 @@ const EpatientDetails = () => {
         />
         <Appbar.Content
           title="Patient Details"
-          titleStyle={{fontSize: 18, marginLeft: 10}}
+          titleStyle={{ fontSize: 18, marginLeft: 10 }}
         />
         {/* <Appbar.Action icon="magnify" onPress={_handleSearch} /> */}
         <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
@@ -130,7 +131,7 @@ const EpatientDetails = () => {
       </View>
       <SafeAreaView style={styles.container}>
         <View style={styles.card}>
-          <View style={[styles.cardContent, {backgroundColor: '#afcafa'}]}>
+          <View style={[styles.cardContent, { backgroundColor: '#afcafa' }]}>
             <Text style={styles.cardlabel}>Patient Name</Text>
             <Text style={styles.cardData}>{firstname}</Text>
           </View>
@@ -138,7 +139,7 @@ const EpatientDetails = () => {
             <Text style={styles.cardlabel}>UHID No.</Text>
             <Text style={styles.cardData}>{uhid}</Text>
           </View>
-          <View style={[styles.cardContent, {backgroundColor: '#afcafa'}]}>
+          <View style={[styles.cardContent, { backgroundColor: '#afcafa' }]}>
             <Text style={styles.cardlabel}>Mobile No.</Text>
             <Text style={styles.cardData}>{mobilenumber}</Text>
           </View>
@@ -164,14 +165,14 @@ const EpatientDetails = () => {
               navigation.navigate('OpdHomePage'), setSelectedFlow('scanned');
             }}>
             <Image source={ipd} alt="OPD" style={styles.img} />
-            <Text style={[styles.uName, {marginLeft: 10}]}>OPD</Text>
+            <Text style={[styles.uName, { marginLeft: 10 }]}>OPD</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.selectDiv}
             onPress={() => navigation.navigate('Eipdoptions')}>
             <Image source={ipd} alt="IPD" style={styles.img} />
-            <Text style={[styles.uName, {marginLeft: 10}]}>IPD</Text>
+            <Text style={[styles.uName, { marginLeft: 10 }]}>IPD</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -191,10 +192,11 @@ const EpatientDetails = () => {
                 patient_id: patient_id,
                 reception_id: _id,
                 hospital_id: hospital_id,
+                mobilenumber: mobilenumber
               })
             }>
             <Image source={invoice} alt="IPD" style={styles.img} />
-            <Text style={[styles.uName, {marginLeft: 10}]}>Bill</Text>
+            <Text style={[styles.uName, { marginLeft: 10 }]}>Bill</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -259,7 +261,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 4,
@@ -295,7 +297,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 5,

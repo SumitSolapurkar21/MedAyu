@@ -10,21 +10,21 @@ import {
   RefreshControl,
   Alert,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import api from '../../../../api.json';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import RNPrint from 'react-native-print';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import Share from 'react-native-share';
 import UserContext from '../../../components/Context/Context';
-import {ActivityIndicator, MD2Colors} from 'react-native-paper';
-import {BackHandler} from 'react-native';
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { BackHandler } from 'react-native';
 
-const BillHistory = ({route}) => {
+const BillHistory = ({ route }) => {
   const {
     scannedPatientsData,
     userData,
@@ -33,12 +33,12 @@ const BillHistory = ({route}) => {
     setBillHistoryArray,
   } = useContext(UserContext);
   const navigation = useNavigation();
-  const {uhid, patient_id} = scannedPatientsData;
-  const {_id, hospital_id} = userData;
+  const { uhid, patient_id, mobilenumber } = scannedPatientsData;
+  const { _id, hospital_id } = userData;
   const [billPatientHistory, setBillPatientHistory] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const {pat_id} = route.params;
+  const { pat_id } = route.params;
 
   //backHandler ...
   useEffect(() => {
@@ -82,10 +82,12 @@ const BillHistory = ({route}) => {
           reception_id: _id,
           hospital_id: hospital_id,
           historytype: 'Personal',
+          mobilenumber: mobilenumber
         })
         .then(res => {
           setBillPatientHistory(res.data);
-          res.data.status === true ? setLoading(false) : null;
+          res.data.status === true ? setLoading(false) : Alert.alert('Info', `${res.data.message}`);
+          setLoading(false)
           return res.data;
         });
     } catch (error) {
@@ -659,7 +661,7 @@ const BillHistory = ({route}) => {
   </html>
                         `;
 
-      const {fs} = RNFetchBlob;
+      const { fs } = RNFetchBlob;
       const path = fs.dirs.DocumentDir + '/bill.pdf';
       const options = {
         html: html,
@@ -712,14 +714,14 @@ const BillHistory = ({route}) => {
                 <Text style={styles.pData}>
                   {billPatientHistory?.fullname}{' '}
                 </Text>
-                <Text style={[styles.pData, {fontWeight: 'normal'}]}>
+                <Text style={[styles.pData, { fontWeight: 'normal' }]}>
                   <FontAwesome6 name="phone" color="#1669f0" size={11} />
                   &nbsp;
                   {billPatientHistory?.mobilenumber}{' '}
                 </Text>
               </View>
               <View style={styles.pDetail}>
-                <Text style={[styles.pLabel, {color: '#04c227'}]}>
+                <Text style={[styles.pLabel, { color: '#04c227' }]}>
                   <FontAwesome6
                     name="arrow-trend-down"
                     color="#04c227"
@@ -733,7 +735,7 @@ const BillHistory = ({route}) => {
                   />
                   &nbsp;{billPatientHistory?.totalreceived} &nbsp;&nbsp;
                 </Text>
-                <Text style={[styles.pLabel, {color: 'red'}]}>
+                <Text style={[styles.pLabel, { color: 'red' }]}>
                   <FontAwesome6 name="arrow-trend-down" color="red" size={14} />
                   &nbsp;Balance &nbsp;&nbsp;
                   <FontAwesome6
@@ -778,7 +780,7 @@ const BillHistory = ({route}) => {
                 },
               ]}>
               <TextInput
-                style={{padding: 6}}
+                style={{ padding: 6 }}
                 placeholder="Search"
                 autoComplete="off"
               />
@@ -794,11 +796,11 @@ const BillHistory = ({route}) => {
               historyArray?.map((res, i) => {
                 return (
                   <View
-                    style={[styles.card, {marginVertical: 6}]}
+                    style={[styles.card, { marginVertical: 6 }]}
                     key={res.bill_id}>
                     <View style={styles.cardBody}>
                       <View>
-                        <Text style={[styles.pData, {fontSize: 16}]}>Sale</Text>
+                        <Text style={[styles.pData, { fontSize: 16 }]}>Sale</Text>
                       </View>
                       <View>
                         <Text style={styles.pData}>
@@ -811,7 +813,7 @@ const BillHistory = ({route}) => {
                     </View>
                     <View style={styles.cardFooter2}>
                       <View>
-                        <Text style={[styles.pData1, {color: '#04c227'}]}>
+                        <Text style={[styles.pData1, { color: '#04c227' }]}>
                           Total
                         </Text>
                         <Text style={styles.pData}>
@@ -820,7 +822,7 @@ const BillHistory = ({route}) => {
                         </Text>
                       </View>
                       <View>
-                        <Text style={[styles.pData1, {color: 'red'}]}>
+                        <Text style={[styles.pData1, { color: 'red' }]}>
                           Balance
                         </Text>
                         <Text style={styles.pData}>
@@ -896,7 +898,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 4,
@@ -958,7 +960,7 @@ const styles = StyleSheet.create({
   },
   homeDiv: {
     backgroundColor: '#5c86fa',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 4,

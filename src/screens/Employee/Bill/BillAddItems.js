@@ -1,28 +1,28 @@
-import {BackHandler, StyleSheet, Text, View} from 'react-native';
-import React, {useState, useEffect, useContext} from 'react';
-import {TextInput} from 'react-native-paper';
+import { BackHandler, StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {Button} from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import UserContext from '../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../api.json';
-import {Dialog, Portal} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import { Dialog, Portal } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
-const BillAddItems = ({route}) => {
+const BillAddItems = ({ route }) => {
   const navigation = useNavigation();
-  const {bill_type} = route.params;
+  const { bill_type } = route.params;
   const [itemQuantity, setItemQuantity] = useState('1');
   const [showDropDown2, setShowDropDown2] = useState(false);
   const [tax, setTax] = useState('');
-  const {userData, scannedPatientsData, setPatientEditArray, billHistoryArray} =
+  const { userData, scannedPatientsData, setPatientEditArray, billHistoryArray } =
     useContext(UserContext);
   const [opdServices, setOpdServices] = useState([]);
   const [selectedItemCharge, setSelectedItemCharge] = useState('');
 
-  const {_id, hospital_id, name} = userData;
-  const {firstname, mobilenumber, patient_id, patientgender, uhid} =
+  const { _id, hospital_id, name } = userData;
+  const { firstname, mobilenumber, patient_id, patientgender, uhid } =
     scannedPatientsData;
 
   //diaglog...
@@ -62,7 +62,7 @@ const BillAddItems = ({route}) => {
       try {
         const GetOPDServicesRes = await axios.post(
           `${api.baseurl}/GetOPDServices`,
-          {hospital_id: hospital_id},
+          { hospital_id: hospital_id },
         );
 
         const data = GetOPDServicesRes.data.servicesArray || [];
@@ -197,25 +197,25 @@ const BillAddItems = ({route}) => {
   const submitBillItemHandler = async () => {
     bill_type === 'ADD'
       ? await axios
-          .post(`${api.baseurl}/UpdateMobileOPDServices`, {
-            reception_id: _id,
-            hospital_id: hospital_id,
-            fullname: name,
-            firstname: firstname,
-            mobilenumber: mobilenumber,
-            patient_id: patient_id,
-            patientgender: patientgender,
-            uhid: uhid,
-            nettotal: itemQuantity * selectedItemCharge.amount,
-            servicesArray,
-          })
-          .then(res => {
-            res.data.status === true
-              ? // showDialog()
-                navigation.replace('BillLayout')
-              : console.warn(`${res.data.message}`);
-            return res.data;
-          })
+        .post(`${api.baseurl}/UpdateMobileOPDServices`, {
+          reception_id: _id,
+          hospital_id: hospital_id,
+          fullname: name,
+          firstname: firstname,
+          mobilenumber: mobilenumber,
+          patient_id: patient_id,
+          patientgender: patientgender,
+          uhid: uhid,
+          nettotal: itemQuantity * selectedItemCharge.amount,
+          servicesArray,
+        })
+        .then(res => {
+          res.data.status === true
+            ? // showDialog()
+            navigation.replace('BillLayout')
+            : console.warn(`${res.data.message}`);
+          return res.data;
+        })
       : setPatientEditArray(prevArray => [...prevArray, ...servicesArray2]),
       showDialog(true);
   };
@@ -249,7 +249,7 @@ const BillAddItems = ({route}) => {
           onDismiss={() => _setServiceCategoryDropdown(false)}
           value={_serviceCategorySelected}
           setValue={_setServiceCategorySelected}
-          list={_serviceCategoryArray?.map(res => ({
+          list={_serviceCategoryArray?.map((res, index) => ({
             label: res.servicecategory,
             key: [res._id, res.servicecategory],
             value: res._id,
@@ -265,7 +265,7 @@ const BillAddItems = ({route}) => {
           onDismiss={() => _setServiceItemDropdown(false)}
           value={_serviceItemSelected}
           setValue={_setServiceItemSelected}
-          list={_serviceItemArray?.map(res => ({
+          list={_serviceItemArray?.map((res, index) => ({
             label: res.outbillingname,
             key: [res._id, res.outbillingname],
             value: res._id,
@@ -278,7 +278,7 @@ const BillAddItems = ({route}) => {
             mode="outlined"
             label="Quantity"
             placeholder="Quantity"
-            style={{width: '49%'}}
+            style={{ width: '49%' }}
             value={itemQuantity}
             onChangeText={e => setItemQuantity(e)}
             keyboardType="numeric"
@@ -288,13 +288,13 @@ const BillAddItems = ({route}) => {
             mode="outlined"
             label="Rate(Price/Unit)"
             placeholder="Rate(Price/Unit)"
-            style={{width: '49%'}}
+            style={{ width: '49%' }}
             value={selectedItemCharge.amount}
             editable={false}
           />
         </View>
         <View style={styles.grpMain}>
-          <View style={{width: '49%'}}>
+          <View style={{ width: '49%' }}>
             <DropDown
               label={'Tax'}
               mode={'outlined'}
@@ -307,7 +307,7 @@ const BillAddItems = ({route}) => {
             />
           </View>
         </View>
-        <Text style={{fontWeight: '600', marginTop: 20, color: 'black'}}>
+        <Text style={{ fontWeight: '600', marginTop: 20, color: 'black' }}>
           Total Amount : &nbsp; &nbsp;
           <FontAwesome6 name="indian-rupee-sign" color="black" size={12} />
           &nbsp; &nbsp;
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginTop: 10,
     marginHorizontal: 12,
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 4,

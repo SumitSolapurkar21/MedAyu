@@ -146,7 +146,6 @@ const FamilyHistory = () => {
         .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
         .then(res => {
           const { status, message } = res.data;
-          console.log(res.data)
           if (status === true) {
             setTemp([]);
             FetchMobileOpdAssessment();

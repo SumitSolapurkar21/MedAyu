@@ -401,7 +401,6 @@ export const Listofpatients = () => {
 
   // MobileChangeWaitingToConsult api ....
   const MobileChangeWaitingToConsult = async data => {
-    console.log("waiting to consult:", data)
     try {
       await axios
         .post(`${api.baseurl}/MobileChangeWaitingToConsult`, data)
@@ -444,7 +443,6 @@ export const Listofpatients = () => {
       role: userData.role,
     };
 
-    console.log("MobileChangeWaitingToConsult", data)
     MobileChangeWaitingToConsult(data);
 
     setWaitingListData(data);
