@@ -161,7 +161,7 @@ const OpdProcedure = () => {
       const filteredData = selectedProcedure?.filter(
         res => res.procedure_id === selectedProcedureDataCode?.procedure_id,
       );
-      setTemp(prevData => [...prevData, ...filteredData]);
+      setTemp(prevData => [...filteredData, ...prevData]);
     }
   }, [selectedProcedureDataCode]);
   const resetHandler = () => {
@@ -262,7 +262,7 @@ const OpdProcedure = () => {
         _handleMore={_handleMore}
         visible={visible}
       />
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View>
           <ScrollView horizontal style={styles.categoryTabs}>
             {_serviceCategoryArray ? (
@@ -310,29 +310,36 @@ const OpdProcedure = () => {
         </View>
         <View style={styles.searchInput}>
           <Text style={styles.heading}>Search Procedure</Text>
-          <TextInput
-            mode="outlined"
-            label="Procedure"
-            placeholder="Search Procedure ..."
-            style={[styles.input]}
-            value={
-              selectedProcedureCode?.procedurename
-                ? selectedProcedureCode?.procedurename
-                : searchInput
-            }
-            onChangeText={text => {
-              setSearchInput(text);
-            }}
-            right={
-              <TextInput.Icon icon="close" onPress={() => resetHandler()} />
-            }
-          />
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <TextInput
+              mode="outlined"
+              label="Procedure"
+              style={[styles.input]}
+              value={
+                selectedProcedureCode?.procedurename
+                  ? selectedProcedureCode?.procedurename
+                  : searchInput
+              }
+              onChangeText={text => {
+                setSearchInput(text);
+              }}
+              right={
+                <TextInput.Icon icon="close" onPress={() => resetHandler()} />
+              }
+            />
+            <Button
+              mode="contained"
+              style={[styles.btn]}
+              onPress={() => resetHandler()}>
+              Add More
+            </Button>
+          </View>
           <ScrollView
             style={{
               zIndex: 1,
-              marginHorizontal: 14,
-              //   maxHeight: drugCode.length > 0 && visibleList ? 200 : 0,
-            }} // Set a higher zIndex for the ScrollView
+              marginHorizontal: 0,
+              maxHeight: 200
+            }}
             vertical={true}>
             {visibleList && (
               <View>
@@ -353,209 +360,215 @@ const OpdProcedure = () => {
               </View>
             )}
           </ScrollView>
+
         </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.inputGroup}>
-          {temp.map((res, index) => {
-            return (
-              <View style={styles.card} key={index}>
-                <View style={styles.cardContentDiv}>
-                  <Text style={[styles.label, { width: 200, marginLeft: 10 }]}>
-                    Name : &nbsp; {res.procedurename}
-                  </Text>
-                  <IconButton
-                    icon="trash-can"
-                    iconColor={MD3Colors.error50}
-                    size={20}
-                    onPress={() =>
-                      _removeSelectedDataHandler(res?.procedure_id)
-                    }
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}> Name : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.procedurename}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].procedurename = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}> Amount : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.procedureamount}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].procedureamount = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}> Time : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.proceduretime}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].proceduretime = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}> KIT : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.procedurekit}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].procedurekit = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
 
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>Instruction : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.procedureinstruction}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].procedureinstruction = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
 
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}> Day's : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.proceduredays}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].proceduredays = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-              </View>
-            );
-          })}
+        <View>
+          <ScrollView horizontal
+            showsVerticalScrollIndicator={false}
+            style={styles.inputGroup}>
+            {temp.map((res, index) => {
+              return (
+                <View style={styles.card} key={index}>
+                  <View style={styles.cardContentDiv}>
+                    <Text style={[styles.label, { width: 200, marginLeft: 10 }]}>
+                      Name : &nbsp; {res.procedurename}
+                    </Text>
+                    <IconButton
+                      icon="trash-can"
+                      iconColor={MD3Colors.error50}
+                      size={20}
+                      onPress={() =>
+                        _removeSelectedDataHandler(res?.procedure_id)
+                      }
+                    />
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}> Name : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res.procedurename}
+                      onChangeText={text => {
+                        const updatedTemp = [...temp];
+                        updatedTemp[index].procedurename = text;
+                        setTemp(updatedTemp);
+                      }}
+                      editable={true}
+                    />
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}> Amount : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res.procedureamount}
+                      onChangeText={text => {
+                        const updatedTemp = [...temp];
+                        updatedTemp[index].procedureamount = text;
+                        setTemp(updatedTemp);
+                      }}
+                      editable={true}
+                    />
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}> Time : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res.proceduretime}
+                      onChangeText={text => {
+                        const updatedTemp = [...temp];
+                        updatedTemp[index].proceduretime = text;
+                        setTemp(updatedTemp);
+                      }}
+                      editable={true}
+                    />
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}> KIT : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res.procedurekit}
+                      onChangeText={text => {
+                        const updatedTemp = [...temp];
+                        updatedTemp[index].procedurekit = text;
+                        setTemp(updatedTemp);
+                      }}
+                      editable={true}
+                    />
+                  </View>
 
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}>Instruction : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res.procedureinstruction}
+                      onChangeText={text => {
+                        const updatedTemp = [...temp];
+                        updatedTemp[index].procedureinstruction = text;
+                        setTemp(updatedTemp);
+                      }}
+                      editable={true}
+                    />
+                  </View>
+
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}> Day's : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res.proceduredays}
+                      onChangeText={text => {
+                        const updatedTemp = [...temp];
+                        updatedTemp[index].proceduredays = text;
+                        setTemp(updatedTemp);
+                      }}
+                      editable={true}
+                    />
+                  </View>
+                </View>
+              );
+            })}
+
+
+          </ScrollView>
+        </View>
+        <View style={styles.submitbutton}>
           <Button
             mode="contained"
-            style={[styles.btn, { alignSelf: 'flex-start' }]}
-            onPress={() => resetHandler()}>
-            Add More
+            onPress={() => navigation.navigate('OpdTreatment')}>
+            Previous
           </Button>
-          <View style={styles.submitbutton}>
-            <Button
-              mode="contained"
-              onPress={() => navigation.navigate('OpdTreatment')}>
-              Previous
-            </Button>
-            <Button mode="contained" onPress={() => submitTreatmenthandler()}>
-              Submit
-            </Button>
-            <Button
-              mode="contained"
-              onPress={() => navigation.navigate('OpdAdvice')}>
-              Next / Skip
-            </Button>
-          </View>
-        </ScrollView>
-        {opdAssessment.length > 0 &&
-          opdAssessment?.map((row, index) => {
-            return (
-              <Card style={styles.card2} key={index + 1}>
-                <Card.Content>
-                  <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, { gap: 8 }]}>
-                      <Text variant="titleLarge" style={styles.cardtext}>
-                        Name :
-                      </Text>
-                      <Text variant="titleLarge" style={styles.cardtext2}>
-                        {row?.procedurename}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={[styles.cardBody, { gap: 8 }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Amount :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.procedureamount}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, { gap: 8 }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Time :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.proceduretime}
-                    </Text>
-                  </View>
-                  <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, { gap: 8 }]}>
-                      <Text variant="titleLarge" style={styles.cardtext}>
-                        Kit :
-                      </Text>
-                      <Text variant="titleLarge" style={[styles.cardtext2]}>
-                        {row?.procedurekit}
-                      </Text>
-                    </View>
-                    <View style={[styles.cardBody, { gap: 8 }]}>
-                      <Text variant="titleLarge" style={styles.cardtext}>
-                        Instruction :
-                      </Text>
-                      <Text variant="titleLarge" style={[styles.cardtext2]}>
-                        {row?.procedureinstruction}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={[styles.cardBody, { gap: 8 }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Procedure Type :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.proceduretype}
-                    </Text>
-                  </View>
+          <Button mode="contained" onPress={() => submitTreatmenthandler()}>
+            Submit
+          </Button>
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate('OpdAdvice')}>
+            Next / Skip
+          </Button>
+        </View>
+        
+        <View>
+          <ScrollView showsVerticalScrollIndicator={false} vertical style={{ maxHeight: '90%' }}>
+            {opdAssessment.length > 0 &&
+              opdAssessment?.map((row, index) => {
+                return (
+                  <Card style={styles.card2} key={index + 1}>
+                    <Card.Content>
+                      <View style={styles.cardBodyHead}>
+                        <View style={[styles.cardBody, { gap: 8 }]}>
+                          <Text variant="titleLarge" style={styles.cardtext}>
+                            Name :
+                          </Text>
+                          <Text variant="titleLarge" style={styles.cardtext2}>
+                            {row?.procedurename}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={[styles.cardBody, { gap: 8 }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Amount :
+                        </Text>
+                        <Text variant="titleLarge" style={[styles.cardtext2]}>
+                          {row?.procedureamount}
+                        </Text>
+                      </View>
+                      <View style={[styles.cardBody, { gap: 8 }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Time :
+                        </Text>
+                        <Text variant="titleLarge" style={[styles.cardtext2]}>
+                          {row?.proceduretime}
+                        </Text>
+                      </View>
+                      <View style={styles.cardBodyHead}>
+                        <View style={[styles.cardBody, { gap: 8 }]}>
+                          <Text variant="titleLarge" style={styles.cardtext}>
+                            Kit :
+                          </Text>
+                          <Text variant="titleLarge" style={[styles.cardtext2]}>
+                            {row?.procedurekit}
+                          </Text>
+                        </View>
+                        <View style={[styles.cardBody, { gap: 8 }]}>
+                          <Text variant="titleLarge" style={styles.cardtext}>
+                            Instruction :
+                          </Text>
+                          <Text variant="titleLarge" style={[styles.cardtext2]}>
+                            {row?.procedureinstruction}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={[styles.cardBody, { gap: 8 }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Procedure Type :
+                        </Text>
+                        <Text variant="titleLarge" style={[styles.cardtext2]}>
+                          {row?.proceduretype}
+                        </Text>
+                      </View>
 
-                  <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Date / Time :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row.opd_date} / {row.opd_time}
-                    </Text>
-                  </View>
-                </Card.Content>
-              </Card>
-            );
-          })}
-      </ScrollView>
+                      <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Date / Time :
+                        </Text>
+                        <Text variant="titleLarge" style={styles.cardtext2}>
+                          {row.opd_date} / {row.opd_time}
+                        </Text>
+                      </View>
+                    </Card.Content>
+                  </Card>
+                );
+              })}
+          </ScrollView>
+        </View>
+      </View>
+
     </>
   );
 };
@@ -563,7 +576,7 @@ const OpdProcedure = () => {
 export default OpdProcedure;
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
   },
   categoryTabs: {
     padding: 10,
@@ -606,6 +619,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     marginHorizontal: 12,
+    marginBottom: 8,
   },
   listView: {
     backgroundColor: '#ede8ed',
@@ -634,12 +648,14 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     marginHorizontal: 14,
-    gap: 4,
+    maxHeight: '100%',
   },
   card: {
     borderWidth: 0.7,
     borderRadius: 6,
     marginBottom: 10,
+    marginRight: 6
+
   },
   btn: {
     marginVertical: 12,
@@ -647,7 +663,11 @@ const styles = StyleSheet.create({
   },
   submitbutton: {
     flexDirection: 'row',
+    justifyContent: "center",
     gap: 10,
+    padding: 6,
+    // backgroundColor: "#ffffff"
+
   },
   cardContentDiv: {
     flexDirection: 'row',
@@ -677,4 +697,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: 200,
   },
+  input: {
+    width: 200,
+  }
 });

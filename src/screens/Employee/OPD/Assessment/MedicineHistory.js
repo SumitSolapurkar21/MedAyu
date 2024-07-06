@@ -51,7 +51,7 @@ const MedicineHistory = () => {
       const filteredData = selectedData.filter(
         res => res.drugcode === selectedDrugCode.drugcode,
       );
-      setTemp(prevData => [...prevData, ...filteredData]);
+      setTemp(prevData => [...filteredData, ...prevData]);
     }
   }, [selectedDrugCode, selectedData]);
 
@@ -84,7 +84,7 @@ const MedicineHistory = () => {
     setSearchInput('');
     setSelectedDrugCode('');
     //     setTemp([]);
-    //     setVisibleList(false);
+    setVisibleList(false);
   };
   const Themes = [{ mainColor: '#F5803E', activeTextColor: '#fff' }];
 
@@ -195,25 +195,25 @@ const MedicineHistory = () => {
     setTemp(updatedSelectedRow);
   };
   const displayData = opdAssessment.map((item, index) => (
-    <View key={index}>
+    <ScrollView showsVerticalScrollIndicator={false} vertical style={{ maxHeight: '100%' }} key={index}>
       {Object.entries(item).map(([key, value]) => (
-        <Card key={key} style={styles.card}>
+        <Card style={styles.card} key={key} >
           {Array.isArray(value) ? (
-            <Text style={{ lineHeight: 20, width: 330 }}>{value.join('\n')}</Text>
+            <Text style={{ lineHeight: 20, width: 300 }}>{value.join('\n')}</Text>
           ) : null}
         </Card>
       ))}
-    </View>
+    </ScrollView>
   ));
 
   const _handleMore = () => {
     setVisible(true);
   };
   const [visible, setVisible] = useState(false);
-
   const openMenu = () => setVisible(true);
-
   const closeMenu = () => setVisible(false);
+
+
   return (
     <>
       {/* Appbar header */}
@@ -236,7 +236,7 @@ const MedicineHistory = () => {
         _handleMore={_handleMore}
         visible={visible}
       />
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         {showCalender && (
           <View style={styles.datePickerContainer}>
             <View style={styles.datePicker}>
@@ -254,68 +254,82 @@ const MedicineHistory = () => {
             </View>
           </View>
         )}
-        <Text style={styles.heading}>Medicine History</Text>
-        <TextInput
-          mode="outlined"
-          label="Medicine Name"
-          placeholder="Search Medicine Name ..."
-          style={[styles.input, { marginHorizontal: 14 }]}
-          value={
-            selectedDrugCode?.drugcode
-              ? selectedDrugCode?.drugcode
-              : searchInput
-          }
-          onChangeText={text => {
-            setSearchInput(text), setSelectedDrugCode('');
-          }}
-          right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
-        />
-        <ScrollView
-          style={{
-            zIndex: 1,
-            marginHorizontal: 14,
-            maxHeight: drugCode.length > 0 && visibleList ? 200 : 0,
-          }} // Set a higher zIndex for the ScrollView
-          vertical={true}>
-          {visibleList && (
-            <View>
-              {drugCode?.map((res, index) => (
-                <List.Item
-                  style={styles.listView}
-                  title={res?.drugname}
-                  key={index + 1}
-                  onPress={() => {
-                    setSelectedDrugCode({
-                      drugcode: res.drugcode,
-                      drugname: res.drugname,
-                    });
-                    setVisibleList(false);
-                  }}
-                />
-              ))}
-            </View>
-          )}
-        </ScrollView>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.inputGroup}>
-          {temp.map((res, index) => {
-            return (
-              <View style={styles.card} key={index + 1}>
-                <View style={styles.cardContentDiv}>
-                  <Text style={[styles.label, { width: 200 }]}>
-                    Drug Name : &nbsp; {res.drugname}
-                  </Text>
-                  <IconButton
-                    icon="trash-can"
-                    iconColor={MD3Colors.error50}
-                    size={20}
-                    onPress={() =>
-                      _removeSelectedDataHandler(res?.prescription_id)
-                    }
+
+        <View style={styles.searchInput}>
+          <Text style={styles.heading}>Medicine History</Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+
+            <TextInput
+              mode="outlined"
+              label="Medicine Name"
+              placeholder="Search Medicine Name ..."
+              style={[styles.input]}
+              value={
+                selectedDrugCode?.drugcode
+                  ? selectedDrugCode?.drugcode
+                  : searchInput
+              }
+              onChangeText={text => {
+                setSearchInput(text), setSelectedDrugCode('');
+              }}
+              right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
+            />
+            <Button
+              mode="contained"
+              style={[styles.btn]}
+              onPress={() => resetHandler()}>
+              Add More
+            </Button>
+          </View>
+          <ScrollView
+            style={{
+              zIndex: 1,
+              marginHorizontal: 0,
+              maxHeight: 200,
+            }} // Set a higher zIndex for the ScrollView
+            vertical={true}>
+            {visibleList && (
+              <View>
+                {drugCode?.map((res, index) => (
+                  <List.Item
+                    style={styles.listView}
+                    title={res?.drugname}
+                    key={index + 1}
+                    onPress={() => {
+                      setSelectedDrugCode({
+                        drugcode: res.drugcode,
+                        drugname: res.drugname,
+                      });
+                      setVisibleList(false);
+                    }}
                   />
-                </View>
-                <View style={styles.innerCard}>
+                ))}
+              </View>
+            )}
+          </ScrollView>
+        </View>
+
+        <View>
+          <ScrollView
+            horizontal
+            showsVerticalScrollIndicator={false}
+            style={styles.inputGroup}>
+            {temp?.map((res, index) => {
+              return (
+                <View style={styles.card} key={index + 1}>
+                  <View style={styles.cardContentDiv}>
+                    <Text style={[styles.label, { width: 200 }]}>
+                      Drug Name : &nbsp; {res.drugname}
+                    </Text>
+                    <IconButton
+                      icon="trash-can"
+                      iconColor={MD3Colors.error50}
+                      size={20}
+                      onPress={() =>
+                        _removeSelectedDataHandler(res?.prescription_id)
+                      }
+                    />
+                  </View>
                   <View style={styles.cardContent}>
                     <Text style={styles.label}>Dose : </Text>
                     <TextInput
@@ -416,17 +430,12 @@ const MedicineHistory = () => {
                     />
                   </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
+          </ScrollView>
+        </View>
 
-          <Button
-            mode="contained"
-            style={[styles.btn, { alignSelf: 'flex-start' }]}
-            onPress={() => resetHandler()}>
-            Add More
-          </Button>
-        </ScrollView>
+
         <View style={styles.submitbutton}>
           <Button
             mode="contained"
@@ -448,8 +457,9 @@ const MedicineHistory = () => {
           </Button>
         </View>
 
-        <View style={{ padding: 10 }}>{displayData}</View>
-      </ScrollView>
+
+        <ScrollView showsVerticalScrollIndicator={false} vertical style={{ maxHeight: '100%', padding: 10 }} >{displayData}</ScrollView>
+      </View>
     </>
   );
 };
@@ -458,37 +468,33 @@ export default MedicineHistory;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   heading: {
     fontWeight: '600',
     fontSize: 18,
-    marginHorizontal: 14,
     marginVertical: 10,
   },
   inputGroup: {
     marginHorizontal: 14,
-    gap: 4,
+    // maxHeight: '100%',
   },
   input: {
     marginBottom: 8,
+    width: 200,
   },
   input2: {
-    //     backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',
     paddingTop: 0,
     paddingLeft: 0,
     height: 35,
-    width: '100%',
-    //     maxWidth: 220,
+    width: 210,
+    maxWidth: 220,
   },
-  addButton: {
-    marginVertical: 10,
-    marginHorizontal: 14,
-    alignSelf: 'flex-end',
-  },
+
   btn: {
     marginVertical: 12,
-    //     alignSelf: 'center',
+
   },
   listView: {
     backgroundColor: '#ede8ed',
@@ -498,14 +504,16 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   card: {
+    borderWidth: 0.7,
     borderRadius: 6,
     marginBottom: 10,
-    padding: 6,
+    marginRight: 6,
+    padding: 10
   },
   cardContent: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     padding: 5,
-    width: '50%',
+    alignItems: 'center',
   },
   label: {
     fontWeight: '600',
@@ -537,8 +545,9 @@ const styles = StyleSheet.create({
   },
   submitbutton: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: "center",
     gap: 10,
+    padding: 6,
   },
   dropdown: {
     height: 40,
@@ -588,8 +597,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  innerCard: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+
+  searchInput: {
+    marginHorizontal: 12,
+    marginBottom: 8,
   },
 });
