@@ -22,7 +22,7 @@ const Samprapti = () => {
   //
   const { scannedPatientsData, waitingListData, userData, selectedFlow } =
     useContext(UserContext);
-  const { appoint_id } = scannedPatientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
@@ -119,7 +119,7 @@ const Samprapti = () => {
     const _body = {
       hospital_id: userData?.hospital_id,
       patient_id: waitingListData?.newpatient_id,
-      mobilenumber: waitingListData?.mobilenumber,
+      mobilenumber: waitingListData?.mobilenumber || mobilenumber,
       reception_id: userData?._id,
       appoint_id: waitingListData?.appoint_id || appoint_id,
       uhid: waitingListData?.uhid,

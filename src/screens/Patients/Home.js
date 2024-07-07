@@ -9,10 +9,10 @@ import {
   BackHandler,
   Alert,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import medayuLogo from '../../images/medayu.jpeg';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 //images
 import pr from '../../images/pr.png';
 import ss from '../../images/sss.png';
@@ -20,17 +20,17 @@ import attendence from '../../images/calendar.png';
 import expenses from '../../images/expenses.png';
 import UserContext from '../../components/Context/Context';
 import Ehome from '../Employee/Ehome';
-import {Appbar, Button, Menu} from 'react-native-paper';
+import { Appbar, Button, Menu } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomnavigationComponent from '../../components/BottomNavigation';
 
 const Home = () => {
   const navigation = useNavigation();
 
-  const {userData, setIsLoggedIn, setPatientSelectedValue} =
+  const { userData, setIsLoggedIn, setPatientSelectedValue } =
     useContext(UserContext);
 
-  const {role} = userData;
+  const { role } = userData;
 
   const [visible, setVisible] = React.useState(false);
 
@@ -87,7 +87,7 @@ const Home = () => {
           title={
             <>
               <Text style={styles.titleText}>{userData?.name}</Text>
-              <Text style={[styles.titleText, {fontSize: 14}]}>
+              <Text style={[styles.titleText, { fontSize: 14 }]}>
                 {userData?.role}
               </Text>
             </>
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     color: '#127359',
     width: 90,
   },
-  uNamee: {fontSize: 17, fontWeight: '600', color: '#127359'},
+  uNamee: { fontSize: 17, fontWeight: '600', color: '#127359' },
   hrcontent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  searchIcon: {marginHorizontal: 10},
+  searchIcon: { marginHorizontal: 10 },
   searchtext: {
     fontSize: 14,
     color: '#127359',
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   contentItem: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 6,

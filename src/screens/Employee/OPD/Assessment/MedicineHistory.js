@@ -169,7 +169,7 @@ const MedicineHistory = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-MEDICINE-HISTORY',
           uhid: uhid,
-          mobilenumber: waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);

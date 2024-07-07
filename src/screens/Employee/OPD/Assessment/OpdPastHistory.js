@@ -63,7 +63,7 @@ const OpdPastHistory = () => {
       const filteredData = illnessSelectedData.filter(
         res => res.illness_id === selectedIllnessCode.illness_id,
       );
-      setTemp(prevData => [...prevData, ...filteredData]);
+      setTemp(prevData => [...filteredData, ...prevData]);
     }
   }, [selectedIllnessCode, illnessSelectedData]);
 
@@ -94,6 +94,7 @@ const OpdPastHistory = () => {
   const resetHandler = () => {
     setSearchInput('');
     setSelectedIllnessCode('');
+    setVisibleList(false);
   };
   const Themes = [{ mainColor: '#F5803E', activeTextColor: '#fff' }];
 
@@ -144,6 +145,8 @@ const OpdPastHistory = () => {
       uhid: uhid,
       api_type: 'OPD-PAST-HISTORY',
       opdpasthistoryarray: temp,
+      mobilenumber: waitingListData?.mobilenumber || mobilenumber,
+
     };
 
     try {
@@ -191,7 +194,7 @@ const OpdPastHistory = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-PAST-HISTORY',
           uhid: uhid,
-          mobilenumber: waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -223,7 +226,7 @@ const OpdPastHistory = () => {
       {Object.entries(item).map(([key, value]) => (
         <Card key={key} style={styles.card}>
           {Array.isArray(value) ? (
-            <Text style={{ lineHeight: 20, width: 330 }}>{value.join('\n')}</Text>
+            <Text style={{ lineHeight: 20, width: 300 }}>{value.join('\n')}</Text>
           ) : null}
         </Card>
       ))}
@@ -234,10 +237,10 @@ const OpdPastHistory = () => {
     setVisible(true);
   };
   const [visible, setVisible] = useState(false);
-
   const openMenu = () => setVisible(true);
-
   const closeMenu = () => setVisible(false);
+
+
   return (
     <>
       {/* Appbar header */}
@@ -254,12 +257,14 @@ const OpdPastHistory = () => {
           onPress={() => openMenu()}
         />
       </Appbar.Header>
+
       <OpdpageNavigation
         closeMenu={closeMenu}
         openMenu={openMenu}
         _handleMore={_handleMore}
         visible={visible}
       />
+
       {showCalender && (
         <View style={styles.datePickerContainer}>
           <View style={styles.datePicker}>
@@ -277,67 +282,86 @@ const OpdPastHistory = () => {
           </View>
         </View>
       )}
-      <ScrollView vertical style={styles.container}>
-        <Text style={styles.heading}>Past History</Text>
-        <TextInput
-          mode="outlined"
-          label="Diseases"
-          placeholder="Search Diseases ..."
-          style={[styles.input, { marginHorizontal: 14 }]}
-          value={
-            selectedIllnessCode?.illnessname
-              ? selectedIllnessCode?.illnessname
-              : searchInput
-          }
-          onChangeText={text => {
-            setSearchInput(text), setSelectedIllnessCode('');
-          }}
-          right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
-        />
-        <ScrollView
-          style={{
-            zIndex: 1,
-            marginHorizontal: 14,
-            maxHeight: illnessCode.length > 0 && visibleList ? 200 : 0,
-          }} // Set a higher zIndex for the ScrollView
-          vertical={true}>
-          {visibleList && (
-            <View>
-              {illnessCode?.map(res => (
-                <List.Item
-                  style={styles.listView}
-                  title={res?.illnessname}
-                  key={res?.illness_id}
-                  onPress={() => {
-                    setSelectedIllnessCode({
-                      illness_id: res.illness_id,
-                      illnessname: res.illnessname,
-                    });
-                    setVisibleList(false);
-                  }}
-                />
-              ))}
-            </View>
-          )}
-        </ScrollView>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.inputGroup}>
-          {temp?.map((res, index) => {
-            return (
-              <View style={styles.card} key={index + 1}>
-                <View style={styles.cardContentDiv}>
-                  <Text style={[styles.label, { width: 200 }]}>
-                    Illness : &nbsp; {res?.illnessname}
-                  </Text>
-                  <IconButton
-                    icon="trash-can"
-                    iconColor={MD3Colors.error50}
-                    size={20}
-                    onPress={() => _removeSelectedDataHandler(res?.illness_id)}
+
+
+      <View style={styles.container}>
+
+        {/* search input ... */}
+        <View style={styles.searchInput}>
+          <Text style={styles.heading}>Past History</Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <TextInput
+              mode="outlined"
+              label="Diseases"
+              placeholder="Search Diseases ..."
+              style={[styles.input]}
+              value={
+                selectedIllnessCode?.illnessname
+                  ? selectedIllnessCode?.illnessname
+                  : searchInput
+              }
+              onChangeText={text => {
+                setSearchInput(text), setSelectedIllnessCode('');
+              }}
+              right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
+            />
+            <Button
+              mode="contained"
+              style={[styles.btn, { alignSelf: 'flex-start' }]}
+              onPress={() => resetHandler()}>
+              Add More
+            </Button>
+          </View>
+        </View>
+
+        {/* list  */}
+        <View>
+          <ScrollView
+            style={{
+              zIndex: 1,
+              marginHorizontal: 0,
+              maxHeight: 200
+            }}
+            vertical={true}>
+            {visibleList && (
+              <View>
+                {illnessCode?.map(res => (
+                  <List.Item
+                    style={styles.listView}
+                    title={res?.illnessname}
+                    key={res?.illness_id}
+                    onPress={() => {
+                      setSelectedIllnessCode({
+                        illness_id: res.illness_id,
+                        illnessname: res.illnessname,
+                      });
+                      setVisibleList(false);
+                    }}
                   />
-                </View>
-                <View style={styles.innerCard}>
+                ))}
+              </View>
+            )}
+          </ScrollView>
+        </View>
+
+        <View>
+          <ScrollView horizontal
+            showsVerticalScrollIndicator={false}
+            style={styles.inputGroup}>
+            {temp?.map((res, index) => {
+              return (
+                <View style={styles.card} key={index + 1}>
+                  <View style={styles.cardContentDiv}>
+                    <Text style={[styles.label, { width: 200 }]}>
+                      Illness : &nbsp; {res?.illnessname}
+                    </Text>
+                    <IconButton
+                      icon="trash-can"
+                      iconColor={MD3Colors.error50}
+                      size={20}
+                      onPress={() => _removeSelectedDataHandler(res?.illness_id)}
+                    />
+                  </View>
                   <View style={styles.cardContent}>
                     <Text style={styles.label}>From Date : </Text>
                     <TextInput
@@ -387,7 +411,7 @@ const OpdPastHistory = () => {
                     />
                   </View>
                   <View style={styles.cardContent}>
-                    <Text style={[styles.label, { width: '200%' }]}>
+                    <Text style={[styles.label]}>
                       Treatment Status
                     </Text>
                     <View>
@@ -423,17 +447,10 @@ const OpdPastHistory = () => {
                     </View>
                   </View>
                 </View>
-              </View>
-            );
-          })}
-
-          <Button
-            mode="contained"
-            style={[styles.btn, { alignSelf: 'flex-start' }]}
-            onPress={() => resetHandler()}>
-            Add More
-          </Button>
-        </ScrollView>
+              );
+            })}
+          </ScrollView>
+        </View>
 
         {/* submit handlers */}
         <View style={styles.submitbutton}>
@@ -457,8 +474,12 @@ const OpdPastHistory = () => {
             Next / Skip
           </Button>
         </View>
-        <View style={{ padding: 10 }}>{displayData}</View>
-      </ScrollView>
+
+        {/* fetch opd assessment */}
+        <ScrollView>
+          <View style={{ padding: 10 }}>{displayData}</View>
+        </ScrollView>
+      </View>
     </>
   );
 };
@@ -472,27 +493,25 @@ const styles = StyleSheet.create({
   heading: {
     fontWeight: '600',
     fontSize: 18,
-    marginHorizontal: 14,
     marginVertical: 10,
   },
+
   inputGroup: {
     marginHorizontal: 14,
-    gap: 4,
+    maxHeight: '100%',
   },
   input: {
-    marginBottom: 8,
+    width: 200,
   },
   input2: {
-    //     backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',
     paddingTop: 0,
     paddingLeft: 0,
     height: 35,
-    width: '100%',
-    //     maxWidth: 220,
+    width: 210,
+    maxWidth: 220,
   },
   addButton: {
-    marginVertical: 10,
-    marginHorizontal: 14,
     alignSelf: 'flex-end',
   },
   btn: {
@@ -507,8 +526,10 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   card: {
+    borderWidth: 0.7,
     borderRadius: 6,
     marginBottom: 10,
+    marginRight: 6,
     padding: 6,
   },
   innerCard: {
@@ -516,9 +537,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   cardContent: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     padding: 5,
-    width: '50%',
+    alignItems: 'center',
   },
   label: {
     fontWeight: '600',
@@ -550,7 +571,7 @@ const styles = StyleSheet.create({
   },
   submitbutton: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: "center",
     gap: 10,
   },
   dropdown: {
@@ -572,15 +593,9 @@ const styles = StyleSheet.create({
   text: { textAlign: 'center', color: 'black', padding: 2 },
   row: { height: 'auto' },
 
-  card2: {
-    marginTop: 10,
-    marginHorizontal: 14,
-    marginBottom: 10,
-  },
   cardBody: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    width: 150,
   },
   cardtext: {
     fontWeight: '600',
@@ -600,5 +615,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  searchInput: {
+    marginHorizontal: 12,
   },
 });

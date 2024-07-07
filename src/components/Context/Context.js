@@ -1,8 +1,8 @@
-import {createContext, useState} from 'react';
+import { createContext, useState } from 'react';
 
 const UserContext = createContext();
 
-export const UserProvider = ({children}) => {
+export const UserProvider = ({ children }) => {
   // ....... //
   const [userData, setUserData] = useState([]);
   const [patientsData, setPatientsData] = useState([]);
@@ -29,6 +29,7 @@ export const UserProvider = ({children}) => {
   };
 
   const [selectedFlow, setSelectedFlow] = useState('');
+  const [consultSelection, setConsultSelection] = useState('');
 
   const contextValue = {
     userData,
@@ -70,8 +71,11 @@ export const UserProvider = ({children}) => {
     setSelectedFlow,
     hospitalName,
     setHospitalName,
+    consultSelection,
+    setConsultSelection
   };
 
+  console.log(consultSelection)
   return (
     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   );

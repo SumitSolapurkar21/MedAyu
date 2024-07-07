@@ -48,7 +48,7 @@ const OpdComplaints = () => {
     userData,
   } = useContext(UserContext);
   const { hospital_id, patient_id, reception_id, uhid } = patientsData;
-  const { appoint_id } = scannedPatientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
   //popup msg....
 
   const keys = ['Symptoms', 'Duration', 'Time', 'Frequency', 'Remark', 'Action'];
@@ -225,7 +225,7 @@ const OpdComplaints = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-COMPLAINTS',
           uhid: uhid,
-          mobilenumber: waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -300,7 +300,7 @@ const OpdComplaints = () => {
       complaintArray: selectedRow,
       api_type: 'OPD-COMPLAINTS',
       uhid: uhid,
-      mobilenumber: waitingListData?.mobilenumber,
+      mobilenumber: waitingListData?.mobilenumber || mobilenumber,
     };
     try {
       await axios

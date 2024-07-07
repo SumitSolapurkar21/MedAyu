@@ -229,7 +229,7 @@ const PersonalHistory = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-PERSONAL-HISTORY',
           uhid: uhid,
-          mobilenumber: waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);

@@ -304,7 +304,7 @@ const OpdVitals = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-VITALS',
           uhid: uhid,
-          mobilenumber: waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);

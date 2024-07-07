@@ -189,7 +189,7 @@ const OpdDiagnosis = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-DIAGNOSIS',
           uhid: uhid,
-          mobilenumber: waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
           type: value,
         })
         .then(res => {

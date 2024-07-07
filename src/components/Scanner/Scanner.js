@@ -8,17 +8,17 @@ import {
   TextInput,
   BackHandler,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import UserContext from '../Context/Context';
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import {RNCamera} from 'react-native-camera';
+import { RNCamera } from 'react-native-camera';
 // 
 import successIcon from '../../images/success.gif';
 import axios from 'axios';
 import api from '../../../api.json';
-import {Appbar} from 'react-native-paper';
+import { Appbar } from 'react-native-paper';
 
 LogBox.ignoreLogs([
   'ViewPropTypes will be removed from React Native, along with all other PropTypes. We recommend that you migrate away from PropTypes and switch to a type system like TypeScript. If you need to continue using ViewPropTypes',
@@ -27,7 +27,7 @@ LogBox.ignoreLogs([
 export default function Scanner() {
   const navigation = useNavigation();
 
-  const {userData, setScannedPatientsData, patientSelectedValue} =
+  const { userData, setScannedPatientsData, patientSelectedValue } =
     useContext(UserContext);
   // const {value} = route.params;
 
@@ -36,7 +36,7 @@ export default function Scanner() {
   const [message, setMessage] = useState('');
   const [searchInput, setSearchInput] = useState('');
 
-  const {_id, hospital_id, role} = userData;
+  const { _id, hospital_id, role } = userData;
 
   const [refreshing, setRefreshing] = React.useState(false);
   //backHandler ...
@@ -208,6 +208,7 @@ export default function Scanner() {
           })
           .then(res => {
             setScannedPatientsData(res.data);
+            console.log(res.data)
             if (res.data.status === true) {
               if (patientSelectedValue === '3') {
                 navigation.navigate('DischargeInitiation');
@@ -236,8 +237,8 @@ export default function Scanner() {
                 patientSelectedValue == 3
                   ? navigation.navigate('Eipdoptions')
                   : patientSelectedValue == 1
-                  ? navigation.navigate('Home')
-                  : null;
+                    ? navigation.navigate('Home')
+                    : null;
               }}
             />
             <Appbar.Content title="Scan QR" style={styles.appbar_title} />
@@ -253,7 +254,7 @@ export default function Scanner() {
               //   </Text>
               // }
               // topViewStyle={{marginVertical: 30}}
-              bottomViewStyle={{marginVertical: 20}}
+              bottomViewStyle={{ marginVertical: 20 }}
             />
             {(patientSelectedValue === '1' || patientSelectedValue === '3') && (
               <View style={styles.bottomContent}>
@@ -306,7 +307,7 @@ export default function Scanner() {
               <View
                 style={[
                   styles.backdrop,
-                  {backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`},
+                  { backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})` },
                 ]}
               />
             )}

@@ -221,7 +221,7 @@ const OpdProcedure = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-PROCEDURE',
           uhid: uhid,
-          mobilenumber: waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -477,6 +477,7 @@ const OpdProcedure = () => {
 
           </ScrollView>
         </View>
+
         <View style={styles.submitbutton}>
           <Button
             mode="contained"
@@ -492,7 +493,7 @@ const OpdProcedure = () => {
             Next / Skip
           </Button>
         </View>
-        
+
         <View>
           <ScrollView showsVerticalScrollIndicator={false} vertical style={{ maxHeight: '90%' }}>
             {opdAssessment.length > 0 &&
@@ -655,7 +656,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 10,
     marginRight: 6
-
   },
   btn: {
     marginVertical: 12,

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, BackHandler } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, BackHandler, KeyboardAvoidingView } from 'react-native';
 import { Appbar, Button, Card, List, TextInput } from 'react-native-paper';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
@@ -8,6 +8,7 @@ import DateTimePicker from 'react-native-ui-datepicker';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton, MD3Colors } from 'react-native-paper';
 import { OpdpageNavigation } from './OpdpageNavigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const OpdTreatment = () => {
   const { patientsData, scannedPatientsData, waitingListData, userData } =
@@ -51,7 +52,7 @@ const OpdTreatment = () => {
       const filteredData = selectedData.filter(
         res => res.drugcode === selectedDrugCode.drugcode,
       );
-      setTemp(prevData => [...prevData, ...filteredData]);
+      setTemp(prevData => [...filteredData, ...prevData]);
     }
   }, [selectedDrugCode, selectedData]);
 
@@ -84,7 +85,7 @@ const OpdTreatment = () => {
     setSearchInput('');
     setSelectedDrugCode('');
     //     setTemp([]);
-    //     setVisibleList(false);
+    setVisibleList(false);
   };
   const Themes = [{ mainColor: '#F5803E', activeTextColor: '#fff' }];
 
@@ -112,6 +113,7 @@ const OpdTreatment = () => {
       uhid: uhid,
       api_type: 'OPD-TREATMENT',
       opdtreatmenthistoryarray: temp,
+      mobilenumber: waitingListData?.mobilenumber || mobilenumber,
     };
     try {
       await axios
@@ -147,7 +149,7 @@ const OpdTreatment = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-TREATMENT',
           uhid: uhid,
-          mobilenumber: waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
         })
         .then(res => {
           setOpdAssessment(res.data.data);
@@ -212,207 +214,223 @@ const OpdTreatment = () => {
           </View>
         </View>
       )}
-      <ScrollView style={styles.container}>
-        <Text style={styles.heading}>OPD Treatments</Text>
-        <TextInput
-          mode="outlined"
-          label="Drug Code"
-          placeholder="Search Drug Code ..."
-          style={[styles.input, { marginHorizontal: 14 }]}
-          value={
-            selectedDrugCode?.drugcode
-              ? selectedDrugCode?.drugcode
-              : searchInput
-          }
-          onChangeText={text => {
-            setSearchInput(text), setSelectedDrugCode('');
-          }}
-          right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
-        />
-        <ScrollView
-          style={{
-            zIndex: 1,
-            marginHorizontal: 14,
-            maxHeight: drugCode.length > 0 && visibleList ? 200 : 0,
-          }} // Set a higher zIndex for the ScrollView
-          vertical={true}>
-          {visibleList && (
-            <View>
-              {drugCode?.map((res, index) => (
-                <List.Item
-                  style={styles.listView}
-                  title={res?.drugname}
-                  key={index + 1}
-                  onPress={() => {
-                    setSelectedDrugCode({
-                      drugcode: res.drugcode,
-                      drugname: res.drugname,
-                    });
-                    setVisibleList(false);
-                  }}
-                />
-              ))}
-            </View>
-          )}
-        </ScrollView>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.inputGroup}>
-          {temp.map((res, index) => {
-            return (
-              <View style={styles.card} key={index + 1}>
-                <View style={styles.cardContentDiv}>
-                  <Text style={[styles.label, { width: 200, marginLeft: 10 }]}>
-                    Drug Name : &nbsp; {res.drugname}
-                  </Text>
-                  <IconButton
-                    icon="trash-can"
-                    iconColor={MD3Colors.error50}
-                    size={20}
-                    onPress={() =>
-                      _removeSelectedDataHandler(res?.prescription_id)
-                    }
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>Drug Code : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.drugcode}
-                    onChangeText={text => {
-                      // Update the value in temp array
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].drugcode = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>Drug Name : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.drugname}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].drugname = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>Brand Name : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.brandname}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].brandname = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>Dose : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.dose}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].dose = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>Instruction : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.anupan}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].anupan = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>Route : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.route}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].route = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>Schedule : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.schedule}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].schedule = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>Days : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={res.duration}
-                    onChangeText={text => {
-                      const updatedTemp = [...temp];
-                      updatedTemp[index].duration = text;
-                      setTemp(updatedTemp);
-                    }}
-                    editable={true}
-                  />
-                </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.label}>From Date : </Text>
-                  <TextInput
-                    mode="flat"
-                    style={[styles.input2]}
-                    value={temp[index].dateValues}
-                    editable={false}
-                    right={
-                      <TextInput.Icon
-                        icon="calendar"
-                        onPress={() => calenderHandler(index)}
-                      />
-                    }
-                  />
-                </View>
-              </View>
-            );
-          })}
 
-          <Button
-            mode="contained"
-            style={[styles.btn, { alignSelf: 'flex-start' }]}
-            onPress={() => resetHandler()}>
-            Add More
-          </Button>
-        </ScrollView>
+
+      <View style={styles.container}>
+        <View style={styles.searchInput}>
+          <Text style={styles.heading}>OPD Treatments</Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+
+            <TextInput
+              mode="outlined"
+              label="Drug Code"
+              placeholder="Search Drug Code ..."
+              style={[styles.input]}
+              value={
+                selectedDrugCode?.drugcode
+                  ? selectedDrugCode?.drugcode
+                  : searchInput
+              }
+              onChangeText={text => {
+                setSearchInput(text), setSelectedDrugCode('');
+              }}
+              right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
+            />
+            <Button
+              mode="contained"
+              style={[styles.btn, { alignSelf: 'flex-start' }]}
+              onPress={() => resetHandler()}>
+              Add More
+            </Button>
+          </View>
+
+
+          <ScrollView
+            style={{
+              zIndex: 1,
+              marginHorizontal: 0,
+              maxHeight: 200
+            }}
+            vertical={true}>
+            {visibleList && (
+              <View>
+                {drugCode?.map((res, index) => (
+                  <List.Item
+                    style={styles.listView}
+                    title={res?.drugname}
+                    key={index + 1}
+                    onPress={() => {
+                      setSelectedDrugCode({
+                        drugcode: res.drugcode,
+                        drugname: res.drugname,
+                      });
+                      setVisibleList(false);
+                    }}
+                  />
+                ))}
+              </View>
+            )}
+          </ScrollView>
+
+        </View>
+        <View>
+          <SafeAreaView >
+            <ScrollView
+              horizontal
+              style={styles.inputGroup}>
+              {temp.map((res, index) => {
+                return (
+                  <View style={styles.card} key={index + 1}>
+                    <View style={styles.cardContentDiv}>
+                      <Text style={[styles.label, { width: 200, marginLeft: 10 }]}>
+                        Drug Name : &nbsp; {res.drugname}
+                      </Text>
+                      <IconButton
+                        icon="trash-can"
+                        iconColor={MD3Colors.error50}
+                        size={20}
+                        onPress={() =>
+                          _removeSelectedDataHandler(res?.prescription_id)
+                        }
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Drug Code : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.drugcode}
+                        onChangeText={text => {
+                          // Update the value in temp array
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].drugcode = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Drug Name : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.drugname}
+                        onChangeText={text => {
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].drugname = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Brand Name : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.brandname}
+                        onChangeText={text => {
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].brandname = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Dose : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.dose}
+                        onChangeText={text => {
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].dose = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Instruction : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.anupan}
+                        onChangeText={text => {
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].anupan = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Route : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.route}
+                        onChangeText={text => {
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].route = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Schedule : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.schedule}
+                        onChangeText={text => {
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].schedule = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>Days : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={res.duration}
+                        onChangeText={text => {
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].duration = text;
+                          setTemp(updatedTemp);
+                        }}
+                        editable={true}
+                      />
+                    </View>
+                    <View style={styles.cardContent}>
+                      <Text style={styles.label}>From Date : </Text>
+                      <TextInput
+                        mode="flat"
+                        style={[styles.input2]}
+                        value={temp[index].dateValues}
+                        editable={false}
+                        right={
+                          <TextInput.Icon
+                            icon="calendar"
+                            onPress={() => calenderHandler(index)}
+                          />
+                        }
+                      />
+                    </View>
+                  </View>
+                );
+              })}
+
+
+            </ScrollView>
+          </SafeAreaView>
+        </View>
+
         <View style={styles.submitbutton}>
           <Button
             mode="contained"
@@ -434,96 +452,100 @@ const OpdTreatment = () => {
           </Button>
         </View>
 
-        {opdAssessment.length > 0 &&
-          opdAssessment?.map((row, index) => {
-            return (
-              <Card style={styles.card2} key={index + 1}>
-                <Card.Content>
-                  <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, { gap: 8 }]}>
-                      <Text variant="titleLarge" style={styles.cardtext}>
-                        Drugcode :
-                      </Text>
-                      <Text variant="titleLarge" style={styles.cardtext2}>
-                        {row?.drugcode}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={[styles.cardBody, { gap: 8 }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Drugname :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.drugname}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, { gap: 8 }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Brandname :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.brandname}
-                    </Text>
-                  </View>
-                  <View style={styles.cardBodyHead}>
-                    <View style={[styles.cardBody, { gap: 8 }]}>
-                      <Text variant="titleLarge" style={styles.cardtext}>
-                        Dose :
-                      </Text>
-                      <Text variant="titleLarge" style={[styles.cardtext2]}>
-                        {row?.dose}
-                      </Text>
-                    </View>
-                    <View style={[styles.cardBody, { gap: 8 }]}>
-                      <Text variant="titleLarge" style={styles.cardtext}>
-                        Route :
-                      </Text>
-                      <Text variant="titleLarge" style={[styles.cardtext2]}>
-                        {row?.route}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={[styles.cardBody, { gap: 8 }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Anupan :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.anupan}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, { gap: 8 }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Schedule :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.schedule}
-                    </Text>
-                  </View>
-                  <View style={[styles.cardBody, { gap: 8 }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      From Date :
-                    </Text>
-                    <Text variant="titleLarge" style={[styles.cardtext2]}>
-                      {row?.dateValues}
-                    </Text>
-                  </View>
+        <View>
+          <ScrollView showsVerticalScrollIndicator={false} vertical style={{ maxHeight: '85%' }}>
+            {opdAssessment.length > 0 &&
+              opdAssessment?.map((row, index) => {
+                return (
+                  <Card style={styles.card2} key={index + 1}>
+                    <Card.Content>
+                      <View style={styles.cardBodyHead}>
+                        <View style={[styles.cardBody, { gap: 8 }]}>
+                          <Text variant="titleLarge" style={styles.cardtext}>
+                            Drugcode :
+                          </Text>
+                          <Text variant="titleLarge" style={styles.cardtext2}>
+                            {row?.drugcode}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={[styles.cardBody, { gap: 8 }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Drugname :
+                        </Text>
+                        <Text variant="titleLarge" style={[styles.cardtext2]}>
+                          {row?.drugname}
+                        </Text>
+                      </View>
+                      <View style={[styles.cardBody, { gap: 8 }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Brandname :
+                        </Text>
+                        <Text variant="titleLarge" style={[styles.cardtext2]}>
+                          {row?.brandname}
+                        </Text>
+                      </View>
+                      <View style={styles.cardBodyHead}>
+                        <View style={[styles.cardBody, { gap: 8 }]}>
+                          <Text variant="titleLarge" style={styles.cardtext}>
+                            Dose :
+                          </Text>
+                          <Text variant="titleLarge" style={[styles.cardtext2]}>
+                            {row?.dose}
+                          </Text>
+                        </View>
+                        <View style={[styles.cardBody, { gap: 8 }]}>
+                          <Text variant="titleLarge" style={styles.cardtext}>
+                            Route :
+                          </Text>
+                          <Text variant="titleLarge" style={[styles.cardtext2]}>
+                            {row?.route}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={[styles.cardBody, { gap: 8 }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Anupan :
+                        </Text>
+                        <Text variant="titleLarge" style={[styles.cardtext2]}>
+                          {row?.anupan}
+                        </Text>
+                      </View>
+                      <View style={[styles.cardBody, { gap: 8 }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Schedule :
+                        </Text>
+                        <Text variant="titleLarge" style={[styles.cardtext2]}>
+                          {row?.schedule}
+                        </Text>
+                      </View>
+                      <View style={[styles.cardBody, { gap: 8 }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          From Date :
+                        </Text>
+                        <Text variant="titleLarge" style={[styles.cardtext2]}>
+                          {row?.dateValues}
+                        </Text>
+                      </View>
 
-                  {/* <View style={styles.cardBodyHead}> */}
+                      {/* <View style={styles.cardBodyHead}> */}
 
-                  <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
-                    <Text variant="titleLarge" style={styles.cardtext}>
-                      Date / Time :
-                    </Text>
-                    <Text variant="titleLarge" style={styles.cardtext2}>
-                      {row.opd_date} / {row.opd_time}
-                    </Text>
-                  </View>
-                  {/* </View> */}
-                </Card.Content>
-              </Card>
-            );
-          })}
-      </ScrollView>
+                      <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
+                        <Text variant="titleLarge" style={styles.cardtext}>
+                          Date / Time :
+                        </Text>
+                        <Text variant="titleLarge" style={styles.cardtext2}>
+                          {row.opd_date} / {row.opd_time}
+                        </Text>
+                      </View>
+                      {/* </View> */}
+                    </Card.Content>
+                  </Card>
+                );
+              })}
+          </ScrollView>
+        </View>
+      </View>
     </>
   );
 };
@@ -537,30 +559,35 @@ const styles = StyleSheet.create({
   heading: {
     fontWeight: '600',
     fontSize: 18,
-    marginHorizontal: 14,
     marginVertical: 10,
   },
   inputGroup: {
     marginHorizontal: 14,
-    gap: 4,
+    // maxHeight: 600,
   },
   input: {
     marginBottom: 8,
-  },
-  input2: {
+    backgroundColor: '#ffffff',
     paddingTop: 0,
     paddingLeft: 0,
-    height: 45,
-    width: '100%',
+    width: 210,
+    maxWidth: 220,
+  },
+  input2: {
+    backgroundColor: '#ffffff',
+    paddingTop: 0,
+    paddingLeft: 0,
+    height: 35,
+    width: 210,
+    maxWidth: 220,
   },
   addButton: {
-    marginVertical: 10,
+    // marginVertical: 10,
     marginHorizontal: 14,
     alignSelf: 'flex-end',
   },
   btn: {
-    marginVertical: 12,
-    alignSelf: 'center',
+    marginVertical: 6,
   },
   listView: {
     backgroundColor: '#ede8ed',
@@ -575,8 +602,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   cardContent: {
-    flexDirection: 'column',
-    padding: 12,
+    flexDirection: 'row',
+    padding: 5,
+    alignItems: 'center',
   },
   label: {
     fontWeight: '600',
@@ -608,15 +636,17 @@ const styles = StyleSheet.create({
   },
   submitbutton: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: "center",
     gap: 10,
+    padding: 6,
+
   },
   head: { height: 40, backgroundColor: '#80aaff' },
   text: { textAlign: 'center', color: 'black', padding: 2 },
   row: { height: 'auto' },
 
   card2: {
-    marginHorizontal: 14,
+    marginHorizontal: 12,
     marginVertical: 10,
   },
   cardBody: {
@@ -643,4 +673,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  searchInput: {
+    marginHorizontal: 12,
+    marginBottom: 8,
+  },
+  card: {
+    borderWidth: 0.7,
+    borderRadius: 6,
+    marginBottom: 10,
+    marginRight: 6
+
+  }
 });

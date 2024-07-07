@@ -1,11 +1,14 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
-import {Button, Divider, Menu} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import { StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Button, Divider, Menu } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import UserContext from '../../../../components/Context/Context';
 
-export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
+export const OpdpageNavigation = ({ visible, openMenu, closeMenu }) => {
+  const { consultSelection } = useContext(UserContext)
   const navigation = useNavigation();
 
+  console.log(consultSelection)
   return (
     <View
       style={{
@@ -14,13 +17,13 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         top: 60,
       }}>
       <Menu
-        contentStyle={{flexDirection: 'row', flexWrap: 'wrap', width: '105%'}}
+        contentStyle={{ flexDirection: 'row', flexWrap: 'wrap', width: '105%' }}
         style={styles.menuItem}
         visible={visible}
         onDismiss={closeMenu}
         anchor={<Button onPress={openMenu}></Button>}>
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('OpdComplaints'), closeMenu();
@@ -29,7 +32,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('OpdPastHistory'), closeMenu();
@@ -38,7 +41,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('FamilyHistory'), closeMenu();
@@ -47,7 +50,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('MedicineHistory'), closeMenu();
@@ -56,7 +59,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('PersonalHistory'), closeMenu();
@@ -65,7 +68,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('ObstetricsHistory'), closeMenu();
@@ -74,7 +77,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('MenstrualHistory'), closeMenu();
@@ -83,7 +86,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('OpdVitals'), closeMenu();
@@ -92,7 +95,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('GeneralExamination'), closeMenu();
@@ -101,7 +104,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('SystemicExamination'), closeMenu();
@@ -110,7 +113,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('OpdDiagnosis'), closeMenu();
@@ -119,7 +122,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('OpdInvestigation'), closeMenu();
@@ -128,7 +131,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('OpdPlanOfCare'), closeMenu();
@@ -137,7 +140,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('OpdTreatment'), closeMenu();
@@ -146,7 +149,7 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('OpdProcedure'), closeMenu();
@@ -156,19 +159,33 @@ export const OpdpageNavigation = ({visible, openMenu, closeMenu}) => {
 
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('OpdAdvice'), closeMenu();
           }}
           title="Advice"
         />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            if (consultSelection === 'dashboard') {
+              navigation.replace('DashboardHomePage')
+            } else if (consultSelection === 'scanpatient') {
+              navigation.replace('EpatientDetails')
+            }
+            closeMenu();
+          }}
+          title="Home"
+        />
       </Menu>
     </View>
   );
 };
 
-export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
+export const OpdAyurvedicNavigation = ({ visible, openMenu, closeMenu }) => {
+  const { consultSelection } = useContext(UserContext)
   const navigation = useNavigation();
 
   return (
@@ -179,13 +196,13 @@ export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
         top: 60,
       }}>
       <Menu
-        contentStyle={{flexDirection: 'row', flexWrap: 'wrap', width: '105%'}}
+        contentStyle={{ flexDirection: 'row', flexWrap: 'wrap', width: '105%' }}
         style={styles.menuItem}
         visible={visible}
         onDismiss={closeMenu}
         anchor={<Button onPress={openMenu}></Button>}>
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('Prakruti'), closeMenu();
@@ -194,7 +211,7 @@ export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('AshtvidhPariksha'), closeMenu();
@@ -203,7 +220,7 @@ export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('DashavidhPariksha'), closeMenu();
@@ -212,7 +229,7 @@ export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('SrotasPariksha'), closeMenu();
@@ -221,19 +238,34 @@ export const OpdAyurvedicNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('Samprapti'), closeMenu();
           }}
           title="Samprapti"
         />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            if (consultSelection === 'dashboard') {
+              navigation.replace('DashboardHomePage')
+            } else if (consultSelection === 'scanpatient') {
+              navigation.replace('EpatientDetails')
+            }
+            closeMenu();
+          }}
+          title="Home"
+        />
       </Menu>
+
     </View>
   );
 };
 
-export const IpdRegistrationNavigation = ({visible, openMenu, closeMenu}) => {
+export const IpdRegistrationNavigation = ({ visible, openMenu, closeMenu }) => {
+  const { consultSelection } = useContext(UserContext)
   const navigation = useNavigation();
 
   return (
@@ -244,13 +276,13 @@ export const IpdRegistrationNavigation = ({visible, openMenu, closeMenu}) => {
         top: 60,
       }}>
       <Menu
-        contentStyle={{flexDirection: 'row', flexWrap: 'wrap', width: '105%'}}
+        contentStyle={{ flexDirection: 'row', flexWrap: 'wrap', width: '105%' }}
         style={styles.menuItem}
         visible={visible}
         onDismiss={closeMenu}
         anchor={<Button onPress={openMenu}></Button>}>
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('EipdregistrationProfile'), closeMenu();
@@ -259,7 +291,7 @@ export const IpdRegistrationNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('EipdregistrationSocioeconomics'), closeMenu();
@@ -269,7 +301,7 @@ export const IpdRegistrationNavigation = ({visible, openMenu, closeMenu}) => {
         <Divider />
 
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('EipdregistrationIdentification'), closeMenu();
@@ -278,7 +310,7 @@ export const IpdRegistrationNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('EipdregistrationInsurance'), closeMenu();
@@ -287,7 +319,7 @@ export const IpdRegistrationNavigation = ({visible, openMenu, closeMenu}) => {
         />
         <Divider />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('EipdregistrationEmergencyContact'), closeMenu();
@@ -295,7 +327,7 @@ export const IpdRegistrationNavigation = ({visible, openMenu, closeMenu}) => {
           title="EmergencyContact"
         />
         <Menu.Item
-          contentStyle={{width: 120}}
+          contentStyle={{ width: 120 }}
           dense
           onPress={() => {
             navigation.replace('Epatientconsentform'), closeMenu();

@@ -30,7 +30,7 @@ const FamilyHistory = () => {
   const { patientsData, scannedPatientsData, waitingListData, userData } =
     useContext(UserContext);
   const { hospital_id, patient_id, reception_id, uhid } = patientsData;
-  const { appoint_id } = scannedPatientsData;
+  const { appoint_id, mobilenumber } = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -57,7 +57,7 @@ const FamilyHistory = () => {
       const filteredData = illnessSelectedData.filter(
         res => res.illness_id === selectedIllnessCode.illness_id,
       );
-      setTemp(prevData => [...prevData, ...filteredData]);
+      setTemp(prevData => [...filteredData, ...prevData]);
     }
   }, [selectedIllnessCode, illnessSelectedData]);
 
@@ -140,6 +140,7 @@ const FamilyHistory = () => {
       uhid: uhid,
       api_type: 'OPD-FAMILY-HISTORY',
       opdfamilyhistoryarray: temp,
+      mobilenumber: waitingListData?.mobilenumber || mobilenumber,
     };
     try {
       await axios
@@ -360,7 +361,7 @@ const FamilyHistory = () => {
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-FAMILY-HISTORY',
           uhid: uhid,
-          mobilenumber: waitingListData?.mobilenumber,
+          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
         })
         .then(res => {
           const DATA = JSON.stringify(res.data.data);
@@ -388,7 +389,7 @@ const FamilyHistory = () => {
   const displayData = opdAssessment.map((item, index) => (
     <View key={index + 1}>
       {Object.entries(item).map(([key, value]) => (
-        <Card key={key} style={styles.card}>
+        <Card key={index + 1} style={styles.card}>
           {Array.isArray(value) ? (
             <Text style={{ lineHeight: 20, width: 330 }}>{value.join('\n')}</Text>
           ) : null}
@@ -444,55 +445,68 @@ const FamilyHistory = () => {
           </View>
         </View>
       )}
-      <ScrollView vertical style={styles.container}>
-        <Text style={styles.heading}>Family History</Text>
-        <TextInput
-          mode="outlined"
-          label="Diseases"
-          placeholder="Search Diseases ..."
-          style={[styles.input, { marginHorizontal: 14 }]}
-          value={
-            selectedIllnessCode?.illnessname
-              ? selectedIllnessCode?.illnessname
-              : searchInput
-          }
-          onChangeText={text => {
-            setSearchInput(text), setSelectedIllnessCode('');
-          }}
-          right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
-        />
-        <ScrollView
-          style={{
-            zIndex: 1,
-            marginHorizontal: 14,
-            maxHeight: illnessCode.length > 0 && visibleList ? 200 : 0,
-          }} // Set a higher zIndex for the ScrollView
-          vertical={true}>
-          {visibleList && (
-            <View>
-              {illnessCode?.map(res => (
-                <List.Item
-                  style={styles.listView}
-                  title={res?.illnessname}
-                  key={res?.illness_id}
-                  onPress={() => {
-                    setSelectedIllnessCode({
-                      illness_id: res.illness_id,
-                      illnessname: res.illnessname,
-                    });
-                    setVisibleList(false);
-                  }}
-                />
-              ))}
-            </View>
-          )}
-        </ScrollView>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.inputGroup}>
-          {temp.map((res, index) => {
-            return (
-              <>
+      <View style={styles.container}>
+        <View style={styles.searchInput}>
+          <Text style={styles.heading}>Family History</Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <TextInput
+              mode="outlined"
+              label="Diseases"
+              placeholder="Search Diseases ..."
+              style={[styles.input]}
+              value={
+                selectedIllnessCode?.illnessname
+                  ? selectedIllnessCode?.illnessname
+                  : searchInput
+              }
+              onChangeText={text => {
+                setSearchInput(text), setSelectedIllnessCode('');
+              }}
+              right={<TextInput.Icon icon="close" onPress={() => resetHandler()} />}
+            />
+            <Button
+              mode="contained"
+              style={[styles.btn, { alignSelf: 'flex-start' }]}
+              onPress={() => resetHandler()}>
+              Add More
+            </Button>
+          </View>
+        </View>
+
+        <View>
+          <ScrollView
+            style={{
+              zIndex: 1,
+              marginHorizontal: 0,
+              maxHeight: 200
+            }} // Set a higher zIndex for the ScrollView
+            vertical={true}>
+            {visibleList && (
+              <View>
+                {illnessCode?.map(res => (
+                  <List.Item
+                    style={styles.listView}
+                    title={res?.illnessname}
+                    key={res?.illness_id}
+                    onPress={() => {
+                      setSelectedIllnessCode({
+                        illness_id: res.illness_id,
+                        illnessname: res.illnessname,
+                      });
+                      setVisibleList(false);
+                    }}
+                  />
+                ))}
+              </View>
+            )}
+          </ScrollView>
+        </View>
+
+        <View>
+          <ScrollView horizontal
+            style={styles.inputGroup}>
+            {temp?.map((res, index) => {
+              return (
                 <View style={styles.card} key={index + 1}>
                   <View style={styles.cardContentDiv}>
                     <Text style={[styles.label, { width: 200 }]}>
@@ -507,98 +521,89 @@ const FamilyHistory = () => {
                       }
                     />
                   </View>
-                  <View style={styles.innerCard}>
-                    <View style={styles.cardContent}>
-                      <Text style={styles.label}>From Date : </Text>
-                      <TextInput
-                        mode="flat"
-                        style={[styles.input2]}
-                        value={res?.dateValues}
-                        editable={false}
-                        right={
-                          <TextInput.Icon
-                            icon="calendar"
-                            onPress={() => calenderHandler(index)}
-                          />
-                        }
-                      />
-                    </View>
-                    <View style={styles.cardContent}>
-                      <Text style={styles.label}>Years : </Text>
-                      <TextInput
-                        mode="flat"
-                        style={[styles.input2]}
-                        value={res.years}
-                        editable={false}
-                      />
-                    </View>
-                    <View style={styles.cardContent}>
-                      <Text style={styles.label}>Months : </Text>
-                      <TextInput
-                        mode="flat"
-                        style={[styles.input2]}
-                        value={res.months}
-                        editable={false}
-                      />
-                    </View>
-                    <View style={styles.cardContent}>
-                      <Text style={styles.label}>Days : </Text>
-                      <TextInput
-                        mode="flat"
-                        style={[styles.input2]}
-                        value={res.days}
-                        editable={false}
-                      />
-                    </View>
-                    <View style={styles.cardContent}>
-                      <Text style={[styles.label, { width: '200%' }]}>
-                        Relation
-                      </Text>
-                      <View>
-                        <Dropdown
-                          mode={'outlined'}
-                          style={[styles.dropdown, { borderColor: 'blue' }]}
-                          placeholderStyle={styles.placeholderStyle}
-                          selectedTextStyle={styles.selectedTextStyle}
-                          inputSearchStyle={styles.inputSearchStyle}
-                          iconStyle={styles.iconStyle}
-                          data={data?.map(res => ({
-                            label: res.label,
-                            value: res.value,
-                          }))}
-                          //   search
-                          maxHeight={300}
-                          labelField="label"
-                          valueField="value"
-                          placeholder={!isFocus2 ? 'Select' : '...'}
-                          //   searchPlaceholder="Search..."
-                          value={res.treatment_status}
-                          onFocus={() => setIsFocus2(true)}
-                          onBlur={() => setIsFocus2(false)}
-                          onChange={item => {
-                            setP_category(item.value);
-                            //     updateSelectedCategoryData(item.value);
-                            setIsFocus2(false);
-                            const updatedTemp = [...temp];
-                            updatedTemp[index].treatment_status = item.value;
-                            setTemp(updatedTemp);
-                          }}
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}>From Date : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res?.dateValues}
+                      editable={false}
+                      right={
+                        <TextInput.Icon
+                          icon="calendar"
+                          onPress={() => calenderHandler(index)}
                         />
-                      </View>
+                      }
+                    />
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}>Years : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res.years}
+                      editable={false}
+                    />
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}>Months : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res.months}
+                      editable={false}
+                    />
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.label}>Days : </Text>
+                    <TextInput
+                      mode="flat"
+                      style={[styles.input2]}
+                      value={res.days}
+                      editable={false}
+                    />
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text style={[styles.label]}>
+                      Relation
+                    </Text>
+                    <View>
+                      <Dropdown
+                        mode={'outlined'}
+                        style={[styles.dropdown, { borderColor: 'blue' }]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data?.map(res => ({
+                          label: res.label,
+                          value: res.value,
+                        }))}
+                        //   search
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={!isFocus2 ? 'Select' : '...'}
+                        //   searchPlaceholder="Search..."
+                        value={res.treatment_status}
+                        onFocus={() => setIsFocus2(true)}
+                        onBlur={() => setIsFocus2(false)}
+                        onChange={item => {
+                          setP_category(item.value);
+                          //     updateSelectedCategoryData(item.value);
+                          setIsFocus2(false);
+                          const updatedTemp = [...temp];
+                          updatedTemp[index].treatment_status = item.value;
+                          setTemp(updatedTemp);
+                        }}
+                      />
                     </View>
                   </View>
                 </View>
-              </>
-            );
-          })}
-
-          <Button
-            mode="contained"
-            style={[styles.btn, { alignSelf: 'flex-start' }]}
-            onPress={() => resetHandler()}>
-            Add More
-          </Button>
-        </ScrollView>
+              );
+            })}
+          </ScrollView>
+        </View>
 
         {/* submit handlers */}
         <View style={styles.submitbutton}>
@@ -614,7 +619,6 @@ const FamilyHistory = () => {
             onPress={() => submitTreatmenthandler()}>
             Submit
           </Button>
-
           <Button
             mode="contained"
             style={styles.btn}
@@ -623,8 +627,11 @@ const FamilyHistory = () => {
           </Button>
         </View>
 
-        <View style={{ padding: 10 }}>{displayData}</View>
-      </ScrollView>
+        {/* fetch opd assessment */}
+        <ScrollView>
+          <View style={{ padding: 10 }}>{displayData}</View>
+        </ScrollView>
+      </View>
     </>
   );
 };
@@ -638,27 +645,25 @@ const styles = StyleSheet.create({
   heading: {
     fontWeight: '600',
     fontSize: 18,
-    marginHorizontal: 14,
     marginVertical: 10,
   },
+
   inputGroup: {
     marginHorizontal: 14,
-    gap: 4,
+    maxHeight: '100%',
   },
   input: {
-    marginBottom: 8,
+    width: 200,
   },
   input2: {
-    //     backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',
     paddingTop: 0,
     paddingLeft: 0,
     height: 35,
-    width: '100%',
-    //     maxWidth: 220,
+    width: 210,
+    maxWidth: 220,
   },
   addButton: {
-    marginVertical: 10,
-    marginHorizontal: 14,
     alignSelf: 'flex-end',
   },
   btn: {
@@ -673,14 +678,21 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   card: {
+    borderWidth: 0.7,
     borderRadius: 6,
     marginBottom: 10,
+    marginRight: 6,
     padding: 6,
+    // width: '100%'
+  },
+  innerCard: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   cardContent: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     padding: 5,
-    width: '50%',
+    alignItems: 'center',
   },
   label: {
     fontWeight: '600',
@@ -712,7 +724,7 @@ const styles = StyleSheet.create({
   },
   submitbutton: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: "center",
     gap: 10,
   },
   dropdown: {
@@ -733,15 +745,10 @@ const styles = StyleSheet.create({
   head: { height: 40, backgroundColor: '#80aaff' },
   text: { textAlign: 'center', color: 'black', padding: 2 },
   row: { height: 'auto' },
-  card2: {
-    marginTop: 10,
-    marginHorizontal: 14,
-    marginBottom: 10,
-  },
+
   cardBody: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    width: 150,
   },
   cardtext: {
     fontWeight: '600',
@@ -762,8 +769,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  innerCard: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  searchInput: {
+    marginHorizontal: 12,
   },
 });

@@ -9,9 +9,9 @@ import {
   BackHandler,
   Alert,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../components/Context/Context';
 //images
 import pr from '../../images/pr.png';
@@ -23,7 +23,7 @@ const Ehome = () => {
   // ........ //
   const navigation = useNavigation();
 
-  const {setPatientSelectedValue, userData} = useContext(UserContext);
+  const { setPatientSelectedValue, userData, setConsultSelection } = useContext(UserContext);
 
 
   //backHandler ...
@@ -73,7 +73,7 @@ const Ehome = () => {
         <View style={styles.contentDiv}>
           <TouchableOpacity
             style={styles.contentItem}
-            onPress={() => navigation.replace('DashboardHomePage')}>
+            onPress={() => { navigation.replace('DashboardHomePage'), setConsultSelection('dashboard') }}>
             <Image source={pr} style={styles.img} />
             <Text style={styles.contentText}>Dashboard</Text>
           </TouchableOpacity>
@@ -88,7 +88,7 @@ const Ehome = () => {
           <TouchableOpacity
             style={styles.contentItem}
             onPress={() => {
-              navigation.navigate('QRScanner'), setPatientSelectedValue('1');
+              navigation.navigate('QRScanner'), setPatientSelectedValue('1'), setConsultSelection('scanpatient');
             }}>
             <Image source={ss} style={styles.img} />
             <Text style={styles.contentText}>Search Patient</Text>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  searchIcon: {marginHorizontal: 10},
+  searchIcon: { marginHorizontal: 10 },
   searchtext: {
     fontSize: 14,
     color: '#127359',
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   contentItem: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 6,
