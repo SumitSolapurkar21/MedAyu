@@ -106,6 +106,13 @@ import Prakruti from '../screens/Employee/OPD/Assessment/Prakruti';
 import OpdHomePage2 from '../screens/Employee/OPD/OpdHomePage2';
 import ConsultantPdf from '../screens/Employee/OPD/Assessment/ConsultantPdf';
 import CalenderComponent from '../components/Calender/CalenderComponent';
+import OpdFollowup from '../screens/Employee/OPD/Assessment/OpdFollowup';
+import ReOpdComplaints from '../screens/Employee/OPD/Assessment/ReOpdComplaints';
+import ReOpdPastHistory from '../screens/Employee/OPD/Assessment/ReOpdPastHistory';
+import ReOpdFamilyHistory from '../screens/Employee/OPD/Assessment/ReOpdFamilyHistory';
+import ReOpdMedicineHistory from '../screens/Employee/OPD/Assessment/ReOpdMedicineHistory';
+import ReOpdPersonalHistory from '../screens/Employee/OPD/Assessment/ReOpdPersonalHistory';
+import ReOpdObstetricsHistory from '../screens/Employee/OPD/Assessment/ReOpdObstetricsHistory';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -992,6 +999,41 @@ const Routes = () => {
         <Stack.Screen
           name="CalenderComponent"
           component={CalenderComponent}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="OpdFollowup"
+          component={OpdFollowup}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdComplaints"
+          component={ReOpdComplaints}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdPastHistory"
+          component={ReOpdPastHistory}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdFamilyHistory"
+          component={ReOpdFamilyHistory}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdMedicineHistory"
+          component={ReOpdMedicineHistory}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdPersonalHistory"
+          component={ReOpdPersonalHistory}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdObstetricsHistory"
+          component={ReOpdObstetricsHistory}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

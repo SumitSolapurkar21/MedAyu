@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
-import {Appbar} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { Appbar } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import billHistory from '../../../images/billHistory.png';
 
 const OpdHomePage2 = () => {
@@ -55,7 +55,13 @@ const OpdHomePage2 = () => {
             <Image source={billHistory} alt="billHistory" style={styles.img} />
             <Text style={styles.uName}>Ayurvedic Assessment</Text>
           </TouchableOpacity>
-          
+          <TouchableOpacity
+            style={styles.selectDiv}
+            onPress={() => navigation.navigate('ReOpdComplaints')}>
+            <Image source={billHistory} alt="billHistory" style={styles.img} />
+            <Text style={styles.uName}>Re-Assessment</Text>
+          </TouchableOpacity>
+
         </View>
       </View>
     </>
@@ -80,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 5,
@@ -94,7 +100,7 @@ const styles = StyleSheet.create({
     height: 35,
   },
   uName: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
     color: '#127359',
     flexWrap: 'wrap',

@@ -75,7 +75,6 @@ export const UserProvider = ({ children }) => {
     setConsultSelection
   };
 
-  console.log(consultSelection)
   return (
     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   );

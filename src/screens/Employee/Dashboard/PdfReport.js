@@ -35,6 +35,35 @@ export const GeneratePdf = async data => {
 
     const data = patientTreatmentPrescriptionDataRes.data.data[0];
 
+    const formatDate = (dateStr) => {
+      const date = new Date(dateStr);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+  };
+
+    const _opdFollowup = `
+    <div class="head-content2">
+                       <div class="head-content2-part1">
+                            <h3 style="margin: 0;padding: 16px 20px;text-align: left;">FOLLOW UP</h3>
+                       </div>
+
+                  </div>
+
+                  <div class="main-part12">
+                     
+                    ${data?.opdfollowuparray?.map((res, i) => {
+                      const formattedDate = formatDate(res.followup_date);
+      return `
+                         <div key=${i} class="divdata" style="margin-left:20px">
+                         <p>${i + 1}. Next Followup is on ${formattedDate} , ${res.followup_day}</p>
+                         
+                         </div>`;
+    })}
+                           
+                  </div>`;
+
     const _complainttableRows = `
     <div class="head-content2">
                        <div class="head-content2-part1">
@@ -46,14 +75,13 @@ export const GeneratePdf = async data => {
                   <div class="main-part12">
                      
                     ${data?.opdcomplaintArray?.map((res, i) => {
-                      return `
+      return `
                          <div key=${i} class="divdata" style="margin-left:20px">
-                         <p>${i + 1}. ${res.symptoms} since ${res.duration} ${
-                        res.time
-                      }, ${res.frequency}</p>
+                         <p>${i + 1}. ${res.symptoms} since ${res.duration} ${res.time
+        }, ${res.frequency}</p>
                          
                          </div>`;
-                    })}
+    })}
                            
                   </div>`;
 
@@ -69,23 +97,19 @@ export const GeneratePdf = async data => {
                                 <div class="main-part12">
                                      
                                              ${data?.opdpasthistoryarray?.map(
-                                               (res, i) => {
-                                                 return `
+      (res, i) => {
+        return `
                                                       <div key=${i} class="divdata" style="margin-left:20px">
                                                        <p>${i + 1}. 
-                                                       ${
-                                                         res.illnessname
-                                                       } since ${
-                                                   res.days
-                                                 } days ${res.months} months ${
-                                                   res.years
-                                                 } years and is ${
-                                                   res.treatment_status
-                                                 } since ${res.dateValues} </p>
+                                                       ${res.illnessname
+          } since ${res.days
+          } days ${res.months} months ${res.years
+          } years and is ${res.treatment_status
+          } since ${res.dateValues} </p>
                                                       
                                                       </div>`;
-                                               },
-                                             )}
+      },
+    )}
                                         
                                 </div>`;
 
@@ -101,24 +125,19 @@ export const GeneratePdf = async data => {
                                 <div class="main-part12">
                                     
                                              ${data?.opdfamilyhistoryarray?.map(
-                                               (res, i) => {
-                                                 return `
+      (res, i) => {
+        return `
                                                      <div key=${i} class="divdata" style="margin-left:20px">
-                                                       <p>${i + 1}. ${
-                                                   res.illnessname
-                                                 } since ${res.days} days ${
-                                                   res.months
-                                                 } months ${
-                                                   res.years
-                                                 } years and is ${
-                                                   res.treatment_status
-                                                 } 
-                                                       since ${
-                                                         res.dateValues
-                                                       } </p>
+                                                       <p>${i + 1}. ${res.illnessname
+          } since ${res.days} days ${res.months
+          } months ${res.years
+          } years and is ${res.treatment_status
+          } 
+                                                       since ${res.dateValues
+          } </p>
                                                       </div>`;
-                                               },
-                                             )}
+      },
+    )}
                                          
                                 </div>`;
 
@@ -134,22 +153,18 @@ export const GeneratePdf = async data => {
                                               <div class="main-part12">
                                                  
                                                   ${data?.opdmedicinehistoryarray?.map(
-                                                    (res, i) => {
-                                                      return `
+      (res, i) => {
+        return `
                                                             <div key=${i} class="divdata" style="margin-left:20px">
-                                                                 <p>${i + 1}. ${
-                                                        res.drugname
-                                                      } ${res.dose} since ${
-                                                        res.days
-                                                      } days ${
-                                                        res.months
-                                                      } months ${
-                                                        res.years
-                                                      } years </p>
+                                                                 <p>${i + 1}. ${res.drugname
+          } ${res.dose} since ${res.days
+          } days ${res.months
+          } months ${res.years
+          } years </p>
                                                             </div>
                                                             `;
-                                                    },
-                                                  )}
+      },
+    )}
                                                       
                                               </div>`;
     const personalHistoryData = `
@@ -164,112 +179,26 @@ export const GeneratePdf = async data => {
                                               <div class="main-part12">
                                                 
                                                            ${data?.opdpersonalhistoryarray?.map(
-                                                             (res, i) => {
-                                                               return `
+      (res, i) => {
+        return `
                                                                       <div key=${i} class="divdata" style="margin-left:20px">
-                                                                           <p>${
-                                                                             i +
-                                                                             1
-                                                                           }. H/o of consuming amount of tea (${
-                                                                 res.Tea
-                                                               }) , coffee (${
-                                                                 res.Coffee
-                                                               }) daily ,  H/o of consuming amount of Tobacco (${
-                                                                 res.Tobacco
-                                                               }) , Smoking (${
-                                                                 res.Smoking
-                                                               }),Alcohol (${
-                                                                 res.Alcohol
-                                                               }) , Drugs (${
-                                                                 res.Drugs
-                                                               }),SoftDrink (${
-                                                                 res.SoftDrink
-                                                               }) , Saltyfood (${
-                                                                 res.Saltyfood
-                                                               }), ${
-                                                                 res.Exercise
-                                                               } Exercise daily   </p>
+                                                                           <p>${i +
+          1
+          }. H/o of consuming amount of tea (${res.Tea
+          }) , coffee (${res.Coffee
+          }) daily ,  H/o of consuming amount of Tobacco (${res.Tobacco
+          }) , Smoking (${res.Smoking
+          }),Alcohol (${res.Alcohol
+          }) , Drugs (${res.Drugs
+          }),SoftDrink (${res.SoftDrink
+          }) , Saltyfood (${res.Saltyfood
+          }), ${res.Exercise
+          } Exercise daily   </p>
                                                                       </div>`;
-                                                             },
-                                                           )}
+      },
+    )}
                                                        
                                               </div>`;
-    // const obstetricsHistoryData = `
-    //                                           <div class="head-content2">
-    //                                                              <div class="head-content2-part1">
-    //                                                                   <h3 style="margin: 0;
-    //                                                                        padding: 16px 20px;text-align: left;">OBSTETRIC</h3>
-    //                                                              </div>
-
-    //                                                         </div>
-
-    //                                                         <div class="main-part12">
-    //                                                              <table style="border-collapse: collapse;">
-    //                                                                   <thead>
-    //                                                                        <th>G  P  L  A  D</th>
-    //                                                                        <th>PREGNANT</th>
-    //                                                                        <th>BREAST FEEDING</th>
-    //                                                                        <th>PLANNING OF CONCEIVE</th>
-    //                                                                        <th>CONTRACEPTION</th>
-    //                                                                        <th>PILLS</th>
-    //                                                                        <th>INJECTION</th>
-    //                                                                        <th>OTHER</th>
-    //                                                                   </thead>
-    //                                                                   <tbody>
-    //                                                                      ${data?.opdobstetricshistoryarray?.map(
-    //                                                                        (
-    //                                                                          res,
-    //                                                                          i,
-    //                                                                        ) => {
-    //                                                                          return `
-    //                                                                               <tr key=${i}>
-    //                                                                                 <td>G${
-    //                                                                                   res.g
-    //                                                                                 }P${
-    //                                                                            res.p
-    //                                                                          }L${
-    //                                                                            res.l
-    //                                                                          }A${
-    //                                                                            res.a
-    //                                                                          }D${
-    //                                                                            res.d
-    //                                                                          }</td>
-    //                                                                                 <td>${
-    //                                                                                   res.pregnant
-    //                                                                                 }</td>
-    //                                                                                 <td>${
-    //                                                                                   res.breastFeeding
-    //                                                                                 }</td>
-    //                                                                                 <td>${
-    //                                                                                   res.conception
-    //                                                                                 }</td>
-    //                                                                                 <td>${
-    //                                                                                   res.contraception
-    //                                                                                 }</td>
-    //                                                                                 <td>${
-    //                                                                                   res.pillsChecked ===
-    //                                                                                   true
-    //                                                                                     ? 'yes'
-    //                                                                                     : 'no'
-    //                                                                                 }</td>
-    //                                                                                 <td>${
-    //                                                                                   res.injuctionChecked ===
-    //                                                                                   true
-    //                                                                                     ? 'yes'
-    //                                                                                     : 'no'
-    //                                                                                 }</td>
-    //                                                                                 <td>${
-    //                                                                                   res.otherChecked ===
-    //                                                                                   true
-    //                                                                                     ? 'yes'
-    //                                                                                     : 'no'
-    //                                                                                 }</td>
-    //                                                                               </tr>`;
-    //                                                                        },
-    //                                                                      )}
-    //                                                                   </tbody>
-    //                                                              </table>
-    //                                                         </div>`;
 
     const menstrualHistoryData = `
                                         <div class="head-content2">
@@ -283,30 +212,24 @@ export const GeneratePdf = async data => {
                                                        <div class="main-part12">
                                                            
                                                                       ${data?.opdmenstrualhistoryarray?.map(
-                                                                        (
-                                                                          res,
-                                                                          i,
-                                                                        ) => {
-                                                                          return `
+      (
+        res,
+        i,
+      ) => {
+        return `
                                                                                 <div key=${i} class="divdata" style="margin-left:20px">
-                                                                                    <p key=${
-                                                                                      i +
-                                                                                      1
-                                                                                    }>She started menses in 12/03/2010. Periods are ${
-                                                                            res.periods
-                                                                          } , blood flow is ${
-                                                                            res.qualityofbloodflow
-                                                                          }, ${
-                                                                            res.painduringcycle
-                                                                          }-pain during periods. LMP: ${
-                                                                            res.lmp
-                                                                          } today is day ${
-                                                                            res.durations
-                                                                          }. </p>
+                                                                                    <p key=${i +
+          1
+          }>She started menses in 12/03/2010. Periods are ${res.periods
+          } , blood flow is ${res.qualityofbloodflow
+          }, ${res.painduringcycle
+          }-pain during periods. LMP: ${res.lmp
+          } today is day ${res.durations
+          }. </p>
                                                                                 </div>
                                                                                     `;
-                                                                        },
-                                                                      )}
+      },
+    )}
                                                                  </tbody>
                                                             </table>
                                                        </div>`;
@@ -332,8 +255,8 @@ export const GeneratePdf = async data => {
                                                   </thead>
                                                   <tbody>
                                                        ${data?.opdvitalshistoryarray?.map(
-                                                         (res, i) => {
-                                                           return `
+      (res, i) => {
+        return `
                                                                  <tr key=${i}>
                                                                  <td>${res.p_temp} F</td>
                                                                  <td>${res.p_pulse} /min</td>
@@ -342,8 +265,8 @@ export const GeneratePdf = async data => {
                                                                  <td>${res.p_rsprate}</td>
                                                                  <td>${res.gcss_status}(E${res.eyeopening}V${res.verbalResponse}M${res.motorResponse}</td>
                                                                  </tr>`;
-                                                         },
-                                                       )}
+      },
+    )}
                                                   </tbody>
                                              </table>
                                         </div>`;
@@ -356,38 +279,38 @@ export const GeneratePdf = async data => {
                                     
                                         <div class="main-part12">
                                             ${data?.opdgeneralexaminationhistoryarray
-                                              ?.map((res, i) => {
-                                                const presentKeys = [];
-                                                const absentKeys = [];
+        ?.map((res, i) => {
+          const presentKeys = [];
+          const absentKeys = [];
 
-                                                for (const [
-                                                  key,
-                                                  value,
-                                                ] of Object.entries(res)) {
-                                                  if (value === 'present') {
-                                                    presentKeys.push(
-                                                      key.toUpperCase(),
-                                                    );
-                                                  } else if (
-                                                    value === 'absent'
-                                                  ) {
-                                                    absentKeys.push(
-                                                      key.toUpperCase(),
-                                                    );
-                                                  }
-                                                }
+          for (const [
+            key,
+            value,
+          ] of Object.entries(res)) {
+            if (value === 'present') {
+              presentKeys.push(
+                key.toUpperCase(),
+              );
+            } else if (
+              value === 'absent'
+            ) {
+              absentKeys.push(
+                key.toUpperCase(),
+              );
+            }
+          }
 
-                                                return `
+          return `
                                                         <div key=${i} class="divdata" style="margin-left:20px">
                                                             <p><strong>Present:</strong> ${presentKeys.join(
-                                                              ', ',
-                                                            )}</p>
+            ', ',
+          )}</p>
                                                             <p><strong>Absent:</strong> ${absentKeys.join(
-                                                              ', ',
-                                                            )}</p>
+            ', ',
+          )}</p>
                                                         </div>`;
-                                              })
-                                              .join('')}
+        })
+        .join('')}
                                         </div>`;
     const diagnosisHistoryData = `
                                         <div class="head-content2">
@@ -401,23 +324,20 @@ export const GeneratePdf = async data => {
                                                        <div class="main-part12">
                                                            
                                                                       ${data?.opddiagnosishistoryarray?.map(
-                                                                        (
-                                                                          res,
-                                                                          i,
-                                                                        ) => {
-                                                                          return `
+      (
+        res,
+        i,
+      ) => {
+        return `
                                                                            <div key=${i} class="divdata" style="margin-left:20px">
-                                                                              <p key=${
-                                                                                i +
-                                                                                1
-                                                                              }>${
-                                                                            res.illnessname
-                                                                          } (${
-                                                                            res.icdcode
-                                                                          })</p>
+                                                                              <p key=${i +
+          1
+          }>${res.illnessname
+          } (${res.icdcode
+          })</p>
                                                                             </div>`;
-                                                                        },
-                                                                      )}
+      },
+    )}
                                                                
                                                        </div>`;
     // const planofcareHistoryData = `
@@ -462,8 +382,8 @@ export const GeneratePdf = async data => {
                                                             </thead>
                                                             <tbody>
                                                                  ${data?.opdtreatmenthistoryarray?.map(
-                                                                   (res, i) => {
-                                                                     return `
+      (res, i) => {
+        return `
                                                                            <tr key=${i}>
                                                                            <td>${res.drugname}</td>
                                                                            <td>${res.dose}</td>
@@ -473,8 +393,8 @@ export const GeneratePdf = async data => {
                                                                            <td>${res.duration}</td>
                                                                          
                                                                            </tr>`;
-                                                                   },
-                                                                 )}
+      },
+    )}
                                                             </tbody>
                                                        </table>
                                                   </div>`;
@@ -522,18 +442,18 @@ export const GeneratePdf = async data => {
                                                                                      <div class="head-content2-part1">
                                                                                           <h3 style="margin: 0;
                                                                                                padding: 16px 20px;text-align: left;">ADVICE :  ${data?.opdadvicehistoryarray?.map(
-                                                                                                 (
-                                                                                                   res,
-                                                                                                   i,
-                                                                                                 ) => {
-                                                                                                   return `
+      (
+        res,
+        i,
+      ) => {
+        return `
                                                                                                             <tr key=${i}>
                                                                                                             <td>${res.opdtemplate_text}</td>
                                                                                                             
                                                                                                           
                                                                                                             </tr>`;
-                                                                                                 },
-                                                                                               )} </h3>
+      },
+    )} </h3>
                                                                                      </div>
                                                                  
                                                                                 </div>
@@ -721,9 +641,8 @@ padding: 8px;">GENDER : <span>${data?.patientgender}</span> </h3>
 </div>
 <div class="head-content3-part3">
 <h3 style="margin: 0;
-padding: 8px; width: 106%;">CONSULTANT NAME : <span>${
-      data?.AppArray[0].name
-    }</span> </h3>
+padding: 8px; width: 106%;">CONSULTANT NAME : <span>${data?.AppArray[0].name
+      }</span> </h3>
 
 <h3 style="margin: 0;width: 50%;
 padding: 8px;">TIME : <span>${data?.AppArray[0].slot_id}</span></h3>
@@ -739,14 +658,14 @@ ${data?.opdmedicinehistoryarray?.length > 0 ? medicineHistoryData : ''}
 ${data?.opdpersonalhistoryarray?.length > 0 ? personalHistoryData : ''}
 ${data?.opdmenstrualhistoryarray?.length > 0 ? menstrualHistoryData : ''}
 ${data?.opdvitalshistoryarray?.length > 0 ? vitalHistoryData : ''}
-${
-  data?.opdgeneralexaminationhistoryarray?.length > 0
-    ? generalexaminationHistoryData
-    : ''
-}
+${data?.opdgeneralexaminationhistoryarray?.length > 0
+        ? generalexaminationHistoryData
+        : ''
+      }
 ${data?.opddiagnosishistoryarray?.length > 0 ? diagnosisHistoryData : ''}
 ${data?.opdtreatmenthistoryarray?.length > 0 ? treatmentHistoryData : ''}
 ${data?.opdadvicehistoryarray?.length > 0 ? adviceHistoryData : ''}
+${data?.opdfollowuparray?.length > 0 ? _opdFollowup : ''}
 
 <br />
 <div class="main4">

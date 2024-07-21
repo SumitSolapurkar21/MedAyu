@@ -208,7 +208,6 @@ export default function Scanner() {
           })
           .then(res => {
             setScannedPatientsData(res.data);
-            console.log(res.data)
             if (res.data.status === true) {
               if (patientSelectedValue === '3') {
                 navigation.navigate('DischargeInitiation');

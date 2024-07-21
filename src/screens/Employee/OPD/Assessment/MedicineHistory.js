@@ -194,6 +194,7 @@ const MedicineHistory = () => {
     const updatedSelectedRow = temp?.filter(row => row.prescription_id !== _id);
     setTemp(updatedSelectedRow);
   };
+
   const displayData = opdAssessment.map((item, index) => (
     <ScrollView showsVerticalScrollIndicator={false} vertical style={{ maxHeight: '100%' }} key={index}>
       {Object.entries(item).map(([key, value]) => (
@@ -230,12 +231,14 @@ const MedicineHistory = () => {
           onPress={() => openMenu()}
         />
       </Appbar.Header>
+
       <OpdpageNavigation
         closeMenu={closeMenu}
         openMenu={openMenu}
         _handleMore={_handleMore}
         visible={visible}
       />
+
       <View style={styles.container}>
         {showCalender && (
           <View style={styles.datePickerContainer}>
@@ -262,7 +265,7 @@ const MedicineHistory = () => {
             <TextInput
               mode="outlined"
               label="Medicine Name"
-              placeholder="Search Medicine Name ..."
+              placeholder="Medicine Name"
               style={[styles.input]}
               value={
                 selectedDrugCode?.drugcode
@@ -310,128 +313,132 @@ const MedicineHistory = () => {
         </View>
 
         <View>
-          <ScrollView
-            horizontal
-            showsVerticalScrollIndicator={false}
-            style={styles.inputGroup}>
-            {temp?.map((res, index) => {
-              return (
-                <View style={styles.card} key={index + 1}>
-                  <View style={styles.cardContentDiv}>
-                    <Text style={[styles.label, { width: 200 }]}>
-                      Drug Name : &nbsp; {res.drugname}
-                    </Text>
-                    <IconButton
-                      icon="trash-can"
-                      iconColor={MD3Colors.error50}
-                      size={20}
-                      onPress={() =>
-                        _removeSelectedDataHandler(res?.prescription_id)
-                      }
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Dose : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.dose}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].dose = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Route : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.route}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].route = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Schedule : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.schedule}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].schedule = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>From Date : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={temp[index].dateValues}
-                      editable={false}
-                      right={
-                        <TextInput.Icon
-                          icon="calendar"
-                          onPress={() => calenderHandler(index)}
+          <ScrollView style={{ maxHeight: 280 }}>
+            <View>
+              <ScrollView
+                horizontal
+                showsVerticalScrollIndicator={false}
+                style={styles.inputGroup}>
+                {temp?.map((res, index) => {
+                  return (
+                    <View style={styles.card} key={index + 1}>
+                      <View style={styles.cardContentDiv}>
+                        <Text style={[styles.label, { width: 200 }]}>
+                          Drug Name : &nbsp; {res.drugname}
+                        </Text>
+                        <IconButton
+                          icon="trash-can"
+                          iconColor={MD3Colors.error50}
+                          size={20}
+                          onPress={() =>
+                            _removeSelectedDataHandler(res?.prescription_id)
+                          }
                         />
-                      }
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Years : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.years}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].years = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Months : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.months}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].months = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.label}>Days : </Text>
-                    <TextInput
-                      mode="flat"
-                      style={[styles.input2]}
-                      value={res.days}
-                      onChangeText={text => {
-                        const updatedTemp = [...temp];
-                        updatedTemp[index].days = text;
-                        setTemp(updatedTemp);
-                      }}
-                      editable={true}
-                    />
-                  </View>
-                </View>
-              );
-            })}
+                      </View>
+                      <View style={styles.cardContent}>
+                        <Text style={styles.label}>Dose : </Text>
+                        <TextInput
+                          mode="flat"
+                          style={[styles.input2]}
+                          value={res.dose}
+                          onChangeText={text => {
+                            const updatedTemp = [...temp];
+                            updatedTemp[index].dose = text;
+                            setTemp(updatedTemp);
+                          }}
+                          editable={true}
+                        />
+                      </View>
+                      <View style={styles.cardContent}>
+                        <Text style={styles.label}>Route : </Text>
+                        <TextInput
+                          mode="flat"
+                          style={[styles.input2]}
+                          value={res.route}
+                          onChangeText={text => {
+                            const updatedTemp = [...temp];
+                            updatedTemp[index].route = text;
+                            setTemp(updatedTemp);
+                          }}
+                          editable={true}
+                        />
+                      </View>
+                      <View style={styles.cardContent}>
+                        <Text style={styles.label}>Schedule : </Text>
+                        <TextInput
+                          mode="flat"
+                          style={[styles.input2]}
+                          value={res.schedule}
+                          onChangeText={text => {
+                            const updatedTemp = [...temp];
+                            updatedTemp[index].schedule = text;
+                            setTemp(updatedTemp);
+                          }}
+                          editable={true}
+                        />
+                      </View>
+                      <View style={styles.cardContent}>
+                        <Text style={styles.label}>From Date : </Text>
+                        <TextInput
+                          mode="flat"
+                          style={[styles.input2]}
+                          value={temp[index].dateValues}
+                          editable={false}
+                          right={
+                            <TextInput.Icon
+                              icon="calendar"
+                              onPress={() => calenderHandler(index)}
+                            />
+                          }
+                        />
+                      </View>
+                      <View style={styles.cardContent}>
+                        <Text style={styles.label}>Years : </Text>
+                        <TextInput
+                          mode="flat"
+                          style={[styles.input2]}
+                          value={res.years}
+                          onChangeText={text => {
+                            const updatedTemp = [...temp];
+                            updatedTemp[index].years = text;
+                            setTemp(updatedTemp);
+                          }}
+                          editable={true}
+                        />
+                      </View>
+                      <View style={styles.cardContent}>
+                        <Text style={styles.label}>Months : </Text>
+                        <TextInput
+                          mode="flat"
+                          style={[styles.input2]}
+                          value={res.months}
+                          onChangeText={text => {
+                            const updatedTemp = [...temp];
+                            updatedTemp[index].months = text;
+                            setTemp(updatedTemp);
+                          }}
+                          editable={true}
+                        />
+                      </View>
+                      <View style={styles.cardContent}>
+                        <Text style={styles.label}>Days : </Text>
+                        <TextInput
+                          mode="flat"
+                          style={[styles.input2]}
+                          value={res.days}
+                          onChangeText={text => {
+                            const updatedTemp = [...temp];
+                            updatedTemp[index].days = text;
+                            setTemp(updatedTemp);
+                          }}
+                          editable={true}
+                        />
+                      </View>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            </View>
           </ScrollView>
         </View>
 
@@ -458,7 +465,7 @@ const MedicineHistory = () => {
         </View>
 
 
-        <ScrollView showsVerticalScrollIndicator={false} vertical style={{ maxHeight: '100%', padding: 10 }} >{displayData}</ScrollView>
+        <ScrollView vertical showsVerticalScrollIndicator={false} style={{ maxHeight: temp?.length > 0 ? 180 : '85%' }}  >{displayData}</ScrollView>
       </View>
     </>
   );
@@ -508,7 +515,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 10,
     marginRight: 6,
-    padding: 10
+    padding: 10,
+    marginHorizontal: 12
   },
   cardContent: {
     flexDirection: 'row',

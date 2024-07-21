@@ -24,7 +24,6 @@ const OpdAdvice = () => {
     patientsData,
     scannedPatientsData,
     selectedFlow,
-    setSelectedFlow,
   } = useContext(UserContext);
   const { patient_id, uhid } = patientsData;
   const { appoint_id, mobilenumber } = scannedPatientsData;

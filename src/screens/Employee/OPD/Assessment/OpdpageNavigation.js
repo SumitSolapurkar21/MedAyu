@@ -8,7 +8,6 @@ export const OpdpageNavigation = ({ visible, openMenu, closeMenu }) => {
   const { consultSelection } = useContext(UserContext)
   const navigation = useNavigation();
 
-  console.log(consultSelection)
   return (
     <View
       style={{
@@ -165,6 +164,16 @@ export const OpdpageNavigation = ({ visible, openMenu, closeMenu }) => {
             navigation.replace('OpdAdvice'), closeMenu();
           }}
           title="Advice"
+        />
+
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('OpdFollowup');
+            closeMenu();
+          }}
+          title="Follow Up"
         />
         <Menu.Item
           contentStyle={{ width: 120 }}
@@ -339,4 +348,193 @@ export const IpdRegistrationNavigation = ({ visible, openMenu, closeMenu }) => {
   );
 };
 
+// re assissment...
+export const ReAssessmentOpdpageNavigation = ({ visible, openMenu, closeMenu }) => {
+  const { consultSelection } = useContext(UserContext)
+  const navigation = useNavigation();
+
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        right: 35,
+        top: 60,
+      }}>
+      <Menu
+        contentStyle={{ flexDirection: 'row', flexWrap: 'wrap', width: '105%' }}
+        style={styles.menuItem}
+        visible={visible}
+        onDismiss={closeMenu}
+        anchor={<Button onPress={openMenu}></Button>}>
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdComplaints'), closeMenu();
+          }}
+          title="Complaints"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdPastHistory'), closeMenu();
+          }}
+          title="Past History"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdFamilyHistory'), closeMenu();
+          }}
+          title="Family History"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdMedicineHistory'), closeMenu();
+          }}
+          title="Medicine History"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdPersonalHistory'), closeMenu();
+          }}
+          title="Personal History"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdObstetricsHistory'), closeMenu();
+          }}
+          title="Obstetrics History"
+        />
+        <Divider />
+        {/* <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdMenstrualHistory'), closeMenu();
+          }}
+          title="Menstrual History"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdVitals'), closeMenu();
+          }}
+          title="Vitals"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('GeneralExamination'), closeMenu();
+          }}
+          title="General Examination"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('SystemicExamination'), closeMenu();
+          }}
+          title="Systemic Examination"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdDiagnosis'), closeMenu();
+          }}
+          title="Diagnosis"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdInvestigation'), closeMenu();
+          }}
+          title="Investigation"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdPlanOfCare'), closeMenu();
+          }}
+          title="Plan of care"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdTreatment'), closeMenu();
+          }}
+          title="Treatment"
+        />
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdProcedure'), closeMenu();
+          }}
+          title="Procedure"
+        />
+
+        <Divider />
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdAdvice'), closeMenu();
+          }}
+          title="Advice"
+        />
+
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            navigation.replace('ReOpdFollowup');
+            closeMenu();
+          }}
+          title="Follow Up"
+        /> */}
+        <Menu.Item
+          contentStyle={{ width: 120 }}
+          dense
+          onPress={() => {
+            if (consultSelection === 'dashboard') {
+              navigation.replace('DashboardHomePage')
+            } else if (consultSelection === 'scanpatient') {
+              navigation.replace('EpatientDetails')
+            }
+            closeMenu();
+          }}
+          title="Home"
+        />
+      </Menu>
+    </View>
+  );
+};
 const styles = StyleSheet.create({});
