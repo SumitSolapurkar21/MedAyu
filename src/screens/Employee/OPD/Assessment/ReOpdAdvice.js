@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { Appbar, Button, Card, TextInput } from 'react-native-paper';
-import { OpdpageNavigation } from './OpdpageNavigation';
+import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import axios from 'axios';
@@ -174,7 +174,6 @@ const ReOpdAdvice = () => {
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
-                         console.log(res.data)
                          const opdTemplateData = res.data.opdadvicehistoryarray[0];
                          setOpdAssessmentforEdit(opdTemplateData);
                          setAdvice(opdTemplateData.template_id);
@@ -202,7 +201,7 @@ const ReOpdAdvice = () => {
                     />
                </Appbar.Header>
 
-               <OpdpageNavigation
+               <ReAssessmentOpdpageNavigation
                     closeMenu={closeMenu}
                     openMenu={openMenu}
                     _handleMore={_handleMore}

@@ -23,7 +23,7 @@ import UserContext from '../../../../components/Context/Context';
 import { Table, Row, Rows } from 'react-native-table-component';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton, MD3Colors } from 'react-native-paper';
-import { OpdpageNavigation } from './OpdpageNavigation';
+import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 
 const ReOpdDiagnosis = () => {
 
@@ -176,7 +176,13 @@ const ReOpdDiagnosis = () => {
                     icdcode: icdcode,
                },
           ];
-          setDiagnosisArray(prev => [...prev, ..._data, ...opdAssessmentforEdit]);
+          // setDiagnosisArray(prev => [..._data, ...opdAssessmentforEdit]);
+          setDiagnosisArray(prev => {
+               const combinedData = [..._data, ...prev];
+               const uniqueData = Array.from(new Set(combinedData.map(item => item.illness_id)))
+                    .map(id => combinedData.find(item => item.illness_id === id));
+               return uniqueData;
+          });
      };
 
 
@@ -232,7 +238,6 @@ const ReOpdDiagnosis = () => {
 
      // remove selected data handler ....
      const _removeSelectedDataHandler = _id => {
-          console.log(_id)
           // Filter out data with the specified id
           const updatedSelectedRow = diagnosisArray?.filter(
                row => row.illness_id !== _id,
@@ -268,7 +273,7 @@ const ReOpdDiagnosis = () => {
                          onPress={() => openMenu()}
                     />
                </Appbar.Header>
-               <OpdpageNavigation
+               <ReAssessmentOpdpageNavigation
                     closeMenu={closeMenu}
                     openMenu={openMenu}
                     _handleMore={_handleMore}

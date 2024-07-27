@@ -6,7 +6,7 @@ import UserContext from '../../../../components/Context/Context';
 import { useNavigation } from '@react-navigation/native';
 import { Appbar, Checkbox, Button, Card } from 'react-native-paper';
 import { Table, Row, Rows } from 'react-native-table-component';
-import { OpdpageNavigation } from './OpdpageNavigation';
+import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 
 const ReOpdPlanOfCare = () => {
      const { patientsData, scannedPatientsData, waitingListData, userData } =
@@ -15,50 +15,13 @@ const ReOpdPlanOfCare = () => {
      const { appoint_id, mobilenumber } = scannedPatientsData;
 
      const navigation = useNavigation();
-
-     const [opdAssessmentforEdit, setOpdAssessmentforEdit] = useState({
-          preventive: '',
-          curative: '',
-          supportive: '',
-          rehabilitative: '',
-          pallative: '',
-          eolcare: '',
-          medicine: '',
-          surgery: '',
-          procedure: '',
-          physiotherapy: '',
-          diettherapy: '',
-          occupationaltherapy: '',
-          counselling: '',
-          physicaltherapy: '',
-          other: '',
-     });
-
-     const [checkedValues, setCheckedValues] = useState({
-          preventive: false,
-          curative: false,
-          supportive: false,
-          rehabilitative: false,
-          pallative: false,
-          eolcare: false,
-          medicine: false,
-          surgery: false,
-          procedure: false,
-          physiotherapy: false,
-          diettherapy: false,
-          occupationaltherapy: false,
-          counselling: false,
-          physicaltherapy: false,
-          other: false,
-     });
-
-
+     const [checkedValues, setCheckedValues] = useState({});
 
 
      //backHandler ...
      useEffect(() => {
           const backAction = () => {
-               navigation.replace('ReOpdGeneralExamination');
+               navigation.replace('OpdInvestigation');
                return true;
           };
 
@@ -69,17 +32,14 @@ const ReOpdPlanOfCare = () => {
 
           return () => backHandler.remove();
      }, []);
-
-
      // checkbox handler .....
+
      // Function to handle checkbox toggle
      const handleCheckboxToggle = key => {
-          setOpdAssessmentforEdit(prevState => ({
+          setCheckedValues(prevState => ({
                ...prevState,
                [key]: !prevState[key], // Toggle the checkbox value
           }));
-
-
      };
 
      //
@@ -240,8 +200,6 @@ const ReOpdPlanOfCare = () => {
      });
      const [widthArr, setWidthArr] = useState([]);
      const [headwidthArr, setheadWidthArr] = useState([]);
-     const [opdAssessment, setOpdAssessment] = useState([]);
-
      useEffect(() => {
           setheadWidthArr([340, ...Array(tableHead8.length - 1).fill(0)]);
           setWidthArr([338, ...Array(_tableData8.length - 1).fill(0)]);
@@ -254,7 +212,7 @@ const ReOpdPlanOfCare = () => {
                patient_id: patient_id,
                reception_id: userData?._id,
                appoint_id: waitingListData?.appoint_id || appoint_id,
-               uhid: waitingListData?.uhid || uhid,
+               uhid: uhid,
                api_type: 'OPD-PLAN-OF-CARE',
                opdplanofcarehistoryarray: [checkedValues],
           };
@@ -274,13 +232,22 @@ const ReOpdPlanOfCare = () => {
                console.error(error);
           }
      };
-
+     const [opdAssessment, setOpdAssessment] = useState([]);
+     const keys3 = [
+          'Preventive',
+          'Medicine',
+          'Physiotherapy',
+          'Physicaltherapy',
+          'Date / Time',
+     ];
+     const [widthArr2, setWidthArr2] = useState([]);
+     useEffect(() => {
+          setWidthArr2([120, 120, 150, 120, 120, ...Array(keys3.length).fill(2)]);
+     }, []);
      useEffect(() => {
           FetchMobileOpdAssessment();
-          FetchMobileOpdAssessmentforEdit();
+          return () => { };
      }, [hospital_id, patient_id, reception_id]);
-
-
      //list of FetchMobileOpdAssessment....
      const FetchMobileOpdAssessment = async () => {
           try {
@@ -291,28 +258,7 @@ const ReOpdPlanOfCare = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-PLAN-OF-CARE',
-                         uhid: waitingListData?.uhid || uhid,
-                         mobilenumber: waitingListData?.mobilenumber || mobilenumber,
-                    })
-                    .then(res => {
-                         setOpdAssessmentforEdit(res.data);
-                    });
-          } catch (error) {
-               console.error(error);
-          }
-     };
-
-     //list of FetchMobileOpdAssessment....
-     const FetchMobileOpdAssessmentforEdit = async () => {
-          try {
-               await axios
-                    .post(`${api.baseurl}/FetchMobileOpdAssessmentforEdit`, {
-                         hospital_id: userData?.hospital_id,
-                         reception_id: userData?._id,
-                         patient_id: patient_id,
-                         appoint_id: waitingListData?.appoint_id || appoint_id,
-                         api_type: 'OPD-PLAN-OF-CARE',
-                         uhid: waitingListData?.uhid || uhid,
+                         uhid: uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
@@ -322,25 +268,21 @@ const ReOpdPlanOfCare = () => {
                console.error(error);
           }
      };
-
-
-
      const _handleMore = () => {
           setVisible(true);
      };
-
      const [visible, setVisible] = useState(false);
+
      const openMenu = () => setVisible(true);
+
      const closeMenu = () => setVisible(false);
-
-
      return (
           <>
                {/* Appbar header */}
                <Appbar.Header>
                     <Appbar.BackAction
                          onPress={() => {
-                              navigation.replace('ReOpdGeneralExamination');
+                              navigation.replace('OpdInvestigation');
                          }}
                     />
                     <Appbar.Content title="Plan oF Care" style={styles.appbar_title} />
@@ -350,7 +292,7 @@ const ReOpdPlanOfCare = () => {
                          onPress={() => openMenu()}
                     />
                </Appbar.Header>
-               <OpdpageNavigation
+               <ReAssessmentOpdpageNavigation
                     closeMenu={closeMenu}
                     openMenu={openMenu}
                     _handleMore={_handleMore}
@@ -360,6 +302,7 @@ const ReOpdPlanOfCare = () => {
                     vertical
                     showsVerticalScrollIndicator={false}
                     style={styles.container}>
+                    {/*  */}
                     <View style={styles.tableDiv}>
                          <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                               <Row
@@ -377,12 +320,6 @@ const ReOpdPlanOfCare = () => {
                                         style={[styles.row]}
                                         textStyle={styles.text}
                                    />
-                                   <Rows
-                                        data={_tableData8}
-                                        widthArr={widthArr}
-                                        style={[styles.row]}
-                                        textStyle={styles.text}
-                                   />
                               </Table>
                          </ScrollView>
                     </View>
@@ -390,7 +327,7 @@ const ReOpdPlanOfCare = () => {
                     <View style={styles.submitbutton}>
                          <Button
                               mode="contained"
-                              onPress={() => navigation.replace('ReOpdDiagnosis')}>
+                              onPress={() => navigation.replace('OpdInvestigation')}>
                               Previous
                          </Button>
                          <Button mode="contained" onPress={() => submitTreatmenthandler()}>
@@ -398,12 +335,12 @@ const ReOpdPlanOfCare = () => {
                          </Button>
                          <Button
                               mode="contained"
-                              onPress={() => navigation.replace('ReOpdTreatment')}>
+                              onPress={() => navigation.navigate('OpdTreatment')}>
                               Next / Skip
                          </Button>
                     </View>
 
-                    {opdAssessment?.length > 0 &&
+                    {opdAssessment.length > 0 &&
                          opdAssessment?.map((row, index) => {
                               return (
                                    <Card style={styles.card2} key={index + 1}>

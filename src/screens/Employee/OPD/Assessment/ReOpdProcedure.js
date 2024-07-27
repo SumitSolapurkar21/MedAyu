@@ -8,15 +8,15 @@ import {
      DefaultTheme,
      Button,
      TextInput,
+     Card,
      IconButton,
      MD3Colors,
-     Card,
 } from 'react-native-paper';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { OpdpageNavigation } from './OpdpageNavigation';
+import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 
 const ReOpdProcedure = () => {
      //backHandler ...
@@ -225,7 +225,7 @@ const ReOpdProcedure = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-PROCEDURE',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
@@ -250,7 +250,6 @@ const ReOpdProcedure = () => {
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
-                         console.log(res.data.opdprocedurehistoryarray)
                          setOpdAssessmentforEdit(res.data.opdprocedurehistoryarray);
                     });
           } catch (error) {
@@ -283,7 +282,7 @@ const ReOpdProcedure = () => {
                          onPress={() => openMenu()}
                     />
                </Appbar.Header>
-               <OpdpageNavigation
+               <ReAssessmentOpdpageNavigation
                     closeMenu={closeMenu}
                     openMenu={openMenu}
                     _handleMore={_handleMore}
@@ -606,8 +605,6 @@ const ReOpdProcedure = () => {
                                                   </View>
                                              );
                                         })}
-
-
                                    </ScrollView>
                               </View>
                          </ScrollView>
@@ -662,23 +659,21 @@ const ReOpdProcedure = () => {
                                                                  {row?.proceduretime}
                                                             </Text>
                                                        </View>
-                                                       <View style={styles.cardBodyHead}>
-                                                            <View style={[styles.cardBody, { gap: 8 }]}>
-                                                                 <Text variant="titleLarge" style={styles.cardtext}>
-                                                                      Kit :
-                                                                 </Text>
-                                                                 <Text variant="titleLarge" style={[styles.cardtext2]}>
-                                                                      {row?.procedurekit}
-                                                                 </Text>
-                                                            </View>
-                                                            <View style={[styles.cardBody, { gap: 8 }]}>
-                                                                 <Text variant="titleLarge" style={styles.cardtext}>
-                                                                      Instruction :
-                                                                 </Text>
-                                                                 <Text variant="titleLarge" style={[styles.cardtext2]}>
-                                                                      {row?.procedureinstruction}
-                                                                 </Text>
-                                                            </View>
+                                                       {/* <View style={[styles.cardBody, { gap: 8 }]}>
+                                                            <Text variant="titleLarge" style={styles.cardtext}>
+                                                                 Kit :
+                                                            </Text>
+                                                            <Text variant="titleLarge" style={[styles.cardtext2]}>
+                                                                 {row?.procedurekit}
+                                                            </Text>
+                                                       </View> */}
+                                                       <View style={[styles.cardBody, { gap: 8 }]}>
+                                                            <Text variant="titleLarge" style={styles.cardtext}>
+                                                                 Instruction :
+                                                            </Text>
+                                                            <Text variant="titleLarge" style={[styles.cardtext2]}>
+                                                                 {row?.procedureinstruction}
+                                                            </Text>
                                                        </View>
                                                        <View style={[styles.cardBody, { gap: 8 }]}>
                                                             <Text variant="titleLarge" style={styles.cardtext}>

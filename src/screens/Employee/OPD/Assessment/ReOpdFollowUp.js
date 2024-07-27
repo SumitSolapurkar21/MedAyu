@@ -2,7 +2,7 @@ import { BackHandler, ScrollView, StyleSheet, Text, TouchableOpacity, View } fro
 import React, { useContext, useEffect, useState } from 'react';
 import { Appbar, Button, Card, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { OpdpageNavigation } from './OpdpageNavigation';
+import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
@@ -204,7 +204,7 @@ const ReOpdFollowup = () => {
                <Appbar.Header>
                     <Appbar.BackAction
                          onPress={() => {
-                              navigation.replace('OpdAdvice');
+                              navigation.replace('ReOpdAdvice');
                          }}
                     />
                     <Appbar.Content title="Follow Up" style={styles.appbar_title} />
@@ -214,7 +214,7 @@ const ReOpdFollowup = () => {
                          onPress={openMenu}
                     />
                </Appbar.Header>
-               <OpdpageNavigation
+               <ReAssessmentOpdpageNavigation
                     closeMenu={closeMenu}
                     openMenu={openMenu}
                     _handleMore={_handleMore}
@@ -261,13 +261,22 @@ const ReOpdFollowup = () => {
                               onConfirm={handleDate}
                               onCancel={hideDatePicker}
                          />
-                         <Button
-                              mode="elevated"
-                              style={styles.button}
-                              textColor="white"
-                              onPress={submitHandler}>
-                              Submit
-                         </Button>
+                         <View style={styles.groupbutton}>
+                              <Button
+                                   mode="elevated"
+                                   style={styles.button}
+                                   textColor="white"
+                                   onPress={submitHandler}>
+                                   Submit
+                              </Button>
+                              <Button
+                                   mode="elevated"
+                                   style={styles.button}
+                                   textColor="white"
+                                   onPress={() => navigation.navigate('Listofpatients')}>
+                                   Home
+                              </Button>
+                         </View>
                     </View>
                     <ScrollView vertical style={{ maxHeight: '90%' }}>
                          {opdAssessment.length > 0 && opdAssessment?.map((res, index) => {
@@ -319,4 +328,9 @@ const styles = StyleSheet.create({
           padding: 12,
           // width: '100%'
      },
+     groupbutton: {
+          flexDirection: "row",
+          gap: 6,
+          justifyContent: "center"
+     }
 });

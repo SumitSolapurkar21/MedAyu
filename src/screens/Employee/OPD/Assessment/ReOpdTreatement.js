@@ -7,7 +7,7 @@ import UserContext from '../../../../components/Context/Context';
 import DateTimePicker from 'react-native-ui-datepicker';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton, MD3Colors } from 'react-native-paper';
-import { OpdpageNavigation } from './OpdpageNavigation';
+import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ReOpdTreatment = () => {
@@ -227,7 +227,7 @@ const ReOpdTreatment = () => {
                          onPress={() => openMenu()}
                     />
                </Appbar.Header>
-               <OpdpageNavigation
+               <ReAssessmentOpdpageNavigation
                     closeMenu={closeMenu}
                     openMenu={openMenu}
                     _handleMore={_handleMore}
@@ -343,7 +343,7 @@ const ReOpdTreatment = () => {
                                                   <View style={styles.card} key={index + 1}>
                                                        <View style={styles.cardContentDiv}>
                                                             <Text style={[styles.label, { width: 200, marginLeft: 10 }]}>
-                                                                 Drug Name : &nbsp; {res.drugname}
+                                                                 Drug Name : &nbsp; {res.drugname.toString()}
                                                             </Text>
                                                             <IconButton
                                                                  icon="trash-can"
@@ -506,7 +506,7 @@ const ReOpdTreatment = () => {
                                                             <TextInput
                                                                  mode="flat"
                                                                  style={[styles.input2]}
-                                                                 value={res.drugcode}
+                                                                 value={res.drugcode.toString()}
                                                                  onChangeText={text => {
                                                                       // Update the value in temp array
                                                                       const updatedTemp = [...opdAssessmentforEdit];
@@ -521,7 +521,7 @@ const ReOpdTreatment = () => {
                                                             <TextInput
                                                                  mode="flat"
                                                                  style={[styles.input2]}
-                                                                 value={res.drugname}
+                                                                 value={res.drugname.toString()}
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...opdAssessmentforEdit];
                                                                       updatedTemp[index].drugname = text;
@@ -535,7 +535,7 @@ const ReOpdTreatment = () => {
                                                             <TextInput
                                                                  mode="flat"
                                                                  style={[styles.input2]}
-                                                                 value={res.brandname}
+                                                                 value={res.brandname.toString()}
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...opdAssessmentforEdit];
                                                                       updatedTemp[index].brandname = text;
@@ -549,7 +549,7 @@ const ReOpdTreatment = () => {
                                                             <TextInput
                                                                  mode="flat"
                                                                  style={[styles.input2]}
-                                                                 value={res.dose}
+                                                                 value={res.dose.toString()}
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...opdAssessmentforEdit];
                                                                       updatedTemp[index].dose = text;
@@ -563,7 +563,7 @@ const ReOpdTreatment = () => {
                                                             <TextInput
                                                                  mode="flat"
                                                                  style={[styles.input2]}
-                                                                 value={res.anupan}
+                                                                 value={res.anupan.toString()}
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...opdAssessmentforEdit];
                                                                       updatedTemp[index].anupan = text;
@@ -577,7 +577,7 @@ const ReOpdTreatment = () => {
                                                             <TextInput
                                                                  mode="flat"
                                                                  style={[styles.input2]}
-                                                                 value={res.route}
+                                                                 value={res.route.toString()}
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...opdAssessmentforEdit];
                                                                       updatedTemp[index].route = text;
@@ -591,7 +591,7 @@ const ReOpdTreatment = () => {
                                                             <TextInput
                                                                  mode="flat"
                                                                  style={[styles.input2]}
-                                                                 value={res.schedule}
+                                                                 value={res.schedule.toString()}
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...opdAssessmentforEdit];
                                                                       updatedTemp[index].schedule = text;
@@ -605,7 +605,7 @@ const ReOpdTreatment = () => {
                                                             <TextInput
                                                                  mode="flat"
                                                                  style={[styles.input2]}
-                                                                 value={res.duration}
+                                                                 value={res.duration.toString()}
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...opdAssessmentforEdit];
                                                                       updatedTemp[index].duration = text;

@@ -126,7 +126,6 @@ const OpdFollowup = () => {
                opdfollowuparray: [submittedformData],
                mobilenumber: waitingListData?.mobilenumber || mobilenumber,
           };
-          console.log(_body)
           try {
                await axios
                     .post(`${api.baseurl}/AddMobileOpdAssessment`, _body)
@@ -163,7 +162,6 @@ const OpdFollowup = () => {
                     })
                     .then(res => {
                          setOpdAssessment(res.data.data);
-                         console.log(res.data)
                     });
           } catch (error) {
                console.error(error);

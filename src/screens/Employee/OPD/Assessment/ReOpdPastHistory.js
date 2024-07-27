@@ -197,6 +197,7 @@ const ReOpdPastHistory = () => {
                          if (status === true) {
                               setTemp([]);
                               FetchMobileOpdAssessment();
+                              FetchMobileOpdAssessmentForEdit();
                          } else {
                               console.error(`${message}`);
                          }
