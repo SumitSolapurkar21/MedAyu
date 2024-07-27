@@ -182,7 +182,7 @@ const ReOpdPastHistory = () => {
                patient_id: patient_id,
                reception_id: userData?._id,
                appoint_id: waitingListData?.appoint_id || appoint_id,
-               uhid: uhid,
+               uhid: waitingListData?.uhid || uhid,
                api_type: 'OPD-PAST-HISTORY',
                opdpasthistoryarray: [...temp, ...opdAssessmentforEdit],
                mobilenumber: waitingListData?.mobilenumber || mobilenumber,
@@ -234,7 +234,7 @@ const ReOpdPastHistory = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-PAST-HISTORY',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
@@ -264,7 +264,7 @@ const ReOpdPastHistory = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-PAST-HISTORY',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {

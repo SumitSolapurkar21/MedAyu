@@ -1583,7 +1583,7 @@ const SystemicExamination = () => {
       patient_id: patient_id,
       reception_id: userData?._id,
       appoint_id: waitingListData?.appoint_id || appoint_id,
-      uhid: uhid,
+      uhid: waitingListData?.uhid || uhid,
       api_type: 'OPD-SYSTEMIC-EXAMINATION',
       opdsystemicexaminationhistoryarray: [checkedValues],
     };
@@ -1619,7 +1619,7 @@ const SystemicExamination = () => {
           patient_id: patient_id,
           appoint_id: waitingListData?.appoint_id || appoint_id,
           api_type: 'OPD-SYSTEMIC-EXAMINATION',
-          uhid: uhid,
+          uhid: waitingListData?.uhid || uhid,
           mobilenumber: waitingListData?.mobilenumber || mobilenumber,
         })
         .then(res => {

@@ -113,6 +113,16 @@ import ReOpdFamilyHistory from '../screens/Employee/OPD/Assessment/ReOpdFamilyHi
 import ReOpdMedicineHistory from '../screens/Employee/OPD/Assessment/ReOpdMedicineHistory';
 import ReOpdPersonalHistory from '../screens/Employee/OPD/Assessment/ReOpdPersonalHistory';
 import ReOpdObstetricsHistory from '../screens/Employee/OPD/Assessment/ReOpdObstetricsHistory';
+import ReOpdMenstrualHistory from '../screens/Employee/OPD/Assessment/ReOpdMenstrualHistory';
+import ReOpdVitals from '../screens/Employee/OPD/Assessment/ReOpdVitals';
+import ReOpdGeneralExamination from '../screens/Employee/OPD/Assessment/ReOpdGeneralExamination';
+import ReOpdSystemicExamination from '../screens/Employee/OPD/Assessment/ReOpdSystemicExamination';
+import ReOpdDiagnosis from '../screens/Employee/OPD/Assessment/ReOpdDiagnosis';
+import ReOpdPlanOfCare from '../screens/Employee/OPD/Assessment/ReOpdPlanOfCare';
+import ReOpdTreatment from '../screens/Employee/OPD/Assessment/ReOpdTreatement';
+import ReOpdProcedure from '../screens/Employee/OPD/Assessment/ReOpdProcedure';
+import ReOpdAdvice from '../screens/Employee/OPD/Assessment/ReOpdAdvice';
+import ReOpdFollowup from '../screens/Employee/OPD/Assessment/ReOpdFollowUp';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -1034,6 +1044,56 @@ const Routes = () => {
         <Stack.Screen
           name="ReOpdObstetricsHistory"
           component={ReOpdObstetricsHistory}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdMenstrualHistory"
+          component={ReOpdMenstrualHistory}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdVitals"
+          component={ReOpdVitals}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdGeneralExamination"
+          component={ReOpdGeneralExamination}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdSystemicExamination"
+          component={ReOpdSystemicExamination}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdDiagnosis"
+          component={ReOpdDiagnosis}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdPlanOfCare"
+          component={ReOpdPlanOfCare}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdTreatment"
+          component={ReOpdTreatment}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdProcedure"
+          component={ReOpdProcedure}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdAdvice"
+          component={ReOpdAdvice}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReOpdFollowup"
+          component={ReOpdFollowup}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

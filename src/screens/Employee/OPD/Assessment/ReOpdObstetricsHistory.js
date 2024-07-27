@@ -50,7 +50,7 @@ const ReOpdObstetricsHistory = () => {
                patient_id: patient_id,
                reception_id: userData?._id,
                appoint_id: waitingListData?.appoint_id || appoint_id,
-               uhid: uhid,
+               uhid: waitingListData?.uhid || uhid,
                api_type: 'OPD-OBSTETRICS-HISTORY',
                opdobstetricshistoryarray: [opdAssessmentforEdit],
           };
@@ -91,7 +91,7 @@ const ReOpdObstetricsHistory = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-OBSTETRICS-HISTORY',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
@@ -121,7 +121,7 @@ const ReOpdObstetricsHistory = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-OBSTETRICS-HISTORY',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
@@ -139,7 +139,7 @@ const ReOpdObstetricsHistory = () => {
                     {Object.entries(item).map(([key, value], index) => (
                          <Card key={index + 1} style={styles.card}>
                               {Array.isArray(value) ? (
-                                   <Text style={{ lineHeight: 20 }}>{value.join('\n')}</Text>
+                                   <Text style={{ lineHeight: 20 }} key={index + 1} >{value.join('\n')}</Text>
                               ) : null}
                          </Card>
                     ))}
@@ -444,7 +444,7 @@ const ReOpdObstetricsHistory = () => {
                          <Button
                               mode="contained"
                               style={styles.btn}
-                         // onPress={() => navigation.navigate('ReOpdMenstrualHistory')}
+                              onPress={() => navigation.navigate('ReOpdMenstrualHistory')}
                          >
                               Next / Skip
                          </Button>

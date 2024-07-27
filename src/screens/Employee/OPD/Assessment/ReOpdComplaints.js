@@ -8,7 +8,6 @@ import {
      Alert,
      Modal,
      Pressable,
-     TouchableOpacity,
 } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import {
@@ -26,8 +25,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../../../components/Context/Context';
 import { IconButton, MD3Colors } from 'react-native-paper';
-import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import { ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 
 const ReOpdComplaints = () => {
      // comming from dashboard.....
@@ -65,6 +63,7 @@ const ReOpdComplaints = () => {
      } = useContext(UserContext);
      const { hospital_id, patient_id, reception_id, uhid } = patientsData;
      const { appoint_id, mobilenumber } = scannedPatientsData;
+
 
      //  search input ....
      const [searchInput, setSearchInput] = useState('')
@@ -244,7 +243,7 @@ const ReOpdComplaints = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-COMPLAINTS',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
@@ -273,7 +272,7 @@ const ReOpdComplaints = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-COMPLAINTS',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
@@ -340,7 +339,7 @@ const ReOpdComplaints = () => {
                appoint_id: waitingListData?.appoint_id || appoint_id,
                complaintArray: selectedRow,
                api_type: 'OPD-COMPLAINTS',
-               uhid: uhid,
+               uhid: waitingListData?.uhid || uhid,
                mobilenumber: waitingListData?.mobilenumber || mobilenumber,
           };
           try {

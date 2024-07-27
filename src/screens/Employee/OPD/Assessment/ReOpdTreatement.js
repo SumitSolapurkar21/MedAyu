@@ -1,41 +1,25 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { BackHandler, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, BackHandler, KeyboardAvoidingView } from 'react-native';
 import { Appbar, Button, Card, List, TextInput } from 'react-native-paper';
 import api from '../../../../../api.json';
+import UserContext from '../../../../components/Context/Context';
 import DateTimePicker from 'react-native-ui-datepicker';
 import { useNavigation } from '@react-navigation/native';
-import UserContext from '../../../../components/Context/Context';
 import { IconButton, MD3Colors } from 'react-native-paper';
-import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
+import { OpdpageNavigation } from './OpdpageNavigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const ReOpdMedicineHistory = () => {
-     const navigation = useNavigation();
-     const [searchInput, setSearchInput] = useState('');
-     const [drugCode, setDrugCode] = useState('');
-     const [selectedDrugCode, setSelectedDrugCode] = useState('');
-     const [visibleList, setVisibleList] = useState(false);
-     const [selectedData, setSelectedData] = useState([]);
-     const [temp, setTemp] = useState([]);
-     const [showCalender, setShowCalender] = useState(false);
-     const [dateValues, setDateValues] = useState([]);
-     const [datePickerIndex, setDatePickerIndex] = useState([]);
-
+const ReOpdTreatment = () => {
      const { patientsData, scannedPatientsData, waitingListData, userData } =
           useContext(UserContext);
      const { hospital_id, patient_id, reception_id, uhid } = patientsData;
      const { appoint_id, mobilenumber } = scannedPatientsData;
 
-     // edit ...
-     const [showCalender1, setShowCalender1] = useState(false);
-     const [dateValues1, setDateValues1] = useState([]);
-     const [datePickerIndex1, setDatePickerIndex1] = useState([]);
-     const [opdAssessmentforEdit, setOpdAssessmentforEdit] = useState([]);
-
      //backHandler ...
      useEffect(() => {
           const backAction = () => {
-               navigation.replace('ReOpdFamilyHistory');
+               navigation.replace('ReOpdPlanOfCare');
                return true;
           };
 
@@ -46,6 +30,21 @@ const ReOpdMedicineHistory = () => {
 
           return () => backHandler.remove();
      }, []);
+
+     const navigation = useNavigation();
+     const [searchInput, setSearchInput] = useState('');
+     const [drugCode, setDrugCode] = useState('');
+     const [selectedDrugCode, setSelectedDrugCode] = useState('');
+     const [visibleList, setVisibleList] = useState(false);
+     const [selectedData, setSelectedData] = useState([]);
+     const [temp, setTemp] = useState([]);
+     const [showCalender, setShowCalender] = useState(false);
+     const [dateValues] = useState([]);
+     const [datePickerIndex, setDatePickerIndex] = useState([]);
+
+     const [showCalender2, setShowCalender2] = useState(false);
+     const [dateValues2] = useState([]);
+     const [datePickerIndex2, setDatePickerIndex2] = useState([]);
 
      useEffect(() => {
           if (searchInput !== '') searchInputHandler();
@@ -98,73 +97,23 @@ const ReOpdMedicineHistory = () => {
           setShowCalender(true);
           setDatePickerIndex(index); // Set the index of the date field for which the calendar is being opened
      };
-     const calenderHandler1 = index => {
-          setShowCalender1(true);
-          setDatePickerIndex1(index); // Set the index of the date field for which the calendar is being opened
-     };
 
-     const handleDateChange = async (date, index) => {
+     const handleDateChange = (date, index) => {
           const [_dateformat] = date.split(' ');
           const updatedTemp = [...temp];
+          updatedTemp[index].dateValues = _dateformat; // Update the dateValues property in the temp array
           updatedTemp[index].activestatus = true;
-          updatedTemp[index].dateValues = _dateformat; // Store the selected date in the temp array
-          const updatedDateValues = [...dateValues];
-          updatedDateValues[index] = _dateformat;
-          setDateValues(updatedDateValues);
-
-          // updatedTemp[index].treatment_status = p_category;
-          try {
-               await axios
-                    .post(`${api.baseurl}/GetMobiledatedetails`, {
-                         date: _dateformat,
-                    })
-                    .then(res => {
-                         // const updatedTemp = [...temp];
-                         updatedTemp[index] = {
-                              ...updatedTemp[index],
-                              days: res.data.days.toString(),
-                              months: res.data.month.toString(),
-                              years: res.data.year.toString(),
-                         };
-                         setTemp(updatedTemp);
-
-                         setShowCalender(false);
-                    });
-          } catch (error) {
-               Alert.alert('Error !!', `${error}`);
-          }
+          setTemp(updatedTemp);
+          setShowCalender(false); // Hide the calendar after selecting a date
      };
 
-     // edit ...
-     const handleDateChange1 = async (date, index) => {
+     const handleDateChange2 = (date, index) => {
           const [_dateformat] = date.split(' ');
           const updatedTemp = [...opdAssessmentforEdit];
+          updatedTemp[index].dateValues = _dateformat; // Update the dateValues property in the temp array
           updatedTemp[index].activestatus = true;
-          updatedTemp[index].dateValues = _dateformat; // Store the selected date in the temp array
-          const updatedDateValues = [...dateValues1];
-          updatedDateValues[index] = _dateformat;
-          setDateValues1(updatedDateValues);
-
-          // updatedTemp[index].treatment_status = p_category;
-          try {
-               await axios
-                    .post(`${api.baseurl}/GetMobiledatedetails`, {
-                         date: _dateformat,
-                    })
-                    .then(res => {
-                         // const updatedTemp = [...temp];
-                         updatedTemp[index] = {
-                              ...updatedTemp[index],
-                              days: res.data.days.toString(),
-                              months: res.data.month.toString(),
-                              years: res.data.year.toString(),
-                         };
-                         setOpdAssessmentforEdit(updatedTemp);
-                         setShowCalender1(false);
-                    });
-          } catch (error) {
-               Alert.alert('Error !!', `${error}`);
-          }
+          setOpdAssessmentforEdit(updatedTemp);
+          setShowCalender2(false); // Hide the calendar after selecting a date
      };
 
      //submit handler ....
@@ -174,9 +123,10 @@ const ReOpdMedicineHistory = () => {
                patient_id: patient_id,
                reception_id: userData?._id,
                appoint_id: waitingListData?.appoint_id || appoint_id,
-               uhid: waitingListData?.uhid || uhid,
-               api_type: 'OPD-MEDICINE-HISTORY',
-               opdmedicinehistoryarray: [...temp, ...opdAssessmentforEdit],
+               uhid: uhid,
+               api_type: 'OPD-TREATMENT',
+               opdtreatmenthistoryarray: [...temp, ...opdAssessmentforEdit],
+               mobilenumber: waitingListData?.mobilenumber || mobilenumber,
           };
           try {
                await axios
@@ -186,7 +136,6 @@ const ReOpdMedicineHistory = () => {
                          if (status === true) {
                               setTemp([]);
                               FetchMobileOpdAssessment();
-                              FetchMobileOpdAssessmentForEdit();
                          } else {
                               console.error(`${message}`);
                          }
@@ -195,11 +144,13 @@ const ReOpdMedicineHistory = () => {
                console.error(error);
           }
      };
+
      const [opdAssessment, setOpdAssessment] = useState([]);
+     const [opdAssessmentforEdit, setOpdAssessmentforEdit] = useState([]);
 
      useEffect(() => {
           FetchMobileOpdAssessment();
-          FetchMobileOpdAssessmentForEdit();
+          FetchMobileOpdAssessmentforEdit();
      }, [hospital_id, patient_id, reception_id]);
 
      //list of FetchMobileOpdAssessment....
@@ -211,48 +162,38 @@ const ReOpdMedicineHistory = () => {
                          reception_id: userData?._id,
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
-                         api_type: 'OPD-MEDICINE-HISTORY',
-                         uhid: waitingListData?.uhid || uhid,
+                         api_type: 'OPD-TREATMENT',
+                         uhid: uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
-                         const DATA = JSON.stringify(res.data.data);
-                         const parsedData = JSON.parse(DATA);
-                         const filteredData = parsedData.filter(item =>
-                              Object.values(item).some(
-                                   value => Array.isArray(value) && value.length > 0,
-                              ),
-                         );
-                         const filteredString = JSON.stringify(filteredData);
-                         const parsedData2 = JSON.parse(filteredString);
-                         setOpdAssessment(parsedData2);
+                         setOpdAssessment(res.data.data);
                     });
           } catch (error) {
                console.error(error);
           }
      };
 
-     const FetchMobileOpdAssessmentForEdit = async () => {
+     //list of FetchMobileOpdAssessment....
+     const FetchMobileOpdAssessmentforEdit = async () => {
           try {
                await axios
-                    .post(`${api.baseurl}/FetchMobileOpdAssessmentForEdit`, {
+                    .post(`${api.baseurl}/FetchMobileOpdAssessmentforEdit`, {
                          hospital_id: userData?.hospital_id,
                          reception_id: userData?._id,
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
-                         api_type: 'OPD-MEDICINE-HISTORY',
-                         uhid: waitingListData?.uhid || uhid,
+                         api_type: 'OPD-TREATMENT',
+                         uhid: uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
-                         const data = res.data.opdmedicinehistoryarray;
-                         setOpdAssessmentforEdit(data);
+                         setOpdAssessmentforEdit(res.data.opdtreatmenthistoryarray);
                     });
           } catch (error) {
                console.error(error);
           }
      };
-
 
      // remove selected data handler ....
      const _removeSelectedDataHandler = _id => {
@@ -261,25 +202,14 @@ const ReOpdMedicineHistory = () => {
           setTemp(updatedSelectedRow);
      };
 
-     const displayData = opdAssessment.map((item, index) => (
-          <ScrollView showsVerticalScrollIndicator={false} vertical style={{ maxHeight: '100%' }} key={index}>
-               {Object.entries(item).map(([key, value]) => (
-                    <Card style={styles.card} key={key} >
-                         {Array.isArray(value) ? (
-                              <Text style={{ lineHeight: 20, width: 300 }}>{value.join('\n')}</Text>
-                         ) : null}
-                    </Card>
-               ))}
-          </ScrollView>
-     ));
-
      const _handleMore = () => {
           setVisible(true);
      };
      const [visible, setVisible] = useState(false);
-     const openMenu = () => setVisible(true);
-     const closeMenu = () => setVisible(false);
 
+     const openMenu = () => setVisible(true);
+
+     const closeMenu = () => setVisible(false);
 
      return (
           <>
@@ -287,68 +217,70 @@ const ReOpdMedicineHistory = () => {
                <Appbar.Header>
                     <Appbar.BackAction
                          onPress={() => {
-                              navigation.replace('ReOpdFamilyHistory');
+                              navigation.replace('OpdPlanOfCare');
                          }}
                     />
-                    <Appbar.Content title="Medicine History" />
+                    <Appbar.Content title="Treatment" style={styles.appbar_title} />
                     <Appbar.Action
                          icon="account-details"
                          size={30}
                          onPress={() => openMenu()}
                     />
                </Appbar.Header>
-
-               <ReAssessmentOpdpageNavigation
+               <OpdpageNavigation
                     closeMenu={closeMenu}
                     openMenu={openMenu}
                     _handleMore={_handleMore}
                     visible={visible}
                />
 
+               {/* date */}
+               {showCalender && (
+                    <View style={styles.datePickerContainer}>
+                         <View style={styles.datePicker}>
+                              <DateTimePicker
+                                   mode="date"
+                                   headerButtonColor={Themes[0]?.mainColor}
+                                   selectedItemColor={Themes[0]?.mainColor}
+                                   selectedTextStyle={{
+                                        fontWeight: 'bold',
+                                        color: Themes[0]?.activeTextColor,
+                                   }}
+                                   value={dateValues[datePickerIndex]} // Use separate state variable for each date field
+                                   onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
+                              />
+                         </View>
+                    </View>
+               )}
+
+               {showCalender2 && (
+                    <View style={styles.datePickerContainer}>
+                         <View style={styles.datePicker}>
+                              <DateTimePicker
+                                   mode="date"
+                                   headerButtonColor={Themes[0]?.mainColor}
+                                   selectedItemColor={Themes[0]?.mainColor}
+                                   selectedTextStyle={{
+                                        fontWeight: 'bold',
+                                        color: Themes[0]?.activeTextColor,
+                                   }}
+                                   value={dateValues2[datePickerIndex2]} // Use separate state variable for each date field
+                                   onValueChange={date => handleDateChange2(date, datePickerIndex2)} // Pass the index to identify which date field is being modified
+                              />
+                         </View>
+                    </View>
+               )}
+
+
                <View style={styles.container}>
-                    {showCalender && (
-                         <View style={styles.datePickerContainer}>
-                              <View style={styles.datePicker}>
-                                   <DateTimePicker
-                                        mode="date"
-                                        headerButtonColor={Themes[0]?.mainColor}
-                                        selectedItemColor={Themes[0]?.mainColor}
-                                        selectedTextStyle={{
-                                             fontWeight: 'bold',
-                                             color: Themes[0]?.activeTextColor,
-                                        }}
-                                        value={dateValues[datePickerIndex]} // Use separate state variable for each date field
-                                        onValueChange={date => handleDateChange(date, datePickerIndex)} // Pass the index to identify which date field is being modified
-                                   />
-                              </View>
-                         </View>
-                    )}
-                    {/* edit ... */}
-                    {showCalender1 && (
-                         <View style={styles.datePickerContainer}>
-                              <View style={styles.datePicker}>
-                                   <DateTimePicker
-                                        mode="date"
-                                        headerButtonColor={Themes[0]?.mainColor}
-                                        selectedItemColor={Themes[0]?.mainColor}
-                                        selectedTextStyle={{
-                                             fontWeight: 'bold',
-                                             color: Themes[0]?.activeTextColor,
-                                        }}
-                                        value={dateValues1[datePickerIndex1]} // Use separate state variable for each date field
-                                        onValueChange={date => handleDateChange1(date, datePickerIndex1)} // Pass the index to identify which date field is being modified
-                                   />
-                              </View>
-                         </View>
-                    )}
                     <View style={styles.searchInput}>
-                         <Text style={styles.heading}>Medicine History</Text>
+                         <Text style={styles.heading}>OPD Treatments</Text>
                          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
 
                               <TextInput
                                    mode="outlined"
-                                   label="Medicine Name"
-                                   placeholder="Medicine Name"
+                                   label="Drug Code"
+                                   placeholder="Drug Code"
                                    style={[styles.input]}
                                    value={
                                         selectedDrugCode?.drugcode
@@ -362,17 +294,19 @@ const ReOpdMedicineHistory = () => {
                               />
                               <Button
                                    mode="contained"
-                                   style={[styles.btn]}
+                                   style={[styles.btn, { alignSelf: 'flex-start' }]}
                                    onPress={() => resetHandler()}>
                                    Add More
                               </Button>
                          </View>
+
+                         {/* list of drug code */}
                          <ScrollView
                               style={{
                                    zIndex: 1,
                                    marginHorizontal: 0,
-                                   maxHeight: 200,
-                              }} // Set a higher zIndex for the ScrollView
+                                   maxHeight: 200
+                              }}
                               vertical={true}>
                               {visibleList && (
                                    <View>
@@ -393,20 +327,22 @@ const ReOpdMedicineHistory = () => {
                                    </View>
                               )}
                          </ScrollView>
+
                     </View>
 
+                    {/* treatment form */}
                     <View>
                          <ScrollView style={{ maxHeight: 280 }}>
                               <View>
                                    <ScrollView
                                         horizontal
-                                        showsVerticalScrollIndicator={false}
                                         style={styles.inputGroup}>
+
                                         {temp?.map((res, index) => {
                                              return (
                                                   <View style={styles.card} key={index + 1}>
                                                        <View style={styles.cardContentDiv}>
-                                                            <Text style={[styles.label, { width: 200 }]}>
+                                                            <Text style={[styles.label, { width: 200, marginLeft: 10 }]}>
                                                                  Drug Name : &nbsp; {res.drugname}
                                                             </Text>
                                                             <IconButton
@@ -419,6 +355,49 @@ const ReOpdMedicineHistory = () => {
                                                             />
                                                        </View>
                                                        <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Drug Code : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.drugcode}
+                                                                 onChangeText={text => {
+                                                                      // Update the value in temp array
+                                                                      const updatedTemp = [...temp];
+                                                                      updatedTemp[index].drugcode = text;
+                                                                      setTemp(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Drug Name : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.drugname}
+                                                                 onChangeText={text => {
+                                                                      const updatedTemp = [...temp];
+                                                                      updatedTemp[index].drugname = text;
+                                                                      setTemp(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Brand Name : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.brandname}
+                                                                 onChangeText={text => {
+                                                                      const updatedTemp = [...temp];
+                                                                      updatedTemp[index].brandname = text;
+                                                                      setTemp(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
                                                             <Text style={styles.label}>Dose : </Text>
                                                             <TextInput
                                                                  mode="flat"
@@ -427,6 +406,20 @@ const ReOpdMedicineHistory = () => {
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...temp];
                                                                       updatedTemp[index].dose = text;
+                                                                      setTemp(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Instruction : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.anupan}
+                                                                 onChangeText={text => {
+                                                                      const updatedTemp = [...temp];
+                                                                      updatedTemp[index].anupan = text;
                                                                       setTemp(updatedTemp);
                                                                  }}
                                                                  editable={true}
@@ -455,6 +448,20 @@ const ReOpdMedicineHistory = () => {
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...temp];
                                                                       updatedTemp[index].schedule = text;
+                                                                      setTemp(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Days : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.duration}
+                                                                 onChangeText={text => {
+                                                                      const updatedTemp = [...temp];
+                                                                      updatedTemp[index].duration = text;
                                                                       setTemp(updatedTemp);
                                                                  }}
                                                                  editable={true}
@@ -475,48 +482,6 @@ const ReOpdMedicineHistory = () => {
                                                                  }
                                                             />
                                                        </View>
-                                                       <View style={styles.cardContent}>
-                                                            <Text style={styles.label}>Years : </Text>
-                                                            <TextInput
-                                                                 mode="flat"
-                                                                 style={[styles.input2]}
-                                                                 value={res.years}
-                                                                 onChangeText={text => {
-                                                                      const updatedTemp = [...temp];
-                                                                      updatedTemp[index].years = text;
-                                                                      setTemp(updatedTemp);
-                                                                 }}
-                                                                 editable={true}
-                                                            />
-                                                       </View>
-                                                       <View style={styles.cardContent}>
-                                                            <Text style={styles.label}>Months : </Text>
-                                                            <TextInput
-                                                                 mode="flat"
-                                                                 style={[styles.input2]}
-                                                                 value={res.months}
-                                                                 onChangeText={text => {
-                                                                      const updatedTemp = [...temp];
-                                                                      updatedTemp[index].months = text;
-                                                                      setTemp(updatedTemp);
-                                                                 }}
-                                                                 editable={true}
-                                                            />
-                                                       </View>
-                                                       <View style={styles.cardContent}>
-                                                            <Text style={styles.label}>Days : </Text>
-                                                            <TextInput
-                                                                 mode="flat"
-                                                                 style={[styles.input2]}
-                                                                 value={res.days}
-                                                                 onChangeText={text => {
-                                                                      const updatedTemp = [...temp];
-                                                                      updatedTemp[index].days = text;
-                                                                      setTemp(updatedTemp);
-                                                                 }}
-                                                                 editable={true}
-                                                            />
-                                                       </View>
                                                   </View>
                                              );
                                         })}
@@ -524,7 +489,7 @@ const ReOpdMedicineHistory = () => {
                                              return (
                                                   <View style={styles.card} key={index + 1}>
                                                        <View style={styles.cardContentDiv}>
-                                                            <Text style={[styles.label, { width: 200 }]}>
+                                                            <Text style={[styles.label, { width: 200, marginLeft: 10 }]}>
                                                                  Drug Name : &nbsp; {res.drugname}
                                                             </Text>
                                                             <IconButton
@@ -537,6 +502,49 @@ const ReOpdMedicineHistory = () => {
                                                             />
                                                        </View>
                                                        <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Drug Code : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.drugcode}
+                                                                 onChangeText={text => {
+                                                                      // Update the value in temp array
+                                                                      const updatedTemp = [...opdAssessmentforEdit];
+                                                                      updatedTemp[index].drugcode = text;
+                                                                      setOpdAssessmentforEdit(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Drug Name : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.drugname}
+                                                                 onChangeText={text => {
+                                                                      const updatedTemp = [...opdAssessmentforEdit];
+                                                                      updatedTemp[index].drugname = text;
+                                                                      setOpdAssessmentforEdit(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Brand Name : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.brandname}
+                                                                 onChangeText={text => {
+                                                                      const updatedTemp = [...opdAssessmentforEdit];
+                                                                      updatedTemp[index].brandname = text;
+                                                                      setOpdAssessmentforEdit(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
                                                             <Text style={styles.label}>Dose : </Text>
                                                             <TextInput
                                                                  mode="flat"
@@ -545,6 +553,20 @@ const ReOpdMedicineHistory = () => {
                                                                  onChangeText={text => {
                                                                       const updatedTemp = [...opdAssessmentforEdit];
                                                                       updatedTemp[index].dose = text;
+                                                                      setOpdAssessmentforEdit(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Instruction : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.anupan}
+                                                                 onChangeText={text => {
+                                                                      const updatedTemp = [...opdAssessmentforEdit];
+                                                                      updatedTemp[index].anupan = text;
                                                                       setOpdAssessmentforEdit(updatedTemp);
                                                                  }}
                                                                  editable={true}
@@ -579,6 +601,20 @@ const ReOpdMedicineHistory = () => {
                                                             />
                                                        </View>
                                                        <View style={styles.cardContent}>
+                                                            <Text style={styles.label}>Days : </Text>
+                                                            <TextInput
+                                                                 mode="flat"
+                                                                 style={[styles.input2]}
+                                                                 value={res.duration}
+                                                                 onChangeText={text => {
+                                                                      const updatedTemp = [...opdAssessmentforEdit];
+                                                                      updatedTemp[index].duration = text;
+                                                                      setOpdAssessmentforEdit(updatedTemp);
+                                                                 }}
+                                                                 editable={true}
+                                                            />
+                                                       </View>
+                                                       <View style={styles.cardContent}>
                                                             <Text style={styles.label}>From Date : </Text>
                                                             <TextInput
                                                                  mode="flat"
@@ -588,67 +624,26 @@ const ReOpdMedicineHistory = () => {
                                                                  right={
                                                                       <TextInput.Icon
                                                                            icon="calendar"
-                                                                           onPress={() => calenderHandler1(index)}
+                                                                           onPress={() => calenderHandler(index)}
                                                                       />
                                                                  }
-                                                            />
-                                                       </View>
-                                                       <View style={styles.cardContent}>
-                                                            <Text style={styles.label}>Years : </Text>
-                                                            <TextInput
-                                                                 mode="flat"
-                                                                 style={[styles.input2]}
-                                                                 value={res.years}
-                                                                 onChangeText={text => {
-                                                                      const updatedTemp = [...opdAssessmentforEdit];
-                                                                      updatedTemp[index].years = text;
-                                                                      setOpdAssessmentforEdit(updatedTemp);
-                                                                 }}
-                                                                 editable={true}
-                                                            />
-                                                       </View>
-                                                       <View style={styles.cardContent}>
-                                                            <Text style={styles.label}>Months : </Text>
-                                                            <TextInput
-                                                                 mode="flat"
-                                                                 style={[styles.input2]}
-                                                                 value={res.months}
-                                                                 onChangeText={text => {
-                                                                      const updatedTemp = [...opdAssessmentforEdit];
-                                                                      updatedTemp[index].months = text;
-                                                                      setOpdAssessmentforEdit(updatedTemp);
-                                                                 }}
-                                                                 editable={true}
-                                                            />
-                                                       </View>
-                                                       <View style={styles.cardContent}>
-                                                            <Text style={styles.label}>Days : </Text>
-                                                            <TextInput
-                                                                 mode="flat"
-                                                                 style={[styles.input2]}
-                                                                 value={res.days}
-                                                                 onChangeText={text => {
-                                                                      const updatedTemp = [...opdAssessmentforEdit];
-                                                                      updatedTemp[index].days = text;
-                                                                      setOpdAssessmentforEdit(updatedTemp);
-                                                                 }}
-                                                                 editable={true}
                                                             />
                                                        </View>
                                                   </View>
                                              );
                                         })}
+
                                    </ScrollView>
                               </View>
                          </ScrollView>
                     </View>
 
-
+                    {/* submit handler ... */}
                     <View style={styles.submitbutton}>
                          <Button
                               mode="contained"
                               style={styles.btn}
-                              onPress={() => navigation.replace('ReOpdFamilyHistory')}>
+                              onPress={() => navigation.replace('ReOpdPlanOfCare')}>
                               Previous
                          </Button>
                          <Button
@@ -660,23 +655,115 @@ const ReOpdMedicineHistory = () => {
                          <Button
                               mode="contained"
                               style={styles.btn}
-                              onPress={() => navigation.navigate('ReOpdPersonalHistory')}>
+                              onPress={() => navigation.navigate('ReOpdProcedure')}>
                               Next / Skip
                          </Button>
                     </View>
 
+                    {/* fetch opdassessment value */}
+                    <View>
+                         <ScrollView vertical showsVerticalScrollIndicator={false} style={{ maxHeight: temp?.length > 0 ? 180 : '85%' }}  >
+                              {opdAssessment.length > 0 &&
+                                   opdAssessment?.map((row, index) => {
+                                        return (
+                                             <Card style={styles.card2} key={index + 1}>
+                                                  <Card.Content>
+                                                       <View style={styles.cardBodyHead}>
+                                                            <View style={[styles.cardBody, { gap: 8 }]}>
+                                                                 <Text variant="titleLarge" style={styles.cardtext}>
+                                                                      Drugcode :
+                                                                 </Text>
+                                                                 <Text variant="titleLarge" style={styles.cardtext2}>
+                                                                      {row?.drugcode}
+                                                                 </Text>
+                                                            </View>
+                                                       </View>
+                                                       <View style={[styles.cardBody, { gap: 8 }]}>
+                                                            <Text variant="titleLarge" style={styles.cardtext}>
+                                                                 Drugname :
+                                                            </Text>
+                                                            <Text variant="titleLarge" style={[styles.cardtext2]}>
+                                                                 {row?.drugname}
+                                                            </Text>
+                                                       </View>
+                                                       <View style={[styles.cardBody, { gap: 8 }]}>
+                                                            <Text variant="titleLarge" style={styles.cardtext}>
+                                                                 Brandname :
+                                                            </Text>
+                                                            <Text variant="titleLarge" style={[styles.cardtext2]}>
+                                                                 {row?.brandname}
+                                                            </Text>
+                                                       </View>
+                                                       <View style={styles.cardBodyHead}>
+                                                            <View style={[styles.cardBody, { gap: 8 }]}>
+                                                                 <Text variant="titleLarge" style={styles.cardtext}>
+                                                                      Dose :
+                                                                 </Text>
+                                                                 <Text variant="titleLarge" style={[styles.cardtext2]}>
+                                                                      {row?.dose}
+                                                                 </Text>
+                                                            </View>
+                                                            <View style={[styles.cardBody, { gap: 8 }]}>
+                                                                 <Text variant="titleLarge" style={styles.cardtext}>
+                                                                      Route :
+                                                                 </Text>
+                                                                 <Text variant="titleLarge" style={[styles.cardtext2]}>
+                                                                      {row?.route}
+                                                                 </Text>
+                                                            </View>
+                                                       </View>
+                                                       <View style={[styles.cardBody, { gap: 8 }]}>
+                                                            <Text variant="titleLarge" style={styles.cardtext}>
+                                                                 Anupan :
+                                                            </Text>
+                                                            <Text variant="titleLarge" style={[styles.cardtext2]}>
+                                                                 {row?.anupan}
+                                                            </Text>
+                                                       </View>
+                                                       <View style={[styles.cardBody, { gap: 8 }]}>
+                                                            <Text variant="titleLarge" style={styles.cardtext}>
+                                                                 Schedule :
+                                                            </Text>
+                                                            <Text variant="titleLarge" style={[styles.cardtext2]}>
+                                                                 {row?.schedule}
+                                                            </Text>
+                                                       </View>
+                                                       <View style={[styles.cardBody, { gap: 8 }]}>
+                                                            <Text variant="titleLarge" style={styles.cardtext}>
+                                                                 From Date :
+                                                            </Text>
+                                                            <Text variant="titleLarge" style={[styles.cardtext2]}>
+                                                                 {row?.dateValues}
+                                                            </Text>
+                                                       </View>
 
-                    <ScrollView vertical showsVerticalScrollIndicator={false} style={{ maxHeight: temp?.length > 0 ? 180 : '85%' }}  >{displayData}</ScrollView>
-               </View>
+                                                       {/* <View style={styles.cardBodyHead}> */}
+
+                                                       <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
+                                                            <Text variant="titleLarge" style={styles.cardtext}>
+                                                                 Date / Time :
+                                                            </Text>
+                                                            <Text variant="titleLarge" style={styles.cardtext2}>
+                                                                 {row.opd_date} / {row.opd_time}
+                                                            </Text>
+                                                       </View>
+                                                       {/* </View> */}
+                                                  </Card.Content>
+                                             </Card>
+                                        );
+                                   })}
+                         </ScrollView>
+                    </View>
+               </View >
           </>
      );
 };
 
-export default ReOpdMedicineHistory;
+export default ReOpdTreatment;
 
 const styles = StyleSheet.create({
      container: {
-          flex: 1
+          flex: 1,
      },
      heading: {
           fontWeight: '600',
@@ -685,11 +772,15 @@ const styles = StyleSheet.create({
      },
      inputGroup: {
           marginHorizontal: 14,
-          // maxHeight: '100%',
+          // maxHeight: 600,
      },
      input: {
           marginBottom: 8,
-          width: 200,
+          backgroundColor: '#ffffff',
+          paddingTop: 0,
+          paddingLeft: 0,
+          width: 210,
+          maxWidth: 220,
      },
      input2: {
           backgroundColor: '#ffffff',
@@ -699,10 +790,13 @@ const styles = StyleSheet.create({
           width: 210,
           maxWidth: 220,
      },
-
+     addButton: {
+          // marginVertical: 10,
+          marginHorizontal: 14,
+          alignSelf: 'flex-end',
+     },
      btn: {
-          marginVertical: 12,
-
+          marginVertical: 6,
      },
      listView: {
           backgroundColor: '#ede8ed',
@@ -715,9 +809,6 @@ const styles = StyleSheet.create({
           borderWidth: 0.7,
           borderRadius: 6,
           marginBottom: 10,
-          marginRight: 6,
-          padding: 10,
-          marginHorizontal: 12
      },
      cardContent: {
           flexDirection: 'row',
@@ -757,44 +848,31 @@ const styles = StyleSheet.create({
           justifyContent: "center",
           gap: 10,
           padding: 6,
-     },
-     dropdown: {
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1.5,
-          borderRadius: 4,
-          paddingHorizontal: 6,
-          marginHorizontal: 6,
-          width: 200,
-     },
-     placeholderStyle: {
-          fontSize: 16,
-     },
-     selectedTextStyle: {
-          fontSize: 16,
+
      },
      head: { height: 40, backgroundColor: '#80aaff' },
      text: { textAlign: 'center', color: 'black', padding: 2 },
      row: { height: 'auto' },
 
      card2: {
-          marginTop: 10,
-          marginHorizontal: 14,
-          marginBottom: 10,
+          marginHorizontal: 12,
+          marginVertical: 6,
      },
      cardBody: {
           flexDirection: 'row',
           justifyContent: 'flex-start',
-          width: 150,
      },
      cardtext: {
           fontWeight: '600',
           color: 'black',
+          width: 80,
+          fontSize: 14
      },
      cardtext2: {
           fontWeight: '600',
           flexWrap: 'wrap',
-          // width: 100,
+          width: 230,
+          fontSize: 14
      },
      cardBodyHead: {
           flexDirection: 'row',
@@ -806,9 +884,15 @@ const styles = StyleSheet.create({
           justifyContent: 'space-between',
           alignItems: 'center',
      },
-
      searchInput: {
           marginHorizontal: 12,
           marginBottom: 8,
      },
+     card: {
+          borderWidth: 0.7,
+          borderRadius: 6,
+          marginBottom: 10,
+          marginRight: 6
+
+     }
 });

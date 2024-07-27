@@ -211,7 +211,7 @@ const ReOpdPersonalHistory = () => {
                patient_id: patient_id,
                reception_id: userData?._id,
                appoint_id: waitingListData?.appoint_id || appoint_id,
-               uhid: uhid,
+               uhid: waitingListData?.uhid || uhid,
                api_type: 'OPD-PERSONAL-HISTORY',
                opdpersonalhistoryarray: [singleObject],
           };
@@ -248,7 +248,7 @@ const ReOpdPersonalHistory = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-PERSONAL-HISTORY',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
@@ -269,7 +269,7 @@ const ReOpdPersonalHistory = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-PERSONAL-HISTORY',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {

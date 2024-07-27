@@ -420,7 +420,7 @@ export const ReAssessmentOpdpageNavigation = ({ visible, openMenu, closeMenu }) 
           title="Obstetrics History"
         />
         <Divider />
-        {/* <Menu.Item
+        <Menu.Item
           contentStyle={{ width: 120 }}
           dense
           onPress={() => {
@@ -442,20 +442,20 @@ export const ReAssessmentOpdpageNavigation = ({ visible, openMenu, closeMenu }) 
           contentStyle={{ width: 120 }}
           dense
           onPress={() => {
-            navigation.replace('GeneralExamination'), closeMenu();
+            navigation.replace('ReOpdGeneralExamination'), closeMenu();
           }}
           title="General Examination"
         />
         <Divider />
-        <Menu.Item
+        {/* <Menu.Item
           contentStyle={{ width: 120 }}
           dense
           onPress={() => {
-            navigation.replace('SystemicExamination'), closeMenu();
+            navigation.replace('ReOpdSystemicExamination'), closeMenu();
           }}
           title="Systemic Examination"
         />
-        <Divider />
+        <Divider /> */}
         <Menu.Item
           contentStyle={{ width: 120 }}
           dense
@@ -465,7 +465,7 @@ export const ReAssessmentOpdpageNavigation = ({ visible, openMenu, closeMenu }) 
           title="Diagnosis"
         />
         <Divider />
-        <Menu.Item
+        {/* <Menu.Item
           contentStyle={{ width: 120 }}
           dense
           onPress={() => {
@@ -473,7 +473,7 @@ export const ReAssessmentOpdpageNavigation = ({ visible, openMenu, closeMenu }) 
           }}
           title="Investigation"
         />
-        <Divider />
+        <Divider /> */}
         <Menu.Item
           contentStyle={{ width: 120 }}
           dense
@@ -519,7 +519,7 @@ export const ReAssessmentOpdpageNavigation = ({ visible, openMenu, closeMenu }) 
             closeMenu();
           }}
           title="Follow Up"
-        /> */}
+        />
         <Menu.Item
           contentStyle={{ width: 120 }}
           dense

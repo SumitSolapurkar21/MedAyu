@@ -174,7 +174,7 @@ const ReOpdFamilyHistory = () => {
                patient_id: patient_id,
                reception_id: userData?._id,
                appoint_id: waitingListData?.appoint_id || appoint_id,
-               uhid: uhid,
+               uhid: waitingListData?.uhid || uhid,
                api_type: 'OPD-FAMILY-HISTORY',
                opdfamilyhistoryarray: [...temp, ...opdAssessmentforEdit],
                mobilenumber: waitingListData?.mobilenumber || mobilenumber,
@@ -399,7 +399,7 @@ const ReOpdFamilyHistory = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-FAMILY-HISTORY',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
@@ -428,11 +428,10 @@ const ReOpdFamilyHistory = () => {
                          patient_id: patient_id,
                          appoint_id: waitingListData?.appoint_id || appoint_id,
                          api_type: 'OPD-FAMILY-HISTORY',
-                         uhid: uhid,
+                         uhid: waitingListData?.uhid || uhid,
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
-                         console.log(res.data)
                          const opdData = res.data.opdfamilyhistoryarray;
                          setOpdAssessmentforEdit(opdData)
                     });
