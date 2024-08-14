@@ -7,8 +7,7 @@ import UserContext from '../../../../components/Context/Context';
 import DateTimePicker from 'react-native-ui-datepicker';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton, MD3Colors } from 'react-native-paper';
-import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 
 const ReOpdTreatment = () => {
      const { patientsData, scannedPatientsData, waitingListData, userData } =
@@ -98,6 +97,10 @@ const ReOpdTreatment = () => {
           setDatePickerIndex(index); // Set the index of the date field for which the calendar is being opened
      };
 
+     const calenderHandler2 = index => {
+          setShowCalender2(true);
+          setDatePickerIndex2(index); // Set the index of the date field for which the calendar is being opened
+     };
      const handleDateChange = (date, index) => {
           const [_dateformat] = date.split(' ');
           const updatedTemp = [...temp];
@@ -199,7 +202,9 @@ const ReOpdTreatment = () => {
      const _removeSelectedDataHandler = _id => {
           // Filter out data with the specified id
           const updatedSelectedRow = temp?.filter(row => row.prescription_id !== _id);
+          const updatedSelectedRow2 = opdAssessmentforEdit?.filter(row => row.prescription_id !== _id);
           setTemp(updatedSelectedRow);
+          setOpdAssessmentforEdit(updatedSelectedRow2)
      };
 
      const _handleMore = () => {
@@ -217,7 +222,7 @@ const ReOpdTreatment = () => {
                <Appbar.Header>
                     <Appbar.BackAction
                          onPress={() => {
-                              navigation.replace('OpdPlanOfCare');
+                              navigation.replace('ReOpdPlanOfCare');
                          }}
                     />
                     <Appbar.Content title="Treatment" style={styles.appbar_title} />
@@ -624,7 +629,7 @@ const ReOpdTreatment = () => {
                                                                  right={
                                                                       <TextInput.Icon
                                                                            icon="calendar"
-                                                                           onPress={() => calenderHandler(index)}
+                                                                           onPress={() => calenderHandler2(index)}
                                                                       />
                                                                  }
                                                             />
@@ -662,8 +667,8 @@ const ReOpdTreatment = () => {
 
                     {/* fetch opdassessment value */}
                     <View>
-                         <ScrollView vertical showsVerticalScrollIndicator={false} style={{ maxHeight: temp?.length > 0 ? 180 : '85%' }}  >
-                              {opdAssessment.length > 0 &&
+                         <ScrollView vertical showsVerticalScrollIndicator={false} style={{ height: 'auto', maxHeight: opdAssessmentforEdit?.length > 0 ? 200 : '85%' }}  >
+                              {opdAssessment?.length > 0 &&
                                    opdAssessment?.map((row, index) => {
                                         return (
                                              <Card style={styles.card2} key={index + 1}>
@@ -737,7 +742,6 @@ const ReOpdTreatment = () => {
                                                             </Text>
                                                        </View>
 
-                                                       {/* <View style={styles.cardBodyHead}> */}
 
                                                        <View style={[styles.cardBody, { gap: 10, width: 'auto' }]}>
                                                             <Text variant="titleLarge" style={styles.cardtext}>
@@ -747,7 +751,6 @@ const ReOpdTreatment = () => {
                                                                  {row.opd_date} / {row.opd_time}
                                                             </Text>
                                                        </View>
-                                                       {/* </View> */}
                                                   </Card.Content>
                                              </Card>
                                         );

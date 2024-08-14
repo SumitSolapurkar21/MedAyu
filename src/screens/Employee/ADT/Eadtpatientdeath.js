@@ -1,15 +1,15 @@
-import {BackHandler, ScrollView, StyleSheet, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import { BackHandler, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../api.json';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {ActivityIndicator} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import { Table, Row, Rows } from 'react-native-table-component';
+import { ActivityIndicator } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 const Eadtpatientdeath = () => {
-  const {userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData;
+  const { userData } = useContext(UserContext);
+  const { _id, hospital_id } = userData;
   const navigation = useNavigation();
 
   //backHandler ...
@@ -52,7 +52,7 @@ const Eadtpatientdeath = () => {
             'STATUS',
           ];
           setTableHead(keys);
-          if (res.data.data.length > 0) {
+          if (res.data.data?.length > 0) {
             const values = res.data.data.map(item => [
               `${item.firstname}`, // Combine DATE and TIME
               item.patientuniqueno,
@@ -80,10 +80,10 @@ const Eadtpatientdeath = () => {
               ),
             ]);
 
-            setWidthArr(Array(keys.length).fill(170));
+            setWidthArr(Array(keys?.length).fill(170));
             setTableData(values);
           } else {
-            setWidthArr(Array(keys.length).fill(170));
+            setWidthArr(Array(keys?.length).fill(170));
             setTableData([['Data Not Available']]);
           }
         });
@@ -110,7 +110,7 @@ const Eadtpatientdeath = () => {
 
       <ScrollView horizontal={true}>
         <View>
-          <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+          <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
             <Row
               data={tableHead}
               widthArr={widthArr}
@@ -119,7 +119,7 @@ const Eadtpatientdeath = () => {
             />
           </Table>
           <ScrollView style={styles.dataWrapper}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Rows
                 data={tableData}
                 widthArr={widthArr}
@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     padding: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black'},
-  dataWrapper: {marginTop: -1},
-  row: {height: 50},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black' },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 50 },
   cardSelection: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',

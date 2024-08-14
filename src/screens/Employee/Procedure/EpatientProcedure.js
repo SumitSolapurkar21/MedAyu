@@ -1,5 +1,5 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   SegmentedButtons,
   DefaultTheme,
@@ -10,11 +10,11 @@ import {
 import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const EpatientProcedure = () => {
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id} = patientsData;
+  const { patientsData } = useContext(UserContext);
+  const { hospital_id } = patientsData;
   const [selectionValue, setSelectionValue] = useState(null);
   const [p_category, setP_category] = useState('');
   const [isFocus2, setIsFocus2] = useState(false);
@@ -36,11 +36,11 @@ const EpatientProcedure = () => {
             hospital_id: hospital_id,
           })
           .then(res => {
-            const {status, message} = res.data;
+            const { status, message } = res.data;
             if (status === true) {
               _setCategory(res.data.data);
               setSelectionValue(
-                res.data.data.length > 0 ? res.data.data[0].category_id : null,
+                res.data.data?.length > 0 ? res.data.data[0].category_id : null,
               );
             } else {
               console.error(message);
@@ -137,10 +137,10 @@ const EpatientProcedure = () => {
       </View>
       <View style={styles.dropdownCategory}>
         <Text style={styles.heading}>Procedure Type</Text>
-        <View style={{width: '70%'}}>
+        <View style={{ width: '70%' }}>
           <Dropdown
             mode={'outlined'}
-            style={[styles.dropdown, isFocus2 && {borderColor: 'blue'}]}
+            style={[styles.dropdown, isFocus2 && { borderColor: 'blue' }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -183,7 +183,7 @@ const EpatientProcedure = () => {
           style={{
             zIndex: 1,
             marginHorizontal: 14,
-            //   maxHeight: drugCode.length > 0 && visibleList ? 200 : 0,
+            //   maxHeight: drugCode?.length > 0 && visibleList ? 200 : 0,
           }} // Set a higher zIndex for the ScrollView
           vertical={true}>
           {visibleList && (
@@ -305,7 +305,7 @@ const EpatientProcedure = () => {
 
           <Button
             mode="contained"
-            style={[styles.btn, {alignSelf: 'flex-start'}]}
+            style={[styles.btn, { alignSelf: 'flex-start' }]}
             onPress={() => resetHandler()}>
             Add More
           </Button>

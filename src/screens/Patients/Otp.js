@@ -6,8 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import React, {useRef, useState, useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useRef, useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const Otp = () => {
   const navigation = useNavigation();
@@ -38,7 +38,7 @@ const Otp = () => {
       inputRefs[index - 1]?.focus();
     }
 
-    if (newOtpInput.join('').length === 4) {
+    if (newOtpInput.join('')?.length === 4) {
       navigation.navigate('Tabs');
     }
   };
@@ -71,10 +71,10 @@ const Otp = () => {
             styles.innerContainer,
             toggle ? styles.invalid : styles.valid,
           ]}>
-          <Text style={{color: '#054185', fontWeight: 'bold'}}>
+          <Text style={{ color: '#054185', fontWeight: 'bold' }}>
             Resend the OTP in
           </Text>
-          <Text style={{color: '#054185', fontWeight: 'bold'}}>{`00:${timeLeft
+          <Text style={{ color: '#054185', fontWeight: 'bold' }}>{`00:${timeLeft
             .toString()
             .padStart(2, '0')} secs`}</Text>
         </View>

@@ -199,8 +199,8 @@ const OpdPlanOfCare = () => {
   const [widthArr, setWidthArr] = useState([]);
   const [headwidthArr, setheadWidthArr] = useState([]);
   useEffect(() => {
-    setheadWidthArr([340, ...Array(tableHead8.length - 1).fill(0)]);
-    setWidthArr([338, ...Array(_tableData8.length - 1).fill(0)]);
+    setheadWidthArr([340, ...Array(tableHead8?.length - 1).fill(0)]);
+    setWidthArr([338, ...Array(_tableData8?.length - 1).fill(0)]);
   }, []);
 
   //  submit handler ....
@@ -240,7 +240,7 @@ const OpdPlanOfCare = () => {
   ];
   const [widthArr2, setWidthArr2] = useState([]);
   useEffect(() => {
-    setWidthArr2([120, 120, 150, 120, 120, ...Array(keys3.length).fill(2)]);
+    setWidthArr2([120, 120, 150, 120, 120, ...Array(keys3?.length).fill(2)]);
   }, []);
   useEffect(() => {
     FetchMobileOpdAssessment();
@@ -338,7 +338,7 @@ const OpdPlanOfCare = () => {
           </Button>
         </View>
 
-        {opdAssessment.length > 0 &&
+        {opdAssessment?.length > 0 &&
           opdAssessment?.map((row, index) => {
             return (
               <Card style={styles.card2} key={index + 1}>

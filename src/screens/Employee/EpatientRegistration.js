@@ -10,10 +10,10 @@ import {
   Modal,
   BackHandler,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {useNavigation} from '@react-navigation/native';
-import {SelectList} from 'react-native-dropdown-select-list';
+import { useNavigation } from '@react-navigation/native';
+import { SelectList } from 'react-native-dropdown-select-list';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import successIcon from '../../images/success.gif';
 import UserContext from '../../components/Context/Context';
@@ -36,7 +36,7 @@ const EpatientRegistration = () => {
 
     return () => backHandler.remove();
   }, []);
-  const {userData} = useContext(UserContext);
+  const { userData } = useContext(UserContext);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [datePicker, setDatePicker] = useState(false);
@@ -63,16 +63,16 @@ const EpatientRegistration = () => {
   const [timeSlotPopup, setTimeSlotPopup] = useState(false);
 
   const Gender_data = [
-    {key: 'Male', value: 'Male'},
-    {key: 'Female', value: 'Female'},
+    { key: 'Male', value: 'Male' },
+    { key: 'Female', value: 'Female' },
   ];
 
-  const nationality_data = [{key: 'Indian', value: 'Indian'}];
+  const nationality_data = [{ key: 'Indian', value: 'Indian' }];
 
   const motherTounge_data = [
-    {key: 'Marathi', value: 'Marathi'},
-    {key: 'Hindi', value: 'Hindi'},
-    {key: 'English', value: 'English'},
+    { key: 'Marathi', value: 'Marathi' },
+    { key: 'Hindi', value: 'Hindi' },
+    { key: 'English', value: 'English' },
   ];
   const [formData, setFormData] = useState({
     patientcategory: 'New',
@@ -104,7 +104,7 @@ const EpatientRegistration = () => {
         await axios.post(`${api.baseurl}/getCountry`).then(res => {
           const c_data = res.data.data;
           let c_array = c_data.map(res => {
-            return {name: res.name, code: res.code};
+            return { name: res.name, code: res.code };
           });
           setCountryData(c_array);
         });
@@ -121,7 +121,7 @@ const EpatientRegistration = () => {
     const stateData = async () => {
       try {
         await axios
-          .post(`${api.baseurl}/FetchState`, {code: c_code})
+          .post(`${api.baseurl}/FetchState`, { code: c_code })
           .then(res => {
             const s_data = res.data.data;
 
@@ -392,7 +392,7 @@ const EpatientRegistration = () => {
   // Function to group timeslots into rows of 3
   const groupTimeslotsIntoRows = (timeslots, itemsPerRow) => {
     const rows = [];
-    for (let i = 0; i < timeslots.length; i += itemsPerRow) {
+    for (let i = 0; i < timeslots?.length; i += itemsPerRow) {
       rows.push(timeslots.slice(i, i + itemsPerRow));
     }
     return rows;
@@ -431,7 +431,7 @@ const EpatientRegistration = () => {
         <View
           style={[
             styles.backdrop,
-            {backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`, zIndex: 1},
+            { backgroundColor: `rgba(0, 0, 0, ${backdropOpacity})`, zIndex: 1 },
           ]}
         />
       )}
@@ -452,7 +452,7 @@ const EpatientRegistration = () => {
                   marginHorizontal: 10,
                   marginBottom: 10,
                 }}>
-                <Text style={{color: 'black', fontWeight: '600', fontSize: 16}}>
+                <Text style={{ color: 'black', fontWeight: '600', fontSize: 16 }}>
                   Select Time Slot
                 </Text>
                 <FontAwesome6
@@ -474,7 +474,7 @@ const EpatientRegistration = () => {
                             {
                               backgroundColor:
                                 timeslot.timestatus === 'true' ||
-                                timeslot.timeSlot === selectedTime
+                                  timeslot.timeSlot === selectedTime
                                   ? '#03b1fc'
                                   : 'white',
                               borderColor:
@@ -493,7 +493,7 @@ const EpatientRegistration = () => {
                               {
                                 color:
                                   timeslot.timestatus === 'true' ||
-                                  timeslot.timeSlot === selectedTime
+                                    timeslot.timeSlot === selectedTime
                                     ? 'white'
                                     : '#03b1fc',
                               },
@@ -551,7 +551,7 @@ const EpatientRegistration = () => {
               borderBottomColor: 'green',
               borderBottomWidth: 2,
             }}>
-            <Text style={{padding: 10, flex: 1}}>{formData.patientdob}</Text>
+            <Text style={{ padding: 10, flex: 1 }}>{formData.patientdob}</Text>
             <FontAwesome6 name="calendar-days" color="red" size={22} />
           </TouchableOpacity>
           <DateTimePickerModal
@@ -708,7 +708,7 @@ const EpatientRegistration = () => {
                 borderBottomColor: 'green',
                 borderBottomWidth: 2,
               }}>
-              <Text style={{padding: 10, flex: 1}}>{formData.app_date}</Text>
+              <Text style={{ padding: 10, flex: 1 }}>{formData.app_date}</Text>
               <FontAwesome6 name="calendar-days" color="red" size={22} />
             </View>
           </TouchableOpacity>
@@ -741,7 +741,7 @@ const EpatientRegistration = () => {
               borderBottomColor: 'green',
               borderBottomWidth: 2,
             }}>
-            <Text style={{padding: 10, fontSize: 14, flex: 1}}>
+            <Text style={{ padding: 10, fontSize: 14, flex: 1 }}>
               {selectedTime.toString()}
             </Text>
             <FontAwesome6 name="clock" color="red" size={22} />

@@ -368,7 +368,7 @@ const FamilyHistory = () => {
           const parsedData = JSON.parse(DATA);
           const filteredData = parsedData.filter(item =>
             Object.values(item).some(
-              value => Array.isArray(value) && value.length > 0,
+              value => Array.isArray(value) && value?.length > 0,
             ),
           );
           const filteredString = JSON.stringify(filteredData);

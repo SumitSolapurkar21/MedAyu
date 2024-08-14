@@ -6,18 +6,18 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import api from '../../../api.json';
 import axios from 'axios';
 import UserContext from '../Context/Context';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 const ExpensesStatuswiseList = value => {
-  const {userData} = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const [expensesDataPending, setExpensesDataPending] = useState([]);
   const [expensesDataApproved, setExpensesDataApproved] = useState([]);
   //table ...
-  const {width: screenWidth} = Dimensions.get('window');
+  const { width: screenWidth } = Dimensions.get('window');
   const [widthArr, setWidthArr] = useState([]);
   useEffect(() => {
     fetchPending_Mobile_Expenses_Form();
@@ -59,19 +59,19 @@ const ExpensesStatuswiseList = value => {
   {
     value?.value === 'Pending'
       ? (tableHead = [
-          'SR.NO',
-          'CATEGORY',
-          'REQUEST AMOUNT',
-          'MONTHLY AMOUNT',
-          'DUE DATE',
-          'PAYEE',
-          'PAYMENT MODE',
-          'TRANSACTION DETAIL',
-          'APPLIED DATE / TIME',
-          'STATUS',
-        ])
+        'SR.NO',
+        'CATEGORY',
+        'REQUEST AMOUNT',
+        'MONTHLY AMOUNT',
+        'DUE DATE',
+        'PAYEE',
+        'PAYMENT MODE',
+        'TRANSACTION DETAIL',
+        'APPLIED DATE / TIME',
+        'STATUS',
+      ])
       : value?.value === 'Approved'
-      ? (tableHead = [
+        ? (tableHead = [
           'SR.NO',
           'CATEGORY',
           'REQUEST AMOUNT',
@@ -85,7 +85,7 @@ const ExpensesStatuswiseList = value => {
           'STATUS',
           'APPROVED DATE / TIME',
         ])
-      : null;
+        : null;
   }
 
   const fetchPending_Mobile_Expenses_Form = async () => {
@@ -98,7 +98,7 @@ const ExpensesStatuswiseList = value => {
       await axios
         .post(`${api.baseurl}/Pending_Mobile_Expenses_Form`, body)
         .then(response => {
-          const {data, status, message} = response.data;
+          const { data, status, message } = response.data;
           if (status === true) {
             if (value?.value === 'Pending') setExpensesDataPending(data);
             else if (value?.value === 'Approved') setExpensesDataApproved(data);
@@ -114,14 +114,14 @@ const ExpensesStatuswiseList = value => {
   };
   return (
     <View style={styles.tableDiv}>
-      <View style={{marginBottom: 10}}>
+      <View style={{ marginBottom: 10 }}>
         <Text style={styles.headtext2}>{value?.value} Expenses</Text>
       </View>
       {value?.value === 'Pending' ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <ScrollView horizontal>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Row
                   data={tableHead}
                   widthArr={widthArr}
@@ -131,7 +131,7 @@ const ExpensesStatuswiseList = value => {
 
                 <Rows
                   data={
-                    expensesDataPending.length > 0 &&
+                    expensesDataPending?.length > 0 &&
                     value?.value === 'Pending' &&
                     expensesDataPending?.map((item, index) => {
                       return [
@@ -158,9 +158,9 @@ const ExpensesStatuswiseList = value => {
         </ScrollView>
       ) : value?.value === 'Approved' ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <ScrollView horizontal>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Row
                   data={tableHead}
                   widthArr={widthArr}
@@ -204,7 +204,7 @@ const ExpensesStatuswiseList = value => {
 export default ExpensesStatuswiseList;
 
 const styles = StyleSheet.create({
-  head: {height: 40, backgroundColor: '#80aaff'},
+  head: { height: 40, backgroundColor: '#80aaff' },
   headtext: {
     textAlign: 'left',
     color: 'white',
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  text: {textAlign: 'left', color: 'black', fontSize: 13, marginLeft: 6},
+  text: { textAlign: 'left', color: 'black', fontSize: 13, marginLeft: 6 },
   row: {
     height: 50,
   },

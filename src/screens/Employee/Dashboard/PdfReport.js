@@ -41,7 +41,7 @@ export const GeneratePdf = async data => {
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
-  };
+    };
 
     const _opdFollowup = `
     <div class="head-content2">
@@ -54,7 +54,7 @@ export const GeneratePdf = async data => {
                   <div class="main-part12">
                      
                     ${data?.opdfollowuparray?.map((res, i) => {
-                      const formattedDate = formatDate(res.followup_date);
+      const formattedDate = formatDate(res.followup_date);
       return `
                          <div key=${i} class="divdata" style="margin-left:20px">
                          <p>${i + 1}. Next Followup is on ${formattedDate} , ${res.followup_day}</p>

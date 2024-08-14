@@ -123,8 +123,8 @@ const OpdComplaints = () => {
 
   // to set width of table ......
   useEffect(() => {
-    setWidthArr([110, 80, 120, 150, 130, 140, ...Array(keys.length).fill(2)]);
-    setWidthArr1([90, 90, 70, 80, 90, 100, 60, ...Array(keys2.length).fill(2)]);
+    setWidthArr([110, 80, 120, 150, 130, 140, ...Array(keys?.length).fill(2)]);
+    setWidthArr1([90, 90, 70, 80, 90, 100, 60, ...Array(keys2?.length).fill(2)]);
   }, []);
 
   const updateSelectedCategoryData = selectedValue => {
@@ -232,7 +232,7 @@ const OpdComplaints = () => {
           const parsedData = JSON.parse(DATA);
           const filteredData = parsedData.filter(item =>
             Object.values(item).some(
-              value => Array.isArray(value) && value.length > 0,
+              value => Array.isArray(value) && value?.length > 0,
             ),
           );
           const filteredString = JSON.stringify(filteredData);
@@ -333,11 +333,8 @@ const OpdComplaints = () => {
     setVisible(true);
   };
   const [visible, setVisible] = useState(false);
-
   const openMenu = () => setVisible(true);
-
   const closeMenu = () => setVisible(false);
-
   const [addSymptomName, setAddSymptomsName] = useState('');
 
   const addsymptomsHandler = text => {
@@ -472,7 +469,7 @@ const OpdComplaints = () => {
 
       {/* after submit Msg... */}
 
-      <ScrollView vertical style={styles.container}>
+      <View style={styles.container}>
         <SegmentedButtons
           theme={theme}
           style={styles.segmentBtn}
@@ -534,9 +531,8 @@ const OpdComplaints = () => {
 
           {/* category details.... */}
           <Text style={styles.tableWrapper3TXT}>Category Details</Text>
-
-          <ScrollView horizontal={true} style={{ padding: 10 }}>
-            <View style={{ height: 'auto', maxHeight: 300 }}>
+          <ScrollView horizontal>
+            <View style={{ height: 'auto', maxHeight: 200 }}>
               <Table
                 borderStyle={{
                   borderWidth: 1,
@@ -549,108 +545,111 @@ const OpdComplaints = () => {
                   textStyle={styles.text}
                 />
               </Table>
-              {/* <ScrollView vertical={true} style={styles.dataWrapper}> */}
-              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
-                <Rows
-                  // data={tableData}
-                  data={filterData.length > 0 && filterData.map((row) => [
-                    row.symptoms,
-                    <TextInput
-                      key={row.id}
-                      style={styles.tableInput}
-                      keyboardType="numeric"
-                      onChangeText={text =>
-                        inputChangeHandler(row.id, 'duration', text)
-                      }
-                    />,
-                    <Dropdown
-                      key={row.id}
-                      style={[
-                        styles.dropdown,
-                        isFocus && { borderColor: 'blue' },
-                      ]}
-                      placeholderStyle={styles.placeholderStyle}
-                      selectedTextStyle={styles.selectedTextStyle}
-                      inputSearchStyle={styles.inputSearchStyle}
-                      iconStyle={styles.iconStyle}
-                      data={data2}
-                      maxHeight={300}
-                      labelField="label"
-                      valueField="value"
-                      placeholder={!isFocus2 ? 'Select' : '...'}
-                      value={dropdownValues2[row.id] || ''}
-                      onFocus={() => setIsFocus2(true)}
-                      onBlur={() => setIsFocus2(false)}
-                      onChange={item => {
-                        setDropdownValues2(prevValues => ({
-                          ...prevValues,
-                          [row.id]: item.value,
-                        }));
-                        setIsFocus2(false);
-                        inputChangeHandler(row.id, 'time', item.value);
-                      }}
-                    />,
-                    <Dropdown
-                      key={row.id}
-                      style={[
-                        styles.dropdown,
-                        isFocus && { borderColor: 'blue' },
-                      ]}
-                      placeholderStyle={styles.placeholderStyle}
-                      selectedTextStyle={styles.selectedTextStyle}
-                      inputSearchStyle={styles.inputSearchStyle}
-                      iconStyle={styles.iconStyle}
-                      data={data}
-                      maxHeight={300}
-                      labelField="label"
-                      valueField="value"
-                      placeholder={!isFocus ? 'Select' : '...'}
-                      value={dropdownValues[row.id] || ''}
-                      onFocus={() => setIsFocus(true)}
-                      onBlur={() => setIsFocus(false)}
-                      onChange={item => {
-                        setDropdownValues(prevValues => ({
-                          ...prevValues,
-                          [row.id]: item.value,
-                        }));
-                        setIsFocus(false);
-                        inputChangeHandler(row.id, 'frequency', item.value);
-                      }}
-                    />,
-                    <TextInput
-                      key={row.id}
-                      style={styles.tableInput}
-                      onChangeText={text =>
-                        inputChangeHandler(row.id, 'remark', text)
-                      }
-                    />,
-                    <Button
-                      key={row.id}
-                      style={{ width: 'auto', marginHorizontal: 30 }}
-                      mode="contained"
-                      onPress={() =>
-                        _addSelectedDataHandler(
-                          [...rowData],
-                          row.id,
-                          row.category,
-                        )
-                      }>
-                      Add
-                    </Button>,
-                  ])}
-                  widthArr={widthArr}
-                  style={styles.row}
-                  textStyle={styles.text}
-                />
-              </Table>
-              {/* </ScrollView> */}
+              <ScrollView vertical>
+
+                {/* <ScrollView vertical={true} style={styles.dataWrapper}> */}
+                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
+                  <Rows
+                    // data={tableData}
+                    data={filterData?.length > 0 && filterData.map((row) => [
+                      row.symptoms,
+                      <TextInput
+                        key={row.id}
+                        style={styles.tableInput}
+                        keyboardType="numeric"
+                        onChangeText={text =>
+                          inputChangeHandler(row.id, 'duration', text)
+                        }
+                      />,
+                      <Dropdown
+                        key={row.id}
+                        style={[
+                          styles.dropdown,
+                          isFocus && { borderColor: 'blue' },
+                        ]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data2}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={!isFocus2 ? 'Select' : '...'}
+                        value={dropdownValues2[row.id] || ''}
+                        onFocus={() => setIsFocus2(true)}
+                        onBlur={() => setIsFocus2(false)}
+                        onChange={item => {
+                          setDropdownValues2(prevValues => ({
+                            ...prevValues,
+                            [row.id]: item.value,
+                          }));
+                          setIsFocus2(false);
+                          inputChangeHandler(row.id, 'time', item.value);
+                        }}
+                      />,
+                      <Dropdown
+                        key={row.id}
+                        style={[
+                          styles.dropdown,
+                          isFocus && { borderColor: 'blue' },
+                        ]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={!isFocus ? 'Select' : '...'}
+                        value={dropdownValues[row.id] || ''}
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+                        onChange={item => {
+                          setDropdownValues(prevValues => ({
+                            ...prevValues,
+                            [row.id]: item.value,
+                          }));
+                          setIsFocus(false);
+                          inputChangeHandler(row.id, 'frequency', item.value);
+                        }}
+                      />,
+                      <TextInput
+                        key={row.id}
+                        style={styles.tableInput}
+                        onChangeText={text =>
+                          inputChangeHandler(row.id, 'remark', text)
+                        }
+                      />,
+                      <Button
+                        key={row.id}
+                        style={{ width: 'auto', marginHorizontal: 30 }}
+                        mode="contained"
+                        onPress={() =>
+                          _addSelectedDataHandler(
+                            [...rowData],
+                            row.id,
+                            row.category,
+                          )
+                        }>
+                        Add
+                      </Button>,
+                    ])}
+                    widthArr={widthArr}
+                    style={styles.row}
+                    textStyle={styles.text}
+                  />
+                </Table>
+                {/* </ScrollView> */}
+              </ScrollView>
             </View>
           </ScrollView>
         </View>
         {selectedRow?.length > 0 && (
           <View style={[styles.categorySelection]}>
-            <ScrollView horizontal={true} style={{ padding: 10 }}>
-              <View style={{ height: 'auto' }}>
+            <ScrollView horizontal style={{ padding: 10 }}>
+              <View style={{ height: 'auto', maxHeight: 150 }}>
                 <Table
                   borderStyle={{
                     borderWidth: 1,
@@ -707,8 +706,8 @@ const OpdComplaints = () => {
             Next / Skip
           </Button>
         </View>
-        <View>{displayData}</View>
-      </ScrollView>
+        <ScrollView vertical style={{ maxHeight: '100%' }}>{displayData}</ScrollView>
+      </View>
     </>
   );
 };
@@ -725,7 +724,7 @@ const styles = StyleSheet.create({
   formGroup: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginBottom: 6,
+    // marginBottom: 6,
     padding: 12,
     gap: 10,
   },
@@ -764,6 +763,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     justifyContent: 'center',
+    marginTop: 4
   },
   label: {
     fontWeight: '600',
@@ -804,7 +804,7 @@ const styles = StyleSheet.create({
   },
   segmentBtn: {
     marginHorizontal: 14,
-    marginTop: '5%',
+    marginTop: '2%',
   },
   card: {
     marginTop: 10,

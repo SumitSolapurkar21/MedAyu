@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {View, StyleSheet, ScrollView, BackHandler} from 'react-native';
-import {Table, Row, Rows} from 'react-native-table-component';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView, BackHandler } from 'react-native';
+import { Table, Row, Rows } from 'react-native-table-component';
 import axios from 'axios';
 import api from '../../../api.json';
 import UserContext from '../../components/Context/Context';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const Epatientvitalhistory = () => {
   const navigation = useNavigation();
@@ -22,9 +22,9 @@ const Epatientvitalhistory = () => {
 
     return () => backHandler.remove();
   }, []);
-  const {scannedPatientsData, userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData;
-  const {patient_id} = scannedPatientsData;
+  const { scannedPatientsData, userData } = useContext(UserContext);
+  const { _id, hospital_id } = userData;
+  const { patient_id } = scannedPatientsData;
   //   const [vitalHistoryData, setVitalHistoryData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [tableHead, setTableHead] = useState([]);
@@ -44,7 +44,7 @@ const Epatientvitalhistory = () => {
         patient_id: patient_id,
       });
 
-      if (res.data.data.length > 0) {
+      if (res.data.data?.length > 0) {
         const _keys = ['Vitals', 'GCS'];
         const keys = [
           'DATE-TIME',
@@ -90,8 +90,8 @@ const Epatientvitalhistory = () => {
 
         setTableData(values);
 
-        setWidthArr(Array(keys.length).fill(100));
-        _setWidthArr([700, 300, ...Array(keys.length - 1).fill(0)]);
+        setWidthArr(Array(keys?.length).fill(100));
+        _setWidthArr([700, 300, ...Array(keys?.length - 1).fill(0)]);
         setTableData(values);
       }
     } catch (error) {
@@ -103,7 +103,7 @@ const Epatientvitalhistory = () => {
     <View style={styles.container}>
       <ScrollView horizontal={true}>
         <View>
-          <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+          <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
             <Row
               data={_tableHead}
               widthArr={_widthArr}
@@ -118,7 +118,7 @@ const Epatientvitalhistory = () => {
             />
           </Table>
           <ScrollView style={styles.dataWrapper}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Rows
                 data={tableData}
                 widthArr={widthArr}
@@ -126,7 +126,7 @@ const Epatientvitalhistory = () => {
                   styles.row,
                   {
                     backgroundColor:
-                      tableData.length > 0 && tableData.length - 1
+                      tableData?.length > 0 && tableData?.length - 1
                         ? 'white'
                         : 'red',
                   },
@@ -147,9 +147,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     padding: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black'},
-  dataWrapper: {marginTop: -1},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black' },
+  dataWrapper: { marginTop: -1 },
   row: {
     height: 50,
   },

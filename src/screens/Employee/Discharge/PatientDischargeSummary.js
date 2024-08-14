@@ -6,18 +6,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {Appbar} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Appbar } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 const PatientDischargeSummary = () => {
   const navigation = useNavigation();
-  const {userData, setSelectedPatientMobileNumber} = useContext(UserContext);
-  const {_id, hospital_id} = userData;
+  const { userData, setSelectedPatientMobileNumber } = useContext(UserContext);
+  const { _id, hospital_id } = userData;
   //
 
   const [tableData, setTableData] = useState([]);
@@ -55,7 +55,7 @@ const PatientDischargeSummary = () => {
           })
           .then(res => {
             const _data = res.data.data;
-            if (_data.length > 0) {
+            if (_data?.length > 0) {
               const keys = [
                 'SR.NO',
                 'PATIENT NAME',
@@ -102,7 +102,7 @@ const PatientDischargeSummary = () => {
                 100,
                 100,
                 100,
-                ...Array(keys.length - 1).fill(0),
+                ...Array(keys?.length - 1).fill(0),
               ]);
             }
           });
@@ -131,7 +131,7 @@ const PatientDischargeSummary = () => {
       <View style={styles.container}>
         <ScrollView horizontal={true}>
           <View>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Row
                 data={tableHead}
                 widthArr={widthArr}
@@ -140,7 +140,7 @@ const PatientDischargeSummary = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={tableData}
                   widthArr={widthArr}
@@ -148,7 +148,7 @@ const PatientDischargeSummary = () => {
                     styles.row,
                     {
                       backgroundColor:
-                        tableData.length > 0 && tableData.length - 1
+                        tableData?.length > 0 && tableData?.length - 1
                           ? 'white'
                           : 'red',
                     },
@@ -175,9 +175,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'left', color: 'black', fontSize: 11, marginLeft: 6},
-  dataWrapper: {marginTop: -1},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'left', color: 'black', fontSize: 11, marginLeft: 6 },
+  dataWrapper: { marginTop: -1 },
   row: {
     height: 50,
   },

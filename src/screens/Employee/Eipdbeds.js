@@ -1,18 +1,18 @@
-import {BackHandler, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import { BackHandler, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {TouchableOpacity} from 'react-native';
-import {Button} from 'react-native-paper';
+import { Table, Row, Rows } from 'react-native-table-component';
+import { TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-paper';
 import UserContext from '../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../api.json';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const Eipdbeds = () => {
-  const {userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData;
+  const { userData } = useContext(UserContext);
+  const { _id, hospital_id } = userData;
   const navigation = useNavigation();
   //backHandler ...
   useEffect(() => {
@@ -38,7 +38,7 @@ const Eipdbeds = () => {
 
   // to set width of table ......
   useEffect(() => {
-    setWidthArr(Array(keys.length).fill(170));
+    setWidthArr(Array(keys?.length).fill(170));
   }, []);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const Eipdbeds = () => {
       <View style={styles.bedSelection} key={res.bed_id}>
         {res.bed_status === 'EMPTY' ? (
           <TouchableOpacity
-            style={{marginLeft: 6}}
+            style={{ marginLeft: 6 }}
             key={res.bed_id}
             onPress={() => onClickStatus(res)}>
             <FontAwesome6
@@ -95,7 +95,7 @@ const Eipdbeds = () => {
             />
           </TouchableOpacity>
         ) : (
-          <View style={{marginLeft: 6}}>
+          <View style={{ marginLeft: 6 }}>
             <FontAwesome6
               name="bed"
               size={22}
@@ -110,7 +110,7 @@ const Eipdbeds = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.bedLegend}>
-        <View style={[styles.legend, {marginBottom: 10}]}>
+        <View style={[styles.legend, { marginBottom: 10 }]}>
           <View style={styles.legend}>
             <FontAwesome6 name="bed" size={20} color="#018433" />
             <Text>AVAILABLE</Text>
@@ -149,7 +149,7 @@ const Eipdbeds = () => {
               />
             </Table>
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={tableData}
                   widthArr={widthArr}
@@ -189,11 +189,11 @@ const styles = StyleSheet.create({
   bedLegend: {
     marginVertical: 10,
   },
-  bedTable: {marginHorizontal: 14},
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black'},
-  dataWrapper: {marginTop: -1},
-  row: {height: 50},
+  bedTable: { marginHorizontal: 14 },
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black' },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 50 },
   bedSelection: {
     flexDirection: 'row',
     justifyContent: 'flex-start',

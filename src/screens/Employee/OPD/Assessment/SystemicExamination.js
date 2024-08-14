@@ -1550,28 +1550,28 @@ const SystemicExamination = () => {
     setheadWidthArr([
       340,
       ...Array(
-        tableHead1.length - 1,
-        tableHead2.length - 1,
-        tableHead3.length - 1,
-        tableHead4.length - 1,
-        tableHead5.length - 1,
-        tableHead6.length - 1,
-        tableHead7.length - 1,
-        tableHead8.length - 1,
+        tableHead1?.length - 1,
+        tableHead2?.length - 1,
+        tableHead3?.length - 1,
+        tableHead4?.length - 1,
+        tableHead5?.length - 1,
+        tableHead6?.length - 1,
+        tableHead7?.length - 1,
+        tableHead8?.length - 1,
       ).fill(0),
     ]);
     setWidthArr([
       100,
       238,
       ...Array(
-        _tableData.length - 1,
-        _tableData2.length - 1,
-        _tableData3.length - 1,
-        _tableData4.length - 1,
-        _tableData5.length - 1,
-        _tableData6.length - 1,
-        _tableData7.length - 1,
-        _tableData8.length - 1,
+        _tableData?.length - 1,
+        _tableData2?.length - 1,
+        _tableData3?.length - 1,
+        _tableData4?.length - 1,
+        _tableData5?.length - 1,
+        _tableData6?.length - 1,
+        _tableData7?.length - 1,
+        _tableData8?.length - 1,
       ).fill(0),
     ]);
   }, []);
@@ -1863,7 +1863,7 @@ const SystemicExamination = () => {
           </Button>
         </View>
 
-        {opdAssessment.length > 0 &&
+        {opdAssessment?.length > 0 &&
           opdAssessment?.map((row, index) => {
             return (
               <Card style={styles.card2} key={index + 1}>

@@ -407,7 +407,7 @@ const ReOpdFamilyHistory = () => {
                          const parsedData = JSON.parse(DATA);
                          const filteredData = parsedData.filter(item =>
                               Object.values(item).some(
-                                   value => Array.isArray(value) && value.length > 0,
+                                   value => Array.isArray(value) && value?.length > 0,
                               ),
                          );
                          const filteredString = JSON.stringify(filteredData);
@@ -443,7 +443,9 @@ const ReOpdFamilyHistory = () => {
      const _removeSelectedDataHandler = _id => {
           // Filter out data with the specified id
           const updatedSelectedRow = temp?.filter(row => row.illness_id !== _id);
+          const updatedSelectedRow2 = opdAssessmentforEdit?.filter(row => row.illness_id !== _id);
           setTemp(updatedSelectedRow);
+          setOpdAssessmentforEdit(updatedSelectedRow2);
      };
 
      const displayData = opdAssessment.map((item, index) => (

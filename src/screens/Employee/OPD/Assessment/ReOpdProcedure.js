@@ -16,7 +16,7 @@ import api from '../../../../../api.json';
 import UserContext from '../../../../components/Context/Context';
 import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
+import { ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 
 const ReOpdProcedure = () => {
      //backHandler ...
@@ -177,7 +177,9 @@ const ReOpdProcedure = () => {
      const _removeSelectedDataHandler = _id => {
           // Filter out data with the specified id
           const updatedSelectedRow = temp?.filter(row => row.procedure_id !== _id);
+          const updatedSelectedRow2 = opdAssessmentforEdit?.filter(row => row.procedure_id !== _id);
           setTemp(updatedSelectedRow);
+          setOpdAssessmentforEdit(updatedSelectedRow2);
      };
 
      //submit handler ....
@@ -628,7 +630,7 @@ const ReOpdProcedure = () => {
 
                     <View>
                          <ScrollView vertical showsVerticalScrollIndicator={false} style={{ maxHeight: temp?.length > 0 ? 180 : '73%' }}  >
-                              {opdAssessment.length > 0 &&
+                              {opdAssessment?.length > 0 &&
                                    opdAssessment?.map((row, index) => {
                                         return (
                                              <Card style={styles.card2} key={index + 1}>

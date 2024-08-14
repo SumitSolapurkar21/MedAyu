@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Appbar,
   Button,
@@ -15,8 +15,8 @@ import {
   SegmentedButtons,
   TextInput,
 } from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {Dropdown} from 'react-native-element-dropdown';
+import { useNavigation } from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import UserContext from '../Context/Context';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -26,9 +26,9 @@ import axios from 'axios';
 import ExpensesStatuswiseList from './ExpensesStatuswiseList';
 
 const Expenses = () => {
-  const {userData} = useContext(UserContext);
+  const { userData } = useContext(UserContext);
 
-  const {role} = userData;
+  const { role } = userData;
   const navigation = useNavigation();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isFocus2, setIsFocus2] = useState(false);
@@ -184,7 +184,7 @@ const Expenses = () => {
       submittedformData.payee !== '' ||
       submittedformData.transactiondetails !== ''
     ) {
-      if (formData._parts.length > 0) {
+      if (formData._parts?.length > 0) {
         try {
           // Make API call to upload the image and form data
           const response = await fetch(`${api.baseurl}/AddMobileExpensesForm`, {
@@ -199,7 +199,7 @@ const Expenses = () => {
           const data3 = JSON.parse(responseText);
           if (data3.status === true) {
             Alert.alert(`Success !!`, 'Expenses form Submitted', [
-              {text: 'OK', onPress: () => navigation.replace('Home')},
+              { text: 'OK', onPress: () => navigation.replace('Home') },
             ]);
           } else {
             Alert.alert('Data Not Submitted!!');
@@ -208,7 +208,7 @@ const Expenses = () => {
           Alert.alert(`Please fill form and Upload Files`, `${error}`);
         }
       } else if (
-        formData._parts.length > 0 &&
+        formData._parts?.length > 0 &&
         submittedformData.amount === '' &&
         submittedformData.availablebudget === '' &&
         submittedformData.category === '' &&
@@ -230,7 +230,7 @@ const Expenses = () => {
           const data3 = await response.json();
           if (data3.status === true) {
             Alert.alert(`Success !!`, 'Expenses form Submitted', [
-              {text: 'OK', onPress: () => navigation.replace('Home')},
+              { text: 'OK', onPress: () => navigation.replace('Home') },
             ]);
           } else {
             Alert.alert('Data Not Submitted!!');
@@ -248,7 +248,7 @@ const Expenses = () => {
           // Handle response
           if (response.data.status === true) {
             Alert.alert(`Success !!`, 'Expenses form Submitted', [
-              {text: 'OK', onPress: () => navigation.replace('Home')},
+              { text: 'OK', onPress: () => navigation.replace('Home') },
             ]);
           } else {
             Alert.alert('Data Not Submitted!!');
@@ -280,7 +280,7 @@ const Expenses = () => {
       await axios
         .post(`${api.baseurl}/GetMobileExpensesCategory`, body)
         .then(res => {
-          const {status, message, data} = res.data;
+          const { status, message, data } = res.data;
           if (status === true) {
             setCategoryArray(data);
           } else {
@@ -312,7 +312,7 @@ const Expenses = () => {
         <Appbar.Content title="Expenses" style={styles.appbar_title} />
       </Appbar.Header>
       <SegmentedButtons
-        style={{padding: 10}}
+        style={{ padding: 10 }}
         theme={theme}
         value={value}
         onValueChange={setValue}
@@ -326,7 +326,7 @@ const Expenses = () => {
             value: 'Pending',
             label: 'Pending',
           },
-          {value: 'Approved', label: 'Approved'},
+          { value: 'Approved', label: 'Approved' },
         ]}
       />
       <ScrollView style={styles.container}>
@@ -351,7 +351,7 @@ const Expenses = () => {
                 <View>
                   <Dropdown
                     mode={'outlined'}
-                    style={[styles.dropdown, isFocus2 && {borderColor: 'blue'}]}
+                    style={[styles.dropdown, isFocus2 && { borderColor: 'blue' }]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
@@ -400,7 +400,7 @@ const Expenses = () => {
                     borderBottomColor: 'green',
                     borderBottomWidth: 2,
                   }}>
-                  <Text style={[styles.input, {padding: 10, flex: 1}]}>
+                  <Text style={[styles.input, { padding: 10, flex: 1 }]}>
                     {submittedformData.duedate || 'DD / MM / YYYY'}
                   </Text>
                   {/* <FontAwesome6 name="calendar-days" color="red" size={22} /> */}
@@ -426,7 +426,7 @@ const Expenses = () => {
                 <View>
                   <Dropdown
                     mode={'outlined'}
-                    style={[styles.dropdown, isFocus1 && {borderColor: 'blue'}]}
+                    style={[styles.dropdown, isFocus1 && { borderColor: 'blue' }]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}

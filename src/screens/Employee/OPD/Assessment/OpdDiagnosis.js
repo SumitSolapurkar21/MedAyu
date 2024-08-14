@@ -49,7 +49,7 @@ const OpdDiagnosis = () => {
   // to set width of table ......
   useEffect(() => {
     // Set a specific width for the 'Sr.No' column, and the same width for the rest
-    setWidthArr([60, ...Array(keys.length - 1).fill(110)]);
+    setWidthArr([60, ...Array(keys?.length - 1).fill(110)]);
   }, []);
 
   const { patientsData, scannedPatientsData, waitingListData, userData } =
@@ -396,7 +396,7 @@ const OpdDiagnosis = () => {
           </Button>
         </View>
 
-        {opdAssessment.length > 0 &&
+        {opdAssessment?.length > 0 &&
           opdAssessment?.map((row, index) => {
             return (
               <Card style={styles.card2} key={index + 1}>

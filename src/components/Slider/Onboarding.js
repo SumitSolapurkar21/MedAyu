@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Image,
   StyleSheet,
@@ -11,14 +11,14 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import UserContext from '../Context/Context';
 import axios from 'axios';
 import api from '../../../api.json';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const slides = [
   {
@@ -38,14 +38,14 @@ const slides = [
   },
 ];
 
-const Slide = ({item}) => {
+const Slide = ({ item }) => {
   return (
-    <View style={[styles.container, {width, marginBottom: 0}]}>
+    <View style={[styles.container, { width, marginBottom: 0 }]}>
       <Image
         source={item?.image}
-        style={[styles.image, {width, resizeMode: 'contain'}]}
+        style={[styles.image, { width, resizeMode: 'contain' }]}
       />
-      <View style={{flex: 0.3}}>
+      <View style={{ flex: 0.3 }}>
         <Text style={styles.subtitle}>{item?.subtitle}</Text>
       </View>
     </View>
@@ -53,7 +53,7 @@ const Slide = ({item}) => {
 };
 
 const Onboarding = () => {
-  const {setUserData, isLoggedIn, setIsLoggedIn, setHospitalName} =
+  const { setUserData, isLoggedIn, setIsLoggedIn, setHospitalName } =
     useContext(UserContext);
 
   const [username, setMobilenumber] = useState('');
@@ -115,7 +115,7 @@ const Onboarding = () => {
         ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
         await AsyncStorage?.setItem(
           'userToken',
-          JSON.stringify({res: res?.data[0]}),
+          JSON.stringify({ res: res?.data[0] }),
         );
 
         setIsLoggedIn(true);
@@ -140,7 +140,7 @@ const Onboarding = () => {
 
   //
   const handleContinue = async () => {
-    if (username === '' || username.length < 10) {
+    if (username === '' || username?.length < 10) {
       ToastAndroid.show(
         'Mobile Number should be 10 Digits',
         ToastAndroid.SHORT,
@@ -159,7 +159,7 @@ const Onboarding = () => {
         horizontal
         data={slides}
         pagingEnabled
-        renderItem={({item}) => <Slide item={item} />}
+        renderItem={({ item }) => <Slide item={item} />}
       />
       <Text
         style={{
@@ -190,7 +190,7 @@ const Onboarding = () => {
         secureTextEntry={true}
       />
       <TouchableOpacity style={styles.button} onPress={handleContinue}>
-        <Text style={{color: '#ffffff'}}>CONTINUE</Text>
+        <Text style={{ color: '#ffffff' }}>CONTINUE</Text>
       </TouchableOpacity>
     </View>
   );

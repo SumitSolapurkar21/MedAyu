@@ -184,7 +184,7 @@ const ReOpdFollowup = () => {
                          mobilenumber: waitingListData?.mobilenumber || mobilenumber,
                     })
                     .then(res => {
-                         if (res.data.data && res.data.data.length > 0) {
+                         if (res.data.data && res.data.data?.length > 0) {
                               const fetchedData = res.data.data[0];
                               setSubmittedFormData({
                                    followup_date: fetchedData.followup_date,
@@ -279,7 +279,7 @@ const ReOpdFollowup = () => {
                          </View>
                     </View>
                     <ScrollView vertical style={{ maxHeight: '90%' }}>
-                         {opdAssessment.length > 0 && opdAssessment?.map((res, index) => {
+                         {opdAssessment?.length > 0 && opdAssessment?.map((res, index) => {
                               return (
                                    <Card style={styles.card} key={index + 1}>
                                         <Text style={styles.cardText}> {res.opd_date} &nbsp;&nbsp;{res.opd_time}</Text>

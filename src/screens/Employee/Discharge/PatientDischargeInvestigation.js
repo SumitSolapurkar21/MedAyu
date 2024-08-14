@@ -1,17 +1,17 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../api.json';
-import {useNavigation} from '@react-navigation/native';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {Appbar} from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { Table, Row, Rows } from 'react-native-table-component';
+import { Appbar } from 'react-native-paper';
 
-const PatientDischargeInvestigation = ({route}) => {
+const PatientDischargeInvestigation = ({ route }) => {
   const navigation = useNavigation();
-  const {userData} = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const patient_id = route?.params?.patient_id;
-  const {_id, hospital_id} = userData;
+  const { _id, hospital_id } = userData;
   //table content ....
   const [tableData, setTableData] = useState([]);
   const [widthArr, setWidthArr] = useState([]);
@@ -22,7 +22,7 @@ const PatientDischargeInvestigation = ({route}) => {
   // to set width of table ......
   useEffect(() => {
     // Set a specific width for the 'Sr.No' column, and the same width for the rest
-    setWidthArr([32, 120, 70, 120, ...Array(keys.length - 1).fill(0)]);
+    setWidthArr([32, 120, 70, 120, ...Array(keys?.length - 1).fill(0)]);
   }, []);
 
   //get patient treatment history ......
@@ -40,7 +40,7 @@ const PatientDischargeInvestigation = ({route}) => {
         api_type: 'PRESCRIPTIONDONE',
       });
 
-      const {status, message, data} = res.data;
+      const { status, message, data } = res.data;
       if (status === true) {
         const dataArray = data.map((res, index) => [
           index + 1,
@@ -61,8 +61,8 @@ const PatientDischargeInvestigation = ({route}) => {
   const _procedureTable = () => {
     return (
       <>
-        <ScrollView horizontal={false} style={{padding: 10}}>
-          <View style={{height: 'auto'}}>
+        <ScrollView horizontal={false} style={{ padding: 10 }}>
+          <View style={{ height: 'auto' }}>
             <Table
               borderStyle={{
                 borderWidth: 1,
@@ -79,7 +79,7 @@ const PatientDischargeInvestigation = ({route}) => {
               vertical
               style={styles.dataWrapper}
               nestedScrollEnabled={true}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={tableData}
                   widthArr={widthArr}
@@ -121,8 +121,8 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderRadius: 6,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'left', color: 'black', marginLeft: 10, fontSize: 12},
-  dataWrapper: {marginTop: -1},
-  row: {height: 45},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'left', color: 'black', marginLeft: 10, fontSize: 12 },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 45 },
 });

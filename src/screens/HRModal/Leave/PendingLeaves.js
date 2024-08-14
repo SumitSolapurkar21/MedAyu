@@ -1,12 +1,12 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Table, Row, Rows } from 'react-native-table-component';
 import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
 
 const PendingLeaves = () => {
-  const {userData} = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const [pendingData, setPendingData] = useState([]);
   const tableHead = [
     'Sr.No',
@@ -49,7 +49,7 @@ const PendingLeaves = () => {
       100,
       100,
       100,
-      ...Array(tableHead.length - 1).fill(1),
+      ...Array(tableHead?.length - 1).fill(1),
     ]);
   }, []);
   return (
@@ -59,8 +59,8 @@ const PendingLeaves = () => {
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          style={{padding: 10}}>
-          <View style={{height: 'auto', maxHeight: 400}}>
+          style={{ padding: 10 }}>
+          <View style={{ height: 'auto', maxHeight: 400 }}>
             <Table
               borderStyle={{
                 borderWidth: 1,
@@ -74,7 +74,7 @@ const PendingLeaves = () => {
               />
             </Table>
             <ScrollView vertical={true} style={styles.dataWrapper}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={pendingData.map((row, index) => [
                     index + 1,
@@ -103,7 +103,7 @@ const PendingLeaves = () => {
 export default PendingLeaves;
 
 const styles = StyleSheet.create({
-  head: {height: 40, backgroundColor: '#80aaff'},
+  head: { height: 40, backgroundColor: '#80aaff' },
   headtext: {
     textAlign: 'left',
     color: 'white',
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 6,
   },
-  dataWrapper: {marginTop: -1},
+  dataWrapper: { marginTop: -1 },
   row: {
     height: 'auto',
   },

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Button, Dialog, List, Portal, TextInput} from 'react-native-paper';
+import { Button, Dialog, List, Portal, TextInput } from 'react-native-paper';
 import api from '../../../api.json';
 import UserContext from '../../components/Context/Context';
 import DateTimePicker from 'react-native-ui-datepicker';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const EpatientTreatment = () => {
   const navigation = useNavigation();
@@ -33,8 +33,8 @@ const EpatientTreatment = () => {
     navigation.navigate('EpatientTreatmentHistory');
   };
 
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id} = patientsData;
+  const { patientsData } = useContext(UserContext);
+  const { hospital_id, patient_id, reception_id } = patientsData;
 
   useEffect(() => {
     if (searchInput !== '') searchInputHandler();
@@ -81,7 +81,7 @@ const EpatientTreatment = () => {
     //     setTemp([]);
     //     setVisibleList(false);
   };
-  const Themes = [{mainColor: '#F5803E', activeTextColor: '#fff'}];
+  const Themes = [{ mainColor: '#F5803E', activeTextColor: '#fff' }];
 
   const calenderHandler = index => {
     setShowCalender(true);
@@ -120,7 +120,7 @@ const EpatientTreatment = () => {
           medicineprescriptionarray: temp,
         })
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setVisibleMsg(true);
             setTemp([]);
@@ -169,7 +169,7 @@ const EpatientTreatment = () => {
         mode="outlined"
         label="Drug Code"
         placeholder="Search Drug Code ..."
-        style={[styles.input, {marginHorizontal: 14}]}
+        style={[styles.input, { marginHorizontal: 14 }]}
         value={
           selectedDrugCode?.drugcode ? selectedDrugCode?.drugcode : searchInput
         }
@@ -182,7 +182,7 @@ const EpatientTreatment = () => {
         style={{
           zIndex: 1,
           marginHorizontal: 14,
-          maxHeight: drugCode.length > 0 && visibleList ? 200 : 0,
+          maxHeight: drugCode?.length > 0 && visibleList ? 200 : 0,
         }} // Set a higher zIndex for the ScrollView
         vertical={true}>
         {visibleList && (
@@ -344,7 +344,7 @@ const EpatientTreatment = () => {
 
         <Button
           mode="contained"
-          style={[styles.btn, {alignSelf: 'flex-start'}]}
+          style={[styles.btn, { alignSelf: 'flex-start' }]}
           onPress={() => resetHandler()}>
           Add More
         </Button>
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     shadowColor: '#e6e8eb',
     shadowOpacity: 0.2,
-    shadowOffset: {width: 10, height: 10},
+    shadowOffset: { width: 10, height: 10 },
   },
   submitbutton: {
     flexDirection: 'row',

@@ -1,5 +1,5 @@
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Searchbar,
   RadioButton,
@@ -15,10 +15,10 @@ import {
 import axios from 'axios';
 import api from '../../../../api.json';
 import UserContext from '../../../components/Context/Context';
-import {Table, Row, Rows} from 'react-native-table-component';
-import {useNavigation} from '@react-navigation/native';
+import { Table, Row, Rows } from 'react-native-table-component';
+import { useNavigation } from '@react-navigation/native';
 
-const PatientDischargeDiagnosis = ({route}) => {
+const PatientDischargeDiagnosis = ({ route }) => {
   const navigation = useNavigation();
   const _patientid = route?.params?.patient_id;
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,11 +41,11 @@ const PatientDischargeDiagnosis = ({route}) => {
   // to set width of table ......
   useEffect(() => {
     // Set a specific width for the 'Sr.No' column, and the same width for the rest
-    setWidthArr([32, ...Array(keys.length - 1).fill(170)]);
+    setWidthArr([32, ...Array(keys?.length - 1).fill(170)]);
   }, []);
 
-  const {userData} = useContext(UserContext);
-  const {hospital_id, _id} = userData;
+  const { userData } = useContext(UserContext);
+  const { hospital_id, _id } = userData;
 
   useEffect(() => {
     if (searchQuery != '') search_Diagnosis_data();
@@ -179,7 +179,7 @@ const PatientDischargeDiagnosis = ({route}) => {
             <TextInput
               mode="view"
               placeholder="Search"
-              style={{height: 40}}
+              style={{ height: 40 }}
               onChangeText={setSearchQuery}
               value={
                 selectedDiagnosis?.illnessname
@@ -198,7 +198,7 @@ const PatientDischargeDiagnosis = ({route}) => {
               editable={true} // Set editable to true
             />
             <ScrollView
-              style={{zIndex: 1}} // Set a higher zIndex for the ScrollView
+              style={{ zIndex: 1 }} // Set a higher zIndex for the ScrollView
               vertical={true}>
               {visibleList && (
                 <View>
@@ -246,8 +246,8 @@ const PatientDischargeDiagnosis = ({route}) => {
               Save
             </Button>
           </View>
-          <ScrollView horizontal={true} style={{padding: 10}}>
-            <View style={{height: 400}}>
+          <ScrollView horizontal={true} style={{ padding: 10 }}>
+            <View style={{ height: 400 }}>
               <Table
                 borderStyle={{
                   borderWidth: 1,
@@ -264,7 +264,7 @@ const PatientDischargeDiagnosis = ({route}) => {
                 vertical
                 style={styles.dataWrapper}
                 nestedScrollEnabled={true}>
-                <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                   <Rows
                     data={tableData}
                     widthArr={widthArr}
@@ -317,10 +317,10 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderRadius: 6,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'left', color: 'black', marginLeft: 10, fontSize: 12},
-  dataWrapper: {marginTop: -1},
-  row: {height: 45},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'left', color: 'black', marginLeft: 10, fontSize: 12 },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 45 },
   listView: {
     backgroundColor: '#ede8ed',
     overflow: 'visible',

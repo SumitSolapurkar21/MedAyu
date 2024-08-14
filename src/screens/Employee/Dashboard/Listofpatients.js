@@ -169,7 +169,7 @@ export const Listofpatients = () => {
           60,
           50,
           76,
-          ...Array(tableHead.length).fill(0),
+          ...Array(tableHead?.length).fill(0),
         ]);
         setWidthArr3([
           30,
@@ -182,7 +182,7 @@ export const Listofpatients = () => {
           60,
           50,
           76,
-          ...Array(patientList.length).fill(0),
+          ...Array(patientList?.length).fill(0),
         ]);
       } else if (
         userData?.role === 'Doctor' &&
@@ -203,7 +203,7 @@ export const Listofpatients = () => {
           76,
           76,
           150,
-          ...Array(tableHead.length).fill(0),
+          ...Array(tableHead?.length).fill(0),
         ]);
         setWidthArr3([
           30,
@@ -218,7 +218,7 @@ export const Listofpatients = () => {
           76,
           76,
           150,
-          ...Array(patientList.length).fill(0),
+          ...Array(patientList?.length).fill(0),
         ]);
       } else if (wstatus === 'Confirmed') {
         setWidthArr2([
@@ -233,7 +233,7 @@ export const Listofpatients = () => {
           50,
           76,
           76,
-          ...Array(tableHead.length).fill(0),
+          ...Array(tableHead?.length).fill(0),
         ]);
         setWidthArr3([
           30,
@@ -247,7 +247,7 @@ export const Listofpatients = () => {
           50,
           76,
           76,
-          ...Array(patientList.length).fill(0),
+          ...Array(patientList?.length).fill(0),
         ]);
       } else if (wstatus === 'Cancelled') {
         setWidthArr2([
@@ -261,7 +261,7 @@ export const Listofpatients = () => {
           60,
           50,
           76,
-          ...Array(tableHead.length).fill(0),
+          ...Array(tableHead?.length).fill(0),
         ]);
         setWidthArr3([
           30,
@@ -274,7 +274,7 @@ export const Listofpatients = () => {
           60,
           50,
           76,
-          ...Array(patientList.length).fill(0),
+          ...Array(patientList?.length).fill(0),
         ]);
       } else {
         setWidthArr2([
@@ -289,7 +289,7 @@ export const Listofpatients = () => {
           50,
           76,
           // 76,
-          ...Array(tableHead.length).fill(0),
+          ...Array(tableHead?.length).fill(0),
         ]);
         setWidthArr3([
           30,
@@ -303,7 +303,7 @@ export const Listofpatients = () => {
           50,
           76,
           // 76,
-          ...Array(patientList.length).fill(0),
+          ...Array(patientList?.length).fill(0),
         ]);
       }
     }

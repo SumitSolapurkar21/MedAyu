@@ -142,8 +142,8 @@ const ReOpdPersonalHistory = () => {
      ]);
 
      useEffect(() => {
-          if (opdAssessmentforEdit.length > 0) {
-               const updatedTableData = tableData.map(item => ({
+          if (opdAssessmentforEdit?.length > 0) {
+               const updatedTableData = tableData?.map(item => ({
                     ...item,
                     checked: opdAssessmentforEdit[0][item.label] || 'none'
                }));
@@ -152,7 +152,7 @@ const ReOpdPersonalHistory = () => {
      }, [opdAssessmentforEdit]);
 
      const handleRadioChange = (itemId, value) => {
-          const updatedTableData = tableData.map(item => {
+          const updatedTableData = tableData?.map(item => {
                if (item.id === itemId) {
                     return { ...item, checked: value };
                }
@@ -200,7 +200,7 @@ const ReOpdPersonalHistory = () => {
                53,
                63,
                53,
-               ...Array(tableHead.length - 1).fill(0),
+               ...Array(tableHead?.length - 1).fill(0),
           ]);
      }, []);
 

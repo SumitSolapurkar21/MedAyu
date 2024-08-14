@@ -303,7 +303,7 @@ const ReOpdMenstrualHistory = () => {
      }, []);
 
      useEffect(() => {
-          setWidthArr([166, 166, ...Array(tableHead1.length - 1).fill(0)]);
+          setWidthArr([166, 166, ...Array(tableHead1?.length - 1).fill(0)]);
      }, []);
 
      useEffect(() => {

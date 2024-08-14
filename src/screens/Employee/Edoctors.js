@@ -8,16 +8,16 @@ import {
   ScrollView,
   BackHandler,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import api from '../../../api.json';
 import axios from 'axios';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {ToastAndroid} from 'react-native';
-import {Appbar, Button, Menu} from 'react-native-paper';
+import { ToastAndroid } from 'react-native';
+import { Appbar, Button, Menu } from 'react-native-paper';
 
-const Edoctors = ({route}) => {
-  const {department_id, patient_id} = route.params;
+const Edoctors = ({ route }) => {
+  const { department_id, patient_id } = route.params;
   const navigation = useNavigation();
   const [doctorData, setDoctorData] = useState([]);
   const [visible, setVisible] = React.useState(false);
@@ -26,6 +26,8 @@ const Edoctors = ({route}) => {
   const _handleMore = () => {
     setVisible(true);
   };
+
+  
   //backHandler ...
   useEffect(() => {
     const backAction = () => {
@@ -75,7 +77,7 @@ const Edoctors = ({route}) => {
         />
         <Appbar.Content
           title="Doctor"
-          titleStyle={{fontSize: 18, marginLeft: 10}}
+          titleStyle={{ fontSize: 18, marginLeft: 10 }}
         />
         <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
       </Appbar.Header>
@@ -123,7 +125,7 @@ const Edoctors = ({route}) => {
                     alt="doctorPic"
                     style={[
                       styles.img,
-                      {resizeMode: 'contain', width: 85, height: 100},
+                      { resizeMode: 'contain', width: 85, height: 100 },
                     ]}
                   />
                 </View>
@@ -134,7 +136,7 @@ const Edoctors = ({route}) => {
                   <Text style={styles.doctorDeg}>{res.specialization}</Text>
                   <Text style={styles.doctorAmt}>
                     You pay &nbsp;
-                    <Text style={{color: '#127359'}}>{res.fees}</Text>
+                    <Text style={{ color: '#127359' }}>{res.fees}</Text>
                   </Text>
                 </View>
               </View>
@@ -161,7 +163,7 @@ const Edoctors = ({route}) => {
                   <Text
                     style={[
                       styles.btn,
-                      {color: 'white', backgroundColor: 'orange'},
+                      { color: 'white', backgroundColor: 'orange' },
                     ]}>
                     <FontAwesome6 name="video" color="#ffffff" size={14} />
                     &nbsp;&nbsp;Digital Consult
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
     backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 0,
     elevation: 4,

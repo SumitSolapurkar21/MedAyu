@@ -6,10 +6,10 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {Appbar, Card} from 'react-native-paper';
-import {Searchbar} from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { Appbar, Card } from 'react-native-paper';
+import { Searchbar } from 'react-native-paper';
 import axios from 'axios';
 import api from '../../../api.json';
 import UserContext from '../../components/Context/Context';
@@ -18,8 +18,8 @@ const EpatientLogs = () => {
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = React.useState('');
   const [historyArray, setHistoryArray] = useState([]);
-  const {userData, scannedPatientsData} = useContext(UserContext);
-  const {uhid, patient_id} = scannedPatientsData;
+  const { userData, scannedPatientsData } = useContext(UserContext);
+  const { uhid, patient_id } = scannedPatientsData;
 
   //backHandler ...
   useEffect(() => {
@@ -47,7 +47,7 @@ const EpatientLogs = () => {
           uhid: uhid,
         })
         .then(response => {
-          const {HistoryArray, status, message} = response.data;
+          const { HistoryArray, status, message } = response.data;
           if (status === true) {
             setHistoryArray(HistoryArray);
           } else {
@@ -82,7 +82,7 @@ const EpatientLogs = () => {
           value={searchQuery}
         />
         <ScrollView showsVerticalScrollIndicator={false}>
-          {historyArray.length > 0 &&
+          {historyArray?.length > 0 &&
             historyArray?.map((res, index) => {
               return (
                 <Card style={styles.card} key={index + 1}>

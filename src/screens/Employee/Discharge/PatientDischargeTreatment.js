@@ -1,5 +1,5 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../api.json';
@@ -11,15 +11,15 @@ import {
   Portal,
   TextInput,
 } from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-import {Table, Row, Rows} from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 import DateTimePicker from 'react-native-ui-datepicker';
 
-const PatientDischargeTreatment = ({route}) => {
-  const {userData} = useContext(UserContext);
+const PatientDischargeTreatment = ({ route }) => {
+  const { userData } = useContext(UserContext);
   const patient_id = route?.params?.patient_id;
-  const {_id, hospital_id} = userData;
+  const { _id, hospital_id } = userData;
   const [treatmentHistory, setTreatmentHistory] = useState([]);
   const navigation = useNavigation();
   //table content ....
@@ -28,7 +28,7 @@ const PatientDischargeTreatment = ({route}) => {
 
   const [visible, setVisible] = useState(false);
 
-  const Themes = [{mainColor: '#F5803E', activeTextColor: '#fff'}];
+  const Themes = [{ mainColor: '#F5803E', activeTextColor: '#fff' }];
   const [showCalender, setShowCalender] = useState(false);
   const [dateValues, setDateValues] = useState([]);
   const [datePickerIndex, setDatePickerIndex] = useState([]);
@@ -63,7 +63,7 @@ const PatientDischargeTreatment = ({route}) => {
       120,
       120,
       120,
-      ...Array(keys.length - 1).fill(1),
+      ...Array(keys?.length - 1).fill(1),
     ]);
   }, []);
 
@@ -80,7 +80,7 @@ const PatientDischargeTreatment = ({route}) => {
         reception_id: _id,
       });
 
-      const {status, message, data} = res.data;
+      const { status, message, data } = res.data;
       if (status === true) {
         setTreatmentHistory(data);
         const dataArray = data.map((res, index) => [
@@ -217,7 +217,7 @@ const PatientDischargeTreatment = ({route}) => {
         <ScrollView
           style={{
             zIndex: 1,
-            maxHeight: drugCode.length > 0 && visibleList ? 200 : 0,
+            maxHeight: drugCode?.length > 0 && visibleList ? 200 : 0,
           }} // Set a higher zIndex for the ScrollView
           vertical={true}>
           {visibleList && (
@@ -242,7 +242,7 @@ const PatientDischargeTreatment = ({route}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={styles.inputGroup}>
-          {temp.length > 0 ? (
+          {temp?.length > 0 ? (
             temp.map((res, index) => {
               return (
                 <View style={styles.card} key={index}>
@@ -482,7 +482,7 @@ const PatientDischargeTreatment = ({route}) => {
           medicineprescriptionarray: temp,
         })
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             setTemp([]);
             _fetchtreatmenthistory();
@@ -538,13 +538,13 @@ const PatientDischargeTreatment = ({route}) => {
         <View style={styles.btn}>
           <Button
             mode="contained"
-            style={{alignSelf: 'flex-end'}}
+            style={{ alignSelf: 'flex-end' }}
             onPress={() => setVisible(true)}>
             Add Treatment
           </Button>
         </View>
-        <ScrollView horizontal={true} style={{padding: 10}}>
-          <View style={{height: 580}}>
+        <ScrollView horizontal={true} style={{ padding: 10 }}>
+          <View style={{ height: 580 }}>
             <Table
               borderStyle={{
                 borderWidth: 1,
@@ -561,7 +561,7 @@ const PatientDischargeTreatment = ({route}) => {
               vertical
               style={styles.dataWrapper}
               nestedScrollEnabled={true}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={tableData}
                   widthArr={widthArr}
@@ -589,10 +589,10 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderRadius: 6,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'left', color: 'black', marginLeft: 10, fontSize: 12},
-  dataWrapper: {marginTop: -1},
-  row: {height: 45},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'left', color: 'black', marginLeft: 10, fontSize: 12 },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 45 },
   listView: {
     backgroundColor: '#ede8ed',
     overflow: 'visible',
@@ -619,7 +619,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     shadowColor: '#e6e8eb',
     shadowOpacity: 0.2,
-    shadowOffset: {width: 10, height: 10},
+    shadowOffset: { width: 10, height: 10 },
     zIndex: 11,
   },
   input: {

@@ -101,7 +101,7 @@ const Onboarding = () => {
   }, []);
 
   const handleContinue = async () => {
-    if (username === '' || username.length < 10) {
+    if (username === '' || username?.length < 10) {
       ToastAndroid.show(
         'Mobile Number should be 10 Digits',
         ToastAndroid.SHORT,

@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../../../components/Context/Context';
 import axios from 'axios';
 import api from '../../../../api.json';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {
   Button,
@@ -19,14 +19,14 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native-paper';
-import {TimePickerModal} from 'react-native-paper-dates';
+import { TimePickerModal } from 'react-native-paper-dates';
 import DropDown from 'react-native-paper-dropdown';
-import {useNavigation} from '@react-navigation/native';
-import {BackHandler} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { BackHandler } from 'react-native';
 
 const Eadtpatientadmitted = () => {
-  const {userData} = useContext(UserContext);
-  const {_id, hospital_id} = userData;
+  const { userData } = useContext(UserContext);
+  const { _id, hospital_id } = userData;
   const [editText, setEditText] = useState('');
   const [showDropDown, setShowDropDown] = useState(false);
   const [showDropDown1, setShowDropDown1] = useState(false);
@@ -49,7 +49,7 @@ const Eadtpatientadmitted = () => {
   }, []);
   const onClickHandler = (fieldname, e, bed_id) => {
     showDialog();
-    setEditText({e: e, fieldname: fieldname, bed_id: bed_id});
+    setEditText({ e: e, fieldname: fieldname, bed_id: bed_id });
   };
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const Eadtpatientadmitted = () => {
           hospital_id: hospital_id,
         })
         .then(res => {
-          if (res.data.data.length > 0) {
+          if (res.data.data?.length > 0) {
             const keys = [
               'NAME',
               'UHID',
@@ -142,7 +142,7 @@ const Eadtpatientadmitted = () => {
               ),
             ]);
 
-            setWidthArr(Array(keys.length).fill(170));
+            setWidthArr(Array(keys?.length).fill(170));
             setTableData(values);
           }
         });
@@ -181,9 +181,9 @@ const Eadtpatientadmitted = () => {
   }, [setVisibleTime]);
 
   const onConfirm = React.useCallback(
-    ({hours, minutes}) => {
+    ({ hours, minutes }) => {
       setVisibleTime(false);
-      setSelectedTime({hours, minutes});
+      setSelectedTime({ hours, minutes });
     },
     [setVisibleTime],
   );
@@ -453,7 +453,7 @@ const Eadtpatientadmitted = () => {
 
       <ScrollView horizontal={true}>
         <View>
-          <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+          <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
             <Row
               data={tableHead}
               widthArr={widthArr}
@@ -462,7 +462,7 @@ const Eadtpatientadmitted = () => {
             />
           </Table>
           <ScrollView style={styles.dataWrapper}>
-            <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+            <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
               <Rows
                 data={tableData}
                 widthArr={widthArr}
@@ -485,10 +485,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     padding: 10,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black'},
-  dataWrapper: {marginTop: -1},
-  row: {height: 50},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black' },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 50 },
   cardSelection: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',

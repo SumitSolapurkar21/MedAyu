@@ -21,7 +21,7 @@ const ReOpdPlanOfCare = () => {
      //backHandler ...
      useEffect(() => {
           const backAction = () => {
-               navigation.replace('OpdInvestigation');
+               navigation.replace('ReOpdDiagnosis');
                return true;
           };
 
@@ -201,8 +201,8 @@ const ReOpdPlanOfCare = () => {
      const [widthArr, setWidthArr] = useState([]);
      const [headwidthArr, setheadWidthArr] = useState([]);
      useEffect(() => {
-          setheadWidthArr([340, ...Array(tableHead8.length - 1).fill(0)]);
-          setWidthArr([338, ...Array(_tableData8.length - 1).fill(0)]);
+          setheadWidthArr([340, ...Array(tableHead8?.length - 1).fill(0)]);
+          setWidthArr([338, ...Array(_tableData8?.length - 1).fill(0)]);
      }, []);
 
      //  submit handler ....
@@ -242,7 +242,7 @@ const ReOpdPlanOfCare = () => {
      ];
      const [widthArr2, setWidthArr2] = useState([]);
      useEffect(() => {
-          setWidthArr2([120, 120, 150, 120, 120, ...Array(keys3.length).fill(2)]);
+          setWidthArr2([120, 120, 150, 120, 120, ...Array(keys3?.length).fill(2)]);
      }, []);
      useEffect(() => {
           FetchMobileOpdAssessment();
@@ -282,7 +282,7 @@ const ReOpdPlanOfCare = () => {
                <Appbar.Header>
                     <Appbar.BackAction
                          onPress={() => {
-                              navigation.replace('OpdInvestigation');
+                              navigation.replace('ReOpdDiagnosis');
                          }}
                     />
                     <Appbar.Content title="Plan oF Care" style={styles.appbar_title} />
@@ -327,7 +327,7 @@ const ReOpdPlanOfCare = () => {
                     <View style={styles.submitbutton}>
                          <Button
                               mode="contained"
-                              onPress={() => navigation.replace('OpdInvestigation')}>
+                              onPress={() => navigation.replace('ReOpdDiagnosis')}>
                               Previous
                          </Button>
                          <Button mode="contained" onPress={() => submitTreatmenthandler()}>
@@ -335,12 +335,12 @@ const ReOpdPlanOfCare = () => {
                          </Button>
                          <Button
                               mode="contained"
-                              onPress={() => navigation.navigate('OpdTreatment')}>
+                              onPress={() => navigation.navigate('ReOpdTreatment')}>
                               Next / Skip
                          </Button>
                     </View>
 
-                    {opdAssessment.length > 0 &&
+                    {opdAssessment?.length > 0 &&
                          opdAssessment?.map((row, index) => {
                               return (
                                    <Card style={styles.card2} key={index + 1}>

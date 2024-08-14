@@ -1,14 +1,14 @@
-import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 
 import api from '../../../../api.json';
 //image ...
 import UserContext from '../../../components/Context/Context';
 import axios from 'axios';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 const RegularizationPending = () => {
-  const {userData} = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const [regPendingData, setRegPendingData] = useState([]);
   const [widthArr, setWidthArr] = useState([]);
 
@@ -33,7 +33,7 @@ const RegularizationPending = () => {
       80,
       80,
       100,
-      ...Array(keys.length).fill(0),
+      ...Array(keys?.length).fill(0),
     ]);
   }, []);
 
@@ -54,7 +54,7 @@ const RegularizationPending = () => {
       await axios
         .post(`${api.baseurl}/get_mobile_regularizes_pending_details`, body)
         .then(response => {
-          const {message, status} = response.data;
+          const { message, status } = response.data;
           if (status === true) {
             setRegPendingData(response.data.data);
           } else {
@@ -75,7 +75,7 @@ const RegularizationPending = () => {
 
         <View>
           <ScrollView horizontal={true}>
-            <View style={{height: 'auto', maxHeight: 400}}>
+            <View style={{ height: 'auto', maxHeight: 400 }}>
               <Table
                 borderStyle={{
                   borderWidth: 1,
@@ -89,7 +89,7 @@ const RegularizationPending = () => {
                 />
               </Table>
               <ScrollView vertical={true} style={styles.dataWrapper}>
-                <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                   <Rows
                     // data={tableData}
                     data={regPendingData.map((row, index) => [
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: '600',
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
+  head: { height: 40, backgroundColor: '#80aaff' },
   text: {
     textAlign: 'left',
     color: '#ffffff',
@@ -168,5 +168,5 @@ const styles = StyleSheet.create({
     padding: 8,
     fontSize: 12,
   },
-  row: {height: 'auto'},
+  row: { height: 'auto' },
 });

@@ -10,7 +10,7 @@ import {
   Keyboard,
   ToastAndroid,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -20,12 +20,12 @@ import {
   SegmentedButtons,
   DefaultTheme,
 } from 'react-native-paper';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 import axios from 'axios';
 import api from '../../../api.json';
 import UserContext from '../../components/Context/Context';
-import {Dropdown} from 'react-native-element-dropdown';
-import {useNavigation} from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { useNavigation } from '@react-navigation/native';
 
 const EpatientPresentComplaint = () => {
   const navigation = useNavigation();
@@ -34,8 +34,8 @@ const EpatientPresentComplaint = () => {
   //table content ....
   const [widthArr, setWidthArr] = useState([]);
 
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id} = patientsData;
+  const { patientsData } = useContext(UserContext);
+  const { hospital_id, patient_id, reception_id } = patientsData;
 
   //popup msg....
   const [visible, setVisible] = useState(false);
@@ -117,7 +117,7 @@ const EpatientPresentComplaint = () => {
   }, []);
   // to set width of table ......
   useEffect(() => {
-    setWidthArr([120, 80, 120, 150, ...Array(keys.length).fill(2)]);
+    setWidthArr([120, 80, 120, 150, ...Array(keys?.length).fill(2)]);
   }, []);
 
   const category = [
@@ -219,7 +219,7 @@ const EpatientPresentComplaint = () => {
         type: selectionValue,
       })
       .then(res => {
-        const {status, message} = res.data;
+        const { status, message } = res.data;
         if (status === false) {
           ToastAndroid.show(
             `${message}`,
@@ -288,7 +288,7 @@ const EpatientPresentComplaint = () => {
           complaintArray: filledRows,
         })
         .then(res => {
-          const {status, message} = res.data;
+          const { status, message } = res.data;
           if (status === true) {
             return res.data;
           } else {
@@ -323,10 +323,10 @@ const EpatientPresentComplaint = () => {
       {/* after submit Msg... */}
       <Portal>
         <Dialog visible={visible}>
-          <Dialog.Icon icon="check-all" style={{color: 'green'}} />
+          <Dialog.Icon icon="check-all" style={{ color: 'green' }} />
           <Dialog.Title style={styles.title}>Success!</Dialog.Title>
           <Dialog.Content>
-            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
+            <Text variant="bodyMedium" style={{ textAlign: 'center' }}>
               Complaint Added Successfully!
             </Text>
           </Dialog.Content>
@@ -371,10 +371,10 @@ const EpatientPresentComplaint = () => {
         />
         <View style={styles.formGroup}>
           <Text style={styles.tableWrapper3TXT}>Category</Text>
-          <View style={{width: '70%'}}>
+          <View style={{ width: '70%' }}>
             <Dropdown
               mode={'outlined'}
-              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
@@ -401,11 +401,11 @@ const EpatientPresentComplaint = () => {
           </View>
         </View>
         <View
-          style={[styles.categorySelection, {marginBottom: keyboardHeight}]}>
+          style={[styles.categorySelection, { marginBottom: keyboardHeight }]}>
           <Text style={styles.tableWrapper3TXT}>Category Details</Text>
 
-          <ScrollView horizontal={true} style={{padding: 10}}>
-            <View style={{height: '90%', minHeight: 300}}>
+          <ScrollView horizontal={true} style={{ padding: 10 }}>
+            <View style={{ height: '90%', minHeight: 300 }}>
               <Table
                 borderStyle={{
                   borderWidth: 1,
@@ -419,7 +419,7 @@ const EpatientPresentComplaint = () => {
                 />
               </Table>
               <ScrollView vertical={true} style={styles.dataWrapper}>
-                <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+                <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                   <Rows
                     // data={tableData}
                     data={rowData.map((row, rowIndex) => [
@@ -436,7 +436,7 @@ const EpatientPresentComplaint = () => {
                         key={row.id}
                         style={[
                           styles.dropdown,
-                          isFocus && {borderColor: 'blue'},
+                          isFocus && { borderColor: 'blue' },
                         ]}
                         placeholderStyle={styles.placeholderStyle}
                         selectedTextStyle={styles.selectedTextStyle}
@@ -463,7 +463,7 @@ const EpatientPresentComplaint = () => {
                         key={row.id}
                         style={[
                           styles.dropdown,
-                          isFocus && {borderColor: 'blue'},
+                          isFocus && { borderColor: 'blue' },
                         ]}
                         placeholderStyle={styles.placeholderStyle}
                         selectedTextStyle={styles.selectedTextStyle}
@@ -568,9 +568,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: 150,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black', padding: 2},
-  row: {height: 'auto'},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black', padding: 2 },
+  row: { height: 'auto' },
   tableInput: {
     height: 40,
     marginHorizontal: 6,

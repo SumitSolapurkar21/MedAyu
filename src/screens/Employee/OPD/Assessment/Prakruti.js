@@ -443,9 +443,9 @@ const Prakruti = () => {
     // Iterate over each key in checkedValues
     Object.keys(checkedValues).forEach(key => {
       checkedValues[key].forEach(item => {
-        doshaCounts[0].count += item.vatta.length;
-        doshaCounts[1].count += item.pitta.length;
-        doshaCounts[2].count += item.kapha.length;
+        doshaCounts[0].count += item.vatta?.length;
+        doshaCounts[1].count += item.pitta?.length;
+        doshaCounts[2].count += item.kapha?.length;
       });
     });
 

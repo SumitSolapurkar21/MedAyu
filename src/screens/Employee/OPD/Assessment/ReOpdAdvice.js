@@ -265,7 +265,7 @@ const ReOpdAdvice = () => {
                     </View>
 
                     {/* fetch data .... */}
-                    {opdAssessment.length > 0 &&
+                    {opdAssessment?.length > 0 &&
                          opdAssessment?.map((row, index) => {
                               return (
                                    <Card style={styles.card2} key={index + 1}>

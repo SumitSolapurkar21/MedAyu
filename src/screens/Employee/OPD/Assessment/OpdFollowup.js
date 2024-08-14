@@ -240,7 +240,7 @@ const OpdFollowup = () => {
                          </Button>
                     </View>
                     <ScrollView vertical style={{ maxHeight: '90%' }}>
-                         {opdAssessment.length > 0 && opdAssessment?.map((res, index) => {
+                         {opdAssessment?.length > 0 && opdAssessment?.map((res, index) => {
                               return (
                                    <Card style={styles.card} key={index + 1}>
                                         <Text style={styles.cardText}> {res.opd_date} &nbsp;&nbsp;{res.opd_time}</Text>

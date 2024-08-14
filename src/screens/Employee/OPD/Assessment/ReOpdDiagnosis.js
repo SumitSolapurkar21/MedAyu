@@ -23,7 +23,7 @@ import UserContext from '../../../../components/Context/Context';
 import { Table, Row, Rows } from 'react-native-table-component';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton, MD3Colors } from 'react-native-paper';
-import { OpdpageNavigation, ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
+import { ReAssessmentOpdpageNavigation } from './OpdpageNavigation';
 
 const ReOpdDiagnosis = () => {
 
@@ -67,7 +67,7 @@ const ReOpdDiagnosis = () => {
      // to set width of table ......
      useEffect(() => {
           // Set a specific width for the 'Sr.No' column, and the same width for the rest
-          setWidthArr([60, ...Array(keys.length - 1).fill(110)]);
+          setWidthArr([60, ...Array(keys?.length - 1).fill(110)]);
      }, []);
 
      const { patientsData, scannedPatientsData, waitingListData, userData } =
@@ -242,7 +242,11 @@ const ReOpdDiagnosis = () => {
           const updatedSelectedRow = diagnosisArray?.filter(
                row => row.illness_id !== _id,
           );
+          const updatedSelectedRow2 = opdAssessmentforEdit?.filter(
+               row => row.illness_id !== _id,
+          );
           setDiagnosisArray(updatedSelectedRow);
+          setOpdAssessmentforEdit(updatedSelectedRow2);
      };
 
      const _handleMore = () => {

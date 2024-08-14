@@ -1,5 +1,5 @@
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Searchbar,
   RadioButton,
@@ -14,7 +14,7 @@ import {
 import axios from 'axios';
 import api from '../../../api.json';
 import UserContext from '../../components/Context/Context';
-import {Table, Row, Rows} from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 const EpatientDiagnosis = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,12 +39,12 @@ const EpatientDiagnosis = () => {
   // to set width of table ......
   useEffect(() => {
     // Set a specific width for the 'Sr.No' column, and the same width for the rest
-    setWidthArr([60, ...Array(keys.length - 1).fill(170)]);
+    setWidthArr([60, ...Array(keys?.length - 1).fill(170)]);
   }, []);
 
   const onDismissSnackBar = () => setVisible(false);
-  const {patientsData} = useContext(UserContext);
-  const {hospital_id, patient_id, reception_id} = patientsData;
+  const { patientsData } = useContext(UserContext);
+  const { hospital_id, patient_id, reception_id } = patientsData;
 
   useEffect(() => {
     if (searchQuery != '') search_Diagnosis_data();
@@ -195,7 +195,7 @@ const EpatientDiagnosis = () => {
           <TextInput
             mode="view"
             placeholder="Search"
-            style={{height: 40}}
+            style={{ height: 40 }}
             onChangeText={setSearchQuery}
             value={
               selectedDiagnosis?.illnessname
@@ -214,7 +214,7 @@ const EpatientDiagnosis = () => {
             editable={true} // Set editable to true
           />
           <ScrollView
-            style={{zIndex: 1}} // Set a higher zIndex for the ScrollView
+            style={{ zIndex: 1 }} // Set a higher zIndex for the ScrollView
             vertical={true}>
             {visibleList && (
               <View>
@@ -262,8 +262,8 @@ const EpatientDiagnosis = () => {
             Save
           </Button>
         </View>
-        <ScrollView horizontal={true} style={{padding: 10}}>
-          <View style={{height: 300}}>
+        <ScrollView horizontal={true} style={{ padding: 10 }}>
+          <View style={{ height: 300 }}>
             <Table
               borderStyle={{
                 borderWidth: 1,
@@ -280,7 +280,7 @@ const EpatientDiagnosis = () => {
               vertical
               style={styles.dataWrapper}
               nestedScrollEnabled={true}>
-              <Table borderStyle={{borderWidth: 1, borderColor: 'gray'}}>
+              <Table borderStyle={{ borderWidth: 1, borderColor: 'gray' }}>
                 <Rows
                   data={tableData}
                   widthArr={widthArr}
@@ -333,10 +333,10 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderRadius: 6,
   },
-  head: {height: 40, backgroundColor: '#80aaff'},
-  text: {textAlign: 'center', color: 'black'},
-  dataWrapper: {marginTop: -1},
-  row: {height: 50},
+  head: { height: 40, backgroundColor: '#80aaff' },
+  text: { textAlign: 'center', color: 'black' },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 50 },
   listView: {
     backgroundColor: '#ede8ed',
     overflow: 'visible',

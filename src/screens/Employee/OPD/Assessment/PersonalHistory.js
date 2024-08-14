@@ -182,7 +182,7 @@ const PersonalHistory = () => {
       53,
       63,
       53,
-      ...Array(tableHead.length - 1).fill(0),
+      ...Array(tableHead?.length - 1).fill(0),
     ]);
   }, []);
 
